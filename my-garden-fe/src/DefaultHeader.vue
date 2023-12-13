@@ -29,6 +29,7 @@
     <div class="navbar navbar-dark bg-dark shadow-sm">
       <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="#">
+          <i class="fa-brands fa-pagelines"></i>
           <strong class="title">myGarden</strong>
         </a>
         <button aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
