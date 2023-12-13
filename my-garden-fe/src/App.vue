@@ -124,7 +124,7 @@ const afternoonDuration = computed(() => {
   <h1>하루 일과 기록</h1>
 
   <div id="wrapper">
-    <div class="container">
+    <div class="data-container">
       <h1>기록</h1>
       <div class="input-group">
         <p>시작</p>
@@ -144,27 +144,25 @@ const afternoonDuration = computed(() => {
         </li>
       </ul>
     </div>
-    <div class="container">
-      <div id="schedule-container">
-        <div id="morning-schedule" class="schedule-section">
-          <div class="schedule-label">오전</div>
-          <div class="schedule-half">
-            <div v-for="(block, index) in morningSchedule" :key="`morning-${index}`"
-                 :style="blockStyle(block, 'morning')"
-                 class="time-block">
-              <div>{{ block.displayStartTime }} ~ {{ block.displayEndTime }} :: {{ block.activity }}</div>
-            </div>
+    <div id="schedule-container">
+      <div id="morning-schedule" class="schedule-section">
+        <div class="schedule-label">오전</div>
+        <div class="schedule-half">
+          <div v-for="(block, index) in morningSchedule" :key="`morning-${index}`"
+               :style="blockStyle(block, 'morning')"
+               class="time-block">
+            <div>{{ block.displayStartTime }} ~ {{ block.displayEndTime }} :: {{ block.activity }}</div>
           </div>
         </div>
+      </div>
 
-        <div id="afternoon-schedule" class="schedule-section">
-          <div class="schedule-label">오후</div>
-          <div class="schedule-half">
-            <div v-for="(block, index) in afternoonSchedule" :key="`afternoon-${index}`"
-                 :style="blockStyle(block, 'afternoon')"
-                 class="time-block">
-              <div>{{ block.displayStartTime }} ~ {{ block.displayEndTime }} :: {{ block.activity }}</div>
-            </div>
+      <div id="afternoon-schedule" class="schedule-section">
+        <div class="schedule-label">오후</div>
+        <div class="schedule-half">
+          <div v-for="(block, index) in afternoonSchedule" :key="`afternoon-${index}`"
+               :style="blockStyle(block, 'afternoon')"
+               class="time-block">
+            <div>{{ block.displayStartTime }} ~ {{ block.displayEndTime }} :: {{ block.activity }}</div>
           </div>
         </div>
       </div>
@@ -175,20 +173,16 @@ const afternoonDuration = computed(() => {
 <style scoped>
 
 #wrapper {
-  display: flex;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
   font-weight: normal;
-}
 
-#wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
   padding: 0 2rem;
 }
 
-.container {
+.data-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -196,6 +190,7 @@ const afternoonDuration = computed(() => {
   text-align: center;
   margin: 0 auto;
   padding: 20px;
+  width: 100%;
 }
 
 h1 {
@@ -239,6 +234,10 @@ li {
   margin-top: 10px;
 }
 
+#schedule-container {
+  display: flex; /* Arrange morning and afternoon sections side by side */
+}
+
 .schedule-section {
   display: flex;
   flex-direction: column; /* Stack label and schedule vertically */
@@ -251,10 +250,6 @@ li {
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 10px; /* Space between label and schedule blocks */
-}
-
-#schedule-container {
-  display: flex; /* Arrange morning and afternoon sections side by side */
 }
 
 .schedule-half {
