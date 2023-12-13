@@ -1,7 +1,10 @@
 <script setup>
 import {computed, onMounted, ref} from 'vue';
+import DateInput from "@/DateInput.vue";
+import ContentInput from "@/ContentInput.vue";
+import PageTitle from "@/PageTitle.vue";
+import ContentTitle from "@/ContentTitle.vue";
 
-const todo = ref('');
 const startDate = ref('');
 const endDate = ref('');
 const logs = ref([]);
@@ -17,17 +20,22 @@ const schedule = ref([
 
 const splitSchedule = ref([]);
 
-function addLog() {
-  if (todo.value.trim() && startDate.value && endDate.value) {
-    logs.value.push({
-      id: Date.now(),
-      text: todo.value,
-      start: startDate.value,
-      end: endDate.value
-    });
-    todo.value = '';
-    saveLogs();
-  }
+function addLog(content) {
+
+  console.log("startDate : " + startDate.value)
+  console.log("endDate : " + endDate.value)
+  console.log("content : " + content.value)
+
+  // if (todo.value.trim() && startDate.value && endDate.value) {
+  //   logs.value.push({
+  //     id: Date.now(),
+  //     text: todo.value,
+  //     start: startDate.value,
+  //     end: endDate.value
+  //   });
+  //   todo.value = '';
+  //   saveLogs();
+  // }
 }
 
 function loadLogs() {
@@ -36,7 +44,6 @@ function loadLogs() {
     console.log(JSON.parse(savedLogs));
     // logs.value = JSON.parse(savedLogs);
   }
-
 }
 
 function saveLogs() {
@@ -121,28 +128,14 @@ const afternoonDuration = computed(() => {
 </script>
 
 <template>
-  <h1>하루 일과 기록</h1>
+  <PageTitle :input-name="'하루 일과 기록'"/>
 
   <div id="wrapper">
     <div class="data-container">
-      <h1>기록</h1>
-      <div class="input-group">
-        <p>시작</p>
-        <input v-model="startDate" type="datetime-local"/>
-      </div>
-      <div class="input-group">
-        <p>끝</p>
-        <input v-model="endDate" type="datetime-local"/>
-      </div>
-      <div class="input-group">
-        <p>내용</p>
-        <textarea v-model="todo" placeholder="일과를 입력하세요" @keyup.enter="addLog"/>
-      </div>
-      <ul>
-        <li v-for="log in logs" :key="log.id">
-          {{ log.start }} ~ {{ log.end }}: {{ log.text }}
-        </li>
-      </ul>
+      <ContentTitle :input-name="'한 일 등록'"/>
+      <DateInput :input-name="'시작'" @change-date="date => startDate = date"/>
+      <DateInput :input-name="'끝'" @change-date="date => endDate = date"/>
+      <ContentInput :input-name="'내용'" @change-content="addLog"/>
     </div>
     <div id="schedule-container">
       <div id="morning-schedule" class="schedule-section">
@@ -191,47 +184,6 @@ const afternoonDuration = computed(() => {
   margin: 0 auto;
   padding: 20px;
   width: 100%;
-}
-
-h1 {
-  text-align: center;
-  font-size: 60px;
-  margin-bottom: 20px;
-}
-
-.input-group {
-  margin-bottom: 10px;
-}
-
-.input-group p {
-  font-size: 20px;
-}
-
-input[type="datetime-local"] {
-  width: 100%;
-  padding: 10px;
-  font-size: 1.2em;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-textarea {
-  width: 100%;
-  padding: 10px;
-  font-size: 1.2em;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  height: 300px;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  text-align: left;
-  margin-top: 10px;
 }
 
 #schedule-container {
