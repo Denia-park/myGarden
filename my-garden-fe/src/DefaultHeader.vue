@@ -8,17 +8,19 @@
       <div class="container">
         <div class="row">
           <div class="col-sm-8 col-md-7 py-4">
-            <h4 class="text-white">About</h4>
-            <p class="text-muted">Add some information about the album below, the author, or any other background
-              context. Make it a few sentences long so folks can pick up some informative tidbits. Then, link them off
-              to some social networking sites or contact information.</p>
+            <h4 class="text-white">Page</h4>
+            <ul class="list-unstyled">
+              <li><a class="text-white" href="#">정리 게시판</a></li>
+              <li><a class="text-white" href="#">하루 습관</a></li>
+              <li><a class="text-white" href="#">명언 정리</a></li>
+            </ul>
           </div>
           <div class="col-sm-4 offset-md-1 py-4">
             <h4 class="text-white">Contact</h4>
             <ul class="list-unstyled">
-              <li><a class="text-white" href="#">Follow on Twitter</a></li>
-              <li><a class="text-white" href="#">Like on Facebook</a></li>
-              <li><a class="text-white" href="#">Email me</a></li>
+              <li><a class="text-white" href="https://github.com/Denia-park">Github</a></li>
+              <li><a class="text-white" href="https://velog.io/@as9587">Blog</a></li>
+              <li><a class="text-white" href="mailto: phg9587@naver.com">Email</a></li>
             </ul>
           </div>
         </div>
@@ -27,13 +29,7 @@
     <div class="navbar navbar-dark bg-dark shadow-sm">
       <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="#">
-          <svg aria-hidden="true" class="me-2" fill="none" height="20" stroke="currentColor"
-               stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20"
-               xmlns="http://www.w3.org/2000/svg">
-            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-            <circle cx="12" cy="13" r="4"/>
-          </svg>
-          <strong>Album</strong>
+          <strong class="title">myGarden</strong>
         </a>
         <button aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
                 data-bs-target="#navbarHeader" data-bs-toggle="collapse" type="button">
@@ -45,6 +41,12 @@
 </template>
 
 <style scoped>
+.title {
+  margin-left: 5px;
+}
 
+a.text-white {
+  text-decoration: none;
+}
 </style>
 
