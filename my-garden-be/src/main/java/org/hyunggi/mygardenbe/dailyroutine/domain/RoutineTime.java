@@ -20,4 +20,16 @@ public class RoutineTime {
         Assert.isTrue(endTime != null, "종료 시간은 null이 될 수 없습니다.");
         Assert.isTrue(startTime.isBefore(endTime), "시작 시간은 종료 시간보다 빨라야 합니다.");
     }
+
+    public boolean isSameDate() {
+        return startTime.toLocalDate().isEqual(endTime.toLocalDate());
+    }
+
+    @Override
+    public String toString() {
+        return "RoutineTime{" +
+                "startTime=" + startTime +
+                ", endTime=" + endTime +
+                '}';
+    }
 }
