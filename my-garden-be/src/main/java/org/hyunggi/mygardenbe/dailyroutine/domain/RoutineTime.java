@@ -1,22 +1,13 @@
 package org.hyunggi.mygardenbe.dailyroutine.domain;
 
-import lombok.Getter;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
-@Getter
-public class RoutineTime {
-    private final LocalDateTime startDateTime;
-    private final LocalDateTime endDateTime;
-
-    public RoutineTime(final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
+public record RoutineTime(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    public RoutineTime {
         validateConstructor(startDateTime, endDateTime);
-
-        this.startDateTime = startDateTime;
-        this.endDateTime = endDateTime;
     }
 
     private void validateConstructor(final LocalDateTime startTime, final LocalDateTime endTime) {
@@ -35,19 +26,6 @@ public class RoutineTime {
 
     public LocalDate getEndDate() {
         return endDateTime.toLocalDate();
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final RoutineTime that = (RoutineTime) o;
-        return Objects.equals(startDateTime, that.startDateTime) && Objects.equals(endDateTime, that.endDateTime);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(startDateTime, endDateTime);
     }
 
     @Override
