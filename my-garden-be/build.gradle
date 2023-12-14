@@ -27,15 +27,35 @@ ext {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    //Spring wen
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok'
+    
+    //Spring Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    //Spring Jpa
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    //Spring Validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    //H2
     runtimeOnly 'com.h2database:h2'
+
+    //MySql Connector
     runtimeOnly 'com.mysql:mysql-connector-j'
+
+    //Lombok
+    compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    //Lombok (테스트 의존성 추가)
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    //테스트 코드
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    //RestDocs
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 }
 
