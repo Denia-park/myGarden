@@ -1,4 +1,4 @@
-package org.hyunggi.mygardenbe.domain;
+package org.hyunggi.mygardenbe.dailyroutine.domain;
 
 import org.springframework.util.Assert;
 

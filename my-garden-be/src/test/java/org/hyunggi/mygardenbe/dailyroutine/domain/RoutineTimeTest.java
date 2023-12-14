@@ -1,4 +1,4 @@
-package org.hyunggi.mygardenbe.domain;
+package org.hyunggi.mygardenbe.dailyroutine.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
