@@ -3,7 +3,9 @@ package org.hyunggi.mygardenbe.dailyroutine.domain;
 import lombok.Getter;
 import org.springframework.util.Assert;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 public class RoutineTime {
@@ -24,7 +26,28 @@ public class RoutineTime {
     }
 
     public boolean isSameDate() {
-        return startDateTime.toLocalDate().isEqual(endDateTime.toLocalDate());
+        return getStartDate().isEqual(getEndDate());
+    }
+
+    public LocalDate getStartDate() {
+        return startDateTime.toLocalDate();
+    }
+
+    public LocalDate getEndDate() {
+        return endDateTime.toLocalDate();
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final RoutineTime that = (RoutineTime) o;
+        return Objects.equals(startDateTime, that.startDateTime) && Objects.equals(endDateTime, that.endDateTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(startDateTime, endDateTime);
     }
 
     @Override
