@@ -1,7 +1,7 @@
 <script setup>
-import PageTitle from "@/PageTitle.vue";
-import DrawDailyRoutine from "@/DrawDailyRoutine.vue";
-import InputDailyRoutine from "@/InputDailyRoutine.vue";
+import PageTitle from "@/components/default/PageTitle.vue";
+import DrawDailyRoutine from "@/components/dailyRoutine/draw/DrawDailyRoutine.vue";
+import InputDailyRoutine from "@/components/dailyRoutine/input/InputDailyRoutine.vue";
 </script>
 <template>
   <PageTitle :input-name="'하루 일과 기록'"/>

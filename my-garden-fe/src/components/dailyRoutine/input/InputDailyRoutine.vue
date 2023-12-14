@@ -1,7 +1,7 @@
 <script setup>
-import ContentTitle from "@/ContentTitle.vue";
-import DateInput from "@/DateInput.vue";
-import ContentInput from "@/ContentInput.vue";
+import ContentTitle from "@/components/default/ContentTitle.vue";
+import DateInput from "@/components/dailyRoutine/input/DateInput.vue";
+import ContentInput from "@/components/dailyRoutine/input/ContentInput.vue";
 import {ref} from "vue";
 
 const startDate = ref('');
