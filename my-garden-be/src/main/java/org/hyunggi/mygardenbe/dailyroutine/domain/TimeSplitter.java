@@ -8,7 +8,7 @@ import java.util.List;
 
 @NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class TimeSplitter {
-    static List<RoutineTime> split(final RoutineTime routineTime) {
+    public static List<RoutineTime> split(final RoutineTime routineTime) {
         if (routineTime.isSameDate()) {
             return List.of(routineTime);
         }
