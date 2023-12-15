@@ -21,7 +21,7 @@ class RoutineTimeTest {
         final LocalDateTime endTime = LocalDateTime.of(2023, 12, 14, 9, 0, 0);
 
         //when, then
-        assertThatThrownBy(() -> new RoutineTime(startTime, endTime))
+        assertThatThrownBy(() -> RoutineTime.of(startTime, endTime))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("시작 시간은 종료 시간보다 빨라야 합니다.");
     }
@@ -40,14 +40,14 @@ class RoutineTimeTest {
     public static Stream<Arguments> providerIsSameDate() {
         return Stream.of(
                 Arguments.of(
-                        new RoutineTime(
+                        RoutineTime.of(
                                 LocalDateTime.of(2023, 12, 14, 9, 0, 0),
                                 LocalDateTime.of(2023, 12, 14, 10, 0, 0)
                         ),
                         true
                 ),
                 Arguments.of(
-                        new RoutineTime(
+                        RoutineTime.of(
                                 LocalDateTime.of(2023, 12, 14, 9, 0, 0),
                                 LocalDateTime.of(2023, 12, 15, 10, 0, 0)
                         ),

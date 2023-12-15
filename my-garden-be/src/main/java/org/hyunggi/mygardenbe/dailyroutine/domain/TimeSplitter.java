@@ -20,16 +20,16 @@ public class TimeSplitter {
     }
 
     private static RoutineTime makeAnotherStartDateTime(final RoutineTime routineTime) {
-        final LocalDateTime originalStartTime = routineTime.startDateTime();
+        final LocalDateTime originalStartTime = routineTime.getStartDateTime();
         final LocalDateTime dayEndDateTime = LocalDateTime.of(routineTime.getStartDate(), LocalTime.of(23, 59, 59));
 
-        return new RoutineTime(originalStartTime, dayEndDateTime);
+        return RoutineTime.of(originalStartTime, dayEndDateTime);
     }
 
     private static RoutineTime makeAnotherEndDateTime(final RoutineTime routineTime) {
         final LocalDateTime dayStart = LocalDateTime.of(routineTime.getEndDate(), LocalTime.of(0, 0));
-        final LocalDateTime originalEndTime = routineTime.endDateTime();
+        final LocalDateTime originalEndTime = routineTime.getEndDateTime();
 
-        return new RoutineTime(dayStart, originalEndTime);
+        return RoutineTime.of(dayStart, originalEndTime);
     }
 }
