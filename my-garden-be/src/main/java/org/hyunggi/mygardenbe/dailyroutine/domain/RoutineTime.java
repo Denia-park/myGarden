@@ -1,6 +1,9 @@
 package org.hyunggi.mygardenbe.dailyroutine.domain;
 
+import jakarta.persistence.Embeddable;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
@@ -8,9 +11,11 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
+@Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoutineTime {
-    private final LocalDateTime startDateTime;
-    private final LocalDateTime endDateTime;
+    private LocalDateTime startDateTime;
+    private LocalDateTime endDateTime;
 
     private RoutineTime(LocalDateTime startDateTime, LocalDateTime endDateTime) {
         this.startDateTime = startDateTime;

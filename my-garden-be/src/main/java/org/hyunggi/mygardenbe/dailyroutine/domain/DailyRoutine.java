@@ -1,13 +1,22 @@
 package org.hyunggi.mygardenbe.dailyroutine.domain;
 
+import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 
 @Getter
+@NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
+@Entity
 public class DailyRoutine {
+    @Id
+    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+    private Long id;
+    @Embedded
     private RoutineTime routineTime;
+    @Enumerated(EnumType.STRING)
     private RoutineType routineType;
     private String routineDescription;
 
