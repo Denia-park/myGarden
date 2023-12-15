@@ -5,7 +5,9 @@ public enum RoutineType {
     SLEEP("수면"),
     EAT("식사"),
     STUDY("공부"),
-    REST("휴식");
+    REST("휴식"),
+    GAME("게임"),
+    ETC("기타");
 
     private String description;
 
