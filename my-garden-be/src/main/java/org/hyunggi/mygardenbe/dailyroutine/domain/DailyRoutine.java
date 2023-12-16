@@ -27,7 +27,7 @@ public class DailyRoutine {
 
     public static DailyRoutine of(RoutineTime routineTime, String routineType, String routineDescription) {
         validateConstructor(routineType);
-        return DailyRoutine.of(routineTime, RoutineType.valueOf(routineType), routineDescription);
+        return of(routineTime, RoutineType.valueOf(routineType), routineDescription);
     }
 
     private static void validateConstructor(final String routineType) {
