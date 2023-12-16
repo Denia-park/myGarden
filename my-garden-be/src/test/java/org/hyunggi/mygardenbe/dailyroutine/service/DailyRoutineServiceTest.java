@@ -23,7 +23,7 @@ class DailyRoutineServiceTest extends ServiceTestSupport {
     private DailyRoutineRepository dailyRoutineRepository;
 
     @Test
-    @DisplayName("dailyRoutine을 등록한다.")
+    @DisplayName("dailyRoutines를 DB에 등록하고, id 목록을 반환한다.")
     void postDailyRoutine() {
         //given
         final RoutineTime routineTimeSample1 = getRoutineTimeSample1();
@@ -33,7 +33,7 @@ class DailyRoutineServiceTest extends ServiceTestSupport {
         final String routineDescription = "자바 스터디";
 
         //when
-        dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription);
+        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription);
 
         //then
         final List<DailyRoutine> dailyRoutines = dailyRoutineRepository.findAll();
@@ -43,6 +43,7 @@ class DailyRoutineServiceTest extends ServiceTestSupport {
                         Tuple.tuple(routineTimeSample1, RoutineType.STUDY, "자바 스터디"),
                         Tuple.tuple(routineTimeSample2, RoutineType.STUDY, "자바 스터디")
                 );
+        assertThat(ids).hasSize(2);
     }
 
     private RoutineTime getRoutineTimeSample2() {
