@@ -1,10 +1,15 @@
 package org.hyunggi.mygardenbe.dailyroutine.controller;
 
 import org.hyunggi.mygardenbe.ControllerTestSupport;
+import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 import org.springframework.http.MediaType;
 
+import java.util.List;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,6 +31,30 @@ class DailyRoutineControllerTest extends ControllerTestSupport {
                         post("/api/daily-routine")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").isArray());
+    }
+
+    @Test
+    @DisplayName("Daily Routine 목록을 조회한다.")
+    void getDailyRoutine() throws Exception {
+        //given
+        BDDMockito.given(dailyRoutineService.getDailyRoutine())
+                .willReturn(
+                        List.of(
+                                DailyRoutineResponse.builder()
+                                        .startDateTime("2023-10-01T22:00:00")
+                                        .endDateTime("2023-10-01T23:00:00")
+                                        .routineType("STUDY")
+                                        .routineDescription("자바 스터디")
+                                        .build()
+                        )
+                );
+
+        //when, then
+        mockMvc.perform(
+                        get("/api/daily-routine")
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data").isArray());

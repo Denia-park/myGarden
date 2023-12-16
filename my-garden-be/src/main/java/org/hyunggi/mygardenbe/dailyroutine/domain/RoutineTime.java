@@ -66,4 +66,12 @@ public class RoutineTime {
                 ", endDateTime=" + endDateTime +
                 '}';
     }
+
+    public String getStartDateTimeString() {
+        return startDateTime.toString();
+    }
+
+    public String getEndDateTimeString() {
+        return endDateTime.toString();
+    }
 }

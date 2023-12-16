@@ -5,9 +5,11 @@ import org.hyunggi.mygardenbe.dailyroutine.domain.DailyRoutine;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineTime;
 import org.hyunggi.mygardenbe.dailyroutine.entity.DailyRoutineEntity;
 import org.hyunggi.mygardenbe.dailyroutine.repository.DailyRoutineRepository;
+import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -32,5 +34,9 @@ public class DailyRoutineService {
         return savedDailyRoutines.stream()
                 .map(DailyRoutineEntity::getId)
                 .toList();
+    }
+
+    public List<DailyRoutineResponse> getDailyRoutine() {
+        return Collections.emptyList();
     }
 }
