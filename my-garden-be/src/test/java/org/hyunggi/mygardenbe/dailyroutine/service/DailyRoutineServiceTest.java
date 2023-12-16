@@ -1,6 +1,7 @@
 package org.hyunggi.mygardenbe.dailyroutine.service;
 
 import org.assertj.core.groups.Tuple;
+import org.hyunggi.mygardenbe.ServiceTestSupport;
 import org.hyunggi.mygardenbe.dailyroutine.domain.DailyRoutine;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineTime;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineType;
@@ -8,18 +9,14 @@ import org.hyunggi.mygardenbe.dailyroutine.repository.DailyRoutineRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-@Transactional
-class DailyRoutineServiceTest {
 
+class DailyRoutineServiceTest extends ServiceTestSupport {
     @Autowired
     private DailyRoutineService dailyRoutineService;
     @Autowired
