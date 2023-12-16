@@ -9,7 +9,6 @@ import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineResponse
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -37,6 +36,26 @@ public class DailyRoutineService {
     }
 
     public List<DailyRoutineResponse> getDailyRoutine() {
-        return Collections.emptyList();
+        final List<DailyRoutineEntity> dailyRoutineEntities = dailyRoutineRepository.findAll();
+        final List<DailyRoutine> dailyRoutines = convertDailyRoutines(dailyRoutineEntities);
+
+        return convertDailyRoutineResponses(dailyRoutines);
+    }
+
+    private List<DailyRoutine> convertDailyRoutines(final List<DailyRoutineEntity> dailyRoutineEntities) {
+        return dailyRoutineEntities.stream()
+                .map(DailyRoutineEntity::toDomain)
+                .toList();
+    }
+
+    private List<DailyRoutineResponse> convertDailyRoutineResponses(final List<DailyRoutine> dailyRoutines) {
+        return dailyRoutines.stream()
+                .sorted(this::compareStartDateTime)
+                .map(DailyRoutineResponse::of)
+                .toList();
+    }
+
+    private int compareStartDateTime(final DailyRoutine o1, final DailyRoutine o2) {
+        return o1.getStartDateTime().compareTo(o2.getStartDateTime());
     }
 }
