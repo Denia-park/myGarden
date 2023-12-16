@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class DailyRoutineTest {
     @Test
-    @DisplayName("생성자를 통해 객체를 생성할 수 있다.")
+    @DisplayName("정적 메서드 of를 통해 객체를 생성할 수 있다.")
     void constructor() {
         //given
         final RoutineTime routineTime = RoutineTime.of(
@@ -20,7 +20,7 @@ class DailyRoutineTest {
         final String routineDescription = "낮잠";
 
         //when
-        final DailyRoutine dailyRoutine = new DailyRoutine(
+        final DailyRoutine dailyRoutine = DailyRoutine.of(
                 routineTime,
                 routineType,
                 routineDescription

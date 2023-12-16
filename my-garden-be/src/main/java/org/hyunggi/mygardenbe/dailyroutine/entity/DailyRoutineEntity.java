@@ -43,7 +43,7 @@ public class DailyRoutineEntity {
     }
 
     public DailyRoutine toDomain() {
-        return new DailyRoutine(
+        return DailyRoutine.of(
                 routineTime,
                 routineType,
                 routineDescription

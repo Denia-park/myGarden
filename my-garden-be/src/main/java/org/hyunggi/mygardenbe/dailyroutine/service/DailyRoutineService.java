@@ -24,7 +24,7 @@ public class DailyRoutineService {
 
     private List<DailyRoutine> convertDailyRoutines(final List<RoutineTime> routineTimes, final String routineType, final String routineDescription) {
         return routineTimes.stream()
-                .map(routineTime -> new DailyRoutine(routineTime, routineType, routineDescription))
+                .map(routineTime -> DailyRoutine.of(routineTime, routineType, routineDescription))
                 .toList();
     }
 

@@ -11,11 +11,7 @@ public class DailyRoutine {
     private RoutineType routineType;
     private String routineDescription;
 
-    public DailyRoutine(RoutineTime routineTime, String routineType, String routineDescription) {
-        this(routineTime, RoutineType.valueOf(routineType), routineDescription);
-    }
-
-    public DailyRoutine(final RoutineTime routineTime, final RoutineType routineType, final String routineDescription) {
+    private DailyRoutine(RoutineTime routineTime, RoutineType routineType, String routineDescription) {
         validateConstructor(routineTime, routineType, routineDescription);
 
         this.routineTime = routineTime;
@@ -27,6 +23,19 @@ public class DailyRoutine {
         Assert.isTrue(routineTime != null, "데일리 루틴의 시간은 null이 될 수 없습니다.");
         Assert.isTrue(routineType != null, "데일리 루틴의 타입은 null이 될 수 없습니다.");
         Assert.isTrue(routineDescription != null, "데일리 루틴의 설명은 null이 될 수 없습니다.");
+    }
+
+    public static DailyRoutine of(RoutineTime routineTime, String routineType, String routineDescription) {
+        validateConstructor(routineType);
+        return DailyRoutine.of(routineTime, RoutineType.valueOf(routineType), routineDescription);
+    }
+
+    private static void validateConstructor(final String routineType) {
+        Assert.hasText(routineType, "데일리 루틴의 타입은 비어있을 수 없습니다.");
+    }
+
+    public static DailyRoutine of(RoutineTime routineTime, RoutineType routineType, String routineDescription) {
+        return new DailyRoutine(routineTime, routineType, routineDescription);
     }
 
     public LocalDateTime getStartDateTime() {
