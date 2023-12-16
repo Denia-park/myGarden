@@ -1,5 +1,8 @@
 package org.hyunggi.mygardenbe.dailyroutine.domain;
 
+import lombok.Getter;
+
+@Getter
 public enum RoutineType {
     EXERCISE("운동"),
     SLEEP("수면"),
