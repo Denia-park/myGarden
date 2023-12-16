@@ -1,6 +1,7 @@
 package org.hyunggi.mygardenbe.dailyroutine.service;
 
 import org.assertj.core.groups.Tuple;
+import org.hyunggi.mygardenbe.ServiceTestSupport;
 import org.hyunggi.mygardenbe.dailyroutine.domain.DailyRoutine;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineTime;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineType;
@@ -8,25 +9,21 @@ import org.hyunggi.mygardenbe.dailyroutine.repository.DailyRoutineRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-@Transactional
-class DailyRoutineServiceTest {
 
+class DailyRoutineServiceTest extends ServiceTestSupport {
     @Autowired
     private DailyRoutineService dailyRoutineService;
     @Autowired
     private DailyRoutineRepository dailyRoutineRepository;
 
     @Test
-    @DisplayName("dailyRoutine을 등록한다.")
+    @DisplayName("dailyRoutines를 DB에 등록하고, id 목록을 반환한다.")
     void postDailyRoutine() {
         //given
         final RoutineTime routineTimeSample1 = getRoutineTimeSample1();
@@ -36,7 +33,7 @@ class DailyRoutineServiceTest {
         final String routineDescription = "자바 스터디";
 
         //when
-        dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription);
+        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription);
 
         //then
         final List<DailyRoutine> dailyRoutines = dailyRoutineRepository.findAll();
@@ -46,6 +43,7 @@ class DailyRoutineServiceTest {
                         Tuple.tuple(routineTimeSample1, RoutineType.STUDY, "자바 스터디"),
                         Tuple.tuple(routineTimeSample2, RoutineType.STUDY, "자바 스터디")
                 );
+        assertThat(ids).hasSize(2);
     }
 
     private RoutineTime getRoutineTimeSample2() {

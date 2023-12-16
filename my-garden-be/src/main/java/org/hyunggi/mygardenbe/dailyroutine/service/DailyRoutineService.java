@@ -15,15 +15,21 @@ public class DailyRoutineService {
     private final DailyRoutineRepository dailyRoutineRepository;
 
     @Transactional
-    public void postDailyRoutine(final List<RoutineTime> routineTimes, final String routineType, final String routineDescription) {
+    public List<Long> postDailyRoutine(final List<RoutineTime> routineTimes, final String routineType, final String routineDescription) {
         final List<DailyRoutine> dailyRoutines = convertDailyRoutines(routineTimes, routineType, routineDescription);
 
-        dailyRoutineRepository.saveAll(dailyRoutines);
+        return extractIds(dailyRoutineRepository.saveAll(dailyRoutines));
     }
 
     private List<DailyRoutine> convertDailyRoutines(final List<RoutineTime> routineTimes, final String routineType, final String routineDescription) {
         return routineTimes.stream()
                 .map(routineTime -> new DailyRoutine(routineTime, routineType, routineDescription))
+                .toList();
+    }
+
+    private List<Long> extractIds(final List<DailyRoutine> savedDailyRoutines) {
+        return savedDailyRoutines.stream()
+                .map(DailyRoutine::getId)
                 .toList();
     }
 }
