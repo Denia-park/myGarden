@@ -46,17 +46,17 @@ class DailyRoutineServiceTest extends ServiceTestSupport {
         assertThat(ids).hasSize(2);
     }
 
-    private RoutineTime getRoutineTimeSample2() {
-        return RoutineTime.of(
-                LocalDateTime.of(2021, 10, 2, 0, 0, 0),
-                LocalDateTime.of(2021, 10, 2, 1, 0, 0)
-        );
-    }
-
     private RoutineTime getRoutineTimeSample1() {
         return RoutineTime.of(
                 LocalDateTime.of(2021, 10, 1, 22, 0, 0),
                 LocalDateTime.of(2021, 10, 1, 23, 59, 59)
+        );
+    }
+
+    private RoutineTime getRoutineTimeSample2() {
+        return RoutineTime.of(
+                LocalDateTime.of(2021, 10, 2, 0, 0, 0),
+                LocalDateTime.of(2021, 10, 2, 1, 0, 0)
         );
     }
 }
