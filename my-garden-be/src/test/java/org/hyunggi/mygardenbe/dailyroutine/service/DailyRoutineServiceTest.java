@@ -2,9 +2,9 @@ package org.hyunggi.mygardenbe.dailyroutine.service;
 
 import org.assertj.core.groups.Tuple;
 import org.hyunggi.mygardenbe.ServiceTestSupport;
-import org.hyunggi.mygardenbe.dailyroutine.domain.DailyRoutine;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineTime;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineType;
+import org.hyunggi.mygardenbe.dailyroutine.entity.DailyRoutineEntity;
 import org.hyunggi.mygardenbe.dailyroutine.repository.DailyRoutineRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ class DailyRoutineServiceTest extends ServiceTestSupport {
         final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription);
 
         //then
-        final List<DailyRoutine> dailyRoutines = dailyRoutineRepository.findAll();
+        final List<DailyRoutineEntity> dailyRoutines = dailyRoutineRepository.findAll();
         assertThat(dailyRoutines).hasSize(2)
                 .extracting("routineTime", "routineType", "routineDescription")
                 .containsExactlyInAnyOrder(
