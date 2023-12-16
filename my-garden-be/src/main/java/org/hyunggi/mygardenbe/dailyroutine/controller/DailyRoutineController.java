@@ -9,6 +9,8 @@ import org.hyunggi.mygardenbe.common.ApiResponse;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineTime;
 import org.hyunggi.mygardenbe.dailyroutine.domain.TimeSplitter;
 import org.hyunggi.mygardenbe.dailyroutine.service.DailyRoutineService;
+import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineResponse;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +34,13 @@ public class DailyRoutineController {
         final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, request.routineType, request.routineDescription);
 
         return ApiResponse.ok(ids);
+    }
+
+    @GetMapping("/api/daily-routine")
+    public ApiResponse<List<DailyRoutineResponse>> getDailyRoutine() {
+        final List<DailyRoutineResponse> dailyRoutineResponses = dailyRoutineService.getDailyRoutine();
+
+        return ApiResponse.ok(dailyRoutineResponses);
     }
 
     @Builder

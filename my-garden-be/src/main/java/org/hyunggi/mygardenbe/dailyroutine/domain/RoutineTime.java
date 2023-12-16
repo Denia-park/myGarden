@@ -8,6 +8,7 @@ import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @Getter
@@ -65,5 +66,13 @@ public class RoutineTime {
                 "startDateTime=" + startDateTime +
                 ", endDateTime=" + endDateTime +
                 '}';
+    }
+
+    public String getStartDateTimeString() {
+        return startDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+    }
+
+    public String getEndDateTimeString() {
+        return endDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 }

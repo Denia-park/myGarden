@@ -6,6 +6,7 @@ import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineTime;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineType;
 import org.hyunggi.mygardenbe.dailyroutine.entity.DailyRoutineEntity;
 import org.hyunggi.mygardenbe.dailyroutine.repository.DailyRoutineRepository;
+import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,13 @@ class DailyRoutineServiceTest extends ServiceTestSupport {
         assertThat(ids).hasSize(2);
     }
 
+    private RoutineTime getRoutineTimeSample1() {
+        return RoutineTime.of(
+                LocalDateTime.of(2021, 10, 1, 22, 0, 0),
+                LocalDateTime.of(2021, 10, 1, 23, 59, 59)
+        );
+    }
+
     private RoutineTime getRoutineTimeSample2() {
         return RoutineTime.of(
                 LocalDateTime.of(2021, 10, 2, 0, 0, 0),
@@ -53,10 +61,26 @@ class DailyRoutineServiceTest extends ServiceTestSupport {
         );
     }
 
-    private RoutineTime getRoutineTimeSample1() {
-        return RoutineTime.of(
-                LocalDateTime.of(2021, 10, 1, 22, 0, 0),
-                LocalDateTime.of(2021, 10, 1, 23, 59, 59)
-        );
+    @Test
+    @DisplayName("Daily Routine 목록을 조회한다.")
+    void getDailyRoutine() {
+        //given
+        final RoutineTime routineTimeSample1 = getRoutineTimeSample1();
+        final RoutineTime routineTimeSample2 = getRoutineTimeSample2();
+        final List<RoutineTime> routineTimes = List.of(routineTimeSample1, routineTimeSample2);
+        final String routineType = "STUDY";
+        final String routineDescription = "자바 스터디";
+        dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription);
+
+        //when
+        final List<DailyRoutineResponse> dailyRoutineResponses = dailyRoutineService.getDailyRoutine();
+
+        //then
+        assertThat(dailyRoutineResponses).hasSize(2)
+                .extracting("startDateTime", "endDateTime", "routineType", "routineDescription")
+                .containsExactlyInAnyOrder(
+                        Tuple.tuple("2021-10-01T22:00:00", "2021-10-01T23:59:59", "공부", "자바 스터디"),
+                        Tuple.tuple("2021-10-02T00:00:00", "2021-10-02T01:00:00", "공부", "자바 스터디")
+                );
     }
 }

@@ -45,4 +45,16 @@ public class DailyRoutine {
     public LocalDateTime getEndDateTime() {
         return routineTime.getEndDateTime();
     }
+
+    public String getStartDateTimeString() {
+        return routineTime.getStartDateTimeString();
+    }
+
+    public String getEndDateTimeString() {
+        return routineTime.getEndDateTimeString();
+    }
+
+    public String getRoutineTypeDescription() {
+        return routineType.getDescription();
+    }
 }
