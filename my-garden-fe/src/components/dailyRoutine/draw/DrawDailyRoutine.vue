@@ -44,13 +44,22 @@ function timeToMinutes(time) {
   return hours * 60 + minutes;
 }
 
+function getOffset(partOfDay) {
+  const blockTotalHeight = 720; // 1px per minute, 12 hours * 60 minutes
+
+  return partOfDay === 'afternoon' ? blockTotalHeight : 0; // 12:00 ~ 24:00
+}
+
 function blockStyle(block, partOfDay) {
   const duration = calculateDuration(block);
-  const totalDuration = partOfDay === 'morning' ? morningDuration.value : afternoonDuration.value;
-  const heightRatio = (duration / totalDuration) * 100;
+  const startTop = timeToMinutes(block.displayStartTime);
+  const offset = getOffset(partOfDay);
+
   return {
+    position: `relative`,
     backgroundColor: block.color,
-    height: `${heightRatio}%`,
+    top: `${startTop - offset}px`,
+    height: `${duration}px`
   };
 }
 
@@ -116,15 +125,6 @@ const morningSchedule = computed(() => {
 const afternoonSchedule = computed(() => {
   return splitSchedule.value.filter(block => block.partOfDay === 'afternoon');
 });
-
-const morningDuration = computed(() => {
-  return morningSchedule.value.reduce((total, block) => total + calculateDuration(block), 0);
-});
-
-const afternoonDuration = computed(() => {
-  return afternoonSchedule.value.reduce((total, block) => total + calculateDuration(block), 0);
-});
-
 </script>
 
 <template>
@@ -173,12 +173,12 @@ const afternoonDuration = computed(() => {
 }
 
 .schedule-half {
-  flex: 1;
   display: flex;
   flex-direction: column;
   border: 1px solid #ccc;
   margin: 0 10px;
   width: 300px;
+  height: 720px;
 }
 
 .time-block {
