@@ -162,7 +162,7 @@ const afternoonSchedule = computed(() => {
   display: flex;
   flex-direction: column; /* Stack label and schedule vertically */
   align-items: center; /* Center align the label and schedule blocks */
-  height: 900px;
+  height: 800px;
 }
 
 .schedule-label {

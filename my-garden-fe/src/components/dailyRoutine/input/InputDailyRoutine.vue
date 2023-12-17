@@ -40,7 +40,7 @@ function addLog(content) {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 900px; /* Fulls viewport height */
+  height: 800px; /* Fulls viewport height */
   text-align: center;
   margin: 0 auto;
   padding: 20px;
