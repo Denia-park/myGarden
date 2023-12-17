@@ -9,6 +9,7 @@ import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineResponse
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -36,8 +37,8 @@ public class DailyRoutineService {
                 .toList();
     }
 
-    public List<DailyRoutineResponse> getDailyRoutine() {
-        final List<DailyRoutineEntity> dailyRoutineEntities = dailyRoutineRepository.findAll();
+    public List<DailyRoutineResponse> getDailyRoutine(final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
+        final List<DailyRoutineEntity> dailyRoutineEntities = dailyRoutineRepository.findAllByDateTimeBetween(startDateTime, endDateTime);
         final List<DailyRoutine> dailyRoutines = convertDailyRoutines(dailyRoutineEntities);
 
         return convertDailyRoutineResponses(dailyRoutines);

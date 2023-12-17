@@ -73,7 +73,10 @@ class DailyRoutineServiceTest extends ServiceTestSupport {
         dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription);
 
         //when
-        final List<DailyRoutineResponse> dailyRoutineResponses = dailyRoutineService.getDailyRoutine();
+        final List<DailyRoutineResponse> dailyRoutineResponses = dailyRoutineService.getDailyRoutine(
+                LocalDateTime.of(2021, 10, 1, 0, 0, 0),
+                LocalDateTime.of(2021, 10, 2, 23, 59, 59)
+        );
 
         //then
         assertThat(dailyRoutineResponses).hasSize(2)

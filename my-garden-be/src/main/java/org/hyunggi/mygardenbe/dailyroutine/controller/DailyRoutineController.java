@@ -37,8 +37,8 @@ public class DailyRoutineController {
     }
 
     @GetMapping("/api/daily-routine")
-    public ApiResponse<List<DailyRoutineResponse>> getDailyRoutine() {
-        final List<DailyRoutineResponse> dailyRoutineResponses = dailyRoutineService.getDailyRoutine();
+    public ApiResponse<List<DailyRoutineResponse>> getDailyRoutine(final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
+        final List<DailyRoutineResponse> dailyRoutineResponses = dailyRoutineService.getDailyRoutine(startDateTime, endDateTime);
 
         return ApiResponse.ok(dailyRoutineResponses);
     }

@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -40,7 +41,7 @@ class DailyRoutineControllerTest extends ControllerTestSupport {
     @DisplayName("Daily Routine 목록을 조회한다.")
     void getDailyRoutine() throws Exception {
         //given
-        BDDMockito.given(dailyRoutineService.getDailyRoutine())
+        BDDMockito.given(dailyRoutineService.getDailyRoutine(any(), any()))
                 .willReturn(
                         List.of(
                                 DailyRoutineResponse.builder()
