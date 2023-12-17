@@ -7,35 +7,30 @@ const schedule = ref([
     endDateTime: '2023-12-17T06:30:00',
     routineType: '운동',
     routineDescription: '공백',
-    color: '#b23f3f'
   },
   {
     startDateTime: '2023-12-17T07:00:00',
     endDateTime: '2023-12-17T15:00:00',
     routineType: '수면',
     routineDescription: '공백',
-    color: '#a0a0a0'
   },
   {
     startDateTime: '2023-12-17T15:00:00',
     endDateTime: '2023-12-17T17:00:00',
-    routineType: 'Meal',
+    routineType: '식사',
     routineDescription: '공백',
-    color: '#70db70'
   },
   {
     startDateTime: '2023-12-17T17:00:00',
     endDateTime: '2023-12-17T17:20:00',
-    routineType: 'Study',
+    routineType: '공부',
     routineDescription: '공백',
-    color: '#ffdb4d'
   },
   {
     startDateTime: '2023-12-17T17:20:00',
     endDateTime: '2023-12-17T17:30:00',
-    routineType: 'Break',
+    routineType: '휴식',
     routineDescription: '공백',
-    color: '#4de4ff'
   },
   // ... add other blocks as necessary
 ]);
@@ -72,6 +67,20 @@ function extractTime(dateTime) {
   return time.slice(0, 5);
 }
 
+function findMatchingColor(type) {
+  const colorMap = {
+    '운동': '#b23f3f',
+    '수면': '#a0a0a0',
+    '식사': '#70db70',
+    '공부': '#ffdb4d',
+    '휴식': '#4de4ff',
+    '게임': '#e76c0c',
+    '기타': '#cd4dff',
+  };
+
+  return colorMap[type];
+}
+
 function processSchedule(schedule) {
   const NOON_STRING = '12:00';
   const noon = timeToMinutes(NOON_STRING);
@@ -87,7 +96,7 @@ function processSchedule(schedule) {
     if (start < noon) {
       splitBlocks.push({
         routineType: block.routineType,
-        color: block.color,
+        color: findMatchingColor(block.routineType),
         displayStartTime: startTime,
         displayEndTime: end > noon ? NOON_STRING : endTime,
         partOfDay: 'morning',
@@ -97,7 +106,7 @@ function processSchedule(schedule) {
     if (end > noon) {
       splitBlocks.push({
         routineType: block.routineType,
-        color: block.color,
+        color: findMatchingColor(block.routineType),
         displayStartTime: start < noon ? NOON_STRING : startTime,
         displayEndTime: endTime,
         partOfDay: 'afternoon',
