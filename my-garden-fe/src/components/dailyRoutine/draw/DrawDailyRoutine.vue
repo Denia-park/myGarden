@@ -8,9 +8,21 @@ onMounted(() => {
   fetchTodayDailyRoutine();
 });
 
+function getTodayDateTimeRange() {
+  const currentDate = new Date();
+
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+  const day = String(currentDate.getDate()).padStart(2, '0');
+
+  const todayStartDateTime = `${year}-${month}-${day}T00:00:00`;
+  const todayEndDateTime = `${year}-${month}-${day}T23:59:59`;
+
+  return {todayStartDateTime, todayEndDateTime};
+}
+
 function fetchTodayDailyRoutine() {
-  const todayStartDateTime = new Date().toISOString().slice(0, 10) + 'T00:00:00';
-  const todayEndDateTime = new Date().toISOString().slice(0, 10) + 'T23:59:59';
+  const {todayStartDateTime, todayEndDateTime} = getTodayDateTimeRange();
 
   axios.get(`/api/daily-routine?startDateTime=${todayStartDateTime}&endDateTime=${todayEndDateTime}`)
       .then(({data}) => {
