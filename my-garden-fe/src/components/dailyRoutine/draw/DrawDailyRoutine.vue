@@ -1,45 +1,25 @@
 <script setup>
 import {computed, onMounted, ref} from "vue";
-
-const schedule = ref([
-  {
-    startDateTime: '2023-12-17T00:10:00',
-    endDateTime: '2023-12-17T06:30:00',
-    routineType: '운동',
-    routineDescription: '공백',
-  },
-  {
-    startDateTime: '2023-12-17T07:00:00',
-    endDateTime: '2023-12-17T15:00:00',
-    routineType: '수면',
-    routineDescription: '공백',
-  },
-  {
-    startDateTime: '2023-12-17T15:00:00',
-    endDateTime: '2023-12-17T17:00:00',
-    routineType: '식사',
-    routineDescription: '공백',
-  },
-  {
-    startDateTime: '2023-12-17T17:00:00',
-    endDateTime: '2023-12-17T17:20:00',
-    routineType: '공부',
-    routineDescription: '공백',
-  },
-  {
-    startDateTime: '2023-12-17T17:20:00',
-    endDateTime: '2023-12-17T17:30:00',
-    routineType: '휴식',
-    routineDescription: '공백',
-  },
-  // ... add other blocks as necessary
-]);
+import axios from "axios";
 
 const splitSchedule = ref([]);
 
 onMounted(() => {
-  splitSchedule.value = processSchedule(schedule);
+  fetchTodayDailyRoutine();
 });
+
+function fetchTodayDailyRoutine() {
+  const todayStartDateTime = new Date().toISOString().slice(0, 10) + 'T00:00:00';
+  const todayEndDateTime = new Date().toISOString().slice(0, 10) + 'T23:59:59';
+
+  axios.get(`/api/daily-routine?startDateTime=${todayStartDateTime}&endDateTime=${todayEndDateTime}`)
+      .then(({data}) => {
+        splitSchedule.value = processSchedule(data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+}
 
 function calculateDuration(block) {
   const start = timeToMinutes(block.displayStartTime);
@@ -85,7 +65,7 @@ function processSchedule(schedule) {
   const NOON_STRING = '12:00';
   const noon = timeToMinutes(NOON_STRING);
 
-  return schedule.value.flatMap(block => {
+  return schedule.flatMap(block => {
     const startTime = extractTime(block.startDateTime);
     const endTime = extractTime(block.endDateTime);
 
