@@ -8,10 +8,7 @@ import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineTime;
 import org.hyunggi.mygardenbe.dailyroutine.domain.TimeSplitter;
 import org.hyunggi.mygardenbe.dailyroutine.service.DailyRoutineService;
 import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineResponse;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,7 +32,7 @@ public class DailyRoutineController {
     }
 
     @GetMapping("/api/daily-routine")
-    public ApiResponse<List<DailyRoutineResponse>> getDailyRoutine(final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
+    public ApiResponse<List<DailyRoutineResponse>> getDailyRoutine(@RequestParam final LocalDateTime startDateTime, @RequestParam final LocalDateTime endDateTime) {
         final List<DailyRoutineResponse> dailyRoutineResponses = dailyRoutineService.getDailyRoutine(startDateTime, endDateTime);
 
         return ApiResponse.ok(dailyRoutineResponses);

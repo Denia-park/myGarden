@@ -57,6 +57,8 @@ class DailyRoutineControllerTest extends ControllerTestSupport {
         //when, then
         mockMvc.perform(
                         get("/api/daily-routine")
+                                .param("startDateTime", "2023-10-01T00:00:00")
+                                .param("endDateTime", "2023-10-01T23:59:59")
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data").isArray());
