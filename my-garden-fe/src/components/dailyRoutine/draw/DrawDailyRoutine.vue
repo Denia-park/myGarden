@@ -2,11 +2,41 @@
 import {computed, onMounted, ref} from "vue";
 
 const schedule = ref([
-  {startTime: '00:10', endTime: '06:30', activity: '운동', color: '#b23f3f'},
-  {startTime: '07:00', endTime: '15:00', activity: 'Sleep', color: '#a0a0a0'},
-  {startTime: '15:00', endTime: '17:00', activity: 'Meal', color: '#70db70'},
-  {startTime: '17:00', endTime: '17:20', activity: 'Study', color: '#ffdb4d'},
-  {startTime: '17:20', endTime: '17:30', activity: 'Break', color: '#4de4ff'},
+  {
+    startDateTime: '2023-12-17T00:10:00',
+    endDateTime: '2023-12-17T06:30:00',
+    routineType: '운동',
+    routineDescription: '공백',
+    color: '#b23f3f'
+  },
+  {
+    startDateTime: '2023-12-17T07:00:00',
+    endDateTime: '2023-12-17T15:00:00',
+    routineType: '수면',
+    routineDescription: '공백',
+    color: '#a0a0a0'
+  },
+  {
+    startDateTime: '2023-12-17T15:00:00',
+    endDateTime: '2023-12-17T17:00:00',
+    routineType: 'Meal',
+    routineDescription: '공백',
+    color: '#70db70'
+  },
+  {
+    startDateTime: '2023-12-17T17:00:00',
+    endDateTime: '2023-12-17T17:20:00',
+    routineType: 'Study',
+    routineDescription: '공백',
+    color: '#ffdb4d'
+  },
+  {
+    startDateTime: '2023-12-17T17:20:00',
+    endDateTime: '2023-12-17T17:30:00',
+    routineType: 'Break',
+    routineDescription: '공백',
+    color: '#4de4ff'
+  },
   // ... add other blocks as necessary
 ]);
 
@@ -37,30 +67,39 @@ function blockStyle(block, partOfDay) {
   };
 }
 
+function extractTime(dateTime) {
+  const [date, time] = dateTime.split('T');
+  return time.slice(0, 5);
+}
+
 function processSchedule(schedule) {
-  const noon = timeToMinutes('12:00');
+  const NOON_STRING = '12:00';
+  const noon = timeToMinutes(NOON_STRING);
 
   return schedule.value.flatMap(block => {
-    const start = timeToMinutes(block.startTime);
-    const end = timeToMinutes(block.endTime);
+    const startTime = extractTime(block.startDateTime);
+    const endTime = extractTime(block.endDateTime);
+
+    const start = timeToMinutes(startTime);
+    const end = timeToMinutes(endTime);
     const splitBlocks = [];
 
     if (start < noon) {
       splitBlocks.push({
-        activity: block.activity,
+        routineType: block.routineType,
         color: block.color,
-        displayStartTime: block.startTime,
-        displayEndTime: end > noon ? '12:00' : block.endTime,
+        displayStartTime: startTime,
+        displayEndTime: end > noon ? NOON_STRING : endTime,
         partOfDay: 'morning',
       });
     }
 
     if (end > noon) {
       splitBlocks.push({
-        activity: block.activity,
+        routineType: block.routineType,
         color: block.color,
-        displayStartTime: start < noon ? '12:00' : block.startTime,
-        displayEndTime: block.endTime,
+        displayStartTime: start < noon ? NOON_STRING : startTime,
+        displayEndTime: endTime,
         partOfDay: 'afternoon',
       });
     }
@@ -95,7 +134,7 @@ const afternoonDuration = computed(() => {
         <div v-for="(block, index) in morningSchedule" :key="`morning-${index}`"
              :style="blockStyle(block, 'morning')"
              class="time-block">
-          <div>{{ block.displayStartTime }} ~ {{ block.displayEndTime }} :: {{ block.activity }}</div>
+          <div>{{ block.displayStartTime }} ~ {{ block.displayEndTime }} :: {{ block.routineType }}</div>
         </div>
       </div>
     </div>
@@ -106,7 +145,7 @@ const afternoonDuration = computed(() => {
         <div v-for="(block, index) in afternoonSchedule" :key="`afternoon-${index}`"
              :style="blockStyle(block, 'afternoon')"
              class="time-block">
-          <div>{{ block.displayStartTime }} ~ {{ block.displayEndTime }} :: {{ block.activity }}</div>
+          <div>{{ block.displayStartTime }} ~ {{ block.displayEndTime }} :: {{ block.routineType }}</div>
         </div>
       </div>
     </div>
