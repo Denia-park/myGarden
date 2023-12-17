@@ -181,10 +181,12 @@ const afternoonSchedule = computed(() => {
   height: 720px;
 }
 
+/*time-block 내부 font 관련 설정*/
 .time-block {
   width: 100%;
   margin: 2px 0;
-  color: white;
+  color: black;
+  font-size: 1.2rem;
   text-align: center;
   box-sizing: border-box;
 }
