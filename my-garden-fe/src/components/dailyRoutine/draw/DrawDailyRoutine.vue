@@ -1,20 +1,37 @@
 <script setup>
 import {computed, onMounted, ref} from "vue";
-
-const schedule = ref([
-  {startTime: '00:10', endTime: '06:30', activity: '운동', color: '#b23f3f'},
-  {startTime: '07:00', endTime: '15:00', activity: 'Sleep', color: '#a0a0a0'},
-  {startTime: '15:00', endTime: '17:00', activity: 'Meal', color: '#70db70'},
-  {startTime: '17:00', endTime: '17:20', activity: 'Study', color: '#ffdb4d'},
-  {startTime: '17:20', endTime: '17:30', activity: 'Break', color: '#4de4ff'},
-  // ... add other blocks as necessary
-]);
+import axios from "axios";
 
 const splitSchedule = ref([]);
 
 onMounted(() => {
-  splitSchedule.value = processSchedule(schedule);
+  fetchTodayDailyRoutine();
 });
+
+function getTodayDateTimeRange() {
+  const currentDate = new Date();
+
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+  const day = String(currentDate.getDate()).padStart(2, '0');
+
+  const todayStartDateTime = `${year}-${month}-${day}T00:00:00`;
+  const todayEndDateTime = `${year}-${month}-${day}T23:59:59`;
+
+  return {todayStartDateTime, todayEndDateTime};
+}
+
+function fetchTodayDailyRoutine() {
+  const {todayStartDateTime, todayEndDateTime} = getTodayDateTimeRange();
+
+  axios.get(`/api/daily-routine?startDateTime=${todayStartDateTime}&endDateTime=${todayEndDateTime}`)
+      .then(({data}) => {
+        splitSchedule.value = processSchedule(data.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+}
 
 function calculateDuration(block) {
   const start = timeToMinutes(block.displayStartTime);
@@ -27,40 +44,72 @@ function timeToMinutes(time) {
   return hours * 60 + minutes;
 }
 
+function getOffset(partOfDay) {
+  const blockTotalHeight = 720; // 1px per minute, 12 hours * 60 minutes
+
+  return partOfDay === 'afternoon' ? blockTotalHeight : 0; // 12:00 ~ 24:00
+}
+
 function blockStyle(block, partOfDay) {
   const duration = calculateDuration(block);
-  const totalDuration = partOfDay === 'morning' ? morningDuration.value : afternoonDuration.value;
-  const heightRatio = (duration / totalDuration) * 100;
+  const startTop = timeToMinutes(block.displayStartTime);
+  const offset = getOffset(partOfDay);
+
   return {
+    position: `relative`,
     backgroundColor: block.color,
-    height: `${heightRatio}%`,
+    top: `${startTop - offset}px`,
+    height: `${duration}px`
   };
 }
 
-function processSchedule(schedule) {
-  const noon = timeToMinutes('12:00');
+function extractTime(dateTime) {
+  const [date, time] = dateTime.split('T');
+  return time.slice(0, 5);
+}
 
-  return schedule.value.flatMap(block => {
-    const start = timeToMinutes(block.startTime);
-    const end = timeToMinutes(block.endTime);
+function findMatchingColor(type) {
+  const colorMap = {
+    '운동': '#b23f3f',
+    '수면': '#a0a0a0',
+    '식사': '#70db70',
+    '공부': '#ffdb4d',
+    '휴식': '#4de4ff',
+    '게임': '#e76c0c',
+    '기타': '#cd4dff',
+  };
+
+  return colorMap[type];
+}
+
+function processSchedule(schedule) {
+  const NOON_STRING = '12:00';
+  const noon = timeToMinutes(NOON_STRING);
+
+  return schedule.flatMap(block => {
+    const startTime = extractTime(block.startDateTime);
+    const endTime = extractTime(block.endDateTime);
+
+    const start = timeToMinutes(startTime);
+    const end = timeToMinutes(endTime);
     const splitBlocks = [];
 
     if (start < noon) {
       splitBlocks.push({
-        activity: block.activity,
-        color: block.color,
-        displayStartTime: block.startTime,
-        displayEndTime: end > noon ? '12:00' : block.endTime,
+        routineType: block.routineType,
+        color: findMatchingColor(block.routineType),
+        displayStartTime: startTime,
+        displayEndTime: end > noon ? NOON_STRING : endTime,
         partOfDay: 'morning',
       });
     }
 
     if (end > noon) {
       splitBlocks.push({
-        activity: block.activity,
-        color: block.color,
-        displayStartTime: start < noon ? '12:00' : block.startTime,
-        displayEndTime: block.endTime,
+        routineType: block.routineType,
+        color: findMatchingColor(block.routineType),
+        displayStartTime: start < noon ? NOON_STRING : startTime,
+        displayEndTime: endTime,
         partOfDay: 'afternoon',
       });
     }
@@ -76,15 +125,6 @@ const morningSchedule = computed(() => {
 const afternoonSchedule = computed(() => {
   return splitSchedule.value.filter(block => block.partOfDay === 'afternoon');
 });
-
-const morningDuration = computed(() => {
-  return morningSchedule.value.reduce((total, block) => total + calculateDuration(block), 0);
-});
-
-const afternoonDuration = computed(() => {
-  return afternoonSchedule.value.reduce((total, block) => total + calculateDuration(block), 0);
-});
-
 </script>
 
 <template>
@@ -95,7 +135,7 @@ const afternoonDuration = computed(() => {
         <div v-for="(block, index) in morningSchedule" :key="`morning-${index}`"
              :style="blockStyle(block, 'morning')"
              class="time-block">
-          <div>{{ block.displayStartTime }} ~ {{ block.displayEndTime }} :: {{ block.activity }}</div>
+          <div>{{ block.displayStartTime }} ~ {{ block.displayEndTime }} :: {{ block.routineType }}</div>
         </div>
       </div>
     </div>
@@ -106,7 +146,7 @@ const afternoonDuration = computed(() => {
         <div v-for="(block, index) in afternoonSchedule" :key="`afternoon-${index}`"
              :style="blockStyle(block, 'afternoon')"
              class="time-block">
-          <div>{{ block.displayStartTime }} ~ {{ block.displayEndTime }} :: {{ block.activity }}</div>
+          <div>{{ block.displayStartTime }} ~ {{ block.displayEndTime }} :: {{ block.routineType }}</div>
         </div>
       </div>
     </div>
@@ -122,7 +162,7 @@ const afternoonDuration = computed(() => {
   display: flex;
   flex-direction: column; /* Stack label and schedule vertically */
   align-items: center; /* Center align the label and schedule blocks */
-  height: 900px;
+  height: 800px;
 }
 
 .schedule-label {
@@ -133,18 +173,20 @@ const afternoonDuration = computed(() => {
 }
 
 .schedule-half {
-  flex: 1;
   display: flex;
   flex-direction: column;
   border: 1px solid #ccc;
   margin: 0 10px;
   width: 300px;
+  height: 720px;
 }
 
+/*time-block 내부 font 관련 설정*/
 .time-block {
   width: 100%;
   margin: 2px 0;
-  color: white;
+  color: black;
+  font-size: 1.2rem;
   text-align: center;
   box-sizing: border-box;
 }

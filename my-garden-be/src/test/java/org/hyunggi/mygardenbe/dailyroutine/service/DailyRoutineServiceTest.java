@@ -1,7 +1,7 @@
 package org.hyunggi.mygardenbe.dailyroutine.service;
 
 import org.assertj.core.groups.Tuple;
-import org.hyunggi.mygardenbe.ServiceTestSupport;
+import org.hyunggi.mygardenbe.IntegrationTestSupport;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineTime;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineType;
 import org.hyunggi.mygardenbe.dailyroutine.entity.DailyRoutineEntity;
@@ -10,6 +10,7 @@ import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineResponse
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,7 +18,8 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-class DailyRoutineServiceTest extends ServiceTestSupport {
+@Transactional
+class DailyRoutineServiceTest extends IntegrationTestSupport {
     @Autowired
     private DailyRoutineService dailyRoutineService;
     @Autowired
@@ -73,7 +75,10 @@ class DailyRoutineServiceTest extends ServiceTestSupport {
         dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription);
 
         //when
-        final List<DailyRoutineResponse> dailyRoutineResponses = dailyRoutineService.getDailyRoutine();
+        final List<DailyRoutineResponse> dailyRoutineResponses = dailyRoutineService.getDailyRoutine(
+                LocalDateTime.of(2021, 10, 1, 0, 0, 0),
+                LocalDateTime.of(2021, 10, 2, 23, 59, 59)
+        );
 
         //then
         assertThat(dailyRoutineResponses).hasSize(2)
