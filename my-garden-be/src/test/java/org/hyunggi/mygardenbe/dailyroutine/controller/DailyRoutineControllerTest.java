@@ -129,4 +129,20 @@ class DailyRoutineControllerTest extends ControllerTestSupport {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data").isArray());
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            ", 2023-10-01T23:00:00",
+            "2023-10-01T22:00:00, "
+    })
+    @DisplayName("Daily Routine 목록을 조회할 때, 시작시간 혹은 종료시간을 입력하지 않으면 요청에 실패한다.")
+    void throwExceptionWhenStartDateTimeOrEndDateTimeIsEmpty(final String startDateTime, final String endDateTime) throws Exception {
+        //given, when, then
+        mockMvc.perform(
+                        get("/api/daily-routine")
+                                .param("startDateTime", startDateTime)
+                                .param("endDateTime", endDateTime)
+                )
+                .andExpect(status().isBadRequest());
+    }
 }
