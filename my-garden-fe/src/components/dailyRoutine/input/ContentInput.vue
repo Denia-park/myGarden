@@ -7,20 +7,18 @@ defineProps({
 
 const content = ref('');
 
-const emit = defineEmits(['changeContent'])
+const emit = defineEmits(['changeContent', 'submit'])
 
 function submit() {
-  emit('changeContent', content);
+  emit('submit', content);
 }
 </script>
 
 <template>
   <div class="input-group">
     <p>{{ inputName }}</p>
-    <textarea v-model="content" placeholder="일과를 입력하세요" @keyup.enter.ctrl="submit"/>
-
-    <button class="btn btn-secondary" type="button" @click="submit">등록</button>
-    <p>(※ Ctrl + Enter를 입력하셔도 등록이 됩니다.)</p>
+    <textarea v-model="content" placeholder="일과를 입력하세요" @input="(e) => emit('changeContent', e.target.value)"
+              @keyup.enter.ctrl="submit"/>
   </div>
 </template>
 
