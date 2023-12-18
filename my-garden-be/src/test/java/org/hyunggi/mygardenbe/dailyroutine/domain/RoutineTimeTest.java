@@ -49,7 +49,7 @@ class RoutineTimeTest {
                 Arguments.of(
                         RoutineTime.of(
                                 LocalDateTime.of(2023, 12, 14, 9, 0, 0),
-                                LocalDateTime.of(2023, 12, 15, 10, 0, 0)
+                                LocalDateTime.of(2023, 12, 15, 9, 0, 0)
                         ),
                         false
                 )
