@@ -31,7 +31,10 @@ function addLog(content) {
     <ContentTitle :input-name="'한 일 등록'"/>
     <DateInput :input-name="'시작'" @change-date="date => startDate = date"/>
     <DateInput :input-name="'끝'" @change-date="date => endDate = date"/>
-    <ContentInput :input-name="'내용'" @change-content="addLog"/>
+    <ContentInput :input-name="'내용'" @submit="addLog" @change-content="typingContent => content = typingContent"/>
+
+    <button class="btn btn-secondary" type="button" @click="postDailyRoutine">등록</button>
+    <p>(※ Ctrl + Enter를 입력하셔도 등록이 됩니다.)</p>
   </div>
 </template>
 
