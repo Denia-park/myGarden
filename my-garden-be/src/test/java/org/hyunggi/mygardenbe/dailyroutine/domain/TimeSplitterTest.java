@@ -32,7 +32,7 @@ class TimeSplitterTest {
         //given
         final RoutineTime routineTime = RoutineTime.of(
                 LocalDateTime.of(2023, 12, 14, 9, 0, 0),
-                LocalDateTime.of(2023, 12, 15, 10, 0, 0)
+                LocalDateTime.of(2023, 12, 15, 3, 0, 0)
         );
 
         //when
@@ -47,7 +47,7 @@ class TimeSplitterTest {
                         ),
                         RoutineTime.of(
                                 LocalDateTime.of(2023, 12, 15, 0, 0, 0),
-                                LocalDateTime.of(2023, 12, 15, 10, 0, 0)
+                                LocalDateTime.of(2023, 12, 15, 3, 0, 0)
                         )
                 );
     }

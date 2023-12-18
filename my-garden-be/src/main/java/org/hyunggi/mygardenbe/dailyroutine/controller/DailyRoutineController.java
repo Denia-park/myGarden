@@ -3,6 +3,7 @@ package org.hyunggi.mygardenbe.dailyroutine.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.hyunggi.mygardenbe.common.ApiResponse;
+import org.hyunggi.mygardenbe.dailyroutine.controller.request.GetRequest;
 import org.hyunggi.mygardenbe.dailyroutine.controller.request.PostRequest;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineTime;
 import org.hyunggi.mygardenbe.dailyroutine.domain.TimeSplitter;
@@ -32,8 +33,8 @@ public class DailyRoutineController {
     }
 
     @GetMapping("/api/daily-routine")
-    public ApiResponse<List<DailyRoutineResponse>> getDailyRoutine(@RequestParam final LocalDateTime startDateTime, @RequestParam final LocalDateTime endDateTime) {
-        final List<DailyRoutineResponse> dailyRoutineResponses = dailyRoutineService.getDailyRoutine(startDateTime, endDateTime);
+    public ApiResponse<List<DailyRoutineResponse>> getDailyRoutine(@ModelAttribute @Valid final GetRequest getRequest) {
+        final List<DailyRoutineResponse> dailyRoutineResponses = dailyRoutineService.getDailyRoutine(getRequest.startDateTime(), getRequest.endDateTime());
 
         return ApiResponse.ok(dailyRoutineResponses);
     }

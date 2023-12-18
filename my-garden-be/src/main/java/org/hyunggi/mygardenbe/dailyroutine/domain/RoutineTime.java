@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.util.Assert;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,6 +16,7 @@ import java.util.Objects;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoutineTime {
+    private static final int SECONDS_PER_DAY = 60 * 60 * 24;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
 
@@ -33,6 +35,7 @@ public class RoutineTime {
         Assert.isTrue(startTime != null, "시작 시간은 null이 될 수 없습니다.");
         Assert.isTrue(endTime != null, "종료 시간은 null이 될 수 없습니다.");
         Assert.isTrue(startTime.isBefore(endTime), "시작 시간은 종료 시간보다 빨라야 합니다.");
+        Assert.isTrue(Duration.between(startTime, endTime).toSeconds() <= SECONDS_PER_DAY, "날짜는 하루 이상 차이날 수 없습니다.");
     }
 
     public boolean isSameDate() {
