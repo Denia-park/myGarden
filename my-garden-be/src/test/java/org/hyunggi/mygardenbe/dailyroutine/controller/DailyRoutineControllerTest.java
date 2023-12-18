@@ -46,7 +46,7 @@ class DailyRoutineControllerTest extends ControllerTestSupport {
             "2023-10-01T22:00:00, "
     })
     @DisplayName("Daily Routine을 등록할 때, 시작시간 혹은 종료시간을 입력하지 않으면 요청에 실패한다.")
-    void throwExceptionWhenStartTimeIsAfterThanEndTime(final String startDateTime, final String endDateTime) throws Exception {
+    void throwExceptionWhenStartTimeOrEndTimeIsNull(final String startDateTime, final String endDateTime) throws Exception {
         //given
         final PostRequest request = PostRequest.builder()
                 .startDateTime(startDateTime)
@@ -86,7 +86,7 @@ class DailyRoutineControllerTest extends ControllerTestSupport {
 
     @Test
     @DisplayName("Daily Routine을 등록할 때, 루틴 설명이 없으면 요청에 실패한다.")
-    void throwExceptionWhenRoutineDescriptionIsEmpty() throws Exception {
+    void throwExceptionWhenRoutineDescriptionIsNull() throws Exception {
         //given
         final PostRequest request = PostRequest.builder()
                 .startDateTime("2023-10-01T21:00:00")
@@ -136,7 +136,7 @@ class DailyRoutineControllerTest extends ControllerTestSupport {
             "2023-10-01T22:00:00, "
     })
     @DisplayName("Daily Routine 목록을 조회할 때, 시작시간 혹은 종료시간을 입력하지 않으면 요청에 실패한다.")
-    void throwExceptionWhenStartDateTimeOrEndDateTimeIsEmpty(final String startDateTime, final String endDateTime) throws Exception {
+    void throwExceptionWhenStartDateTimeOrEndDateTimeIsNull(final String startDateTime, final String endDateTime) throws Exception {
         //given, when, then
         mockMvc.perform(
                         get("/api/daily-routine")
