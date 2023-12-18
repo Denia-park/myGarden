@@ -56,7 +56,7 @@ function blockStyle(block, partOfDay) {
   const offset = getOffset(partOfDay);
 
   return {
-    position: `relative`,
+    position: `absolute`,
     backgroundColor: block.color,
     top: `${startTop - offset}px`,
     height: `${duration}px`
@@ -173,6 +173,7 @@ const afternoonSchedule = computed(() => {
 }
 
 .schedule-half {
+  position: relative;
   display: flex;
   flex-direction: column;
   border: 1px solid #ccc;
