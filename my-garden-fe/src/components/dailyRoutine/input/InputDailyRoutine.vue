@@ -9,7 +9,7 @@ import axios from "axios";
 const startDate = ref('');
 const endDate = ref('');
 const content = ref('');
-const routineType = ref('');
+const routineType = ref('STUDY');
 
 function logData() {
   console.log("startDate : " + startDate.value)
