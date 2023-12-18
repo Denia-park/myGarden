@@ -2,21 +2,29 @@
 import ContentTitle from "@/components/default/ContentTitle.vue";
 import DateInput from "@/components/dailyRoutine/input/DateInput.vue";
 import ContentInput from "@/components/dailyRoutine/input/ContentInput.vue";
+import TypeInput from "@/components/dailyRoutine/input/TypeInput.vue";
 import {ref} from "vue";
 import axios from "axios";
 
 const startDate = ref('');
 const endDate = ref('');
 const content = ref('');
+const routineType = ref('');
 
-function postDailyRoutine() {
+function logData() {
   console.log("startDate : " + startDate.value)
   console.log("endDate : " + endDate.value)
   console.log("content : " + content.value)
+  console.log("routineType : " + routineType.value)
+}
+
+function postDailyRoutine() {
+  // logData();
 
   axios.post('/api/daily-routine', {
         startDateTime: startDate.value,
         endDateTime: endDate.value,
+        routineType: routineType.value,
         routineDescription: content.value
       }
   ).then(() => {
@@ -79,6 +87,7 @@ function validateContentLength() {
     <ContentTitle :input-name="'한 일 등록'"/>
     <DateInput :input-name="'시작'" @change-date="date => startDate = date"/>
     <DateInput :input-name="'끝'" @change-date="date => endDate = date"/>
+    <TypeInput :input-name="'타입'" @change-type="type => routineType = type"/>
     <ContentInput :input-name="'내용'" @submit="addLog" @change-content="typingContent => content = typingContent"/>
 
     <button class="btn btn-secondary" type="button" @click="postDailyRoutine">등록</button>

@@ -17,7 +17,6 @@ const emit = defineEmits(['changeDate'])
 <style scoped>
 
 p {
-  text-align: center;
   font-size: 20px;
   margin-bottom: 10px;
 }
