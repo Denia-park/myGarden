@@ -55,4 +55,17 @@ class RoutineTimeTest {
                 )
         );
     }
+
+    @Test
+    @DisplayName("만약 날짜가 하루이상 차이가 나면 예외가 발생한다")
+    void throwExceptionWhenDateIsMoreThanOneDay() {
+        //given
+        final LocalDateTime startTime = LocalDateTime.of(2023, 12, 14, 9, 0, 0);
+        final LocalDateTime endTime = LocalDateTime.of(2023, 12, 15, 9, 0, 1);
+
+        //when, then
+        assertThatThrownBy(() -> RoutineTime.of(startTime, endTime))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("날짜는 하루 이상 차이날 수 없습니다.");
+    }
 }
