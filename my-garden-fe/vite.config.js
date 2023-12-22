@@ -17,5 +17,8 @@ export default defineConfig({
         proxy: {
             '/api': 'http://localhost:8080'
         }
+    },
+    build: {
+        outDir: '../my-garden-be/src/main/resources/static'
     }
 })
