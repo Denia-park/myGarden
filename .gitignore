@@ -65,3 +65,6 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+# Vue build output file
+**/resources/static
