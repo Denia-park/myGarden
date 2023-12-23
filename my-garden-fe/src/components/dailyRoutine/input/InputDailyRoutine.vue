@@ -3,13 +3,20 @@ import ContentTitle from "@/components/default/ContentTitle.vue";
 import DateInput from "@/components/dailyRoutine/input/DateInput.vue";
 import ContentInput from "@/components/dailyRoutine/input/ContentInput.vue";
 import TypeInput from "@/components/dailyRoutine/input/TypeInput.vue";
-import {ref} from "vue";
-import {postDailyRoutine} from "@/components/dailyRoutine/api/apiUtils.js";
+import {onMounted, ref} from "vue";
+import {fetchTodayDailyRoutine, postDailyRoutine} from "@/components/dailyRoutine/api/apiUtils.js";
 
 const startDate = ref('');
 const endDate = ref('');
 const content = ref('');
 const routineType = ref('STUDY');
+
+onMounted(() => {
+  fetchTodayDailyRoutine()
+      .then(response => {
+        startDate.value = response.todayFirstDateTime;
+      });
+});
 
 function addLog() {
   // logData();
@@ -65,7 +72,7 @@ function validateContentLength() {
 <template>
   <div class="data-container">
     <ContentTitle :input-name="'한 일 등록'"/>
-    <DateInput :input-name="'시작'" @change-date="date => startDate = date"/>
+    <DateInput :input-name="'시작'" :start-date-time="startDate" @change-date="date => startDate = date"/>
     <DateInput :input-name="'끝'" @change-date="date => endDate = date"/>
     <TypeInput :input-name="'타입'" @change-type="type => routineType = type"/>
     <ContentInput :input-name="'내용'" @submit="addLog" @change-content="typingContent => content = typingContent"/>
