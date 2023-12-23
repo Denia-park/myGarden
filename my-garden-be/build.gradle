@@ -12,6 +12,10 @@ java {
     sourceCompatibility = '17'
 }
 
+jar {
+    enabled = false
+}
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -29,7 +33,7 @@ ext {
 dependencies {
     //Spring wen
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    
+
     //Spring Actuator
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
