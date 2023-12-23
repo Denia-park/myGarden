@@ -1,24 +1,18 @@
 <script setup>
-import {ref} from "vue";
 
 defineProps({
   inputName: String
 });
 
-const content = ref('');
-
 const emit = defineEmits(['changeContent', 'submit'])
 
-function submit() {
-  emit('submit', content);
-}
 </script>
 
 <template>
   <div class="input-group">
     <p>{{ inputName }}</p>
-    <textarea v-model="content" placeholder="일과를 입력하세요" @input="(e) => emit('changeContent', e.target.value)"
-              @keyup.enter.ctrl="submit"/>
+    <textarea placeholder="일과를 입력하세요" @input="(e) => emit('changeContent', e.target.value)"
+              @keyup.enter.ctrl="() => emit('submit', '')"/>
   </div>
 </template>
 
