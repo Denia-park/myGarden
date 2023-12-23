@@ -1,37 +1,19 @@
 <script setup>
 import {computed, onMounted, ref} from "vue";
-import axios from "axios";
+import {fetchTodayDailyRoutine} from "@/components/dailyRoutine/api/apiUtils.js";
 
 const splitSchedule = ref([]);
 
 onMounted(() => {
-  fetchTodayDailyRoutine();
-});
-
-function getTodayDateTimeRange() {
-  const currentDate = new Date();
-
-  const year = currentDate.getFullYear();
-  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-  const day = String(currentDate.getDate()).padStart(2, '0');
-
-  const todayStartDateTime = `${year}-${month}-${day}T00:00:00`;
-  const todayEndDateTime = `${year}-${month}-${day}T23:59:59`;
-
-  return {todayStartDateTime, todayEndDateTime};
-}
-
-function fetchTodayDailyRoutine() {
-  const {todayStartDateTime, todayEndDateTime} = getTodayDateTimeRange();
-
-  axios.get(`/api/daily-routine?startDateTime=${todayStartDateTime}&endDateTime=${todayEndDateTime}`)
-      .then(({data}) => {
-        splitSchedule.value = processSchedule(data.data);
+  fetchTodayDailyRoutine()
+      .then(response => {
+        splitSchedule.value = processSchedule(response.allDateTimeDataArray);
       })
       .catch(error => {
         console.log(error);
       });
-}
+});
+
 
 function calculateDuration(block) {
   const start = timeToMinutes(block.displayStartTime);
