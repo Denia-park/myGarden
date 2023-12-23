@@ -19,6 +19,13 @@ import java.util.List;
 public class DailyRoutineController {
     private final DailyRoutineService dailyRoutineService;
 
+    @GetMapping("/api/daily-routine")
+    public ApiResponse<List<DailyRoutineResponse>> getDailyRoutine(@ModelAttribute @Valid final GetRequest getRequest) {
+        final List<DailyRoutineResponse> dailyRoutineResponses = dailyRoutineService.getDailyRoutine(getRequest.startDateTime(), getRequest.endDateTime());
+
+        return ApiResponse.ok(dailyRoutineResponses);
+    }
+
     @PostMapping("/api/daily-routine")
     public ApiResponse<List<Long>> postDailyRoutine(@RequestBody @Valid final PostRequest request) {
         final List<RoutineTime> routineTimes = TimeSplitter.split(
@@ -30,12 +37,5 @@ public class DailyRoutineController {
         final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, request.routineType(), request.routineDescription());
 
         return ApiResponse.ok(ids);
-    }
-
-    @GetMapping("/api/daily-routine")
-    public ApiResponse<List<DailyRoutineResponse>> getDailyRoutine(@ModelAttribute @Valid final GetRequest getRequest) {
-        final List<DailyRoutineResponse> dailyRoutineResponses = dailyRoutineService.getDailyRoutine(getRequest.startDateTime(), getRequest.endDateTime());
-
-        return ApiResponse.ok(dailyRoutineResponses);
     }
 }
