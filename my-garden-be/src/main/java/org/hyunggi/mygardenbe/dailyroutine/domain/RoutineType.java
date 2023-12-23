@@ -4,13 +4,13 @@ import lombok.Getter;
 
 @Getter
 public enum RoutineType {
+    STUDY("공부"),
+    REST("휴식"),
+    ETC("기타"),
     EXERCISE("운동"),
     SLEEP("수면"),
     MEAL("식사"),
-    STUDY("공부"),
-    REST("휴식"),
-    GAME("게임"),
-    ETC("기타");
+    GAME("게임");
 
     private String description;
 
