@@ -1,6 +1,7 @@
 <script setup>
 defineProps({
-  inputName: String
+  inputName: String,
+  startDateTime: String,
 });
 
 const emit = defineEmits(['changeDate'])
@@ -10,7 +11,7 @@ const emit = defineEmits(['changeDate'])
 <template>
   <div class="input-group">
     <p>{{ inputName }}</p>
-    <input type="datetime-local" @input="(e) => emit('changeDate', e.target.value)"/>
+    <input :value="startDateTime" type="datetime-local" @input="(e) => emit('changeDate', e.target.value)"/>
   </div>
 </template>
 

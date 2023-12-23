@@ -1,71 +1,71 @@
 <script setup>
 import {computed, onMounted, ref} from "vue";
-import axios from "axios";
+import {fetchTodayDailyRoutine} from "@/components/dailyRoutine/api/apiUtils.js";
 
 const splitSchedule = ref([]);
 
 onMounted(() => {
-  fetchTodayDailyRoutine();
-});
-
-function getTodayDateTimeRange() {
-  const currentDate = new Date();
-
-  const year = currentDate.getFullYear();
-  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-  const day = String(currentDate.getDate()).padStart(2, '0');
-
-  const todayStartDateTime = `${year}-${month}-${day}T00:00:00`;
-  const todayEndDateTime = `${year}-${month}-${day}T23:59:59`;
-
-  return {todayStartDateTime, todayEndDateTime};
-}
-
-function fetchTodayDailyRoutine() {
-  const {todayStartDateTime, todayEndDateTime} = getTodayDateTimeRange();
-
-  axios.get(`/api/daily-routine?startDateTime=${todayStartDateTime}&endDateTime=${todayEndDateTime}`)
-      .then(({data}) => {
-        splitSchedule.value = processSchedule(data.data);
+  fetchTodayDailyRoutine()
+      .then(response => {
+        splitSchedule.value = processSchedule(response.allDateTimeDataArray);
       })
       .catch(error => {
         console.log(error);
       });
-}
+});
 
-function calculateDuration(block) {
-  const start = timeToMinutes(block.displayStartTime);
-  const end = timeToMinutes(block.displayEndTime);
-  return end - start;
-}
+function processSchedule(schedule) {
+  const NOON_STRING = '12:00';
+  const noon = timeToMinutes(NOON_STRING);
 
-function timeToMinutes(time) {
-  const [hours, minutes] = time.split(':').map(Number);
-  return hours * 60 + minutes;
-}
+  function createMorningBlock(block, startTime, end, endTime) {
+    return {
+      routineType: block.routineType,
+      color: findMatchingColor(block.routineType),
+      displayStartTime: startTime,
+      displayEndTime: end > noon ? NOON_STRING : endTime,
+      partOfDay: 'morning',
+    };
+  }
 
-function getOffset(partOfDay) {
-  const blockTotalHeight = 720; // 1px per minute, 12 hours * 60 minutes
+  function createAfternoonBlock(block, start, startTime, endTime) {
+    return {
+      routineType: block.routineType,
+      color: findMatchingColor(block.routineType),
+      displayStartTime: start < noon ? NOON_STRING : startTime,
+      displayEndTime: endTime,
+      partOfDay: 'afternoon',
+    };
+  }
 
-  return partOfDay === 'afternoon' ? blockTotalHeight : 0; // 12:00 ~ 24:00
-}
+  return schedule.flatMap(block => {
+    const startTime = extractTime(block.startDateTime);
+    const endTime = extractTime(block.endDateTime);
 
-function blockStyle(block, partOfDay) {
-  const duration = calculateDuration(block);
-  const startTop = timeToMinutes(block.displayStartTime);
-  const offset = getOffset(partOfDay);
+    const start = timeToMinutes(startTime);
+    const end = timeToMinutes(endTime);
+    const splitBlocks = [];
 
-  return {
-    position: `absolute`,
-    backgroundColor: block.color,
-    top: `${startTop - offset}px`,
-    height: `${duration}px`
-  };
+    if (start < noon) {
+      splitBlocks.push(createMorningBlock(block, startTime, end, endTime));
+    }
+
+    if (end > noon) {
+      splitBlocks.push(createAfternoonBlock(block, start, startTime, endTime));
+    }
+
+    return splitBlocks;
+  });
 }
 
 function extractTime(dateTime) {
   const [date, time] = dateTime.split('T');
   return time.slice(0, 5);
+}
+
+function timeToMinutes(time) {
+  const [hours, minutes] = time.split(':').map(Number);
+  return hours * 60 + minutes;
 }
 
 function findMatchingColor(type) {
@@ -82,40 +82,29 @@ function findMatchingColor(type) {
   return colorMap[type];
 }
 
-function processSchedule(schedule) {
-  const NOON_STRING = '12:00';
-  const noon = timeToMinutes(NOON_STRING);
+function blockStyle(block, partOfDay) {
+  const duration = calculateDuration(block);
+  const startTop = timeToMinutes(block.displayStartTime);
+  const offset = getOffset(partOfDay);
 
-  return schedule.flatMap(block => {
-    const startTime = extractTime(block.startDateTime);
-    const endTime = extractTime(block.endDateTime);
+  return {
+    position: `absolute`,
+    backgroundColor: block.color,
+    top: `${startTop - offset}px`,
+    height: `${duration}px`
+  };
+}
 
-    const start = timeToMinutes(startTime);
-    const end = timeToMinutes(endTime);
-    const splitBlocks = [];
+function calculateDuration(block) {
+  const start = timeToMinutes(block.displayStartTime);
+  const end = timeToMinutes(block.displayEndTime);
+  return end - start;
+}
 
-    if (start < noon) {
-      splitBlocks.push({
-        routineType: block.routineType,
-        color: findMatchingColor(block.routineType),
-        displayStartTime: startTime,
-        displayEndTime: end > noon ? NOON_STRING : endTime,
-        partOfDay: 'morning',
-      });
-    }
+function getOffset(partOfDay) {
+  const blockTotalHeight = 720; // 1px per minute, 12 hours * 60 minutes
 
-    if (end > noon) {
-      splitBlocks.push({
-        routineType: block.routineType,
-        color: findMatchingColor(block.routineType),
-        displayStartTime: start < noon ? NOON_STRING : startTime,
-        displayEndTime: endTime,
-        partOfDay: 'afternoon',
-      });
-    }
-
-    return splitBlocks;
-  });
+  return partOfDay === 'afternoon' ? blockTotalHeight : 0; // 12:00 ~ 24:00
 }
 
 const morningSchedule = computed(() => {
