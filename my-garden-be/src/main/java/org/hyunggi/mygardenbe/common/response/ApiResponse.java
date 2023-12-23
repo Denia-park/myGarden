@@ -1,4 +1,4 @@
-package org.hyunggi.mygardenbe.common;
+package org.hyunggi.mygardenbe.common.response;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
