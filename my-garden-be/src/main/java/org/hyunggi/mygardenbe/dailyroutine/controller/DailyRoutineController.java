@@ -2,7 +2,7 @@ package org.hyunggi.mygardenbe.dailyroutine.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.hyunggi.mygardenbe.common.ApiResponse;
+import org.hyunggi.mygardenbe.common.response.ApiResponse;
 import org.hyunggi.mygardenbe.dailyroutine.controller.request.GetRequest;
 import org.hyunggi.mygardenbe.dailyroutine.controller.request.PostRequest;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineTime;

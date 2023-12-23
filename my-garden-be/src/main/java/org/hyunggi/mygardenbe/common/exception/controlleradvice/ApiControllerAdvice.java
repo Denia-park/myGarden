@@ -1,6 +1,7 @@
-package org.hyunggi.mygardenbe.common;
+package org.hyunggi.mygardenbe.common.exception.controlleradvice;
 
 import lombok.extern.slf4j.Slf4j;
+import org.hyunggi.mygardenbe.common.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
