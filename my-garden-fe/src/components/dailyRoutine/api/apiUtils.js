@@ -41,3 +41,20 @@ function calculateTodayFirstDateTime(todayStartDateTime, allDateTimeData) {
 
     return returnValue;
 }
+
+export async function postDailyRoutine(startDate, endDate, routineType, content) {
+    axios.post('/api/daily-routine', {
+        startDateTime: startDate,
+        endDateTime: endDate,
+        routineType: routineType,
+        routineDescription: content
+    })
+        .then(() => {
+            alert("등록되었습니다.");
+            location.reload();
+        })
+        .catch(error => {
+            alert("등록에 실패하였습니다.");
+            console.log(error);
+        });
+}

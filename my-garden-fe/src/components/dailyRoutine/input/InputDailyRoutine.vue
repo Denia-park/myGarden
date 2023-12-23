@@ -4,45 +4,25 @@ import DateInput from "@/components/dailyRoutine/input/DateInput.vue";
 import ContentInput from "@/components/dailyRoutine/input/ContentInput.vue";
 import TypeInput from "@/components/dailyRoutine/input/TypeInput.vue";
 import {ref} from "vue";
-import axios from "axios";
+import {postDailyRoutine} from "@/components/dailyRoutine/api/apiUtils.js";
 
 const startDate = ref('');
 const endDate = ref('');
 const content = ref('');
 const routineType = ref('STUDY');
 
+function addLog() {
+  // logData();
+
+  validate();
+  postDailyRoutine(startDate.value, endDate.value, routineType.value, content.value);
+}
+
 function logData() {
   console.log("startDate : " + startDate.value)
   console.log("endDate : " + endDate.value)
   console.log("content : " + content.value)
   console.log("routineType : " + routineType.value)
-}
-
-function postDailyRoutine() {
-  // logData();
-
-  axios.post('/api/daily-routine', {
-        startDateTime: startDate.value,
-        endDateTime: endDate.value,
-        routineType: routineType.value,
-        routineDescription: content.value
-      }
-  ).then(() => {
-        alert("등록되었습니다.");
-        location.reload();
-      }
-  ).catch(error => {
-        alert("등록에 실패하였습니다.");
-        console.log(error);
-      }
-  );
-}
-
-function addLog(inputContent) {
-  content.value = inputContent.value;
-
-  validate();
-  postDailyRoutine();
 }
 
 function validate() {
@@ -80,7 +60,6 @@ function validateContentLength() {
     alert("content는 255자를 넘을 수 없습니다.")
   }
 }
-
 </script>
 
 <template>
@@ -91,7 +70,7 @@ function validateContentLength() {
     <TypeInput :input-name="'타입'" @change-type="type => routineType = type"/>
     <ContentInput :input-name="'내용'" @submit="addLog" @change-content="typingContent => content = typingContent"/>
 
-    <button class="btn btn-secondary" type="button" @click="postDailyRoutine">등록</button>
+    <button class="btn btn-secondary" type="button" @click="addLog">등록</button>
     <p>(※ Ctrl + Enter를 입력하셔도 등록이 됩니다.)</p>
   </div>
 </template>
