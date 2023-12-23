@@ -32,6 +32,7 @@ function postDailyRoutine() {
         location.reload();
       }
   ).catch(error => {
+        alert("등록에 실패하였습니다.");
         console.log(error);
       }
   );
