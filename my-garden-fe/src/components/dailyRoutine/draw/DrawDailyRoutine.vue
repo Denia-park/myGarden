@@ -14,40 +14,58 @@ onMounted(() => {
       });
 });
 
+function processSchedule(schedule) {
+  const NOON_STRING = '12:00';
+  const noon = timeToMinutes(NOON_STRING);
 
-function calculateDuration(block) {
-  const start = timeToMinutes(block.displayStartTime);
-  const end = timeToMinutes(block.displayEndTime);
-  return end - start;
-}
+  function createMorningBlock(block, startTime, end, endTime) {
+    return {
+      routineType: block.routineType,
+      color: findMatchingColor(block.routineType),
+      displayStartTime: startTime,
+      displayEndTime: end > noon ? NOON_STRING : endTime,
+      partOfDay: 'morning',
+    };
+  }
 
-function timeToMinutes(time) {
-  const [hours, minutes] = time.split(':').map(Number);
-  return hours * 60 + minutes;
-}
+  function createAfternoonBlock(block, start, startTime, endTime) {
+    return {
+      routineType: block.routineType,
+      color: findMatchingColor(block.routineType),
+      displayStartTime: start < noon ? NOON_STRING : startTime,
+      displayEndTime: endTime,
+      partOfDay: 'afternoon',
+    };
+  }
 
-function getOffset(partOfDay) {
-  const blockTotalHeight = 720; // 1px per minute, 12 hours * 60 minutes
+  return schedule.flatMap(block => {
+    const startTime = extractTime(block.startDateTime);
+    const endTime = extractTime(block.endDateTime);
 
-  return partOfDay === 'afternoon' ? blockTotalHeight : 0; // 12:00 ~ 24:00
-}
+    const start = timeToMinutes(startTime);
+    const end = timeToMinutes(endTime);
+    const splitBlocks = [];
 
-function blockStyle(block, partOfDay) {
-  const duration = calculateDuration(block);
-  const startTop = timeToMinutes(block.displayStartTime);
-  const offset = getOffset(partOfDay);
+    if (start < noon) {
+      splitBlocks.push(createMorningBlock(block, startTime, end, endTime));
+    }
 
-  return {
-    position: `absolute`,
-    backgroundColor: block.color,
-    top: `${startTop - offset}px`,
-    height: `${duration}px`
-  };
+    if (end > noon) {
+      splitBlocks.push(createAfternoonBlock(block, start, startTime, endTime));
+    }
+
+    return splitBlocks;
+  });
 }
 
 function extractTime(dateTime) {
   const [date, time] = dateTime.split('T');
   return time.slice(0, 5);
+}
+
+function timeToMinutes(time) {
+  const [hours, minutes] = time.split(':').map(Number);
+  return hours * 60 + minutes;
 }
 
 function findMatchingColor(type) {
@@ -64,40 +82,29 @@ function findMatchingColor(type) {
   return colorMap[type];
 }
 
-function processSchedule(schedule) {
-  const NOON_STRING = '12:00';
-  const noon = timeToMinutes(NOON_STRING);
+function blockStyle(block, partOfDay) {
+  const duration = calculateDuration(block);
+  const startTop = timeToMinutes(block.displayStartTime);
+  const offset = getOffset(partOfDay);
 
-  return schedule.flatMap(block => {
-    const startTime = extractTime(block.startDateTime);
-    const endTime = extractTime(block.endDateTime);
+  return {
+    position: `absolute`,
+    backgroundColor: block.color,
+    top: `${startTop - offset}px`,
+    height: `${duration}px`
+  };
+}
 
-    const start = timeToMinutes(startTime);
-    const end = timeToMinutes(endTime);
-    const splitBlocks = [];
+function calculateDuration(block) {
+  const start = timeToMinutes(block.displayStartTime);
+  const end = timeToMinutes(block.displayEndTime);
+  return end - start;
+}
 
-    if (start < noon) {
-      splitBlocks.push({
-        routineType: block.routineType,
-        color: findMatchingColor(block.routineType),
-        displayStartTime: startTime,
-        displayEndTime: end > noon ? NOON_STRING : endTime,
-        partOfDay: 'morning',
-      });
-    }
+function getOffset(partOfDay) {
+  const blockTotalHeight = 720; // 1px per minute, 12 hours * 60 minutes
 
-    if (end > noon) {
-      splitBlocks.push({
-        routineType: block.routineType,
-        color: findMatchingColor(block.routineType),
-        displayStartTime: start < noon ? NOON_STRING : startTime,
-        displayEndTime: endTime,
-        partOfDay: 'afternoon',
-      });
-    }
-
-    return splitBlocks;
-  });
+  return partOfDay === 'afternoon' ? blockTotalHeight : 0; // 12:00 ~ 24:00
 }
 
 const morningSchedule = computed(() => {
