@@ -3,14 +3,17 @@ import axios from "axios";
 export async function fetchTodayDailyRoutine() {
     const {todayStartDateTime, todayEndDateTime} = getTodayDateTimeRange();
 
+    function saveLastStartDateTimeInLocalStorage(allDateTimeDataArray) {
+        localStorage.setItem('todayLastStartDateTime', calculateTodayLastStartDateTime(todayStartDateTime, allDateTimeDataArray));
+    }
+
     return axios.get(`/api/daily-routine?startDateTime=${todayStartDateTime}&endDateTime=${todayEndDateTime}`)
         .then(({data}) => {
             const allDateTimeDataArray = data.data;
-            const todayFirstDateTime = calculateTodayFirstDateTime(todayStartDateTime, allDateTimeDataArray);
+            saveLastStartDateTimeInLocalStorage(allDateTimeDataArray);
 
             return {
-                allDateTimeDataArray,
-                todayFirstDateTime
+                allDateTimeDataArray
             };
         })
         .catch(error => {
@@ -19,7 +22,7 @@ export async function fetchTodayDailyRoutine() {
         });
 }
 
-function getTodayDateTimeRange() {
+export function getTodayDateTimeRange() {
     const currentDate = new Date();
 
     const year = currentDate.getFullYear();
@@ -32,7 +35,7 @@ function getTodayDateTimeRange() {
     return {todayStartDateTime, todayEndDateTime};
 }
 
-function calculateTodayFirstDateTime(todayStartDateTime, allDateTimeData) {
+function calculateTodayLastStartDateTime(todayStartDateTime, allDateTimeData) {
     let returnValue = todayStartDateTime;
 
     if (allDateTimeData.length !== 0) {
