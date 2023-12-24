@@ -4,18 +4,27 @@ import DateInput from "@/components/dailyRoutine/input/DateInput.vue";
 import ContentInput from "@/components/dailyRoutine/input/ContentInput.vue";
 import TypeInput from "@/components/dailyRoutine/input/TypeInput.vue";
 import {onMounted, ref} from "vue";
-import {fetchTodayDailyRoutine, postDailyRoutine} from "@/components/dailyRoutine/api/apiUtils.js";
+import {getTodayDateTimeRange, postDailyRoutine} from "@/components/dailyRoutine/api/apiUtils.js";
 
 const startDate = ref('');
 const endDate = ref('');
 const content = ref('');
 const routineType = ref('STUDY');
 
+function updateLastStartDateTime() {
+  let todayLastStartDateTime = localStorage.getItem("todayLastStartDateTime");
+  const todayDate = getTodayDateTimeRange().todayStartDateTime.split("T")[0];
+
+  //localStorage에 데이터가 없거나, 데이터 확인 했는데 오늘 날짜가 아니면 초기화
+  if (todayLastStartDateTime === null || todayLastStartDateTime.split("T")[0] !== todayDate) {
+    todayLastStartDateTime = "" + todayDate + "T00:00:00";
+  }
+
+  startDate.value = todayLastStartDateTime;
+}
+
 onMounted(() => {
-  fetchTodayDailyRoutine()
-      .then(response => {
-        startDate.value = response.todayFirstDateTime;
-      });
+  updateLastStartDateTime();
 });
 
 function addLog() {
