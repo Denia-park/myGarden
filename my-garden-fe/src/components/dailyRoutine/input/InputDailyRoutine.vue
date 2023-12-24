@@ -32,6 +32,8 @@ function addLog() {
 
   validate();
   postDailyRoutine(startDate.value, endDate.value, routineType.value, content.value);
+  
+  localStorage.setItem("todayLastStartDateTime", endDate.value);
 }
 
 function logData() {
