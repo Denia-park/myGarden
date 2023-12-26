@@ -25,6 +25,7 @@ function processSchedule(schedule) {
       displayStartTime: startTime,
       displayEndTime: end > noon ? NOON_STRING : endTime,
       partOfDay: 'morning',
+      routineDescription: block.routineDescription,
     };
   }
 
@@ -35,6 +36,7 @@ function processSchedule(schedule) {
       displayStartTime: start < noon ? NOON_STRING : startTime,
       displayEndTime: endTime,
       partOfDay: 'afternoon',
+      routineDescription: block.routineDescription,
     };
   }
 
@@ -125,7 +127,9 @@ const afternoonSchedule = computed(() => {
              :style="blockStyle(block, 'morning')"
              class="time-block my-tooltip">
           <div>{{ block.displayStartTime }} ~ {{ block.displayEndTime }} :: {{ block.routineType }}</div>
-          <span class="tooltiptext tooltip-left">왼쪽 툴팁</span>
+          <span class="tooltiptext tooltip-left">
+            {{ block.routineDescription === "" ? block.routineType : block.routineDescription }}
+          </span>
         </div>
       </div>
     </div>
@@ -137,7 +141,9 @@ const afternoonSchedule = computed(() => {
              :style="blockStyle(block, 'afternoon')"
              class="time-block my-tooltip">
           <div>{{ block.displayStartTime }} ~ {{ block.displayEndTime }} :: {{ block.routineType }}</div>
-          <span class="tooltiptext tooltip-right">오른쪽 툴팁</span>
+          <span class="tooltiptext tooltip-right">
+            {{ block.routineDescription === "" ? block.routineType : block.routineDescription }}
+          </span>
         </div>
       </div>
     </div>
