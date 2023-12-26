@@ -87,5 +87,9 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
                         Tuple.tuple("2021-10-01T22:00:00", "2021-10-01T23:59:59", "공부", "자바 스터디"),
                         Tuple.tuple("2021-10-02T00:00:00", "2021-10-02T01:00:00", "공부", "자바 스터디")
                 );
+
+        assertThat(dailyRoutineResponses)
+                .extracting("id")
+                .doesNotContainNull();
     }
 }

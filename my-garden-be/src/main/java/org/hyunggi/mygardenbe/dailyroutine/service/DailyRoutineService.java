@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -39,25 +42,20 @@ public class DailyRoutineService {
 
     public List<DailyRoutineResponse> getDailyRoutine(final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
         final List<DailyRoutineEntity> dailyRoutineEntities = dailyRoutineRepository.findAllByDateTimeBetween(startDateTime, endDateTime);
-        final List<DailyRoutine> dailyRoutines = convertDailyRoutines(dailyRoutineEntities);
+        final Map<Long, DailyRoutine> dailyRoutines = convertMapWithKeyAndDailyRoutine(dailyRoutineEntities);
 
         return convertDailyRoutineResponses(dailyRoutines);
     }
 
-    private List<DailyRoutine> convertDailyRoutines(final List<DailyRoutineEntity> dailyRoutineEntities) {
+    private Map<Long, DailyRoutine> convertMapWithKeyAndDailyRoutine(final List<DailyRoutineEntity> dailyRoutineEntities) {
         return dailyRoutineEntities.stream()
-                .map(DailyRoutineEntity::toDomain)
-                .toList();
+                .collect(Collectors.toMap(DailyRoutineEntity::getId, DailyRoutineEntity::toDomain));
     }
 
-    private List<DailyRoutineResponse> convertDailyRoutineResponses(final List<DailyRoutine> dailyRoutines) {
-        return dailyRoutines.stream()
-                .sorted(this::compareStartDateTime)
-                .map(DailyRoutineResponse::of)
-                .toList();
-    }
-
-    private int compareStartDateTime(final DailyRoutine o1, final DailyRoutine o2) {
-        return o1.getStartDateTime().compareTo(o2.getStartDateTime());
+    private List<DailyRoutineResponse> convertDailyRoutineResponses(final Map<Long, DailyRoutine> dailyRoutines) {
+        return dailyRoutines.entrySet().stream()
+                .map(entry -> DailyRoutineResponse.of(entry.getKey(), entry.getValue()))
+                .sorted(Comparator.comparing(DailyRoutineResponse::startDateTime))
+                .collect(Collectors.toList());
     }
 }

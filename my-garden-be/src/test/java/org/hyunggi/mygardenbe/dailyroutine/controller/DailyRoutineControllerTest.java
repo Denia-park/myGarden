@@ -112,6 +112,7 @@ class DailyRoutineControllerTest extends ControllerTestSupport {
                 .willReturn(
                         List.of(
                                 DailyRoutineResponse.builder()
+                                        .id(1L)
                                         .startDateTime("2023-10-01T22:00:00")
                                         .endDateTime("2023-10-01T23:00:00")
                                         .routineType("STUDY")
