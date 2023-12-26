@@ -143,8 +143,8 @@ const afternoonSchedule = computed(() => {
         <div v-for="(block, index) in afternoonSchedule" :key="`afternoon-${index}`"
              :style="blockStyle(block, 'afternoon')"
              class="time-block my-tooltip">
-          <div v-if="calculateDuration(block) >= 20">{{ block.displayStartTime }} ~ {{ block.displayEndTime }} ::
-            {{ block.routineType }}
+          <div v-if="calculateDuration(block) >= 20">
+            {{ block.displayStartTime }} ~ {{ block.displayEndTime }} :: {{ block.routineType }}
           </div>
           <span class="tooltiptext tooltip-right">
             {{ block.routineDescription === "" ? block.routineType : block.routineDescription }}
