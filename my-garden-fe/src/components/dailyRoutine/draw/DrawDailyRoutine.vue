@@ -196,7 +196,7 @@ const afternoonSchedule = computed(() => {
 
 .my-tooltip .tooltiptext {
   visibility: hidden; /* 이벤트가 없으면 툴팁 영역을 숨김 */
-  width: 120px; /* 툴팁 영역의 넓이를 설정 */
+  width: 180px; /* 툴팁 영역의 넓이를 설정 */
   background-color: black;
   color: #fff;
   text-align: center;
