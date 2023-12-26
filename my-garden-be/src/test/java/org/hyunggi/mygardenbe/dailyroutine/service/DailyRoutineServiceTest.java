@@ -46,7 +46,8 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
                         Tuple.tuple(routineTimeSample1, RoutineType.STUDY, "자바 스터디"),
                         Tuple.tuple(routineTimeSample2, RoutineType.STUDY, "자바 스터디")
                 );
-        assertThat(ids).hasSize(2);
+        assertThat(ids).hasSize(2)
+                .doesNotContainNull();
     }
 
     private RoutineTime getRoutineTimeSample1() {
