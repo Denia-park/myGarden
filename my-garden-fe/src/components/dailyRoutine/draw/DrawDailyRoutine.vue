@@ -93,7 +93,8 @@ function blockStyle(block, partOfDay) {
     position: `absolute`,
     backgroundColor: block.color,
     top: `${startTop - offset}px`,
-    height: `${duration}px`
+    height: `${duration}px`,
+    border: `1px solid black`,
   };
 }
 
