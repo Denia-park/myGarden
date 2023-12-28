@@ -10,7 +10,7 @@ const updateBlock = ref({});
 <template>
   <PageTitle :input-name="'하루 일과 기록'"/>
   <div id="wrapper">
-    <InputDailyRoutine/>
+    <InputDailyRoutine :update-block="updateBlock"/>
     <DrawDailyRoutine @update-block="(block) => updateBlock = block"/>
   </div>
 </template>

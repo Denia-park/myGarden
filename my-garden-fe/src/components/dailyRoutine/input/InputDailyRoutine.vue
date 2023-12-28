@@ -3,13 +3,17 @@ import ContentTitle from "@/components/default/ContentTitle.vue";
 import DateInput from "@/components/dailyRoutine/input/DateInput.vue";
 import ContentInput from "@/components/dailyRoutine/input/ContentInput.vue";
 import TypeInput from "@/components/dailyRoutine/input/TypeInput.vue";
-import {onMounted, ref} from "vue";
-import {getTodayDateTimeRange, postDailyRoutine} from "@/components/dailyRoutine/api/apiUtils.js";
+import {onMounted, ref, watch} from "vue";
+import {getTodayDate, getTodayDateTimeRange, postDailyRoutine} from "@/components/dailyRoutine/api/apiUtils.js";
 
 const startDate = ref('');
 const endDate = ref('');
 const content = ref('');
 const routineType = ref('STUDY');
+
+const props = defineProps({
+  updateBlock: Object
+});
 
 function updateLastStartDateTime() {
   let todayLastStartDateTime = localStorage.getItem("todayLastStartDateTime");
@@ -32,7 +36,7 @@ function addLog() {
 
   validate();
   postDailyRoutine(startDate.value, endDate.value, routineType.value, content.value);
-  
+
   localStorage.setItem("todayLastStartDateTime", endDate.value);
 }
 
@@ -78,15 +82,28 @@ function validateContentLength() {
     alert("content는 255자를 넘을 수 없습니다.")
   }
 }
+
+watch(() => props.updateBlock, (newVal) => {
+      const updateStartDateTime = getTodayDate() + `T${newVal.displayStartTime}`;
+
+      if (updateStartDateTime !== startDate.value) {
+        startDate.value = updateStartDateTime;
+        endDate.value = getTodayDate() + `T${newVal.displayEndTime}`;
+      }
+    }, {deep: true}
+)
+
+
 </script>
 
 <template>
   <div class="data-container">
     <ContentTitle :input-name="'한 일 등록'"/>
     <DateInput :input-name="'시작'" :start-date-time="startDate" @change-date="date => startDate = date"/>
-    <DateInput :input-name="'끝'" @change-date="date => endDate = date"/>
+    <DateInput :end-date-time="endDate" :input-name="'끝'" @change-date="date => endDate = date"/>
     <TypeInput :input-name="'타입'" @change-type="type => routineType = type"/>
-    <ContentInput :input-name="'내용'" @submit="addLog" @change-content="typingContent => content = typingContent"/>
+    <ContentInput :input-name="'내용'" @submit="addLog"
+                  @change-content="typingContent => content = typingContent"/>
 
     <button class="btn btn-secondary" type="button" @click="addLog">등록</button>
     <p>(※ Ctrl + Enter를 입력하셔도 등록이 됩니다.)</p>
