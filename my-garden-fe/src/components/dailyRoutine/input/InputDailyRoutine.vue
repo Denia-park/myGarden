@@ -32,22 +32,6 @@ onMounted(() => {
   updateLastStartDateTime();
 });
 
-function postRoutine() {
-  // logData();
-
-  validate();
-  postDailyRoutineApi(startDate.value, endDate.value, routineType.value, content.value);
-
-  localStorage.setItem("todayLastStartDateTime", endDate.value);
-}
-
-function logData() {
-  console.log("startDate : " + startDate.value)
-  console.log("endDate : " + endDate.value)
-  console.log("content : " + content.value)
-  console.log("routineType : " + routineType.value)
-}
-
 function validate() {
   //시작 날짜가 끝 날짜보다 늦을 수 없다.
   validateStartDateIsBeforeEndDate();
@@ -82,6 +66,31 @@ function validateContentLength() {
   if (content.value.length > 255) {
     alert("content는 255자를 넘을 수 없습니다.")
   }
+}
+
+function submit() {
+  validate();
+
+  if (isUpdateMode.value)
+    updateRoutine();
+  else
+    postRoutine();
+}
+
+function postRoutine() {
+  // logData();
+
+  validate();
+  postDailyRoutineApi(startDate.value, endDate.value, routineType.value, content.value);
+
+  localStorage.setItem("todayLastStartDateTime", endDate.value);
+}
+
+function logData() {
+  console.log("startDate : " + startDate.value)
+  console.log("endDate : " + endDate.value)
+  console.log("content : " + content.value)
+  console.log("routineType : " + routineType.value)
 }
 
 function updateRoutine() {
@@ -127,7 +136,7 @@ watch(() => props.updateBlock, (newVal) => {
     <DateInput :input-name="'시작'" :start-date-time="startDate" @change-date="date => startDate = date"/>
     <DateInput :end-date-time="endDate" :input-name="'끝'" @change-date="date => endDate = date"/>
     <TypeInput :input-name="'타입'" :routine-type="routineType" @change-type="type => routineType = type"/>
-    <ContentInput :content="content" :input-name="'내용'" @submit="postRoutine"
+    <ContentInput :content="content" :input-name="'내용'" @submit="submit"
                   @change-content="typingContent => content = typingContent"/>
 
     <div v-if="!isUpdateMode" class="submitBtnBox">
