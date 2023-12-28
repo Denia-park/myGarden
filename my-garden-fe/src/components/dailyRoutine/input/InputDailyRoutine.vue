@@ -32,7 +32,7 @@ onMounted(() => {
   updateLastStartDateTime();
 });
 
-function addLog() {
+function postRoutine() {
   // logData();
 
   validate();
@@ -84,7 +84,7 @@ function validateContentLength() {
   }
 }
 
-function updateLog() {
+function updateRoutine() {
   // 업데이트 로직
   alert("아직 준비중입니다.");
   // alert("수정되었습니다.");
@@ -99,7 +99,7 @@ function cancelUpdate() {
   content.value = '';
 }
 
-function deleteLog() {
+function deleteRoutine() {
   // 삭제 로직
   alert("아직 준비중입니다.");
   // alert("삭제되었습니다.");
@@ -127,17 +127,17 @@ watch(() => props.updateBlock, (newVal) => {
     <DateInput :input-name="'시작'" :start-date-time="startDate" @change-date="date => startDate = date"/>
     <DateInput :end-date-time="endDate" :input-name="'끝'" @change-date="date => endDate = date"/>
     <TypeInput :input-name="'타입'" :routine-type="routineType" @change-type="type => routineType = type"/>
-    <ContentInput :content="content" :input-name="'내용'" @submit="addLog"
+    <ContentInput :content="content" :input-name="'내용'" @submit="postRoutine"
                   @change-content="typingContent => content = typingContent"/>
 
     <div v-if="!isUpdateMode" class="submitBtnBox">
-      <button class="btn btn-secondary" type="button" @click="addLog">등록</button>
+      <button class="btn btn-secondary" type="button" @click="postRoutine">등록</button>
       <p>(※ Ctrl + Enter를 입력하셔도 등록이 됩니다.)</p>
     </div>
     <div v-if="isUpdateMode" class="editBtnBox">
-      <button class="btn btn-primary" type="button" @click="updateLog">수정</button>
+      <button class="btn btn-primary" type="button" @click="updateRoutine">수정</button>
       <button class="btn btn-secondary" type="button" @click="cancelUpdate">취소</button>
-      <button class="btn btn-danger" type="button" @click="deleteLog">삭제</button>
+      <button class="btn btn-danger" type="button" @click="deleteRoutine">삭제</button>
       <p>(※ Ctrl + Enter를 입력하셔도 수정이 됩니다.)</p>
     </div>
   </div>
