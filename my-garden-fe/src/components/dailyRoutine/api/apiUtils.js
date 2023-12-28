@@ -2,7 +2,12 @@ import axios from "axios";
 
 export async function getDailyRoutineApi(startDateTime, endDateTime) {
     function saveLastStartDateTimeInLocalStorage(allDateTimeDataArray) {
-        localStorage.setItem('todayLastStartDateTime', calculateTodayLastStartDateTime(startDateTime, allDateTimeDataArray));
+        const saveStartDateTime = calculateTodayLastStartDateTime(startDateTime, allDateTimeDataArray);
+
+        if (localStorage.getItem('todayLastStartDateTime') !== saveStartDateTime) {
+            localStorage.setItem('todayLastStartDateTime', saveStartDateTime);
+            location.reload();
+        }
     }
 
     return axios.get(`/api/daily-routine?startDateTime=${startDateTime}&endDateTime=${endDateTime}`)
