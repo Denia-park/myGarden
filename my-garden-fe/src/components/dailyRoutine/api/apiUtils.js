@@ -1,13 +1,11 @@
 import axios from "axios";
 
-export async function getDailyRoutineApi() {
-    const {todayStartDateTime, todayEndDateTime} = getTodayDateTimeRange();
-
+export async function getDailyRoutineApi(startDateTime, endDateTime) {
     function saveLastStartDateTimeInLocalStorage(allDateTimeDataArray) {
-        localStorage.setItem('todayLastStartDateTime', calculateTodayLastStartDateTime(todayStartDateTime, allDateTimeDataArray));
+        localStorage.setItem('todayLastStartDateTime', calculateTodayLastStartDateTime(startDateTime, allDateTimeDataArray));
     }
 
-    return axios.get(`/api/daily-routine?startDateTime=${todayStartDateTime}&endDateTime=${todayEndDateTime}`)
+    return axios.get(`/api/daily-routine?startDateTime=${startDateTime}&endDateTime=${endDateTime}`)
         .then(({data}) => {
             const allDateTimeDataArray = data.data;
             saveLastStartDateTimeInLocalStorage(allDateTimeDataArray);
@@ -17,7 +15,7 @@ export async function getDailyRoutineApi() {
             };
         })
         .catch(error => {
-            alert('오늘의 일정을 불러오는데 실패했습니다.')
+            alert('일정을 불러오는데 실패했습니다.')
             console.log(error);
         });
 }
