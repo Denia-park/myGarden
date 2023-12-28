@@ -10,6 +10,7 @@ const startDate = ref('');
 const endDate = ref('');
 const content = ref('');
 const routineType = ref('STUDY');
+const isUpdateMode = ref(false);
 
 const props = defineProps({
   updateBlock: Object
@@ -83,6 +84,28 @@ function validateContentLength() {
   }
 }
 
+function updateLog() {
+  // 업데이트 로직
+  alert("아직 준비중입니다.");
+  // alert("수정되었습니다.");
+  //location.reload();
+}
+
+function cancelUpdate() {
+  isUpdateMode.value = false;
+  updateLastStartDateTime();
+  endDate.value = '';
+  routineType.value = 'STUDY'
+  content.value = '';
+}
+
+function deleteLog() {
+  // 삭제 로직
+  alert("아직 준비중입니다.");
+  // alert("삭제되었습니다.");
+  //location.reload();
+}
+
 watch(() => props.updateBlock, (newVal) => {
       const updateStartDateTime = getTodayDate() + `T${newVal.displayStartTime}`;
 
@@ -91,10 +114,10 @@ watch(() => props.updateBlock, (newVal) => {
         endDate.value = getTodayDate() + `T${newVal.displayEndTime}`;
         routineType.value = newVal.routineType;
         content.value = newVal.routineDescription;
+        isUpdateMode.value = true;
       }
     }, {deep: true}
 )
-
 
 </script>
 
@@ -107,8 +130,16 @@ watch(() => props.updateBlock, (newVal) => {
     <ContentInput :content="content" :input-name="'내용'" @submit="addLog"
                   @change-content="typingContent => content = typingContent"/>
 
-    <button class="btn btn-secondary" type="button" @click="addLog">등록</button>
-    <p>(※ Ctrl + Enter를 입력하셔도 등록이 됩니다.)</p>
+    <div v-if="!isUpdateMode" class="submitBtnBox">
+      <button class="btn btn-secondary" type="button" @click="addLog">등록</button>
+      <p>(※ Ctrl + Enter를 입력하셔도 등록이 됩니다.)</p>
+    </div>
+    <div v-if="isUpdateMode" class="editBtnBox">
+      <button class="btn btn-primary" type="button" @click="updateLog">수정</button>
+      <button class="btn btn-secondary" type="button" @click="cancelUpdate">취소</button>
+      <button class="btn btn-danger" type="button" @click="deleteLog">삭제</button>
+      <p>(※ Ctrl + Enter를 입력하셔도 수정이 됩니다.)</p>
+    </div>
   </div>
 </template>
 
@@ -122,6 +153,18 @@ watch(() => props.updateBlock, (newVal) => {
   margin: 0 auto;
   padding: 20px;
   width: 100%;
+}
+
+.submitBtnBox button {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.editBtnBox button {
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  width: 26%
 }
 
 </style>
