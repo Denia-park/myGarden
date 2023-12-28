@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export async function fetchTodayDailyRoutine() {
+export async function getDailyRoutineApi() {
     const {todayStartDateTime, todayEndDateTime} = getTodayDateTimeRange();
 
     function saveLastStartDateTimeInLocalStorage(allDateTimeDataArray) {
@@ -55,7 +55,7 @@ function calculateTodayLastStartDateTime(todayStartDateTime, allDateTimeData) {
     return returnValue;
 }
 
-export async function postDailyRoutine(startDate, endDate, routineType, content) {
+export async function postDailyRoutineApi(startDate, endDate, routineType, content) {
     axios.post('/api/daily-routine', {
         startDateTime: startDate,
         endDateTime: endDate,

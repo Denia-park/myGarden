@@ -1,12 +1,12 @@
 <script setup>
 import {computed, onMounted, ref} from "vue";
-import {fetchTodayDailyRoutine} from "@/components/dailyRoutine/api/apiUtils.js";
+import {getDailyRoutineApi} from "@/components/dailyRoutine/api/apiUtils.js";
 
 const splitSchedule = ref([]);
 const emit = defineEmits(['updateBlock'])
 
 onMounted(() => {
-  fetchTodayDailyRoutine()
+  getDailyRoutineApi()
       .then(response => {
         splitSchedule.value = processSchedule(response.allDateTimeDataArray);
       })

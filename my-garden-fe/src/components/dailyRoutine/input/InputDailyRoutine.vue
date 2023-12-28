@@ -4,7 +4,7 @@ import DateInput from "@/components/dailyRoutine/input/DateInput.vue";
 import ContentInput from "@/components/dailyRoutine/input/ContentInput.vue";
 import TypeInput from "@/components/dailyRoutine/input/TypeInput.vue";
 import {onMounted, ref, watch} from "vue";
-import {getTodayDate, getTodayDateTimeRange, postDailyRoutine} from "@/components/dailyRoutine/api/apiUtils.js";
+import {getTodayDate, getTodayDateTimeRange, postDailyRoutineApi} from "@/components/dailyRoutine/api/apiUtils.js";
 
 const startDate = ref('');
 const endDate = ref('');
@@ -36,7 +36,7 @@ function postRoutine() {
   // logData();
 
   validate();
-  postDailyRoutine(startDate.value, endDate.value, routineType.value, content.value);
+  postDailyRoutineApi(startDate.value, endDate.value, routineType.value, content.value);
 
   localStorage.setItem("todayLastStartDateTime", endDate.value);
 }
