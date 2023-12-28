@@ -1,17 +1,27 @@
 <script setup>
 
-defineProps({
-  inputName: String
+import {ref, watch} from "vue";
+
+const props = defineProps({
+  inputName: String,
+  content: String
 });
 
+const content = ref(props.content);
+
 const emit = defineEmits(['changeContent', 'submit'])
+
+watch(() => props.content, (newValue) => {
+  content.value = newValue;
+});
 
 </script>
 
 <template>
   <div class="input-group">
     <p>{{ inputName }}</p>
-    <textarea placeholder="일과를 입력하세요" @input="(e) => emit('changeContent', e.target.value)"
+    <textarea v-model="content" placeholder="일과를 입력하세요"
+              @input="(e) => emit('changeContent', e.target.value)"
               @keyup.enter.ctrl="() => emit('submit', '')"/>
   </div>
 </template>
