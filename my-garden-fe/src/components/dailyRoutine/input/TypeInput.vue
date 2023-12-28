@@ -1,15 +1,45 @@
 <script setup>
-defineProps({
-  inputName: String
+import {ref, watch} from "vue";
+
+const props = defineProps({
+  inputName: String,
+  routineType: String
 });
 
 const emit = defineEmits(['changeType'])
+const selectValue = ref('');
+
+watch(() => props.routineType, (newValue) => {
+      selectValue.value = convertRoutineTypeToSelectValue(newValue);
+    }, {immediate: true}
+);
+
+function convertRoutineTypeToSelectValue(inputString) {
+  switch (inputString) {
+    case '공부':
+      return 'STUDY';
+    case '휴식':
+      return 'REST';
+    case '기타':
+      return 'ETC';
+    case '운동':
+      return 'EXERCISE';
+    case '수면':
+      return 'SLEEP';
+    case '식사':
+      return 'MEAL';
+    case '게임':
+      return 'GAME';
+    default: // 영어인 경우
+      return inputString;
+  }
+}
 
 </script>
 
 <template>
   <p>{{ inputName }}</p>
-  <select id="activity" @change="(e) => emit('changeType', e.target.value)">
+  <select id="activity" v-model="selectValue" @change="(e) => emit('changeType', e.target.value)">
     <option value="STUDY">공부</option>
     <option value="REST">휴식</option>
     <option value="ETC">기타</option>

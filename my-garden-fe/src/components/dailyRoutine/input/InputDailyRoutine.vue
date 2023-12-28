@@ -89,6 +89,7 @@ watch(() => props.updateBlock, (newVal) => {
       if (updateStartDateTime !== startDate.value) {
         startDate.value = updateStartDateTime;
         endDate.value = getTodayDate() + `T${newVal.displayEndTime}`;
+        routineType.value = newVal.routineType;
       }
     }, {deep: true}
 )
@@ -101,7 +102,7 @@ watch(() => props.updateBlock, (newVal) => {
     <ContentTitle :input-name="'한 일 등록'"/>
     <DateInput :input-name="'시작'" :start-date-time="startDate" @change-date="date => startDate = date"/>
     <DateInput :end-date-time="endDate" :input-name="'끝'" @change-date="date => endDate = date"/>
-    <TypeInput :input-name="'타입'" @change-type="type => routineType = type"/>
+    <TypeInput :input-name="'타입'" :routine-type="routineType" @change-type="type => routineType = type"/>
     <ContentInput :input-name="'내용'" @submit="addLog"
                   @change-content="typingContent => content = typingContent"/>
 
