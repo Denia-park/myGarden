@@ -39,19 +39,30 @@ onMounted(() => {
 
 function validate() {
   //시작 날짜가 끝 날짜보다 늦을 수 없다.
-  validateStartDateIsBeforeEndDate();
+  if (!validateStartDateIsBeforeEndDate()) {
+    return false;
+  }
 
   //두 날짜는 1일이상 차이가 날 수 없다.
-  validateDateDifferenceIsSmaller1();
+  if (!validateDateDifferenceIsSmaller1()) {
+    return false;
+  }
 
   //content는 255자를 넘을 수 없다.
-  validateContentLength();
+  if (!validateContentLength()) {
+    return false;
+  }
+
+  return true;
 }
 
 function validateStartDateIsBeforeEndDate() {
   if (startDate.value > endDate.value) {
     alert("시작 날짜가 끝 날짜보다 늦을 수 없습니다.")
+    return false;
   }
+
+  return true;
 }
 
 function validateDateDifferenceIsSmaller1() {
@@ -64,17 +75,25 @@ function validateDateDifferenceIsSmaller1() {
   // Check if the difference is more than 2 days
   if (daysDifference >= 1) {
     alert("1일 이상 차이 날 수 없습니다.");
+    return false;
   }
+
+  return true;
 }
 
 function validateContentLength() {
   if (content.value.length > 255) {
     alert("content는 255자를 넘을 수 없습니다.")
+    return false;
   }
+
+  return true;
 }
 
 function submit() {
-  validate();
+  if (!validate()) {
+    return;
+  }
 
   if (isUpdateMode.value)
     updateRoutine();
@@ -85,7 +104,10 @@ function submit() {
 function postRoutine() {
   // logData();
 
-  validate();
+  if (!validate()) {
+    return;
+  }
+  
   postDailyRoutineApi(startDate.value, endDate.value, routineType.value, content.value);
 
   localStorage.setItem("todayLastStartDateTime", endDate.value);
