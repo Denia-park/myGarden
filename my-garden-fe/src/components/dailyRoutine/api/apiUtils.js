@@ -74,3 +74,31 @@ export async function postDailyRoutineApi(startDate, endDate, routineType, conte
             console.log(error);
         });
 }
+
+export async function updateDailyRoutineApi(id, startDate, endDate, routineType, content) {
+    function updateLastStartDateTime(endDate) {
+        const todayLastStartDateTime = localStorage.getItem("todayLastStartDateTime");
+
+        if (todayLastStartDateTime < endDate) {
+            localStorage.setItem("todayLastStartDateTime", endDate);
+        }
+    }
+
+    axios.put(`/api/daily-routine/${id}`, {
+        startDateTime: startDate,
+        endDateTime: endDate,
+        routineType: routineType,
+        routineDescription: content
+    })
+        .then(() => {
+            alert("수정되었습니다.");
+
+            updateLastStartDateTime(endDate);
+
+            location.reload();
+        })
+        .catch(error => {
+            alert("수정에 실패했습니다.");
+            console.log(error);
+        });
+}

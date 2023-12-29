@@ -4,7 +4,12 @@ import DateInput from "@/components/dailyRoutine/input/DateInput.vue";
 import ContentInput from "@/components/dailyRoutine/input/ContentInput.vue";
 import TypeInput from "@/components/dailyRoutine/input/TypeInput.vue";
 import {onMounted, ref, watch} from "vue";
-import {getTodayDate, getTodayDateTimeRange, postDailyRoutineApi} from "@/components/dailyRoutine/api/apiUtils.js";
+import {
+  getTodayDate,
+  getTodayDateTimeRange,
+  postDailyRoutineApi,
+  updateDailyRoutineApi
+} from "@/components/dailyRoutine/api/apiUtils.js";
 
 const startDate = ref('');
 const endDate = ref('');
@@ -93,11 +98,15 @@ function logData() {
   console.log("routineType : " + routineType.value)
 }
 
+/*
+TODO
+  2. 삭제 로직 구현
+    2-1. api 호출
+ */
+
 function updateRoutine() {
-  // 업데이트 로직
-  alert("아직 준비중입니다.");
-  // alert("수정되었습니다.");
-  //location.reload();
+  validate();
+  updateDailyRoutineApi(props.updateBlock.id, startDate.value, endDate.value, routineType.value, content.value);
 }
 
 function cancelUpdate() {
