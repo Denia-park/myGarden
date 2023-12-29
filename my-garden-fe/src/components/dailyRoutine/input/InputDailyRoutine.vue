@@ -21,6 +21,10 @@ const props = defineProps({
   updateBlock: Object
 });
 
+onMounted(() => {
+  getLastStartDateTime();
+});
+
 function getLastStartDateTime() {
   let todayLastStartDateTime = localStorage.getItem("todayLastStartDateTime");
   const todayDate = getTodayDateTimeRange().todayStartDateTime.split("T")[0];
@@ -33,63 +37,6 @@ function getLastStartDateTime() {
   startDate.value = todayLastStartDateTime;
 }
 
-onMounted(() => {
-  getLastStartDateTime();
-});
-
-function validate() {
-  //시작 날짜가 끝 날짜보다 늦을 수 없다.
-  if (!validateStartDateIsBeforeEndDate()) {
-    return false;
-  }
-
-  //두 날짜는 1일이상 차이가 날 수 없다.
-  if (!validateDateDifferenceIsSmaller1()) {
-    return false;
-  }
-
-  //content는 255자를 넘을 수 없다.
-  if (!validateContentLength()) {
-    return false;
-  }
-
-  return true;
-}
-
-function validateStartDateIsBeforeEndDate() {
-  if (startDate.value > endDate.value) {
-    alert("시작 날짜가 끝 날짜보다 늦을 수 없습니다.")
-    return false;
-  }
-
-  return true;
-}
-
-function validateDateDifferenceIsSmaller1() {
-  // Calculate the time difference in milliseconds
-  const timeDifference = new Date(endDate.value) - new Date(startDate.value);
-
-  // Calculate the number of days difference
-  const daysDifference = timeDifference / (1000 * 3600 * 24);
-
-  // Check if the difference is more than 2 days
-  if (daysDifference >= 1) {
-    alert("1일 이상 차이 날 수 없습니다.");
-    return false;
-  }
-
-  return true;
-}
-
-function validateContentLength() {
-  if (content.value.length > 255) {
-    alert("content는 255자를 넘을 수 없습니다.")
-    return false;
-  }
-
-  return true;
-}
-
 function submit() {
   if (!validate()) {
     return;
@@ -99,6 +46,59 @@ function submit() {
     updateRoutine();
   else
     postRoutine();
+}
+
+function validate() {
+  //시작 날짜가 끝 날짜보다 늦을 수 없다.
+  function validateStartDateIsBeforeEndDate() {
+    if (startDate.value > endDate.value) {
+      alert("시작 날짜가 끝 날짜보다 늦을 수 없습니다.")
+      return false;
+    }
+
+    return true;
+  }
+
+  if (!validateStartDateIsBeforeEndDate()) {
+    return false;
+  }
+
+  //두 날짜는 1일이상 차이가 날 수 없다.
+  function validateDateDifferenceIsSmaller1() {
+    // Calculate the time difference in milliseconds
+    const timeDifference = new Date(endDate.value) - new Date(startDate.value);
+
+    // Calculate the number of days difference
+    const daysDifference = timeDifference / (1000 * 3600 * 24);
+
+    // Check if the difference is more than 2 days
+    if (daysDifference >= 1) {
+      alert("1일 이상 차이 날 수 없습니다.");
+      return false;
+    }
+
+    return true;
+  }
+
+  if (!validateDateDifferenceIsSmaller1()) {
+    return false;
+  }
+
+  //content는 255자를 넘을 수 없다.
+  function validateContentLength() {
+    if (content.value.length > 255) {
+      alert("content는 255자를 넘을 수 없습니다.")
+      return false;
+    }
+
+    return true;
+  }
+
+  if (!validateContentLength()) {
+    return false;
+  }
+
+  return true;
 }
 
 function postRoutine() {
