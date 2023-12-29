@@ -107,7 +107,7 @@ function postRoutine() {
   if (!validate()) {
     return;
   }
-  
+
   postDailyRoutineApi(startDate.value, endDate.value, routineType.value, content.value);
 
   localStorage.setItem("todayLastStartDateTime", endDate.value);
@@ -127,8 +127,33 @@ TODO
  */
 
 function updateRoutine() {
-  validate();
+  if (!updateValidate()) {
+    return;
+  }
+
   updateDailyRoutineApi(props.updateBlock.id, startDate.value, endDate.value, routineType.value, content.value);
+}
+
+function updateValidate() {
+  if (!validate()) {
+    return false;
+  }
+
+  function isNotDateToday() {
+    //오늘내의 날짜로만 수정이 가능하다.
+    const todayDate = getTodayDate(); // Assuming getTodayDate() returns a String
+    const tempStartDate = startDate.value.split("T")[0];
+    const tempEndDate = endDate.value.split("T")[0];
+
+    return tempStartDate !== todayDate || tempEndDate !== todayDate;
+  }
+
+  if (isNotDateToday()) {
+    alert("오늘 내의 날짜만 수정이 가능합니다.");
+    return false;
+  }
+
+  return true;
 }
 
 function cancelUpdate() {
