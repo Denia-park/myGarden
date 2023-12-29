@@ -32,7 +32,7 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         final RoutineTime routineTimeSample1 = getRoutineTimeSample1();
         final RoutineTime routineTimeSample2 = getRoutineTimeSample2();
         final List<RoutineTime> routineTimes = List.of(routineTimeSample1, routineTimeSample2);
-        final String routineType = "STUDY";
+        final RoutineType routineType = RoutineType.STUDY;
         final String routineDescription = "자바 스터디";
 
         //when
@@ -71,7 +71,7 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         final RoutineTime routineTimeSample1 = getRoutineTimeSample1();
         final RoutineTime routineTimeSample2 = getRoutineTimeSample2();
         final List<RoutineTime> routineTimes = List.of(routineTimeSample1, routineTimeSample2);
-        final String routineType = "STUDY";
+        final RoutineType routineType = RoutineType.STUDY;
         final String routineDescription = "자바 스터디";
         dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription);
 

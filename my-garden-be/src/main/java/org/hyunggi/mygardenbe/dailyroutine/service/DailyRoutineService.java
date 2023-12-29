@@ -3,6 +3,7 @@ package org.hyunggi.mygardenbe.dailyroutine.service;
 import lombok.RequiredArgsConstructor;
 import org.hyunggi.mygardenbe.dailyroutine.domain.DailyRoutine;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineTime;
+import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineType;
 import org.hyunggi.mygardenbe.dailyroutine.entity.DailyRoutineEntity;
 import org.hyunggi.mygardenbe.dailyroutine.repository.DailyRoutineRepository;
 import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineResponse;
@@ -22,13 +23,13 @@ public class DailyRoutineService {
     private final DailyRoutineRepository dailyRoutineRepository;
 
     @Transactional
-    public List<Long> postDailyRoutine(final List<RoutineTime> routineTimes, final String routineType, final String routineDescription) {
+    public List<Long> postDailyRoutine(final List<RoutineTime> routineTimes, final RoutineType routineType, final String routineDescription) {
         final List<DailyRoutine> dailyRoutines = convertDailyRoutines(routineTimes, routineType, routineDescription);
 
         return extractIds(dailyRoutineRepository.saveAll(DailyRoutineEntity.of(dailyRoutines)));
     }
 
-    private List<DailyRoutine> convertDailyRoutines(final List<RoutineTime> routineTimes, final String routineType, final String routineDescription) {
+    private List<DailyRoutine> convertDailyRoutines(final List<RoutineTime> routineTimes, final RoutineType routineType, final String routineDescription) {
         return routineTimes.stream()
                 .map(routineTime -> DailyRoutine.of(routineTime, routineType, routineDescription))
                 .toList();

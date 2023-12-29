@@ -34,9 +34,11 @@ public class DailyRoutineController {
                 RoutineTime.of(
                         LocalDateTime.parse(request.startDateTime()),
                         LocalDateTime.parse(request.endDateTime())
-                ));
+                )
+        );
+        final RoutineType routineType = RoutineType.valueOf(request.routineType());
 
-        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, request.routineType(), request.routineDescription());
+        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, request.routineDescription());
 
         return ApiResponse.ok(ids);
     }
