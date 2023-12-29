@@ -2,7 +2,6 @@ package org.hyunggi.mygardenbe.dailyroutine.controller;
 
 import org.hyunggi.mygardenbe.ControllerTestSupport;
 import org.hyunggi.mygardenbe.dailyroutine.controller.request.PostRequest;
-import org.hyunggi.mygardenbe.dailyroutine.controller.request.PutRequest;
 import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -151,8 +150,7 @@ class DailyRoutineControllerTest extends ControllerTestSupport {
     @DisplayName("Daily Routine을 수정한다.")
     void putDailyRoutine() throws Exception {
         //given
-        final PutRequest request = PutRequest.builder()
-                .id(1L)
+        final PostRequest request = PostRequest.builder()
                 .startDateTime("2023-10-01T22:00:00")
                 .endDateTime("2023-10-01T23:00:00")
                 .routineType("STUDY")

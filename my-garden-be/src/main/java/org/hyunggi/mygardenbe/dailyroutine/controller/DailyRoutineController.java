@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.hyunggi.mygardenbe.common.response.ApiResponse;
 import org.hyunggi.mygardenbe.dailyroutine.controller.request.GetRequest;
 import org.hyunggi.mygardenbe.dailyroutine.controller.request.PostRequest;
-import org.hyunggi.mygardenbe.dailyroutine.controller.request.PutRequest;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineTime;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineType;
 import org.hyunggi.mygardenbe.dailyroutine.domain.TimeSplitter;
@@ -44,7 +43,7 @@ public class DailyRoutineController {
     }
 
     @PutMapping("/api/daily-routine/{id}")
-    public ApiResponse<Long> putDailyRoutine(@PathVariable final Long id, @RequestBody @Valid final PutRequest request) {
+    public ApiResponse<Long> putDailyRoutine(@PathVariable final Long id, @RequestBody @Valid final PostRequest request) {
         final RoutineTime routineTime = RoutineTime.of(
                 LocalDateTime.parse(request.startDateTime()),
                 LocalDateTime.parse(request.endDateTime())
