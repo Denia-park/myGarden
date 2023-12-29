@@ -49,4 +49,10 @@ public class DailyRoutineEntity extends BaseEntity {
                 routineDescription
         );
     }
+
+    public void update(final DailyRoutine dailyRoutine) {
+        this.routineTime = dailyRoutine.getRoutineTime();
+        this.routineType = dailyRoutine.getRoutineType();
+        this.routineDescription = dailyRoutine.getRoutineDescription();
+    }
 }

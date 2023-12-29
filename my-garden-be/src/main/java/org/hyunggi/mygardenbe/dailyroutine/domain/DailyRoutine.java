@@ -1,6 +1,7 @@
 package org.hyunggi.mygardenbe.dailyroutine.domain;
 
 import lombok.Getter;
+import org.hyunggi.mygardenbe.common.exception.BusinessException;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
@@ -56,5 +57,15 @@ public class DailyRoutine {
 
     public String getRoutineTypeDescription() {
         return routineType.getDescription();
+    }
+
+    public void update(final RoutineTime routineTime, final RoutineType routineType, final String description) {
+        if (this.routineTime.isNotStartAndEndDateEqualTo(routineTime)) {
+            throw new BusinessException("동일한 날짜의 시간으로만 수정할 수 있습니다.");
+        }
+
+        this.routineTime = routineTime;
+        this.routineType = routineType;
+        this.routineDescription = description;
     }
 }
