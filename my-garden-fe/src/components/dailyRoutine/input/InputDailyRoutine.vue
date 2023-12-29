@@ -140,7 +140,7 @@ watch(() => props.updateBlock, (newVal) => {
                   @change-content="typingContent => content = typingContent"/>
 
     <div v-if="!isUpdateMode" class="submitBtnBox">
-      <button class="btn btn-secondary" type="button" @click="postRoutine">등록</button>
+      <button class="btn btn-primary" type="button" @click="postRoutine">등록</button>
       <p>(※ Ctrl + Enter를 입력하셔도 등록이 됩니다.)</p>
     </div>
     <div v-if="isUpdateMode" class="editBtnBox">
