@@ -10,7 +10,10 @@ const emit = defineEmits(['changeType'])
 const selectValue = ref('');
 
 watch(() => props.routineType, (newValue) => {
-      selectValue.value = convertRoutineTypeToSelectValue(newValue);
+      const type = convertRoutineTypeToSelectValue(newValue);
+
+      selectValue.value = type;
+      emit('changeType', type)
     }, {immediate: true}
 );
 
