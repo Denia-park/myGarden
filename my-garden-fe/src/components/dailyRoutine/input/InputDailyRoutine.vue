@@ -16,7 +16,7 @@ const props = defineProps({
   updateBlock: Object
 });
 
-function updateLastStartDateTime() {
+function getLastStartDateTime() {
   let todayLastStartDateTime = localStorage.getItem("todayLastStartDateTime");
   const todayDate = getTodayDateTimeRange().todayStartDateTime.split("T")[0];
 
@@ -29,7 +29,7 @@ function updateLastStartDateTime() {
 }
 
 onMounted(() => {
-  updateLastStartDateTime();
+  getLastStartDateTime();
 });
 
 function validate() {
@@ -102,7 +102,7 @@ function updateRoutine() {
 
 function cancelUpdate() {
   isUpdateMode.value = false;
-  updateLastStartDateTime();
+  getLastStartDateTime();
   endDate.value = '';
   routineType.value = 'STUDY'
   content.value = '';
