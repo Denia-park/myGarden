@@ -10,6 +10,16 @@ export async function getDailyRoutineApi(startDateTime, endDateTime) {
         }
     }
 
+    function calculateTodayLastStartDateTime(todayStartDateTime, allDateTimeData) {
+        let returnValue = todayStartDateTime;
+
+        if (allDateTimeData.length !== 0) {
+            returnValue = allDateTimeData[allDateTimeData.length - 1].endDateTime;
+        }
+
+        return returnValue;
+    }
+
     return axios.get(`/api/daily-routine?startDateTime=${startDateTime}&endDateTime=${endDateTime}`)
         .then(({data}) => {
             const allDateTimeDataArray = data.data;
@@ -48,16 +58,6 @@ export function getTodayDate() {
     return `${year}-${month}-${day}`;
 }
 
-function calculateTodayLastStartDateTime(todayStartDateTime, allDateTimeData) {
-    let returnValue = todayStartDateTime;
-
-    if (allDateTimeData.length !== 0) {
-        returnValue = allDateTimeData[allDateTimeData.length - 1].endDateTime;
-    }
-
-    return returnValue;
-}
-
 export async function postDailyRoutineApi(startDate, endDate, routineType, content) {
     axios.post('/api/daily-routine', {
         startDateTime: startDate,
@@ -70,7 +70,7 @@ export async function postDailyRoutineApi(startDate, endDate, routineType, conte
             location.reload();
         })
         .catch(error => {
-            alert("등록에 실패하였습니다.");
+            alert("등록에 실패했습니다.");
             console.log(error);
         });
 }
