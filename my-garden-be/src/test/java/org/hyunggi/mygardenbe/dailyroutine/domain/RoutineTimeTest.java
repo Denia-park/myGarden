@@ -72,7 +72,7 @@ class RoutineTimeTest {
     @ParameterizedTest
     @MethodSource("providerIsStartAndEndDateEqualTo")
     @DisplayName("입력으로 전달한 날짜가 RoutineTime의 시작 날짜와 종료 날짜랑 같은지 비교한다.")
-    void throwExceptionWhenInputDateIsDifferentFromRoutineTime(RoutineTime inputDate, boolean expected) {
+    void throwExceptionWhenInputDateIsDifferentFromRoutineTime(RoutineTime inputRoutineTime, boolean expected) {
         //given
         final RoutineTime routineTime = RoutineTime.of(
                 LocalDateTime.of(2023, 12, 14, 9, 0, 0),
@@ -80,7 +80,7 @@ class RoutineTimeTest {
         );
 
         //when
-        final boolean isStartAndEndDateEqualTo = routineTime.isStartAndEndDateEqualTo(inputDate);
+        final boolean isStartAndEndDateEqualTo = routineTime.isStartAndEndDateEqualTo(inputRoutineTime);
 
         //then
         assertThat(isStartAndEndDateEqualTo).isEqualTo(expected);
