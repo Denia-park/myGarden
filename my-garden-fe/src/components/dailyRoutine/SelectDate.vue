@@ -1,0 +1,88 @@
+<script setup>
+import {ref} from "vue";
+import {getTodayDate} from "@/components/dailyRoutine/api/apiUtils.js";
+
+const showModal = ref(false);
+const selectedDate = ref(getTodayDate());
+
+function openModal() {
+  showModal.value = true;
+}
+
+function closeModal() {
+  showModal.value = false;
+}
+
+function updateDate(event) {
+  selectedDate.value = event.target.value;
+  closeModal();
+}
+
+</script>
+<template>
+  <button class="date-button btn btn-success" @click="openModal">날짜 선택</button>
+
+  <div v-if="showModal" class="modal">
+    <div class="modal-content">
+      <h4>날짜 선택</h4>
+      <input :value="selectedDate" type="date" @change="updateDate"/>
+      <span class="close" @click="closeModal">close</span>
+    </div>
+  </div>
+
+  <h4 v-if="selectedDate" class="date-text">선택한 날짜 : {{ selectedDate }}</h4>
+</template>
+
+<style scoped>
+.date-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.date-text {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 50px;
+  margin-right: 10px;
+}
+
+.modal {
+  display: block;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 600px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+</style>
