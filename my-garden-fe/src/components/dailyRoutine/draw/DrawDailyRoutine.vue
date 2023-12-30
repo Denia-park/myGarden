@@ -1,21 +1,26 @@
 <script setup>
-import {computed, onMounted, ref} from "vue";
-import {getDailyRoutineApi, getTodayDateTimeRange} from "@/components/dailyRoutine/api/apiUtils.js";
+import {computed, ref, watch} from "vue";
+import {getDailyRoutineApi, getTargetDateTimeRange} from "@/components/dailyRoutine/api/apiUtils.js";
+
+const props = defineProps({
+  updateDate: String,
+});
 
 const splitSchedule = ref([]);
 const emit = defineEmits(['updateBlock'])
 
-onMounted(() => {
-  const {todayStartDateTime, todayEndDateTime} = getTodayDateTimeRange();
+watch(() => props.updateDate, (newDate) => {
+      const {targetStartDateTime, targetEndDateTime} = getTargetDateTimeRange(newDate);
 
-  getDailyRoutineApi(todayStartDateTime, todayEndDateTime)
-      .then(response => {
-        splitSchedule.value = processSchedule(response.allDateTimeDataArray);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-});
+      getDailyRoutineApi(targetStartDateTime, targetEndDateTime)
+          .then(response => {
+            splitSchedule.value = processSchedule(response.allDateTimeDataArray);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+    }, {immediate: true}
+);
 
 function processSchedule(schedule) {
   const NOON_STRING = '12:00';

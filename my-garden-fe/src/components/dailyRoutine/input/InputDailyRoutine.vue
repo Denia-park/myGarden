@@ -7,7 +7,6 @@ import {onMounted, ref, watch} from "vue";
 import {
   deleteDailyRoutineApi,
   getTodayDate,
-  getTodayDateTimeRange,
   postDailyRoutineApi,
   updateDailyRoutineApi
 } from "@/components/dailyRoutine/api/apiUtils.js";
@@ -28,7 +27,7 @@ onMounted(() => {
 
 function getLastStartDateTime() {
   let todayLastStartDateTime = localStorage.getItem("todayLastStartDateTime");
-  const todayDate = getTodayDateTimeRange().todayStartDateTime.split("T")[0];
+  const todayDate = getTodayDate();
 
   //localStorage에 데이터가 없거나, 데이터 확인 했는데 오늘 날짜가 아니면 초기화
   if (todayLastStartDateTime === null || todayLastStartDateTime.split("T")[0] !== todayDate) {
