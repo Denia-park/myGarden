@@ -13,8 +13,7 @@ import org.springframework.http.MediaType;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -112,6 +111,7 @@ class DailyRoutineControllerTest extends ControllerTestSupport {
                 .willReturn(
                         List.of(
                                 DailyRoutineResponse.builder()
+                                        .id(1L)
                                         .startDateTime("2023-10-01T22:00:00")
                                         .endDateTime("2023-10-01T23:00:00")
                                         .routineType("STUDY")
@@ -144,5 +144,28 @@ class DailyRoutineControllerTest extends ControllerTestSupport {
                                 .param("endDateTime", endDateTime)
                 )
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Daily Routine을 수정한다.")
+    void putDailyRoutine() throws Exception {
+        //given
+        final PostRequest request = PostRequest.builder()
+                .startDateTime("2023-10-01T22:00:00")
+                .endDateTime("2023-10-01T23:00:00")
+                .routineType("STUDY")
+                .routineDescription("자바 스터디")
+                .build();
+        BDDMockito.given(dailyRoutineService.putDailyRoutine(any(), any(), any(), any()))
+                .willReturn(1L);
+
+        //when, then
+        mockMvc.perform(
+                        put("/api/daily-routine/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").value(1L));
     }
 }

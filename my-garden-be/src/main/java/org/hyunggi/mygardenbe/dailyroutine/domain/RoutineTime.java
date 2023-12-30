@@ -78,4 +78,21 @@ public class RoutineTime {
     public String getEndDateTimeString() {
         return endDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
+
+    public boolean isNotStartAndEndDateEqualTo(final RoutineTime routineTime) {
+        return !isStartAndEndDateEqualTo(routineTime);
+    }
+
+    public boolean isStartAndEndDateEqualTo(final RoutineTime routineTime) {
+        return isSameStartDate(routineTime.getStartDate()) && isSameEndDate(routineTime.getEndDate());
+    }
+
+    private boolean isSameStartDate(final LocalDate startDate) {
+        return getStartDate().isEqual(startDate);
+    }
+
+    private boolean isSameEndDate(final LocalDate endDate) {
+        return getEndDate().isEqual(endDate);
+    }
+
 }

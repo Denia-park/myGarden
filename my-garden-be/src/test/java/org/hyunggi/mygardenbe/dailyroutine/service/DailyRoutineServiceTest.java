@@ -2,6 +2,7 @@ package org.hyunggi.mygardenbe.dailyroutine.service;
 
 import org.assertj.core.groups.Tuple;
 import org.hyunggi.mygardenbe.IntegrationTestSupport;
+import org.hyunggi.mygardenbe.common.exception.BusinessException;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineTime;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineType;
 import org.hyunggi.mygardenbe.dailyroutine.entity.DailyRoutineEntity;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
 @Transactional
@@ -32,7 +34,7 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         final RoutineTime routineTimeSample1 = getRoutineTimeSample1();
         final RoutineTime routineTimeSample2 = getRoutineTimeSample2();
         final List<RoutineTime> routineTimes = List.of(routineTimeSample1, routineTimeSample2);
-        final String routineType = "STUDY";
+        final RoutineType routineType = RoutineType.STUDY;
         final String routineDescription = "자바 스터디";
 
         //when
@@ -46,7 +48,8 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
                         Tuple.tuple(routineTimeSample1, RoutineType.STUDY, "자바 스터디"),
                         Tuple.tuple(routineTimeSample2, RoutineType.STUDY, "자바 스터디")
                 );
-        assertThat(ids).hasSize(2);
+        assertThat(ids).hasSize(2)
+                .doesNotContainNull();
     }
 
     private RoutineTime getRoutineTimeSample1() {
@@ -70,7 +73,7 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         final RoutineTime routineTimeSample1 = getRoutineTimeSample1();
         final RoutineTime routineTimeSample2 = getRoutineTimeSample2();
         final List<RoutineTime> routineTimes = List.of(routineTimeSample1, routineTimeSample2);
-        final String routineType = "STUDY";
+        final RoutineType routineType = RoutineType.STUDY;
         final String routineDescription = "자바 스터디";
         dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription);
 
@@ -87,5 +90,62 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
                         Tuple.tuple("2021-10-01T22:00:00", "2021-10-01T23:59:59", "공부", "자바 스터디"),
                         Tuple.tuple("2021-10-02T00:00:00", "2021-10-02T01:00:00", "공부", "자바 스터디")
                 );
+
+        assertThat(dailyRoutineResponses)
+                .extracting("id")
+                .doesNotContainNull();
+    }
+
+    @Test
+    @DisplayName("Daily Routine를 수정한다.")
+    void putDailyRoutine() {
+        //given
+        final List<RoutineTime> routineTimes = List.of(getRoutineTimeSample2());
+        final RoutineType routineType = RoutineType.STUDY;
+        final String routineDescription = "자바 스터디";
+        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription);
+        final Long postId = ids.get(0);
+
+        final RoutineTime updateRoutineTime = RoutineTime.of(
+                LocalDateTime.of(2021, 10, 2, 0, 0, 0),
+                LocalDateTime.of(2021, 10, 2, 3, 30, 0)
+        );
+        final RoutineType updateRoutineType = RoutineType.EXERCISE;
+        final String updateRoutineDescription = "운동";
+
+        //when
+        final Long putId = dailyRoutineService.putDailyRoutine(postId, updateRoutineTime, updateRoutineType, updateRoutineDescription);
+
+        //then
+        final DailyRoutineEntity dailyRoutine = dailyRoutineRepository.findById(postId).get();
+
+        assertThat(putId).isEqualTo(postId);
+        assertThat(dailyRoutine).isNotNull();
+        assertThat(dailyRoutine.getRoutineTime()).isEqualTo(updateRoutineTime);
+        assertThat(dailyRoutine.getRoutineType()).isEqualTo(updateRoutineType);
+        assertThat(dailyRoutine.getRoutineDescription()).isEqualTo(updateRoutineDescription);
+    }
+
+    @Test
+    @DisplayName("수정한 Daily Routine의 날짜가 오늘 날짜가 아니면 예외가 발생한다.")
+    void throwExceptionWhenUpdateDailyRoutineIsNotToday() {
+        //given
+        final List<RoutineTime> routineTimes = List.of(getRoutineTimeSample2());
+        final RoutineType routineType = RoutineType.STUDY;
+        final String routineDescription = "자바 스터디";
+        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription);
+        final Long postId = ids.get(0);
+
+        final RoutineTime updateRoutineTime = RoutineTime.of(
+                LocalDateTime.of(2021, 10, 3, 0, 0, 0),
+                LocalDateTime.of(2021, 10, 3, 3, 30, 0)
+        );
+        final RoutineType updateRoutineType = RoutineType.EXERCISE;
+        final String updateRoutineDescription = "운동";
+
+        //when, then
+        assertThatThrownBy(() -> dailyRoutineService.putDailyRoutine(postId, updateRoutineTime, updateRoutineType, updateRoutineDescription))
+                .isInstanceOf(BusinessException.class)
+                .hasMessageContaining("동일한 날짜의 시간으로만 수정할 수 있습니다.");
     }
 }

@@ -1,11 +1,14 @@
 <script setup>
 import {computed, onMounted, ref} from "vue";
-import {fetchTodayDailyRoutine} from "@/components/dailyRoutine/api/apiUtils.js";
+import {getDailyRoutineApi, getTodayDateTimeRange} from "@/components/dailyRoutine/api/apiUtils.js";
 
 const splitSchedule = ref([]);
+const emit = defineEmits(['updateBlock'])
 
 onMounted(() => {
-  fetchTodayDailyRoutine()
+  const {todayStartDateTime, todayEndDateTime} = getTodayDateTimeRange();
+
+  getDailyRoutineApi(todayStartDateTime, todayEndDateTime)
       .then(response => {
         splitSchedule.value = processSchedule(response.allDateTimeDataArray);
       })
@@ -20,6 +23,7 @@ function processSchedule(schedule) {
 
   function createMorningBlock(block, startTime, end, endTime) {
     return {
+      id: block.id,
       routineType: block.routineType,
       color: findMatchingColor(block.routineType),
       displayStartTime: startTime,
@@ -31,6 +35,7 @@ function processSchedule(schedule) {
 
   function createAfternoonBlock(block, start, startTime, endTime) {
     return {
+      id: block.id,
       routineType: block.routineType,
       color: findMatchingColor(block.routineType),
       displayStartTime: start < noon ? NOON_STRING : startTime,
@@ -117,6 +122,12 @@ const morningSchedule = computed(() => {
 const afternoonSchedule = computed(() => {
   return splitSchedule.value.filter(block => block.partOfDay === 'afternoon');
 });
+
+function updateBlock(block) {
+  block.lastUpdated = new Date().toISOString();
+
+  emit('updateBlock', block);
+}
 </script>
 
 <template>
@@ -126,7 +137,8 @@ const afternoonSchedule = computed(() => {
       <div class="schedule-half">
         <div v-for="(block, index) in morningSchedule" :key="`morning-${index}`"
              :style="blockStyle(block, 'morning')"
-             class="time-block my-tooltip">
+             class="time-block my-tooltip"
+             @click="updateBlock(block)">
           <div v-if="calculateDuration(block) >= 20">
             {{ block.displayStartTime }} ~ {{ block.displayEndTime }} :: {{ block.routineType }}
           </div>
@@ -142,7 +154,8 @@ const afternoonSchedule = computed(() => {
       <div class="schedule-half">
         <div v-for="(block, index) in afternoonSchedule" :key="`afternoon-${index}`"
              :style="blockStyle(block, 'afternoon')"
-             class="time-block my-tooltip">
+             class="time-block my-tooltip"
+             @click="updateBlock(block)">
           <div v-if="calculateDuration(block) >= 20">
             {{ block.displayStartTime }} ~ {{ block.displayEndTime }} :: {{ block.routineType }}
           </div>

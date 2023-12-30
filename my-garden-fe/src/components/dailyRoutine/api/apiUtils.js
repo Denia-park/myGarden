@@ -1,13 +1,26 @@
 import axios from "axios";
 
-export async function fetchTodayDailyRoutine() {
-    const {todayStartDateTime, todayEndDateTime} = getTodayDateTimeRange();
-
+export async function getDailyRoutineApi(startDateTime, endDateTime) {
     function saveLastStartDateTimeInLocalStorage(allDateTimeDataArray) {
-        localStorage.setItem('todayLastStartDateTime', calculateTodayLastStartDateTime(todayStartDateTime, allDateTimeDataArray));
+        const saveStartDateTime = calculateTodayLastStartDateTime(startDateTime, allDateTimeDataArray);
+
+        if (localStorage.getItem('todayLastStartDateTime') !== saveStartDateTime) {
+            localStorage.setItem('todayLastStartDateTime', saveStartDateTime);
+            location.reload();
+        }
     }
 
-    return axios.get(`/api/daily-routine?startDateTime=${todayStartDateTime}&endDateTime=${todayEndDateTime}`)
+    function calculateTodayLastStartDateTime(todayStartDateTime, allDateTimeData) {
+        let returnValue = todayStartDateTime;
+
+        if (allDateTimeData.length !== 0) {
+            returnValue = allDateTimeData[allDateTimeData.length - 1].endDateTime;
+        }
+
+        return returnValue;
+    }
+
+    return axios.get(`/api/daily-routine?startDateTime=${startDateTime}&endDateTime=${endDateTime}`)
         .then(({data}) => {
             const allDateTimeDataArray = data.data;
             saveLastStartDateTimeInLocalStorage(allDateTimeDataArray);
@@ -17,7 +30,7 @@ export async function fetchTodayDailyRoutine() {
             };
         })
         .catch(error => {
-            alert('오늘의 일정을 불러오는데 실패했습니다.')
+            alert('일정을 불러오는데 실패했습니다.')
             console.log(error);
         });
 }
@@ -35,17 +48,17 @@ export function getTodayDateTimeRange() {
     return {todayStartDateTime, todayEndDateTime};
 }
 
-function calculateTodayLastStartDateTime(todayStartDateTime, allDateTimeData) {
-    let returnValue = todayStartDateTime;
+export function getTodayDate() {
+    const currentDate = new Date();
 
-    if (allDateTimeData.length !== 0) {
-        returnValue = allDateTimeData[allDateTimeData.length - 1].endDateTime;
-    }
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
 
-    return returnValue;
+    return `${year}-${month}-${day}`;
 }
 
-export async function postDailyRoutine(startDate, endDate, routineType, content) {
+export async function postDailyRoutineApi(startDate, endDate, routineType, content) {
     axios.post('/api/daily-routine', {
         startDateTime: startDate,
         endDateTime: endDate,
@@ -57,7 +70,35 @@ export async function postDailyRoutine(startDate, endDate, routineType, content)
             location.reload();
         })
         .catch(error => {
-            alert("등록에 실패하였습니다.");
+            alert("등록에 실패했습니다.");
+            console.log(error);
+        });
+}
+
+export async function updateDailyRoutineApi(id, startDate, endDate, routineType, content) {
+    function updateLastStartDateTime(endDate) {
+        const todayLastStartDateTime = localStorage.getItem("todayLastStartDateTime");
+
+        if (todayLastStartDateTime < endDate) {
+            localStorage.setItem("todayLastStartDateTime", endDate);
+        }
+    }
+
+    axios.put(`/api/daily-routine/${id}`, {
+        startDateTime: startDate,
+        endDateTime: endDate,
+        routineType: routineType,
+        routineDescription: content
+    })
+        .then(() => {
+            alert("수정되었습니다.");
+
+            updateLastStartDateTime(endDate);
+
+            location.reload();
+        })
+        .catch(error => {
+            alert("수정에 실패했습니다.");
             console.log(error);
         });
 }

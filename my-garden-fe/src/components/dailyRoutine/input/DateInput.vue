@@ -1,17 +1,29 @@
 <script setup>
-defineProps({
+import {ref, watch} from "vue";
+
+const props = defineProps({
   inputName: String,
   startDateTime: String,
+  endDateTime: String
 });
 
 const emit = defineEmits(['changeDate'])
+const dateTime = ref('');
+
+watch(() => [props.startDateTime, props.endDateTime], (newValue) => {
+  if (props.inputName === '시작') {
+    dateTime.value = newValue[0];
+  } else if (props.inputName === '끝') {
+    dateTime.value = newValue[1];
+  }
+});
 
 </script>
 
 <template>
   <div class="input-group">
     <p>{{ inputName }}</p>
-    <input :value="startDateTime" type="datetime-local" @input="(e) => emit('changeDate', e.target.value)"/>
+    <input :value="dateTime" type="datetime-local" @input="(e) => emit('changeDate', e.target.value)"/>
   </div>
 </template>
 

@@ -68,4 +68,40 @@ class RoutineTimeTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("날짜는 하루 이상 차이날 수 없습니다.");
     }
+
+    @ParameterizedTest
+    @MethodSource("providerIsStartAndEndDateEqualTo")
+    @DisplayName("입력으로 전달한 날짜가 RoutineTime의 시작 날짜와 종료 날짜랑 같은지 비교한다.")
+    void throwExceptionWhenInputDateIsDifferentFromRoutineTime(RoutineTime inputRoutineTime, boolean expected) {
+        //given
+        final RoutineTime routineTime = RoutineTime.of(
+                LocalDateTime.of(2023, 12, 14, 9, 0, 0),
+                LocalDateTime.of(2023, 12, 14, 10, 0, 0)
+        );
+
+        //when
+        final boolean isStartAndEndDateEqualTo = routineTime.isStartAndEndDateEqualTo(inputRoutineTime);
+
+        //then
+        assertThat(isStartAndEndDateEqualTo).isEqualTo(expected);
+    }
+
+    public static Stream<Arguments> providerIsStartAndEndDateEqualTo() {
+        return Stream.of(
+                Arguments.of(
+                        RoutineTime.of(
+                                LocalDateTime.of(2023, 12, 14, 10, 0, 0),
+                                LocalDateTime.of(2023, 12, 14, 11, 0, 0)
+                        ),
+                        true
+                ),
+                Arguments.of(
+                        RoutineTime.of(
+                                LocalDateTime.of(2023, 12, 14, 9, 0, 0),
+                                LocalDateTime.of(2023, 12, 15, 9, 0, 0)
+                        ),
+                        false
+                )
+        );
+    }
 }

@@ -6,6 +6,7 @@ import org.hyunggi.mygardenbe.common.response.ApiResponse;
 import org.hyunggi.mygardenbe.dailyroutine.controller.request.GetRequest;
 import org.hyunggi.mygardenbe.dailyroutine.controller.request.PostRequest;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineTime;
+import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineType;
 import org.hyunggi.mygardenbe.dailyroutine.domain.TimeSplitter;
 import org.hyunggi.mygardenbe.dailyroutine.service.DailyRoutineService;
 import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineResponse;
@@ -32,10 +33,25 @@ public class DailyRoutineController {
                 RoutineTime.of(
                         LocalDateTime.parse(request.startDateTime()),
                         LocalDateTime.parse(request.endDateTime())
-                ));
+                )
+        );
+        final RoutineType routineType = RoutineType.valueOf(request.routineType());
 
-        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, request.routineType(), request.routineDescription());
+        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, request.routineDescription());
 
         return ApiResponse.ok(ids);
+    }
+
+    @PutMapping("/api/daily-routine/{id}")
+    public ApiResponse<Long> putDailyRoutine(@PathVariable final Long id, @RequestBody @Valid final PostRequest request) {
+        final RoutineTime routineTime = RoutineTime.of(
+                LocalDateTime.parse(request.startDateTime()),
+                LocalDateTime.parse(request.endDateTime())
+        );
+        final RoutineType routineType = RoutineType.valueOf(request.routineType());
+
+        final Long updatedId = dailyRoutineService.putDailyRoutine(id, routineTime, routineType, request.routineDescription());
+
+        return ApiResponse.ok(updatedId);
     }
 }
