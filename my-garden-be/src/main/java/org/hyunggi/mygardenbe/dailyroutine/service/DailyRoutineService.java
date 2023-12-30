@@ -77,6 +77,7 @@ public class DailyRoutineService {
                 .orElseThrow(() -> new EntityNotFoundException("해당하는 ID의 DailyRoutine이 존재하지 않습니다."));
     }
 
+    @Transactional
     public Long deleteDailyRoutine(final Long id) {
         dailyRoutineRepository.deleteById(id);
         return id;
