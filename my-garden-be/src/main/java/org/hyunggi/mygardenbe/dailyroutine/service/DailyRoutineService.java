@@ -78,6 +78,7 @@ public class DailyRoutineService {
     }
 
     public Long deleteDailyRoutine(final Long id) {
-        return 1L;
+        dailyRoutineRepository.deleteById(id);
+        return id;
     }
 }

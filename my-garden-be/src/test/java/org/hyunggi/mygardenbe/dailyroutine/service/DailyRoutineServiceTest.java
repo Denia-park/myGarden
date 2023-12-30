@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -147,5 +148,23 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         assertThatThrownBy(() -> dailyRoutineService.putDailyRoutine(postId, updateRoutineTime, updateRoutineType, updateRoutineDescription))
                 .isInstanceOf(BusinessException.class)
                 .hasMessageContaining("동일한 날짜의 시간으로만 수정할 수 있습니다.");
+    }
+
+    @Test
+    @DisplayName("Daily Routine를 삭제한다.")
+    void deleteDailyRoutine() {
+        //given
+        final List<RoutineTime> routineTimes = List.of(getRoutineTimeSample2());
+        final RoutineType routineType = RoutineType.STUDY;
+        final String routineDescription = "자바 스터디";
+        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription);
+        final Long postId = ids.get(0);
+
+        //when
+        dailyRoutineService.deleteDailyRoutine(postId);
+
+        //then
+        final Optional<DailyRoutineEntity> findDailyRoutineEntity = dailyRoutineRepository.findById(postId);
+        assertThat(findDailyRoutineEntity).isEmpty();
     }
 }
