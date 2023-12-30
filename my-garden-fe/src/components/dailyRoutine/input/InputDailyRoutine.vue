@@ -5,6 +5,7 @@ import ContentInput from "@/components/dailyRoutine/input/ContentInput.vue";
 import TypeInput from "@/components/dailyRoutine/input/TypeInput.vue";
 import {onMounted, ref, watch} from "vue";
 import {
+  deleteDailyRoutineApi,
   getTodayDate,
   getTodayDateTimeRange,
   postDailyRoutineApi,
@@ -165,10 +166,7 @@ function cancelUpdate() {
 }
 
 function deleteRoutine() {
-  // 삭제 로직
-  alert("아직 준비중입니다.");
-  // alert("삭제되었습니다.");
-  //location.reload();
+  deleteDailyRoutineApi(props.updateBlock.id);
 }
 
 watch(() => props.updateBlock, (newVal) => {
