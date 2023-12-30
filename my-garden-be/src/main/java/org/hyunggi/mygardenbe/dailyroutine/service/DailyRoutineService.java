@@ -68,12 +68,16 @@ public class DailyRoutineService {
 
         dailyRoutine.update(routineTime, routineType, description);
         dailyRoutineEntity.update(dailyRoutine);
-        
+
         return id;
     }
 
     private DailyRoutineEntity getDailyRoutineEntity(final Long id) {
         return dailyRoutineRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("해당하는 ID의 DailyRoutine이 존재하지 않습니다."));
+    }
+
+    public Long deleteDailyRoutine(final Long id) {
+        return 1L;
     }
 }

@@ -54,4 +54,11 @@ public class DailyRoutineController {
 
         return ApiResponse.ok(updatedId);
     }
+
+    @DeleteMapping("/api/daily-routine/{id}")
+    public ApiResponse<Long> deleteDailyRoutine(@PathVariable final Long id) {
+        final Long deletedId = dailyRoutineService.deleteDailyRoutine(id);
+
+        return ApiResponse.ok(deletedId);
+    }
 }

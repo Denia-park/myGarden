@@ -168,4 +168,19 @@ class DailyRoutineControllerTest extends ControllerTestSupport {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data").value(1L));
     }
+
+    @Test
+    @DisplayName("Daily Routine을 삭제한다.")
+    void deleteDailyRoutine() throws Exception {
+        //given
+        BDDMockito.given(dailyRoutineService.deleteDailyRoutine(any()))
+                .willReturn(1L);
+
+        //when, then
+        mockMvc.perform(
+                        delete("/api/daily-routine/1")
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").value(1L));
+    }
 }
