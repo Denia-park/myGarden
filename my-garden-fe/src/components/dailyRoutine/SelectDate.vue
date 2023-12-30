@@ -21,12 +21,20 @@ function updateDate(event) {
   emit("update-date", selectedDate.value);
 }
 
+function handleClickOutside(event) {
+  const modalContent = document.querySelector('.modal-content');
+  if (!modalContent.contains(event.target)) {
+    closeModal();
+  }
+}
 </script>
 <template>
   <button class="date-button btn btn-success" @click="openModal">조회 날짜 선택</button>
 
-  <div v-if="showModal" class="modal">
-    <div class="modal-content">
+  <!-- 모달 바깥쪽 클릭 시 closeModal 호출 -->
+  <div v-if="showModal" class="modal" @click="handleClickOutside">
+    <!-- stop modifier는 이벤트 버블링을 막습니다 -->
+    <div class="modal-content" @click.stop>
       <h4>조회 날짜 선택</h4>
       <input :value="selectedDate" type="date" @change="updateDate"/>
       <span class="close" @click="closeModal">close</span>
