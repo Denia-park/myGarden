@@ -23,7 +23,11 @@ export async function getDailyRoutineApi(startDateTime, endDateTime) {
     return axios.get(`/api/daily-routine?startDateTime=${startDateTime}&endDateTime=${endDateTime}`)
         .then(({data}) => {
             const allDateTimeDataArray = data.data;
-            saveLastStartDateTimeInLocalStorage(allDateTimeDataArray);
+
+            //오늘 날짜인 경우에만 LocalStorage를 업데이트
+            if (isToday(startDateTime)) {
+                saveLastStartDateTimeInLocalStorage(allDateTimeDataArray);
+            }
 
             return {
                 allDateTimeDataArray
@@ -35,8 +39,9 @@ export async function getDailyRoutineApi(startDateTime, endDateTime) {
         });
 }
 
-export function getTodayDateTimeRange() {
-    const currentDate = new Date();
+function isToday(targetDate) {
+    return getTodayDate() === targetDate.split('T')[0];
+}
 
     const year = currentDate.getFullYear();
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
