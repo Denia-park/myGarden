@@ -43,14 +43,11 @@ function isToday(targetDate) {
     return getTodayDate() === targetDate.split('T')[0];
 }
 
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const day = String(currentDate.getDate()).padStart(2, '0');
+export function getTargetDateTimeRange(targetDate) {
+    const targetStartDateTime = `${targetDate}T00:00:00`;
+    const targetEndDateTime = `${targetDate}T23:59:59`;
 
-    const todayStartDateTime = `${year}-${month}-${day}T00:00:00`;
-    const todayEndDateTime = `${year}-${month}-${day}T23:59:59`;
-
-    return {todayStartDateTime, todayEndDateTime};
+    return {targetStartDateTime, targetEndDateTime};
 }
 
 export function getTodayDate() {
