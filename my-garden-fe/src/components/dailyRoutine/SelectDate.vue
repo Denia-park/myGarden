@@ -5,6 +5,8 @@ import {getTodayDate} from "@/components/dailyRoutine/api/apiUtils.js";
 const showModal = ref(false);
 const selectedDate = ref(getTodayDate());
 
+const emit = defineEmits(["update-date"]);
+
 function openModal() {
   showModal.value = true;
 }
@@ -16,15 +18,16 @@ function closeModal() {
 function updateDate(event) {
   selectedDate.value = event.target.value;
   closeModal();
+  emit("update-date", selectedDate.value);
 }
 
 </script>
 <template>
-  <button class="date-button btn btn-success" @click="openModal">날짜 선택</button>
+  <button class="date-button btn btn-success" @click="openModal">조회 날짜 선택</button>
 
   <div v-if="showModal" class="modal">
     <div class="modal-content">
-      <h4>날짜 선택</h4>
+      <h4>조회 날짜 선택</h4>
       <input :value="selectedDate" type="date" @change="updateDate"/>
       <span class="close" @click="closeModal">close</span>
     </div>
@@ -83,6 +86,14 @@ function updateDate(event) {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+input {
+  width: 100%;
+  font-size: 30px;
+  height: 40px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 </style>

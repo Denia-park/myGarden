@@ -4,18 +4,20 @@ import DrawDailyRoutine from "@/components/dailyRoutine/draw/DrawDailyRoutine.vu
 import InputDailyRoutine from "@/components/dailyRoutine/input/InputDailyRoutine.vue";
 import SelectDate from "@/components/dailyRoutine/SelectDate.vue";
 import {ref} from "vue";
+import {getTodayDate} from "@/components/dailyRoutine/api/apiUtils.js";
 
 const updateBlock = ref({});
+const updateDate = ref(getTodayDate());
 
 </script>
 <template>
   <div id="header">
     <PageTitle :input-name="'하루 일과 기록'"/>
-    <SelectDate/>
+    <SelectDate @update-date="date => updateDate = date"/>
   </div>
   <div id="wrapper">
     <InputDailyRoutine :update-block="updateBlock"/>
-    <DrawDailyRoutine @update-block="(block) => updateBlock = block"/>
+    <DrawDailyRoutine :update-date="updateDate" @update-block="(block) => updateBlock = block"/>
   </div>
 </template>
 
