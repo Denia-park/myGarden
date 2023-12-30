@@ -102,3 +102,15 @@ export async function updateDailyRoutineApi(id, startDate, endDate, routineType,
             console.log(error);
         });
 }
+
+export async function deleteDailyRoutineApi(id) {
+    axios.delete(`/api/daily-routine/${id}`)
+        .then(() => {
+            alert("삭제되었습니다.");
+            location.reload();
+        })
+        .catch(error => {
+            alert("삭제에 실패했습니다.");
+            console.log(error);
+        });
+}
