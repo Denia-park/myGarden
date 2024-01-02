@@ -6,6 +6,7 @@ const props = defineProps({
   updateDate: String,
 });
 
+const SHOW_TEXT_PIXELS = 30;
 const splitSchedule = ref([]);
 const emit = defineEmits(['updateBlock'])
 
@@ -120,6 +121,22 @@ function getOffset(partOfDay) {
   return partOfDay === 'afternoon' ? blockTotalHeight : 0; // 12:00 ~ 24:00
 }
 
+function buildTooltipMessage(block) {
+  return block.routineDescription === "" ? block.routineType : block.routineDescription;
+}
+
+function buildTimeText(block) {
+  return `${block.displayStartTime} ~ ${block.displayEndTime} :: ${block.routineType}`
+}
+
+function isEnoughHeightBlock(block) {
+  return calculateDuration(block) >= SHOW_TEXT_PIXELS;
+}
+
+function isNotEnoughHeightBlock(block) {
+  return !isEnoughHeightBlock(block);
+}
+
 const morningSchedule = computed(() => {
   return splitSchedule.value.filter(block => block.partOfDay === 'morning');
 });
@@ -144,11 +161,14 @@ function updateBlock(block) {
              :style="blockStyle(block, 'morning')"
              class="time-block my-tooltip"
              @click="updateBlock(block)">
-          <div v-if="calculateDuration(block) >= 20">
-            {{ block.displayStartTime }} ~ {{ block.displayEndTime }} :: {{ block.routineType }}
+          <div v-if="isEnoughHeightBlock(block)">
+            {{ buildTimeText(block) }}
           </div>
-          <span class="tooltiptext tooltip-left">
-            {{ block.routineDescription === "" ? block.routineType : block.routineDescription }}
+          <span class="tooltip-text tooltip-left">
+            <span v-if="isNotEnoughHeightBlock(block)">
+              {{ buildTimeText(block) }}
+            </span>
+            {{ buildTooltipMessage(block) }}
           </span>
         </div>
       </div>
@@ -161,11 +181,14 @@ function updateBlock(block) {
              :style="blockStyle(block, 'afternoon')"
              class="time-block my-tooltip"
              @click="updateBlock(block)">
-          <div v-if="calculateDuration(block) >= 20">
-            {{ block.displayStartTime }} ~ {{ block.displayEndTime }} :: {{ block.routineType }}
+          <div v-if="isEnoughHeightBlock(block)">
+            {{ buildTimeText(block) }}
           </div>
-          <span class="tooltiptext tooltip-right">
-            {{ block.routineDescription === "" ? block.routineType : block.routineDescription }}
+          <span class="tooltip-text tooltip-right">
+            <span v-if="isNotEnoughHeightBlock(block)">
+              {{ buildTimeText(block) }}
+            </span>
+            {{ buildTooltipMessage(block) }}
           </span>
         </div>
       </div>
@@ -216,7 +239,7 @@ function updateBlock(block) {
   display: block;
 }
 
-.my-tooltip .tooltiptext {
+.my-tooltip .tooltip-text {
   visibility: hidden; /* 이벤트가 없으면 툴팁 영역을 숨김 */
   width: 180px; /* 툴팁 영역의 넓이를 설정 */
   background-color: black;
@@ -229,11 +252,11 @@ function updateBlock(block) {
   z-index: 1;
 }
 
-.my-tooltip:hover .tooltiptext {
+.my-tooltip:hover .tooltip-text {
   visibility: visible; /* hover 이벤트 발생시 영역을 보여줌 */
 }
 
-.my-tooltip .tooltiptext::after {
+.my-tooltip .tooltip-text::after {
   content: " "; /* 정사각형 영역 사용 */
   position: absolute; /* 절대 위치 사용 */
   border-style: solid;
