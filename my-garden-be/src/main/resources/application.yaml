@@ -24,16 +24,20 @@ spring:
 
 ---
 
+config:
+  type: aws-parameterstore:/config/myGarden/
+
 spring:
   config:
     activate:
       on-profile: prod
+    import: ${config.type}
   jpa:
     hibernate:
       ddl-auto: none
 
   datasource:
-    url: jdbc:h2:tcp://localhost/~/test
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    url: ${jdbc.url}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${jdbc.username}
+    password: ${jdbc.password}
