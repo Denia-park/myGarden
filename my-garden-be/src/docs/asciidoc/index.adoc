@@ -10,8 +10,9 @@ endif::snippets[]
 :sectlinks:
 
 [[daily-routine]]
-== Daily Routine
+== Daily Routine [하루 일과]
 
 include::dailyroutine/get.adoc[]
 include::dailyroutine/post.adoc[]
 include::dailyroutine/put.adoc[]
+include::dailyroutine/delete.adoc[]

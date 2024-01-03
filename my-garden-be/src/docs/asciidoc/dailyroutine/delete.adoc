@@ -1,0 +1,12 @@
+[[put-daily-routine]]
+=== DELETE [삭제]
+
+==== HTTP Request
+
+include::{snippets}/daily-routine/delete-daily-routine/http-request.adoc[]
+include::{snippets}/daily-routine/delete-daily-routine/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/daily-routine/delete-daily-routine/http-response.adoc[]
+include::{snippets}/daily-routine/delete-daily-routine/response-fields.adoc[]
