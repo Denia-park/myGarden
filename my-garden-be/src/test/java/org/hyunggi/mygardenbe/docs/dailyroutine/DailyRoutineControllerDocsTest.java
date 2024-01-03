@@ -119,7 +119,7 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("code").type(JsonFieldType.NUMBER).description("코드"),
                                 fieldWithPath("status").type(JsonFieldType.STRING).description("상태"),
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
-                                fieldWithPath("data").type(JsonFieldType.ARRAY).description("데이터 (ID 목록)")
+                                fieldWithPath("data").type(JsonFieldType.ARRAY).description("데이터 (등록된 TimeBlock ID 목록)")
                         )
                 ));
     }
@@ -164,7 +164,7 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("code").type(JsonFieldType.NUMBER).description("코드"),
                                 fieldWithPath("status").type(JsonFieldType.STRING).description("상태"),
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
-                                fieldWithPath("data").type(JsonFieldType.NUMBER).description("데이터 (ID)")
+                                fieldWithPath("data").type(JsonFieldType.NUMBER).description("데이터 (수정된 TimeBlock ID)")
                         )
                 ));
     }
