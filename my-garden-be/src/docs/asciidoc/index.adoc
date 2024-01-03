@@ -14,3 +14,4 @@ endif::snippets[]
 
 include::dailyroutine/get.adoc[]
 include::dailyroutine/post.adoc[]
+include::dailyroutine/put.adoc[]
