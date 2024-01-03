@@ -13,3 +13,4 @@ endif::snippets[]
 == Daily Routine
 
 include::dailyroutine/get.adoc[]
+include::dailyroutine/post.adoc[]

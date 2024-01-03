@@ -1,0 +1,12 @@
+[[post-daily-routine]]
+=== POST [등록]
+
+==== HTTP Request
+
+include::{snippets}/daily-routine/post-daily-routine/http-request.adoc[]
+include::{snippets}/daily-routine/post-daily-routine/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/daily-routine/post-daily-routine/http-response.adoc[]
+include::{snippets}/daily-routine/post-daily-routine/response-fields.adoc[]
