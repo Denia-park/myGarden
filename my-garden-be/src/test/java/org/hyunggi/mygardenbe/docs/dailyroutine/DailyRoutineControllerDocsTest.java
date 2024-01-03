@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.util.List;
@@ -18,8 +19,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -120,6 +120,51 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("status").type(JsonFieldType.STRING).description("상태"),
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
                                 fieldWithPath("data").type(JsonFieldType.ARRAY).description("데이터 (ID 목록)")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("Daily Routine를 수정한다.")
+    void putDailyRoutine() throws Exception {
+        //given
+        final PostRequest request = PostRequest.builder()
+                .startDateTime("2023-10-01T22:00:00")
+                .endDateTime("2023-10-01T23:00:00")
+                .routineType("STUDY")
+                .routineDescription("자바 스터디")
+                .build();
+
+        BDDMockito.given(dailyRoutineService.putDailyRoutine(any(), any(), any(), any()))
+                .willReturn(
+                        1L
+                );
+
+        //when, then
+        mockMvc.perform(
+                        RestDocumentationRequestBuilders.put("/api/daily-routine/{id}", 1L)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").isNumber())
+                .andDo(document("daily-routine/put-daily-routine"
+                        , preprocessRequest(prettyPrint())
+                        , preprocessResponse(prettyPrint())
+                        , pathParameters(
+                                parameterWithName("id").description("수정할 TimeBlock ID")
+                        )
+                        , requestFields(
+                                fieldWithPath("startDateTime").type(JsonFieldType.STRING).description("시작일시 (yyyy-MM-ddTHH:mm:ss)"),
+                                fieldWithPath("endDateTime").type(JsonFieldType.STRING).description("종료일시 (yyyy-MM-ddTHH:mm:ss)"),
+                                fieldWithPath("routineType").type(JsonFieldType.STRING).description("루틴 타입"),
+                                fieldWithPath("routineDescription").type(JsonFieldType.STRING).description("루틴 설명")
+                        )
+                        , responseFields(
+                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("코드"),
+                                fieldWithPath("status").type(JsonFieldType.STRING).description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
+                                fieldWithPath("data").type(JsonFieldType.NUMBER).description("데이터 (ID)")
                         )
                 ));
     }
