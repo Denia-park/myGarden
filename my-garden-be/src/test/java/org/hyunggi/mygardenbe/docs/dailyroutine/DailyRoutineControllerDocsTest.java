@@ -70,7 +70,7 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("code").type(JsonFieldType.NUMBER).description("코드"),
                                 fieldWithPath("status").type(JsonFieldType.STRING).description("상태"),
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
-                                fieldWithPath("data").type(JsonFieldType.ARRAY).description("데이터"),
+                                fieldWithPath("data").type(JsonFieldType.ARRAY).description("데이터 (TimeBlock 목록)"),
                                 fieldWithPath("data[].id").type(JsonFieldType.NUMBER).description("ID"),
                                 fieldWithPath("data[].startDateTime").type(JsonFieldType.STRING).description("시작일시"),
                                 fieldWithPath("data[].endDateTime").type(JsonFieldType.STRING).description("종료일시"),
