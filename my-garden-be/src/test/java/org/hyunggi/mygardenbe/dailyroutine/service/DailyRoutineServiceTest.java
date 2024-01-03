@@ -1,5 +1,6 @@
 package org.hyunggi.mygardenbe.dailyroutine.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.assertj.core.groups.Tuple;
 import org.hyunggi.mygardenbe.IntegrationTestSupport;
 import org.hyunggi.mygardenbe.common.exception.BusinessException;
@@ -125,6 +126,30 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         assertThat(dailyRoutine.getRoutineTime()).isEqualTo(updateRoutineTime);
         assertThat(dailyRoutine.getRoutineType()).isEqualTo(updateRoutineType);
         assertThat(dailyRoutine.getRoutineDescription()).isEqualTo(updateRoutineDescription);
+    }
+
+
+    @Test
+    @DisplayName("Daily Routine을 수정할 때, 존재하지 않는 ID를 입력하면 예외가 발생한다.")
+    void throwExceptionWhenIdIsNotExist() {
+        //given
+        final List<RoutineTime> routineTimes = List.of(getRoutineTimeSample2());
+        final RoutineType routineType = RoutineType.STUDY;
+        final String routineDescription = "자바 스터디";
+        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription);
+        final Long postId = ids.get(0);
+
+        final RoutineTime updateRoutineTime = RoutineTime.of(
+                LocalDateTime.of(2021, 10, 2, 0, 0, 0),
+                LocalDateTime.of(2021, 10, 2, 3, 30, 0)
+        );
+        final RoutineType updateRoutineType = RoutineType.EXERCISE;
+        final String updateRoutineDescription = "운동";
+
+        //when, then
+        assertThatThrownBy(() -> dailyRoutineService.putDailyRoutine(postId + 1, updateRoutineTime, updateRoutineType, updateRoutineDescription))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessageContaining("해당하는 ID의 DailyRoutine이 존재하지 않습니다.");
     }
 
     @Test
