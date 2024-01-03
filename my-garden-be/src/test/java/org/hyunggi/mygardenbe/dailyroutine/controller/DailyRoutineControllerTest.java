@@ -29,6 +29,11 @@ class DailyRoutineControllerTest extends ControllerTestSupport {
                 .routineDescription("자바 스터디")
                 .build();
 
+        BDDMockito.given(dailyRoutineService.postDailyRoutine(any(), any(), any()))
+                .willReturn(
+                        List.of(1L)
+                );
+
         //when, then
         mockMvc.perform(
                         post("/api/daily-routine")
@@ -36,7 +41,7 @@ class DailyRoutineControllerTest extends ControllerTestSupport {
                                 .content(objectMapper.writeValueAsString(request))
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data").isArray());
+                .andExpect(jsonPath("$.data[0]").value(1L));
     }
 
     @ParameterizedTest
@@ -127,7 +132,12 @@ class DailyRoutineControllerTest extends ControllerTestSupport {
                                 .param("endDateTime", "2023-10-01T23:59:59")
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data").isArray());
+                .andExpect(jsonPath("$.data").isArray())
+                .andExpect(jsonPath("$.data[0].id").value(1L))
+                .andExpect(jsonPath("$.data[0].startDateTime").value("2023-10-01T22:00:00"))
+                .andExpect(jsonPath("$.data[0].endDateTime").value("2023-10-01T23:00:00"))
+                .andExpect(jsonPath("$.data[0].routineType").value("STUDY"))
+                .andExpect(jsonPath("$.data[0].routineDescription").value("자바 스터디"));
     }
 
     @ParameterizedTest

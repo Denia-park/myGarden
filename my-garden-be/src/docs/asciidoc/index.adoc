@@ -1,0 +1,18 @@
+ifndef::snippets[]
+:snippets: ../../build/generated-snippets
+endif::snippets[]
+= Daily Routine REST API 문서
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[daily-routine]]
+== Daily Routine [하루 일과]
+
+include::dailyroutine/get.adoc[]
+include::dailyroutine/post.adoc[]
+include::dailyroutine/put.adoc[]
+include::dailyroutine/delete.adoc[]

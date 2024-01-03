@@ -1,0 +1,12 @@
+[[get-daily-routine]]
+=== GET [조회]
+
+==== HTTP Request
+
+include::{snippets}/daily-routine/get-daily-routine/http-request.adoc[]
+include::{snippets}/daily-routine/get-daily-routine/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/daily-routine/get-daily-routine/http-response.adoc[]
+include::{snippets}/daily-routine/get-daily-routine/response-fields.adoc[]

@@ -1,0 +1,13 @@
+[[put-daily-routine]]
+=== PUT [수정]
+
+==== HTTP Request
+
+include::{snippets}/daily-routine/put-daily-routine/http-request.adoc[]
+include::{snippets}/daily-routine/put-daily-routine/path-parameters.adoc[]
+include::{snippets}/daily-routine/put-daily-routine/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/daily-routine/put-daily-routine/http-response.adoc[]
+include::{snippets}/daily-routine/put-daily-routine/response-fields.adoc[]

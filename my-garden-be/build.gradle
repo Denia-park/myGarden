@@ -20,14 +20,11 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    asciidoctorExt
 }
 
 repositories {
     mavenCentral()
-}
-
-ext {
-    set('snippetsDir', file("build/generated-snippets"))
 }
 
 dependencies {
@@ -64,15 +61,33 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     //RestDocs
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 }
 
-tasks.named('test') {
+ext { // 전역 변수
+    snippetsDir = file('build/generated-snippets')
+}
+
+test {
     outputs.dir snippetsDir
     useJUnitPlatform()
 }
 
-tasks.named('asciidoctor') {
+asciidoctor {
     inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
+
+    sources { // 특정 파일만 html로 만든다.
+        include('**/index.adoc')
+    }
+    baseDirFollowsSourceFile() // 다른 adoc 파일을 include 할 때 경로를 baseDir로 맞춘다.
     dependsOn test
+}
+
+bootJar {
+    dependsOn asciidoctor
+    from("${asciidoctor.outputDir}") {
+        into 'static/docs'
+    }
 }
