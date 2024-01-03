@@ -168,4 +168,34 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
                         )
                 ));
     }
+
+    @Test
+    @DisplayName("Daily Routine을 삭제한다.")
+    void deleteDailyRoutine() throws Exception {
+        //given
+        BDDMockito.given(dailyRoutineService.deleteDailyRoutine(any()))
+                .willReturn(
+                        1L
+                );
+
+        //when, then
+        mockMvc.perform(
+                        RestDocumentationRequestBuilders.delete("/api/daily-routine/{id}", 1L)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").isNumber())
+                .andDo(document("daily-routine/delete-daily-routine"
+                        , preprocessRequest(prettyPrint())
+                        , preprocessResponse(prettyPrint())
+                        , pathParameters(
+                                parameterWithName("id").description("삭제할 TimeBlock ID")
+                        )
+                        , responseFields(
+                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("코드"),
+                                fieldWithPath("status").type(JsonFieldType.STRING).description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
+                                fieldWithPath("data").type(JsonFieldType.NUMBER).description("데이터 (삭제된 TimeBlock ID)")
+                        )
+                ));
+    }
 }
