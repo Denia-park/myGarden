@@ -1,4 +1,4 @@
-package org.hyunggi.mygardenbe.dailyroutine.entity;
+package org.hyunggi.mygardenbe.common.entity;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

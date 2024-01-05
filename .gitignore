@@ -68,3 +68,6 @@ coverage
 
 # Vue build output file
 **/resources/static
+
+# private file
+application-db_test.yaml

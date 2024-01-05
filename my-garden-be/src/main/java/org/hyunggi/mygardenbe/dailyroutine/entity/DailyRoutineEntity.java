@@ -3,6 +3,7 @@ package org.hyunggi.mygardenbe.dailyroutine.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hyunggi.mygardenbe.common.entity.BaseEntity;
 import org.hyunggi.mygardenbe.dailyroutine.domain.DailyRoutine;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineTime;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineType;
