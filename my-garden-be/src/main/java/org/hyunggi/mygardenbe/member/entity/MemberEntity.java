@@ -6,12 +6,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hyunggi.mygardenbe.common.entity.BaseEntity;
 import org.hyunggi.mygardenbe.member.domain.Member;
 
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @Entity
-public class MemberEntity {
+public class MemberEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
