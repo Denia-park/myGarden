@@ -4,6 +4,7 @@ import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hyunggi.mygardenbe.common.exception.BusinessException;
 import org.springframework.util.Assert;
 
 import java.time.Duration;
@@ -34,8 +35,14 @@ public class RoutineTime {
     private static void validateConstructor(final LocalDateTime startTime, final LocalDateTime endTime) {
         Assert.isTrue(startTime != null, "시작 시간은 null이 될 수 없습니다.");
         Assert.isTrue(endTime != null, "종료 시간은 null이 될 수 없습니다.");
-        Assert.isTrue(startTime.isBefore(endTime), "시작 시간은 종료 시간보다 빨라야 합니다.");
-        Assert.isTrue(Duration.between(startTime, endTime).toSeconds() <= SECONDS_PER_DAY, "날짜는 하루 이상 차이날 수 없습니다.");
+
+        if (startTime.isAfter(endTime)) {
+            throw new BusinessException("시작 시간은 종료 시간보다 빨라야 합니다.");
+        }
+
+        if (Duration.between(startTime, endTime).toSeconds() > SECONDS_PER_DAY) {
+            throw new BusinessException("날짜는 하루 이상 차이날 수 없습니다.");
+        }
     }
 
     public boolean isSameDate() {
