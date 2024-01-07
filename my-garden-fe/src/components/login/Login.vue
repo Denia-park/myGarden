@@ -1,7 +1,8 @@
 <script setup>
 
 import {ref} from "vue";
-import {loginApi} from "@/components/dailyRoutine/api/api.js";
+import {loginApi} from "@/components/login/api/api.js";
+
 
 const form = ref({
   email: '',
