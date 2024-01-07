@@ -2,7 +2,15 @@ import {createStore} from 'vuex'
 
 export const store = createStore({
     state() {
-        return {}
+        return {
+            account: {
+                id: 0
+            }
+        }
     },
-    mutations: {},
+    mutations: {
+        setAccount(state, payload) {
+            state.account.id = payload;
+        }
+    },
 })

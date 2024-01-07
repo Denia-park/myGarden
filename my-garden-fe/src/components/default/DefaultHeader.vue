@@ -1,5 +1,11 @@
 <script setup>
+import {store} from "@/scripts/store.js";
+import {router} from "@/scripts/router.js";
 
+function logout() {
+  store.commit('setAccount', 0);
+  router.push('/login');
+}
 </script>
 
 <template>
@@ -11,7 +17,8 @@
             <h4 class="text-white">Page</h4>
             <ul class="list-unstyled">
               <li>
-                <router-link class="text-white" to="/login">로그인</router-link>
+                <router-link v-if="!$store.state.account.id" class="text-white" to="/login">로그인</router-link>
+                <a v-else class="text-white" href="#" @click="logout">로그아웃</a>
               </li>
               <li>
                 <router-link class="text-white" to="/">하루 일과</router-link>
