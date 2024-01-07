@@ -10,6 +10,12 @@
           <div class="col-sm-8 col-md-7 py-4">
             <h4 class="text-white">Page</h4>
             <ul class="list-unstyled">
+              <li>
+                <router-link class="text-white" to="/login">로그인</router-link>
+              </li>
+              <li>
+                <router-link class="text-white" to="/">하루 일과</router-link>
+              </li>
               <li><a class="text-white" href="#">정리 게시판</a></li>
               <li><a class="text-white" href="#">하루 습관</a></li>
               <li><a class="text-white" href="#">명언 정리</a></li>
