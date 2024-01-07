@@ -5,6 +5,7 @@ import App from './App.vue'
 import {createRouter, createWebHistory} from 'vue-router'
 import DailyRoutine from "@/components/dailyRoutine/DailyRoutine.vue";
 import Login from "@/components/login/Login.vue";
+import {store} from "@/scripts/store.js";
 
 const routes = [
     {path: '/', component: DailyRoutine},
@@ -16,4 +17,4 @@ const router = createRouter({
     routes
 })
 
-createApp(App).use(router).mount('#app')
+createApp(App).use(store).use(router).mount('#app')
