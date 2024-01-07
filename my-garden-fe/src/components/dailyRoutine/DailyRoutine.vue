@@ -4,7 +4,7 @@ import DrawDailyRoutine from "@/components/dailyRoutine/draw/DrawDailyRoutine.vu
 import InputDailyRoutine from "@/components/dailyRoutine/input/InputDailyRoutine.vue";
 import SelectDate from "@/components/dailyRoutine/SelectDate.vue";
 import {ref} from "vue";
-import {getTodayDate} from "@/components/dailyRoutine/api/apiUtils.js";
+import {getTodayDate} from "@/components/dailyRoutine/api/api.js";
 
 const updateBlock = ref({});
 const updateDate = ref(getTodayDate());
