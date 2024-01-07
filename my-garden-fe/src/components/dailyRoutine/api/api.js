@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export async function getDailyRoutineApi(startDateTime, endDateTime) {
+export function getDailyRoutineApi(startDateTime, endDateTime) {
     function saveLastStartDateTimeInLocalStorage(allDateTimeDataArray) {
         const saveStartDateTime = calculateTodayLastStartDateTime(startDateTime, allDateTimeDataArray);
 
