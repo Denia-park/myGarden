@@ -17,9 +17,6 @@ watch(() => props.updateDate, (newDate) => {
           .then(response => {
             splitSchedule.value = processSchedule(response.allDateTimeDataArray);
           })
-          .catch(error => {
-            console.log(error);
-          });
     }, {immediate: true}
 );
 
