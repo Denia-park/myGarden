@@ -4,6 +4,7 @@ import {router} from "@/scripts/router.js";
 
 function logout() {
   store.commit('setAccount', 0);
+  sessionStorage.removeItem('id');
   router.push('/login');
 }
 </script>

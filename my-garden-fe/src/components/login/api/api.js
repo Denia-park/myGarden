@@ -13,6 +13,8 @@ export function loginApi(email, password) {
             store.commit('setAccount', id);
             alert("로그인에 성공했습니다.");
 
+            sessionStorage.setItem('id', id);
+
             return id;
 
             // return {
