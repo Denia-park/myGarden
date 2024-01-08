@@ -40,9 +40,13 @@ public class RoutineTime {
             throw new BusinessException("시작 시간은 종료 시간보다 빨라야 합니다.");
         }
 
-        if (Duration.between(startTime, endTime).toSeconds() > SECONDS_PER_DAY) {
+        if (isDurationExceedingOneDay(startTime, endTime)) {
             throw new BusinessException("날짜는 하루 이상 차이날 수 없습니다.");
         }
+    }
+
+    private static boolean isDurationExceedingOneDay(final LocalDateTime startTime, final LocalDateTime endTime) {
+        return Duration.between(startTime, endTime).toSeconds() > SECONDS_PER_DAY;
     }
 
     public boolean isSameDate() {
