@@ -35,12 +35,12 @@ public class AuthController {
                 paramas.get("password")
         ).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 회원입니다."));
 
-        addJwtToResponse(response, member);
+        addJwtToResponseCookie(response, member);
 
         return ResponseEntity.ok(ApiResponse.ok(member.getId()));
     }
 
-    private void addJwtToResponse(final HttpServletResponse response, final MemberEntity member) {
+    private void addJwtToResponseCookie(final HttpServletResponse response, final MemberEntity member) {
         final String token = jwtService.getToken("id", member.getId());
 
         Cookie cookie = new Cookie("token", token);
