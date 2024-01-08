@@ -60,12 +60,16 @@ public class DailyRoutine {
     }
 
     public void update(final RoutineTime routineTime, final RoutineType routineType, final String description) {
-        if (this.routineTime.isNotStartAndEndDateEqualTo(routineTime)) {
-            throw new BusinessException("동일한 날짜의 시간으로만 수정할 수 있습니다.");
-        }
+        validate(routineTime);
 
         this.routineTime = routineTime;
         this.routineType = routineType;
         this.routineDescription = description;
+    }
+
+    private void validate(final RoutineTime routineTime) {
+        if (this.routineTime.isNotStartAndEndDateEqualTo(routineTime)) {
+            throw new BusinessException("동일한 날짜의 시간으로만 수정할 수 있습니다.");
+        }
     }
 }

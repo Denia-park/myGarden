@@ -1,5 +1,6 @@
 package org.hyunggi.mygardenbe.member.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hyunggi.mygardenbe.common.response.ApiResponse;
 import org.hyunggi.mygardenbe.member.entity.MemberEntity;
@@ -29,7 +30,7 @@ public class AuthController {
         final MemberEntity member = memberRepository.findByEmailAndPassword(
                 paramas.get("email"),
                 paramas.get("password")
-        ).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+        ).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 회원입니다."));
 
         return ApiResponse.ok(member.getId());
     }

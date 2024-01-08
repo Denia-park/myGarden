@@ -1,5 +1,6 @@
 package org.hyunggi.mygardenbe.dailyroutine.domain;
 
+import org.hyunggi.mygardenbe.common.exception.BusinessException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,7 +23,7 @@ class RoutineTimeTest {
 
         //when, then
         assertThatThrownBy(() -> RoutineTime.of(startTime, endTime))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(BusinessException.class)
                 .hasMessageContaining("시작 시간은 종료 시간보다 빨라야 합니다.");
     }
 
@@ -65,7 +66,7 @@ class RoutineTimeTest {
 
         //when, then
         assertThatThrownBy(() -> RoutineTime.of(startTime, endTime))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(BusinessException.class)
                 .hasMessageContaining("날짜는 하루 이상 차이날 수 없습니다.");
     }
 

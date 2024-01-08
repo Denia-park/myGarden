@@ -41,6 +41,19 @@ public class ApiControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ApiResponse<Object> illegalArgumentException(IllegalArgumentException e) {
+        final String errorMessage = e.getMessage();
+        log.warn("API Controller IllegalArgumentException : {}", errorMessage);
+
+        return ApiResponse.of(
+                HttpStatus.BAD_REQUEST,
+                errorMessage,
+                null
+        );
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BusinessException.class)
     public ApiResponse<Object> businessException(BusinessException e) {
         final String errorMessage = e.getMessage();
