@@ -24,6 +24,10 @@ spring:
 
 ---
 
+jwt:
+  secretKey: ${jwt.secretKey}
+  expiration: ${jwt.expiration}
+
 config:
   type: aws-parameterstore:/config/myGarden/
 
