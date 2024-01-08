@@ -1,7 +1,9 @@
 <script setup>
 
 import {ref} from "vue";
-import {loginApi} from "@/components/dailyRoutine/api/apiUtils.js";
+import {loginApi} from "@/components/login/api/api.js";
+import {router} from "@/scripts/router.js";
+
 
 const form = ref({
   email: '',
@@ -11,7 +13,14 @@ const form = ref({
 function submit() {
   const {email, password} = form.value;
 
-  loginApi(email, password);
+  loginApi(email, password)
+      .then(response => {
+        if (response === null) {
+          return;
+        }
+
+        router.push('/');
+      })
 }
 
 </script>

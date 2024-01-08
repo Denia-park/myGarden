@@ -9,7 +9,7 @@ import {
   getTodayDate,
   postDailyRoutineApi,
   updateDailyRoutineApi
-} from "@/components/dailyRoutine/api/apiUtils.js";
+} from "@/components/dailyRoutine/api/api.js";
 
 const startDate = ref('');
 const endDate = ref('');

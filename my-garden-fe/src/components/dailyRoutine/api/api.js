@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export async function getDailyRoutineApi(startDateTime, endDateTime) {
+export function getDailyRoutineApi(startDateTime, endDateTime) {
     function saveLastStartDateTimeInLocalStorage(allDateTimeDataArray) {
         const saveStartDateTime = calculateTodayLastStartDateTime(startDateTime, allDateTimeDataArray);
 
@@ -60,7 +60,7 @@ export function getTodayDate() {
     return `${year}-${month}-${day}`;
 }
 
-export async function postDailyRoutineApi(startDate, endDate, routineType, content) {
+export function postDailyRoutineApi(startDate, endDate, routineType, content) {
     axios.post('/api/daily-routine', {
         startDateTime: startDate,
         endDateTime: endDate,
@@ -77,7 +77,7 @@ export async function postDailyRoutineApi(startDate, endDate, routineType, conte
         });
 }
 
-export async function updateDailyRoutineApi(id, startDate, endDate, routineType, content) {
+export function updateDailyRoutineApi(id, startDate, endDate, routineType, content) {
     function updateLastStartDateTime(endDate) {
         const todayLastStartDateTime = localStorage.getItem("todayLastStartDateTime");
 
@@ -105,7 +105,7 @@ export async function updateDailyRoutineApi(id, startDate, endDate, routineType,
         });
 }
 
-export async function deleteDailyRoutineApi(id) {
+export function deleteDailyRoutineApi(id) {
     axios.delete(`/api/daily-routine/${id}`)
         .then(() => {
             alert("삭제되었습니다.");
@@ -113,26 +113,6 @@ export async function deleteDailyRoutineApi(id) {
         })
         .catch(error => {
             alert("삭제에 실패했습니다.");
-            console.log(error);
-        });
-}
-
-export async function loginApi(email, password) {
-    return axios.post('/api/auth/login', {
-        email: email,
-        password: password
-    })
-        .then(({data}) => {
-            console.log(data);
-            alert("로그인에 성공했습니다.");
-
-            // return {
-            // accessToken: data.accessToken,
-            // refreshToken: data.refreshToken
-            // };
-        })
-        .catch(error => {
-            alert("로그인에 실패했습니다.");
             console.log(error);
         });
 }

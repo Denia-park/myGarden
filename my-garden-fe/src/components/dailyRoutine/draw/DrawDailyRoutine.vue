@@ -1,6 +1,6 @@
 <script setup>
 import {computed, ref, watch} from "vue";
-import {getDailyRoutineApi, getTargetDateTimeRange} from "@/components/dailyRoutine/api/apiUtils.js";
+import {getDailyRoutineApi, getTargetDateTimeRange} from "@/components/dailyRoutine/api/api.js";
 
 const props = defineProps({
   updateDate: String,
@@ -17,9 +17,6 @@ watch(() => props.updateDate, (newDate) => {
           .then(response => {
             splitSchedule.value = processSchedule(response.allDateTimeDataArray);
           })
-          .catch(error => {
-            console.log(error);
-          });
     }, {immediate: true}
 );
 
