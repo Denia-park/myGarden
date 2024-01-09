@@ -68,13 +68,13 @@ public class ApiControllerAdvice {
         );
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler({ExpiredJwtException.class, JwtException.class})
     public ApiResponse<Object> jwtException(Exception e) {
         final String errorMessage = e.getMessage();
 
         return ApiResponse.of(
-                HttpStatus.BAD_REQUEST,
+                HttpStatus.UNAUTHORIZED,
                 errorMessage,
                 null
         );
