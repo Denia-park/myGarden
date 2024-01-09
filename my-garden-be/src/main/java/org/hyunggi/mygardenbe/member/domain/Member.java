@@ -7,12 +7,16 @@ import org.hyunggi.mygardenbe.common.exception.BusinessException;
 public class Member {
     private final String email;
     private final String password;
+    private final Role role;
+    private final boolean enabled;
 
     public Member(String email, String password) {
         validateConstructor(email, password);
 
         this.email = email;
         this.password = password;
+        this.role = Role.USER;
+        this.enabled = true;
     }
 
     private void validateConstructor(String email, String password) {
