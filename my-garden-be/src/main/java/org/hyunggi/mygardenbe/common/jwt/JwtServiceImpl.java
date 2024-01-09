@@ -1,7 +1,7 @@
 package org.hyunggi.mygardenbe.common.jwt;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class JwtServiceImpl implements JwtService {
     @Value("${jwt.secretKey}")
@@ -28,6 +29,29 @@ public class JwtServiceImpl implements JwtService {
                 .setExpiration(buildExpirationTime())
                 .signWith(buildKey(), SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    @Override
+    public Claims getClaims(final String token) {
+        if (token == null || token.isEmpty()) {
+            throw new IllegalArgumentException("Token is null or empty");
+        }
+
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(buildKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            log.warn("만료된 JWT token: {}", token);
+
+            throw new ExpiredJwtException(null, null, "Expired JWT token");
+        } catch (JwtException e) {
+            log.warn("유효하지 않은 JWT token: {}", token);
+
+            throw new JwtException("Invalid JWT token");
+        }
     }
 
     private Map<String, Object> buildHeader() {

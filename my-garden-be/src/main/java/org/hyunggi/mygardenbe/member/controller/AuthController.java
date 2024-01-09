@@ -1,5 +1,6 @@
 package org.hyunggi.mygardenbe.member.controller;
 
+import io.jsonwebtoken.Claims;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -10,9 +11,7 @@ import org.hyunggi.mygardenbe.member.entity.MemberEntity;
 import org.hyunggi.mygardenbe.member.repository.MemberRepository;
 import org.hyunggi.mygardenbe.member.service.MemberService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -48,5 +47,12 @@ public class AuthController {
         cookie.setPath("/");
 
         response.addCookie(cookie);
+    }
+
+    @GetMapping("/api/auth/check")
+    public ResponseEntity<ApiResponse<Long>> check(@CookieValue(value = "token", required = false) final String token) {
+        final Claims claims = jwtService.getClaims(token);
+
+        return ResponseEntity.ok(ApiResponse.ok(claims.get("id", Long.class)));
     }
 }

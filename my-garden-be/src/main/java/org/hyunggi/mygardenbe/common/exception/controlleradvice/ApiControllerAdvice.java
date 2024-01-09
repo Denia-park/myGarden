@@ -1,5 +1,7 @@
 package org.hyunggi.mygardenbe.common.exception.controlleradvice;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.hyunggi.mygardenbe.common.exception.BusinessException;
@@ -61,6 +63,18 @@ public class ApiControllerAdvice {
 
         return ApiResponse.of(
                 HttpStatus.BAD_REQUEST,
+                errorMessage,
+                null
+        );
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler({ExpiredJwtException.class, JwtException.class})
+    public ApiResponse<Object> jwtException(Exception e) {
+        final String errorMessage = e.getMessage();
+
+        return ApiResponse.of(
+                HttpStatus.UNAUTHORIZED,
                 errorMessage,
                 null
         );
