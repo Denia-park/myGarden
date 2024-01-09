@@ -1,5 +1,7 @@
 package org.hyunggi.mygardenbe.common.exception.controlleradvice;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.hyunggi.mygardenbe.common.exception.BusinessException;
@@ -58,6 +60,18 @@ public class ApiControllerAdvice {
     public ApiResponse<Object> businessException(BusinessException e) {
         final String errorMessage = e.getMessage();
         log.warn("API Controller BusinessException : {}", errorMessage);
+
+        return ApiResponse.of(
+                HttpStatus.BAD_REQUEST,
+                errorMessage,
+                null
+        );
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({ExpiredJwtException.class, JwtException.class})
+    public ApiResponse<Object> jwtException(Exception e) {
+        final String errorMessage = e.getMessage();
 
         return ApiResponse.of(
                 HttpStatus.BAD_REQUEST,
