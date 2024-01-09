@@ -42,10 +42,10 @@ function logout() {
     </div>
     <div class="navbar navbar-dark bg-dark shadow-sm">
       <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="#">
+        <router-link class="navbar-brand d-flex align-items-center" to="/">
           <i class="fa-brands fa-pagelines"></i>
           <strong class="title">myGarden</strong>
-        </a>
+        </router-link>
         <button aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
                 data-bs-target="#navbarHeader" data-bs-toggle="collapse" type="button">
           <span class="navbar-toggler-icon"></span>
