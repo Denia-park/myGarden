@@ -1,29 +1,34 @@
 package org.hyunggi.mygardenbe.auth.jwt.domain;
 
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
 import org.springframework.util.Assert;
 
+@Getter
 public class Token {
     private String tokenText;
     private TokenType tokenType;
     private boolean revoked;
     private boolean expired;
 
+    @Builder(access = AccessLevel.PRIVATE)
     private Token(final String tokenText, final TokenType tokenType, final boolean revoked, final boolean expired) {
-        validateConstructor(tokenText, tokenType);
-
         this.tokenText = tokenText;
         this.tokenType = tokenType;
         this.revoked = revoked;
         this.expired = expired;
     }
 
-    private void validateConstructor(final String tokenText, final TokenType tokenType) {
-        Assert.hasText(tokenText, "토큰은 null 혹은 빈 문자열이 될 수 없습니다.");
-        Assert.notNull(tokenType, "토큰 타입은 null이 될 수 없습니다.");
-    }
-
     public static Token createBearerToken(final String tokenText) {
-        return new Token(tokenText, TokenType.BEARER, false, false);
+        Assert.hasText(tokenText, "토큰은 null 혹은 빈 문자열이 될 수 없습니다.");
+
+        return Token.builder()
+                .tokenText(tokenText)
+                .tokenType(TokenType.BEARER)
+                .revoked(false)
+                .expired(false)
+                .build();
     }
 
     public boolean isValid() {

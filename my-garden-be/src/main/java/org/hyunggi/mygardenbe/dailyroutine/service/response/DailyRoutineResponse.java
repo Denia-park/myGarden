@@ -1,7 +1,9 @@
 package org.hyunggi.mygardenbe.dailyroutine.service.response;
 
+import lombok.Builder;
 import org.hyunggi.mygardenbe.dailyroutine.domain.DailyRoutine;
 
+@Builder(access = lombok.AccessLevel.PRIVATE)
 public record DailyRoutineResponse(
         Long id,
         String startDateTime,
@@ -9,22 +11,21 @@ public record DailyRoutineResponse(
         String routineType,
         String routineDescription) {
     public static DailyRoutineResponse of(DailyRoutine dailyRoutine) {
-        return new DailyRoutineResponse(
-                null,
-                dailyRoutine.getStartDateTimeString(),
-                dailyRoutine.getEndDateTimeString(),
-                dailyRoutine.getRoutineTypeDescription(),
-                dailyRoutine.getRoutineDescription()
-        );
+        return DailyRoutineResponse.builder()
+                .startDateTime(dailyRoutine.getStartDateTimeString())
+                .endDateTime(dailyRoutine.getEndDateTimeString())
+                .routineType(dailyRoutine.getRoutineTypeDescription())
+                .routineDescription(dailyRoutine.getRoutineDescription())
+                .build();
     }
 
     public static DailyRoutineResponse of(final Long id, final DailyRoutine dailyRoutine) {
-        return new DailyRoutineResponse(
-                id,
-                dailyRoutine.getStartDateTimeString(),
-                dailyRoutine.getEndDateTimeString(),
-                dailyRoutine.getRoutineTypeDescription(),
-                dailyRoutine.getRoutineDescription()
-        );
+        return DailyRoutineResponse.builder()
+                .id(id)
+                .startDateTime(dailyRoutine.getStartDateTimeString())
+                .endDateTime(dailyRoutine.getEndDateTimeString())
+                .routineType(dailyRoutine.getRoutineTypeDescription())
+                .routineDescription(dailyRoutine.getRoutineDescription())
+                .build();
     }
 }

@@ -2,6 +2,7 @@ package org.hyunggi.mygardenbe.dailyroutine.domain;
 
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hyunggi.mygardenbe.common.exception.BusinessException;
@@ -21,6 +22,7 @@ public class RoutineTime {
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
 
+    @Builder(access = AccessLevel.PRIVATE)
     private RoutineTime(final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
@@ -29,7 +31,10 @@ public class RoutineTime {
     public static RoutineTime of(final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
         validateConstructor(startDateTime, endDateTime);
 
-        return new RoutineTime(startDateTime, endDateTime);
+        return RoutineTime.builder()
+                .startDateTime(startDateTime)
+                .endDateTime(endDateTime)
+                .build();
     }
 
     private static void validateConstructor(final LocalDateTime startTime, final LocalDateTime endTime) {
