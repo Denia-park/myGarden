@@ -11,4 +11,8 @@ public enum TokenType {
     TokenType(final String parseText) {
         this.parseText = parseText;
     }
+
+    public int getParseTextLength() {
+        return this.parseText.length();
+    }
 }
