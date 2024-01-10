@@ -26,7 +26,7 @@ public class TokenEntity extends BaseEntity {
     private Long memberId;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private TokenEntity(String tokenText, TokenType tokenType, boolean revoked, boolean expired, Long memberId) {
+    private TokenEntity(final String tokenText, final TokenType tokenType, final boolean revoked, final boolean expired, final Long memberId) {
         this.tokenText = tokenText;
         this.tokenType = tokenType;
         this.revoked = revoked;
