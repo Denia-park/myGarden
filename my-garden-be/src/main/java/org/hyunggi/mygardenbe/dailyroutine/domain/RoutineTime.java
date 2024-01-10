@@ -21,7 +21,7 @@ public class RoutineTime {
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
 
-    private RoutineTime(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    private RoutineTime(final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
     }

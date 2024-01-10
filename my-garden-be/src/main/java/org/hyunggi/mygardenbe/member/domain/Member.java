@@ -10,7 +10,7 @@ public class Member {
     private final Role role;
     private final boolean enabled;
 
-    public Member(String email, String password) {
+    public Member(final String email, final String password) {
         validateConstructor(email, password);
 
         this.email = email;
@@ -19,7 +19,7 @@ public class Member {
         this.enabled = true;
     }
 
-    private void validateConstructor(String email, String password) {
+    private void validateConstructor(final String email, final String password) {
         validateEmail(email);
 
         validatePassword(password);

@@ -12,7 +12,7 @@ public class DailyRoutine {
     private RoutineType routineType;
     private String routineDescription;
 
-    private DailyRoutine(RoutineTime routineTime, RoutineType routineType, String routineDescription) {
+    private DailyRoutine(final RoutineTime routineTime, final RoutineType routineType, final String routineDescription) {
         validateConstructor(routineTime, routineType, routineDescription);
 
         this.routineTime = routineTime;
@@ -26,7 +26,7 @@ public class DailyRoutine {
         Assert.isTrue(routineDescription != null, "데일리 루틴의 설명은 null이 될 수 없습니다.");
     }
 
-    public static DailyRoutine of(RoutineTime routineTime, String routineType, String routineDescription) {
+    public static DailyRoutine of(final RoutineTime routineTime, final String routineType, final String routineDescription) {
         validateConstructor(routineType);
         return of(routineTime, RoutineType.valueOf(routineType), routineDescription);
     }
@@ -35,7 +35,7 @@ public class DailyRoutine {
         Assert.hasText(routineType, "데일리 루틴의 타입은 비어있을 수 없습니다.");
     }
 
-    public static DailyRoutine of(RoutineTime routineTime, RoutineType routineType, String routineDescription) {
+    public static DailyRoutine of(final RoutineTime routineTime, final RoutineType routineType, final String routineDescription) {
         return new DailyRoutine(routineTime, routineType, routineDescription);
     }
 

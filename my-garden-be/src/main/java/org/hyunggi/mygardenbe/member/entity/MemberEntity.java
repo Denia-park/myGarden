@@ -34,7 +34,7 @@ public class MemberEntity extends BaseEntity implements UserDetails {
         this.password = password;
     }
 
-    public static MemberEntity of(Member member) {
+    public static MemberEntity of(final Member member) {
         return new MemberEntity(
                 member.getEmail(),
                 member.getPassword()

@@ -18,7 +18,7 @@ public class ApiControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
-    public ApiResponse<Object> bindException(BindException e) {
+    public ApiResponse<Object> bindException(final BindException e) {
         final String errorMessage = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
         log.warn("API Controller BindException : {}", errorMessage);
 
@@ -31,7 +31,7 @@ public class ApiControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(EntityNotFoundException.class)
-    public ApiResponse<Object> entityNotFoundException(EntityNotFoundException e) {
+    public ApiResponse<Object> entityNotFoundException(final EntityNotFoundException e) {
         final String errorMessage = e.getMessage();
         log.warn("API Controller EntityNotFoundException : {}", errorMessage);
 
@@ -44,7 +44,7 @@ public class ApiControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException.class)
-    public ApiResponse<Object> illegalArgumentException(IllegalArgumentException e) {
+    public ApiResponse<Object> illegalArgumentException(final IllegalArgumentException e) {
         final String errorMessage = e.getMessage();
         log.warn("API Controller IllegalArgumentException : {}", errorMessage);
 
@@ -57,7 +57,7 @@ public class ApiControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BusinessException.class)
-    public ApiResponse<Object> businessException(BusinessException e) {
+    public ApiResponse<Object> businessException(final BusinessException e) {
         final String errorMessage = e.getMessage();
         log.warn("API Controller BusinessException : {}", errorMessage);
 
@@ -70,7 +70,7 @@ public class ApiControllerAdvice {
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler({ExpiredJwtException.class, JwtException.class})
-    public ApiResponse<Object> jwtException(Exception e) {
+    public ApiResponse<Object> jwtException(final Exception e) {
         final String errorMessage = e.getMessage();
 
         return ApiResponse.of(
