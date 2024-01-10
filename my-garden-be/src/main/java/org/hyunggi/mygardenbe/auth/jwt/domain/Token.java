@@ -9,10 +9,17 @@ public class Token {
     private boolean expired;
 
     private Token(final String tokenText, final TokenType tokenType, final boolean revoked, final boolean expired) {
+        validateConstructor(tokenText, tokenType);
+
         this.tokenText = tokenText;
         this.tokenType = tokenType;
         this.revoked = revoked;
         this.expired = expired;
+    }
+
+    private void validateConstructor(final String tokenText, final TokenType tokenType) {
+        Assert.hasText(tokenText, "토큰은 null 혹은 빈 문자열이 될 수 없습니다.");
+        Assert.notNull(tokenType, "토큰 타입은 null이 될 수 없습니다.");
     }
 
     public static Token createBearerToken(final String tokenText) {
