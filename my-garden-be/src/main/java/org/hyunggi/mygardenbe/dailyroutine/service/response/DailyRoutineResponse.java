@@ -1,9 +1,7 @@
 package org.hyunggi.mygardenbe.dailyroutine.service.response;
 
-import lombok.Builder;
 import org.hyunggi.mygardenbe.dailyroutine.domain.DailyRoutine;
 
-@Builder
 public record DailyRoutineResponse(
         Long id,
         String startDateTime,

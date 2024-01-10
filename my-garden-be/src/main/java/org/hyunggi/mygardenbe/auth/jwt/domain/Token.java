@@ -1,7 +1,6 @@
 package org.hyunggi.mygardenbe.auth.jwt.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
+import org.springframework.util.Assert;
 
 public class Token {
     private String tokenText;
@@ -9,7 +8,6 @@ public class Token {
     private boolean revoked;
     private boolean expired;
 
-    @Builder(access = AccessLevel.PRIVATE)
     private Token(final String tokenText, final TokenType tokenType, final boolean revoked, final boolean expired) {
         this.tokenText = tokenText;
         this.tokenType = tokenType;
@@ -18,12 +16,7 @@ public class Token {
     }
 
     public static Token createBearerToken(final String tokenText) {
-        return Token.builder()
-                .tokenText(tokenText)
-                .tokenType(TokenType.BEARER)
-                .revoked(false)
-                .expired(false)
-                .build();
+        return new Token(tokenText, TokenType.BEARER, false, false);
     }
 
     public boolean isValid() {
