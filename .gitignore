@@ -72,3 +72,4 @@ coverage
 # private file
 application-db_test.yaml
 application-test.yaml
+**/privateStudyTest
