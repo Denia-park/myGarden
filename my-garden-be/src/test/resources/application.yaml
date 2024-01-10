@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    default: test
   jpa:
     hibernate:
       ddl-auto: create
