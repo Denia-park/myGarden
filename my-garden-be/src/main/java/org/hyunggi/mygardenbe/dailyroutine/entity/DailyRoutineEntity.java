@@ -29,7 +29,7 @@ public class DailyRoutineEntity extends BaseEntity {
         this.routineDescription = routineDescription;
     }
 
-    public static DailyRoutineEntity of(DailyRoutine dailyRoutine) {
+    public static DailyRoutineEntity of(final DailyRoutine dailyRoutine) {
         return new DailyRoutineEntity(
                 dailyRoutine.getRoutineTime(),
                 dailyRoutine.getRoutineType(),

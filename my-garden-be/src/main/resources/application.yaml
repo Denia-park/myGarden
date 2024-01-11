@@ -23,10 +23,13 @@ spring:
     password:
 
 ---
-
-jwt:
-  secretKey: ${jwt.secretKey}
-  expiration: ${jwt.expiration}
+application:
+  security:
+    jwt:
+      secret-key: ${jwt.secret-key}
+      expiration: ${jwt.expiration}
+      refresh-token:
+        expiration: ${jwt.refresh-expiration}
 
 config:
   type: aws-parameterstore:/config/myGarden/

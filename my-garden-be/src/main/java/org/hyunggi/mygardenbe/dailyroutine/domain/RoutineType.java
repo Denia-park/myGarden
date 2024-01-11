@@ -14,7 +14,7 @@ public enum RoutineType {
 
     private String description;
 
-    RoutineType(String description) {
+    RoutineType(final String description) {
         this.description = description;
     }
 }
