@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.hyunggi.mygardenbe.auth.controller.AuthController;
 import org.hyunggi.mygardenbe.auth.jwt.domain.TokenType;
-import org.hyunggi.mygardenbe.auth.jwt.repository.TokenRepository;
 import org.hyunggi.mygardenbe.auth.jwt.service.JwtService;
 import org.hyunggi.mygardenbe.auth.jwt.util.JwtAuthUtil;
 import org.springframework.lang.NonNull;
@@ -26,7 +25,6 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
-    private final TokenRepository tokenRepository;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
