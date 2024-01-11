@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.hyunggi.mygardenbe.auth.controller.AuthController;
 import org.hyunggi.mygardenbe.auth.jwt.domain.TokenType;
-import org.hyunggi.mygardenbe.auth.jwt.entity.TokenEntity;
 import org.hyunggi.mygardenbe.auth.jwt.repository.TokenRepository;
 import org.hyunggi.mygardenbe.auth.jwt.service.JwtService;
 import org.hyunggi.mygardenbe.auth.jwt.util.JwtAuthUtil;
@@ -45,7 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (userEmail != null && isUserNotAuthenticated()) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
 
-            if (jwtService.isTokenValid(accessTokenText, userDetails) && isTokenFromDatabaseValid(userEmail)) {
+            if (jwtService.isTokenValid(accessTokenText, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
@@ -67,11 +66,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private boolean isUserNotAuthenticated() {
         return SecurityContextHolder.getContext().getAuthentication() == null;
-    }
-
-    private boolean isTokenFromDatabaseValid(final String userEmail) {
-        return tokenRepository.findTokenByUserEmail(userEmail)
-                .map(TokenEntity::isValid)
-                .orElse(false);
     }
 }
