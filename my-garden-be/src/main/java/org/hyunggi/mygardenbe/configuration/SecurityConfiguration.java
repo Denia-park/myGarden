@@ -1,7 +1,7 @@
 package org.hyunggi.mygardenbe.configuration;
 
 import lombok.RequiredArgsConstructor;
-import org.hyunggi.mygardenbe.auth.controller.AuthController;
+import org.hyunggi.mygardenbe.auth.controller.AuthenticationController;
 import org.hyunggi.mygardenbe.auth.jwt.filter.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +23,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableMethodSecurity
 public class SecurityConfiguration {
     private static final String[] WHITE_LIST_URL = {
-            AuthController.AUTH_API_PATH + "/**",
+            AuthenticationController.AUTH_BASE_API_PATH + "/**",
             "/docs/index.html",
             "/actuator/**"
     };
@@ -45,7 +45,7 @@ public class SecurityConfiguration {
                 .authenticationProvider(myAuthenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout ->
-                        logout.logoutUrl(AuthController.AUTH_API_PATH + "/logout")
+                        logout.logoutUrl(AuthenticationController.AUTH_BASE_API_PATH + "/logout")
                                 .addLogoutHandler(myLogoutHandler)
                                 .logoutSuccessHandler((req, res, auth) -> SecurityContextHolder.clearContext())
                 );

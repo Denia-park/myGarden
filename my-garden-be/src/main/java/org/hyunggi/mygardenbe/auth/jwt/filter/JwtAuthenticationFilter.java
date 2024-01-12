@@ -5,7 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.hyunggi.mygardenbe.auth.controller.AuthController;
+import org.hyunggi.mygardenbe.auth.controller.AuthenticationController;
 import org.hyunggi.mygardenbe.auth.jwt.domain.TokenType;
 import org.hyunggi.mygardenbe.auth.jwt.service.JwtService;
 import org.hyunggi.mygardenbe.auth.jwt.util.JwtAuthUtil;
@@ -59,7 +59,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private boolean isAuthApiPath(final HttpServletRequest request) {
-        return request.getServletPath().contains(AuthController.AUTH_API_PATH);
+        return request.getServletPath().contains(AuthenticationController.AUTH_BASE_API_PATH);
     }
 
     private boolean isUserNotAuthenticated() {
