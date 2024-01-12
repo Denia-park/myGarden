@@ -22,7 +22,11 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfiguration {
-    private static final String[] WHITE_LIST_URL = {(AuthController.AUTH_API_PATH + "/**"), "/docs/index.html", "/actuator/**"};
+    private static final String[] WHITE_LIST_URL = {
+            AuthController.AUTH_API_PATH + "/**",
+            "/docs/index.html",
+            "/actuator/**"
+    };
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider myAuthenticationProvider;
