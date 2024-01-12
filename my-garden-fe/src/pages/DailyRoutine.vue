@@ -2,7 +2,7 @@
 import PageTitle from "@/components/default/PageTitle.vue";
 import DrawDailyRoutine from "@/components/dailyRoutine/draw/DrawDailyRoutine.vue";
 import InputDailyRoutine from "@/components/dailyRoutine/input/InputDailyRoutine.vue";
-import SelectDate from "@/components/dailyRoutine/SelectDate.vue";
+import SelectDate from "@/components/dailyRoutine/popup/SelectDate.vue";
 import {ref} from "vue";
 import {getTodayDate} from "@/components/dailyRoutine/api/api.js";
 
