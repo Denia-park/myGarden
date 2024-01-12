@@ -27,7 +27,6 @@ public class SecurityConfiguration {
     private static final String[] WHITE_LIST_URL = {
             AuthenticationController.AUTH_BASE_API_PATH + "/**",
             "/docs/index.html",
-            "/actuator/**",
             "/assets/**",
             "/favicon.ico",
             "/",
