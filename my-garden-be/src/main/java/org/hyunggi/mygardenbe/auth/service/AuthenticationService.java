@@ -1,11 +1,11 @@
 package org.hyunggi.mygardenbe.auth.service;
 
 import lombok.RequiredArgsConstructor;
-import org.hyunggi.mygardenbe.auth.controller.response.AuthenticationResponse;
 import org.hyunggi.mygardenbe.auth.jwt.domain.Token;
 import org.hyunggi.mygardenbe.auth.jwt.entity.TokenEntity;
 import org.hyunggi.mygardenbe.auth.jwt.repository.TokenRepository;
 import org.hyunggi.mygardenbe.auth.jwt.service.JwtService;
+import org.hyunggi.mygardenbe.auth.service.response.AuthenticationResponse;
 import org.hyunggi.mygardenbe.member.domain.Member;
 import org.hyunggi.mygardenbe.member.entity.MemberEntity;
 import org.hyunggi.mygardenbe.member.repository.MemberRepository;

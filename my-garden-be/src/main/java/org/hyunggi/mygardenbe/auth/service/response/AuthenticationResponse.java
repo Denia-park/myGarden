@@ -1,4 +1,4 @@
-package org.hyunggi.mygardenbe.auth.controller.response;
+package org.hyunggi.mygardenbe.auth.service.response;
 
 import lombok.Builder;
 
