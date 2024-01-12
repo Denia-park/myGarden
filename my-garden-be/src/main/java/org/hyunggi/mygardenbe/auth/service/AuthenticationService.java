@@ -1,4 +1,4 @@
-package org.hyunggi.mygardenbe.member.service;
+package org.hyunggi.mygardenbe.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import org.hyunggi.mygardenbe.auth.controller.response.AuthenticationResponse;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class MemberService {
+public class AuthenticationService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;

@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hyunggi.mygardenbe.auth.controller.AuthenticationController;
 import org.hyunggi.mygardenbe.auth.jwt.filter.JwtAuthenticationFilter;
 import org.hyunggi.mygardenbe.auth.jwt.service.MyLogoutHandler;
+import org.hyunggi.mygardenbe.auth.service.AuthenticationService;
 import org.hyunggi.mygardenbe.dailyroutine.controller.DailyRoutineController;
 import org.hyunggi.mygardenbe.dailyroutine.service.DailyRoutineService;
-import org.hyunggi.mygardenbe.member.service.MemberService;
 import org.hyunggi.mygardenbe.mock.security.MyCustomTestSecurityConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -43,5 +43,5 @@ public abstract class ControllerTestSupport {
     protected DailyRoutineService dailyRoutineService;
 
     @MockBean
-    protected MemberService memberService;
+    protected AuthenticationService authenticationService;
 }

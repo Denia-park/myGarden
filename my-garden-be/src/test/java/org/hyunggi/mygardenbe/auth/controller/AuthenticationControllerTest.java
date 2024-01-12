@@ -30,7 +30,7 @@ class AuthenticationControllerTest extends ControllerTestSupport {
                 )
                 .andExpect(status().isOk());
 
-        BDDMockito.verify(memberService).signUp(request.email(), request.password());
+        BDDMockito.verify(authenticationService).signUp(request.email(), request.password());
     }
 
     @ParameterizedTest
