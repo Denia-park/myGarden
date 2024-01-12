@@ -3,6 +3,7 @@ package org.hyunggi.mygardenbe.configuration;
 import lombok.RequiredArgsConstructor;
 import org.hyunggi.mygardenbe.auth.controller.AuthenticationController;
 import org.hyunggi.mygardenbe.auth.jwt.filter.JwtAuthenticationFilter;
+import org.hyunggi.mygardenbe.common.view.filter.HistoryModeFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
@@ -25,7 +27,10 @@ public class SecurityConfiguration {
     private static final String[] WHITE_LIST_URL = {
             AuthenticationController.AUTH_BASE_API_PATH + "/**",
             "/docs/index.html",
-            "/actuator/**"
+            "/assets/**",
+            "/favicon.ico",
+            "/",
+            "/index.html",
     };
 
     private final JwtAuthenticationFilter jwtAuthFilter;
@@ -44,6 +49,7 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(myAuthenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new HistoryModeFilter(), AuthorizationFilter.class)
                 .logout(logout ->
                         logout.logoutUrl(AuthenticationController.AUTH_BASE_API_PATH + "/logout")
                                 .addLogoutHandler(myLogoutHandler)
