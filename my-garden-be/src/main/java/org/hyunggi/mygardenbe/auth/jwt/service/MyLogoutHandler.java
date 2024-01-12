@@ -8,7 +8,6 @@ import org.hyunggi.mygardenbe.auth.jwt.entity.TokenEntity;
 import org.hyunggi.mygardenbe.auth.jwt.repository.TokenRepository;
 import org.hyunggi.mygardenbe.auth.jwt.util.JwtAuthUtil;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Service;
 
@@ -27,10 +26,10 @@ public class MyLogoutHandler implements LogoutHandler {
         }
 
         final TokenEntity storedToken = tokenRepository.findByTokenText(accessTokenText).orElse(null);
+
         if (storedToken != null) {
             storedToken.revoke();
             tokenRepository.save(storedToken);
-            SecurityContextHolder.clearContext();
         }
     }
 }
