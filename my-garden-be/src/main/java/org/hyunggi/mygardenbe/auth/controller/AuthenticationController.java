@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(AuthController.AUTH_API_PATH)
-public class AuthController {
-    public static final String AUTH_API_PATH = "/api/auth";
+@RequestMapping(AuthenticationController.AUTH_BASE_API_PATH)
+public class AuthenticationController {
+    public static final String AUTH_BASE_API_PATH = "/api/auth";
 
     private final MemberService memberService;
 

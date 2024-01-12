@@ -12,7 +12,7 @@ import org.springframework.http.MediaType;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class AuthControllerTest extends ControllerTestSupport {
+class AuthenticationControllerTest extends ControllerTestSupport {
     @Test
     @DisplayName("회원가입을 한다.")
     void signUp() throws Exception {

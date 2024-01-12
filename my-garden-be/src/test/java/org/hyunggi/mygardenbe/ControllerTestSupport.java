@@ -1,7 +1,7 @@
 package org.hyunggi.mygardenbe;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hyunggi.mygardenbe.auth.controller.AuthController;
+import org.hyunggi.mygardenbe.auth.controller.AuthenticationController;
 import org.hyunggi.mygardenbe.auth.jwt.filter.JwtAuthenticationFilter;
 import org.hyunggi.mygardenbe.auth.jwt.service.MyLogoutHandler;
 import org.hyunggi.mygardenbe.dailyroutine.controller.DailyRoutineController;
@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(
         controllers = {
-                AuthController.class,
+                AuthenticationController.class,
                 DailyRoutineController.class
         },
 
