@@ -19,7 +19,7 @@ public class AuthController {
 
     private final MemberService memberService;
 
-    @PostMapping("/sign-up")
+    @PostMapping("/signup")
     public ApiResponse<AuthenticationResponse> signUp(@RequestBody @Valid SignupRequest request) {
         final AuthenticationResponse response = memberService.signUp(request.email(), request.password());
 
