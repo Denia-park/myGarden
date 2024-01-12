@@ -1,5 +1,5 @@
-import DailyRoutine from "@/components/dailyRoutine/DailyRoutine.vue";
-import Login from "@/components/login/Login.vue";
+import DailyRoutine from "@/pages/DailyRoutine.vue";
+import Login from "@/pages/Login.vue";
 import {createRouter, createWebHistory} from "vue-router";
 
 const routes = [
