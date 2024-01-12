@@ -1,4 +1,4 @@
-package org.hyunggi.mygardenbe.auth.jwt.handler;
+package org.hyunggi.mygardenbe.auth.jwt.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
