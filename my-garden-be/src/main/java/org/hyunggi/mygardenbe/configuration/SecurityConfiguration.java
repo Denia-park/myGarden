@@ -43,7 +43,6 @@ public class SecurityConfiguration {
                 .logout(logout ->
                         logout.logoutUrl(AuthController.AUTH_API_PATH + "/logout")
                                 .addLogoutHandler(myLogoutHandler)
-                                .logoutSuccessUrl("/login")
                                 .logoutSuccessHandler((req, res, auth) -> SecurityContextHolder.clearContext())
                 );
 
