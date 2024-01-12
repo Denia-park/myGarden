@@ -28,7 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
         }
 )
 @WithMyCustomUser
-public abstract class ControllerTestSupport {
+public abstract class ControllerTestSupportWithMockUser {
     @Autowired
     protected MockMvc mockMvc;
 

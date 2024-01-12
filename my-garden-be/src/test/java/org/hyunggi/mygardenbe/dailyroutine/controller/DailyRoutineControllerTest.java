@@ -1,6 +1,6 @@
 package org.hyunggi.mygardenbe.dailyroutine.controller;
 
-import org.hyunggi.mygardenbe.ControllerTestSupport;
+import org.hyunggi.mygardenbe.ControllerTestSupportWithMockUser;
 import org.hyunggi.mygardenbe.dailyroutine.controller.request.PostRequest;
 import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class DailyRoutineControllerTest extends ControllerTestSupport {
+class DailyRoutineControllerTest extends ControllerTestSupportWithMockUser {
     @Test
     @DisplayName("신규 Daily Routine을 등록한다.")
     void postDailyRoutine() throws Exception {
