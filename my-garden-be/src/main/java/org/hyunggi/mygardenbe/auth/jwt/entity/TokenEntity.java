@@ -23,6 +23,7 @@ public class TokenEntity extends BaseEntity {
     private TokenType tokenType;
     private boolean revoked;
     private boolean expired;
+    @Getter
     private Long memberId;
 
     @Builder(access = AccessLevel.PRIVATE)
@@ -44,22 +45,7 @@ public class TokenEntity extends BaseEntity {
                 .build();
     }
 
-    public boolean isValid() {
-        return !this.revoked && !this.expired;
-    }
-
-    public void revoke() {
-        this.revoked = true;
-        this.expired = true;
-    }
-
-    public boolean isSameTokenText(final String tokenText) {
-        return this.tokenText.equals(tokenText);
-    }
-
-    public void refresh(final String refreshTokenText) {
-        this.tokenText = refreshTokenText;
-        this.revoked = false;
-        this.expired = false;
+    public Token toDomain() {
+        return Token.of(this.tokenText, this.tokenType, this.revoked, this.expired);
     }
 }
