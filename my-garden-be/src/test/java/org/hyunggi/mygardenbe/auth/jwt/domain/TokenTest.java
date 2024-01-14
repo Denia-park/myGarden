@@ -2,8 +2,12 @@ package org.hyunggi.mygardenbe.auth.jwt.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.NullSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TokenTest {
@@ -25,6 +29,30 @@ class TokenTest {
         assertEquals(tokenType, token.getTokenType());
         assertFalse(token.isRevoked());
         assertFalse(token.isExpired());
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @DisplayName("정적 메서드 of의 입력으로 tokenText가 null 혹은 빈 문자열이면 예외가 발생한다.")
+    void of_nullAndEmptyTokenText(final String tokenText) {
+        //when, when
+        assertThatThrownBy(() -> {
+            Token.of(tokenText, TokenType.BEARER, false, false);
+        })
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("토큰은 null 혹은 빈 문자열이 될 수 없습니다.");
+    }
+
+    @ParameterizedTest
+    @NullSource
+    @DisplayName("정적 메서드 of의 입력으로 tokenType이 null이면 예외가 발생한다.")
+    void of_nullTokenType(final TokenType tokenType) {
+        //when, when
+        assertThatThrownBy(() -> {
+            Token.of("tokenText", tokenType, false, false);
+        })
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("토큰 타입은 null이 될 수 없습니다.");
     }
 
     @Test
