@@ -7,6 +7,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TokenTest {
+    @Test
+    @DisplayName("정적 메서드 of를 통해 객체를 생성할 수 있다.")
+    void of() {
+        //given
+        final String tokenText = "tokenText";
+        final TokenType tokenType = TokenType.BEARER;
+        final boolean revoked = false;
+        final boolean expired = false;
+
+        //when
+        final Token token = Token.of(tokenText, tokenType, revoked, expired);
+
+        //then
+        assertThat(token).isNotNull();
+        assertEquals(tokenText, token.getTokenText());
+        assertEquals(tokenType, token.getTokenType());
+        assertFalse(token.isRevoked());
+        assertFalse(token.isExpired());
+    }
 
     @Test
     @DisplayName("토큰을 생성한다.")
