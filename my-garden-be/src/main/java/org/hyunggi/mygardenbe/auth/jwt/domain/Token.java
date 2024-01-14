@@ -20,15 +20,20 @@ public class Token {
         this.expired = expired;
     }
 
-    public static Token createBearerToken(final String tokenText) {
+    public static Token of(final String tokenText, final TokenType tokenType, final boolean revoked, final boolean expired) {
         Assert.hasText(tokenText, "토큰은 null 혹은 빈 문자열이 될 수 없습니다.");
+        Assert.notNull(tokenType, "토큰 타입은 null이 될 수 없습니다.");
 
         return Token.builder()
                 .tokenText(tokenText)
-                .tokenType(TokenType.BEARER)
-                .revoked(false)
-                .expired(false)
+                .tokenType(tokenType)
+                .revoked(revoked)
+                .expired(expired)
                 .build();
+    }
+
+    public static Token createBearerToken(final String tokenText) {
+        return of(tokenText, TokenType.BEARER, false, false);
     }
 
     public boolean isValid() {
