@@ -115,13 +115,15 @@ class TokenTest {
         token.expire();
         boolean isOldTokenValid = token.isValid();
 
+        String refreshTokenText = "refreshTokenText";
+
         //when
-        token.refresh("refreshTokenText");
+        token.refresh(refreshTokenText);
         boolean isNewTokenValid = token.isValid();
 
         //then
         assertFalse(isOldTokenValid);
-        assertEquals("refreshTokenText", token.getTokenText());
+        assertEquals(refreshTokenText, token.getTokenText());
         assertTrue(isNewTokenValid);
     }
 }
