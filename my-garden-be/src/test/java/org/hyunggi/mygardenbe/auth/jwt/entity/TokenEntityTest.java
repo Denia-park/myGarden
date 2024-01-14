@@ -3,8 +3,12 @@ package org.hyunggi.mygardenbe.auth.jwt.entity;
 import org.hyunggi.mygardenbe.auth.jwt.domain.Token;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.NullSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TokenEntityTest {
@@ -23,6 +27,37 @@ class TokenEntityTest {
         assertThat(tokenEntity).isNotNull();
         assertEquals(token.getTokenText(), tokenEntity.getTokenText());
         assertEquals(memberId, tokenEntity.getMemberId());
+    }
+
+    @Test
+    @DisplayName("정적 메서드 of의 입력으로 token이 null이면 예외가 발생한다.")
+    void of_nullToken() {
+        //given
+        final Token token = null;
+        final Long memberId = 1L;
+
+        //when, when
+        assertThatThrownBy(() -> {
+            TokenEntity.of(token, memberId);
+        })
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("토큰은 null이 될 수 없습니다.");
+    }
+
+    @ParameterizedTest
+    @NullSource
+    @CsvSource(value = {"0", "-1"})
+    @DisplayName("정적 메서드 of의 입력으로 memberId가 null 혹은 0보다 작은 수면 예외가 발생한다.")
+    void of_nullOrNegativeMemberId(Long memberId) {
+        //given
+        final Token token = Token.createBearerToken("tokenText");
+
+        //when, when
+        assertThatThrownBy(() -> {
+            TokenEntity.of(token, memberId);
+        })
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("회원 ID는 null이 될 수 없고, 0보다 커야 합니다.");
     }
 
     @Test

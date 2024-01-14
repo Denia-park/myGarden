@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hyunggi.mygardenbe.auth.jwt.domain.Token;
 import org.hyunggi.mygardenbe.auth.jwt.domain.TokenType;
 import org.hyunggi.mygardenbe.common.entity.BaseEntity;
+import org.springframework.util.Assert;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -36,6 +37,9 @@ public class TokenEntity extends BaseEntity {
     }
 
     public static TokenEntity of(final Token token, final Long memberId) {
+        Assert.notNull(token, "토큰은 null이 될 수 없습니다.");
+        Assert.isTrue(memberId != null && memberId > 0, "회원 ID는 null이 될 수 없고, 0보다 커야 합니다.");
+
         return TokenEntity.builder()
                 .tokenText(token.getTokenText())
                 .tokenType(token.getTokenType())
