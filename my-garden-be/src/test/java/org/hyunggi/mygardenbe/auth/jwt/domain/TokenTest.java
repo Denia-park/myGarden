@@ -12,10 +12,10 @@ class TokenTest {
     @DisplayName("토큰을 생성한다.")
     void createBearerToken() {
         //given
-        String tokenText = "tokenText";
+        final String tokenText = "tokenText";
 
         //when
-        Token token = Token.createBearerToken(tokenText);
+        final Token token = Token.createBearerToken(tokenText);
 
         //then
         assertThat(token).isNotNull();
@@ -29,10 +29,10 @@ class TokenTest {
     @DisplayName("토큰이 유효한지 확인한다.")
     void isValid() {
         //given
-        Token token = Token.createBearerToken("tokenText");
+        final Token token = Token.createBearerToken("tokenText");
 
         //when
-        boolean valid = token.isValid();
+        final boolean valid = token.isValid();
 
         //then
         assertTrue(valid);
@@ -42,7 +42,7 @@ class TokenTest {
     @DisplayName("토큰을 만료시키면, expired가 true로 변경된다.")
     void expire() {
         //given
-        Token token = Token.createBearerToken("tokenText");
+        final Token token = Token.createBearerToken("tokenText");
 
         //when
         token.expire();
@@ -55,7 +55,7 @@ class TokenTest {
     @DisplayName("토큰을 취소시키면, revoked와 expired가 true로 변경된다.")
     void revoke() {
         //given
-        Token token = Token.createBearerToken("tokenText");
+        final Token token = Token.createBearerToken("tokenText");
 
         //when
         token.revoke();
@@ -69,11 +69,11 @@ class TokenTest {
     @DisplayName("revoked가 true인 토큰은 유효하지 않다.")
     void isValidWhenRevoked() {
         //given
-        Token token = Token.createBearerToken("tokenText");
+        final Token token = Token.createBearerToken("tokenText");
         token.revoke();
 
         //when
-        boolean valid = token.isValid();
+        final boolean valid = token.isValid();
 
         //then
         assertFalse(valid);
@@ -83,11 +83,11 @@ class TokenTest {
     @DisplayName("expired가 true인 토큰은 유효하지 않다.")
     void isValidWhenExpired() {
         //given
-        Token token = Token.createBearerToken("tokenText");
+        final Token token = Token.createBearerToken("tokenText");
         token.expire();
 
         //when
-        boolean valid = token.isValid();
+        final boolean valid = token.isValid();
 
         //then
         assertFalse(valid);
@@ -98,10 +98,10 @@ class TokenTest {
     void isSameTokenText() {
         //given
         final String tokenText = "tokenText";
-        Token token = Token.createBearerToken(tokenText);
+        final Token token = Token.createBearerToken(tokenText);
 
         //when
-        boolean sameTokenText = token.isSameTokenText(tokenText);
+        final boolean sameTokenText = token.isSameTokenText(tokenText);
 
         //then
         assertTrue(sameTokenText);
@@ -111,15 +111,15 @@ class TokenTest {
     @DisplayName("refresh()를 하면, 주어진 text로 토큰의 text를 변경하고 만료된 Token을 다시 활성화시킨다.")
     void refresh() {
         //given
-        Token token = Token.createBearerToken("tokenText");
+        final Token token = Token.createBearerToken("tokenText");
         token.expire();
-        boolean isOldTokenValid = token.isValid();
+        final boolean isOldTokenValid = token.isValid();
 
-        String refreshTokenText = "refreshTokenText";
+        final String refreshTokenText = "refreshTokenText";
 
         //when
         token.refresh(refreshTokenText);
-        boolean isNewTokenValid = token.isValid();
+        final boolean isNewTokenValid = token.isValid();
 
         //then
         assertFalse(isOldTokenValid);
