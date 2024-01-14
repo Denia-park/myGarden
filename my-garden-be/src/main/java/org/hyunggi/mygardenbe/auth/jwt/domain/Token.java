@@ -40,6 +40,10 @@ public class Token {
         this.expired = true;
     }
 
+    public void expire() {
+        this.expired = true;
+    }
+
     public boolean isSameTokenText(final String tokenText) {
         return this.tokenText.equals(tokenText);
     }
