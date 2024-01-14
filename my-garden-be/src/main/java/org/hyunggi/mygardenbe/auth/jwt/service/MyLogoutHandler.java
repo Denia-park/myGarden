@@ -3,6 +3,7 @@ package org.hyunggi.mygardenbe.auth.jwt.service;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.hyunggi.mygardenbe.auth.jwt.domain.Token;
 import org.hyunggi.mygardenbe.auth.jwt.domain.TokenType;
 import org.hyunggi.mygardenbe.auth.jwt.entity.TokenEntity;
 import org.hyunggi.mygardenbe.auth.jwt.repository.TokenRepository;
@@ -28,8 +29,9 @@ public class MyLogoutHandler implements LogoutHandler {
         final TokenEntity storedToken = tokenRepository.findByTokenText(accessTokenText).orElse(null);
 
         if (storedToken != null) {
-            storedToken.revoke();
-            tokenRepository.save(storedToken);
+            final Token token = storedToken.toDomain();
+            token.revoke();
+            tokenRepository.save(TokenEntity.of(token, storedToken.getMemberId()));
         }
     }
 }
