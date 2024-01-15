@@ -9,7 +9,9 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.mockito.BDDMockito;
 import org.springframework.http.MediaType;
 
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class AuthenticationControllerTest extends ControllerTestSupport {
@@ -22,15 +24,17 @@ class AuthenticationControllerTest extends ControllerTestSupport {
                 .password("test1234!")
                 .build();
 
+        given(authenticationService.signUp(request.email(), request.password()))
+                .willReturn(1L);
+
         //when, then
         mockMvc.perform(
                         post("/api/auth/signup")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request))
                 )
-                .andExpect(status().isOk());
-
-        BDDMockito.verify(authenticationService).signUp(request.email(), request.password());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").value(1L));
     }
 
     @ParameterizedTest
