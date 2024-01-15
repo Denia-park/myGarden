@@ -2,12 +2,16 @@ import DailyRoutine from "@/pages/DailyRoutine.vue";
 import Login from "@/pages/Login.vue";
 import {createRouter, createWebHistory} from "vue-router";
 import NotFound from "@/pages/NotFound.vue";
+import SignUp from "@/components/signup/SignUp.vue";
 
 const routes = [
-    {path: '/', component: DailyRoutine},
     {path: '/login', component: Login},
+    {path: '/daily-routine', component: DailyRoutine},
+    {path: '/signup', component: SignUp},
     {path: '/notFound', component: NotFound},
-    {path: "/:pathMatch(.*)*", redirect: "/notFound"}
+
+    {path: '/', redirect: '/login'},
+    {path: '/:pathMatch(.*)*', redirect: '/notFound'}
 ]
 
 export const router = createRouter({
