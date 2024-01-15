@@ -7,6 +7,7 @@ import org.hyunggi.mygardenbe.common.entity.BaseEntity;
 import org.hyunggi.mygardenbe.dailyroutine.domain.DailyRoutine;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineTime;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineType;
+import org.springframework.util.Assert;
 
 import java.util.List;
 
@@ -30,6 +31,8 @@ public class DailyRoutineEntity extends BaseEntity {
     }
 
     public static DailyRoutineEntity of(final DailyRoutine dailyRoutine) {
+        Assert.isTrue(dailyRoutine != null, "데일리 루틴은 null이 될 수 없습니다.");
+
         return new DailyRoutineEntity(
                 dailyRoutine.getRoutineTime(),
                 dailyRoutine.getRoutineType(),
@@ -38,6 +41,8 @@ public class DailyRoutineEntity extends BaseEntity {
     }
 
     public static List<DailyRoutineEntity> of(final List<DailyRoutine> dailyRoutines) {
+        Assert.isTrue(dailyRoutines != null, "데일리 루틴은 null이 될 수 없습니다.");
+        
         return dailyRoutines.stream()
                 .map(DailyRoutineEntity::of)
                 .toList();
