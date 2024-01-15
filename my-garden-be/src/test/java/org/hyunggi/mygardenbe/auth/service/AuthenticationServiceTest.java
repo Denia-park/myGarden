@@ -5,6 +5,7 @@ import org.hyunggi.mygardenbe.IntegrationTestSupport;
 import org.hyunggi.mygardenbe.auth.jwt.domain.TokenType;
 import org.hyunggi.mygardenbe.auth.jwt.entity.TokenEntity;
 import org.hyunggi.mygardenbe.auth.jwt.repository.TokenRepository;
+import org.hyunggi.mygardenbe.auth.service.response.AuthenticationResponse;
 import org.hyunggi.mygardenbe.member.domain.Role;
 import org.hyunggi.mygardenbe.member.entity.MemberEntity;
 import org.hyunggi.mygardenbe.member.repository.MemberRepository;
@@ -62,5 +63,40 @@ class AuthenticationServiceTest extends IntegrationTestSupport {
 
         //  반환된 Member ID 확인
         assertThat(memberId).isEqualTo(savedMemberId);
+    }
+
+    @Test
+    @DisplayName("로그인에 성공하면, accessToken과 refreshToken을 반환하며 토큰 데이터베이스에는 새로 생성된 refreshToken 정보로 업데이트된다.")
+    void login() {
+        //given
+        String email = "test@test.com";
+        String password = "test1234!";
+
+        final Long memberId = authenticationService.signUp(email, password);
+        final TokenEntity oldToken = tokenRepository.findByMemberId(memberId).get();
+        final String oldTokenText = changeTokenTextForCheckingUpdate(oldToken.getTokenText());
+
+        //when
+        final AuthenticationResponse authenticationResponse = authenticationService.login(email, password);
+
+        //then
+        //  반환된 Token 확인
+        final String accessToken = authenticationResponse.accessToken();
+        final String refreshToken = authenticationResponse.refreshToken();
+
+        assertThat(accessToken).isNotNull();
+        assertThat(refreshToken).isNotNull();
+
+        //  Token이 업데이트 되었는지 확인
+        final TokenEntity newToken = tokenRepository.findTokenByUserEmail(email).get();
+        assertThat(newToken.getTokenText()).isNotEqualTo(oldTokenText);
+        assertThat(newToken.getTokenText()).isEqualTo(refreshToken);
+    }
+
+    private String changeTokenTextForCheckingUpdate(final String tokenText) {
+        //테스트를 위해 토큰 텍스트의 마지막 문자를 변경한다.
+        //JWT에서 iss는 초 단위의 시간을 나타내므로, 문자 변경을 하지 않으면 로그인과의 시간차이가 1초 이하로 나타나서 테스트가 실패한다.
+
+        return tokenText + " ";
     }
 }
