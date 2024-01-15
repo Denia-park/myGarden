@@ -23,11 +23,15 @@ function submit() {
       })
 }
 
+function signup() {
+  router.push('/signup');
+}
+
 </script>
 
 <template>
   <div class="form-sign-in w-100 m-auto">
-    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+    <h1 class="h3 mb-3 fw-normal">Please login</h1>
 
     <div class="form-floating">
       <input id="floatingInput" v-model="form.email" class="form-control" placeholder="name@example.com" type="email">
@@ -45,8 +49,9 @@ function submit() {
         Remember me
       </label>
     </div>
-    <button class="btn btn-primary w-100 py-2" @click="submit">Sign in</button>
-    <p class="mt-5 mb-3 text-body-secondary">&copy; 2017–2023</p>
+    <button class="btn btn-primary w-100 py-2" @click="submit">Login</button>
+    <button class="btn btn-success w-100 py-2" @click="signup">Sign up</button>
+    <p class="mt-5 mb-3 text-body-secondary">&copy; 2023–2024</p>
   </div>
 </template>
 
@@ -70,5 +75,9 @@ function submit() {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+
+button {
+  margin-bottom: 1rem;
 }
 </style>
