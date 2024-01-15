@@ -39,7 +39,7 @@ public class AuthenticationService {
     private void checkDuplicateEmail(final String email) {
         memberRepository.findByEmail(email)
                 .ifPresent(m -> {
-                    throw new IllegalArgumentException("Email already exists");
+                    throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
                 });
     }
 
