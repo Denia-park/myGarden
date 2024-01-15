@@ -34,8 +34,8 @@ class AuthenticationServiceTest extends IntegrationTestSupport {
     @DisplayName("회원 가입을 하면, Member와 refreshToken을 데이터베이스에 저장하고 Member의 ID를 반환한다. ")
     void signUp() {
         //given
-        String email = "test@test.com";
-        String password = "test1234!";
+        final String email = "test@test.com";
+        final String password = "test1234!";
 
         //when
         final Long memberId = authenticationService.signUp(email, password);
@@ -69,8 +69,8 @@ class AuthenticationServiceTest extends IntegrationTestSupport {
     @DisplayName("로그인에 성공하면, accessToken과 refreshToken을 반환하며 토큰 데이터베이스에는 새로 생성된 refreshToken 정보로 업데이트된다.")
     void login() {
         //given
-        String email = "test@test.com";
-        String password = "test1234!";
+        final String email = "test@test.com";
+        final String password = "test1234!";
 
         final Long memberId = authenticationService.signUp(email, password);
         final TokenEntity oldToken = tokenRepository.findByMemberId(memberId).get();

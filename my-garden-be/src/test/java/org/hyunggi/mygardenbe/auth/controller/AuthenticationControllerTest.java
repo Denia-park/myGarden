@@ -21,7 +21,7 @@ class AuthenticationControllerTest extends ControllerTestSupport {
     @DisplayName("회원가입을 한다.")
     void signUp() throws Exception {
         //given
-        SignupRequest request = SignupRequest.builder()
+        final SignupRequest request = SignupRequest.builder()
                 .email("test@test.com")
                 .password("test1234!")
                 .build();
@@ -42,9 +42,9 @@ class AuthenticationControllerTest extends ControllerTestSupport {
     @ParameterizedTest
     @NullAndEmptySource
     @DisplayName("회원가입을 할 때 이메일이 null 혹은 비어있으면, 400을 반환한다.")
-    void signUpWithNullEmail(String email) throws Exception {
+    void signUpWithNullEmail(final String email) throws Exception {
         //given
-        SignupRequest request = SignupRequest.builder()
+        final SignupRequest request = SignupRequest.builder()
                 .email(email)
                 .password("test1234!")
                 .build();
@@ -62,7 +62,7 @@ class AuthenticationControllerTest extends ControllerTestSupport {
     @DisplayName("회원가입을 할 때 이메일이 이메일 형식이 아니면 400을 반환한다.")
     void signUpWithInvalidEmail() throws Exception {
         //given
-        SignupRequest request = SignupRequest.builder()
+        final SignupRequest request = SignupRequest.builder()
                 .email("test")
                 .password("test1234!")
                 .build();
@@ -79,9 +79,9 @@ class AuthenticationControllerTest extends ControllerTestSupport {
     @ParameterizedTest
     @NullAndEmptySource
     @DisplayName("회원가입을 할 때 비밀번호가 null 혹은 비어있으면 400을 반환한다.")
-    void signUpWithNullPassword(String password) throws Exception {
+    void signUpWithNullPassword(final String password) throws Exception {
         //given
-        SignupRequest request = SignupRequest.builder()
+        final SignupRequest request = SignupRequest.builder()
                 .email("test@test.com")
                 .password(password)
                 .build();
@@ -99,8 +99,8 @@ class AuthenticationControllerTest extends ControllerTestSupport {
     @DisplayName("로그인을 한다.")
     void login() throws Exception {
         //given
-        String email = "test@test.com";
-        String password = "test1234!";
+        final String email = "test@test.com";
+        final String password = "test1234!";
 
         ApiTestUtil.signUp(mockMvc, email, password);
 
@@ -133,9 +133,9 @@ class AuthenticationControllerTest extends ControllerTestSupport {
     @ParameterizedTest
     @NullAndEmptySource
     @DisplayName("로그인을 할 때 이메일이 null 혹은 비어있으면 400을 반환한다.")
-    void loginWithNullEmail(String email) throws Exception {
+    void loginWithNullEmail(final String email) throws Exception {
         //given
-        String password = "test1234!";
+        final String password = "test1234!";
 
         ApiTestUtil.signUp(mockMvc, "test@test.com", "test1234!");
 
@@ -158,9 +158,9 @@ class AuthenticationControllerTest extends ControllerTestSupport {
     @ParameterizedTest
     @NullAndEmptySource
     @DisplayName("로그인을 할 때 비밀번호가 null 혹은 비어있으면 400을 반환한다.")
-    void loginWithNullPassword(String password) throws Exception {
+    void loginWithNullPassword(final String password) throws Exception {
         //given
-        String email = "test@test.com";
+        final String email = "test@test.com";
 
         ApiTestUtil.signUp(mockMvc, "test@test.com", "test1234!");
 
