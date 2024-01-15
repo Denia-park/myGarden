@@ -21,14 +21,14 @@ public class AuthenticationService {
     private final TokenRepository tokenRepository;
 
     public AuthenticationResponse signUp(final String email, final String password) {
-        String trimEmail = email.trim();
-        String trimPassword = password.trim();
+        final String trimEmail = email.trim();
+        final String trimPassword = password.trim();
         checkDuplicateEmail(trimEmail);
 
-        MemberEntity savedMember = saveMember(trimEmail, trimPassword);
+        final MemberEntity savedMember = saveMember(trimEmail, trimPassword);
 
-        String accessToken = jwtService.generateAccessToken(savedMember);
-        String refreshToken = jwtService.generateRefreshToken(savedMember);
+        final String accessToken = jwtService.generateAccessToken(savedMember);
+        final String refreshToken = jwtService.generateRefreshToken(savedMember);
 
         saveToken(savedMember, accessToken);
 
@@ -54,8 +54,8 @@ public class AuthenticationService {
         return memberRepository.save(member);
     }
 
-    private void saveToken(MemberEntity member, String jwtToken) {
-        Token token = Token.createBearerToken(jwtToken);
+    private void saveToken(final MemberEntity member, final String jwtToken) {
+        final Token token = Token.createBearerToken(jwtToken);
 
         tokenRepository.save(TokenEntity.of(token, member.getId()));
     }
