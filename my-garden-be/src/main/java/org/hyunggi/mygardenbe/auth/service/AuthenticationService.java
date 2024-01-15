@@ -5,7 +5,6 @@ import org.hyunggi.mygardenbe.auth.jwt.domain.Token;
 import org.hyunggi.mygardenbe.auth.jwt.entity.TokenEntity;
 import org.hyunggi.mygardenbe.auth.jwt.repository.TokenRepository;
 import org.hyunggi.mygardenbe.auth.jwt.service.JwtService;
-import org.hyunggi.mygardenbe.auth.service.response.AuthenticationResponse;
 import org.hyunggi.mygardenbe.member.domain.Member;
 import org.hyunggi.mygardenbe.member.entity.MemberEntity;
 import org.hyunggi.mygardenbe.member.repository.MemberRepository;
@@ -20,22 +19,18 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final TokenRepository tokenRepository;
 
-    public AuthenticationResponse signUp(final String email, final String password) {
+    public Long signUp(final String email, final String password) {
         final String trimEmail = email.trim();
         final String trimPassword = password.trim();
         checkDuplicateEmail(trimEmail);
 
         final MemberEntity savedMember = saveMember(trimEmail, trimPassword);
 
-        final String accessToken = jwtService.generateAccessToken(savedMember);
         final String refreshToken = jwtService.generateRefreshToken(savedMember);
 
-        saveToken(savedMember, accessToken);
+        saveToken(savedMember, refreshToken);
 
-        return AuthenticationResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
+        return savedMember.getId();
     }
 
     private void checkDuplicateEmail(final String email) {

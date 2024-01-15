@@ -20,9 +20,9 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/signup")
-    public ApiResponse<AuthenticationResponse> signUp(@RequestBody @Valid SignupRequest request) {
-        final AuthenticationResponse response = authenticationService.signUp(request.email(), request.password());
+    public ApiResponse<Long> signUp(@RequestBody @Valid SignupRequest request) {
+        final Long memberId = authenticationService.signUp(request.email(), request.password());
 
-        return ApiResponse.ok(response);
+        return ApiResponse.ok(memberId);
     }
 }

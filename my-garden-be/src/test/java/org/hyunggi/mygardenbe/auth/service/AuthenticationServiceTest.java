@@ -5,7 +5,6 @@ import org.hyunggi.mygardenbe.IntegrationTestSupport;
 import org.hyunggi.mygardenbe.auth.jwt.domain.TokenType;
 import org.hyunggi.mygardenbe.auth.jwt.entity.TokenEntity;
 import org.hyunggi.mygardenbe.auth.jwt.repository.TokenRepository;
-import org.hyunggi.mygardenbe.auth.service.response.AuthenticationResponse;
 import org.hyunggi.mygardenbe.member.domain.Role;
 import org.hyunggi.mygardenbe.member.entity.MemberEntity;
 import org.hyunggi.mygardenbe.member.repository.MemberRepository;
@@ -31,14 +30,14 @@ class AuthenticationServiceTest extends IntegrationTestSupport {
     private TokenRepository tokenRepository;
 
     @Test
-    @DisplayName("회원 가입을 하면, Member와 Token이 생성되고 데이터베이스에 저장된다. ")
+    @DisplayName("회원 가입을 하면, Member와 refreshToken을 데이터베이스에 저장하고 Member의 ID를 반환한다. ")
     void signUp() {
         //given
         String email = "test@test.com";
         String password = "test1234!";
 
         //when
-        final AuthenticationResponse authenticationResponse = authenticationService.signUp(email, password);
+        final Long memberId = authenticationService.signUp(email, password);
 
         //then
         //  Member 저장 확인
@@ -54,17 +53,14 @@ class AuthenticationServiceTest extends IntegrationTestSupport {
 
         //  Token 저장 확인
         final List<TokenEntity> tokens = tokenRepository.findAll();
-        final String accessToken = authenticationResponse.accessToken();
 
         assertThat(tokens).hasSize(1)
-                .extracting("tokenText", "tokenType", "memberId", "revoked", "expired")
+                .extracting("tokenType", "memberId", "revoked", "expired")
                 .containsExactly(
-                        Tuple.tuple(accessToken, TokenType.BEARER, savedMemberId, false, false)
+                        Tuple.tuple(TokenType.BEARER, savedMemberId, false, false)
                 );
 
-        //  저장된 Token 과 발급받은 Token 이 같은지 확인
-        final String savedTokenText = tokens.get(0).getTokenText();
-
-        assertThat(savedTokenText).isEqualTo(accessToken);
+        //  반환된 Member ID 확인
+        assertThat(memberId).isEqualTo(savedMemberId);
     }
 }
