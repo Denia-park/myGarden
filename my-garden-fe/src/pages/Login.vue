@@ -23,7 +23,7 @@ function submit() {
       })
 }
 
-function signup() {
+function goToSignup() {
   router.push('/signup');
 }
 
@@ -57,7 +57,7 @@ function signup() {
             </label>
           </div>
           <button class="btn btn-primary w-100 py-2" @click="submit">Login</button>
-          <button class="btn btn-success w-100 py-2" @click="signup">Sign up</button>
+          <button class="btn btn-success w-100 py-2" @click="goToSignup">Sign up</button>
         </div>
       </div>
     </div>
