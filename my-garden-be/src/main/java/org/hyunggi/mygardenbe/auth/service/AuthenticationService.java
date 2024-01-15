@@ -21,9 +21,11 @@ public class AuthenticationService {
     private final TokenRepository tokenRepository;
 
     public AuthenticationResponse signUp(final String email, final String password) {
-        checkDuplicateEmail(email);
+        String trimEmail = email.trim();
+        String trimPassword = password.trim();
+        checkDuplicateEmail(trimEmail);
 
-        final MemberEntity savedMember = saveMember(email, password);
+        MemberEntity savedMember = saveMember(trimEmail, trimPassword);
 
         String accessToken = jwtService.generateAccessToken(savedMember);
         String refreshToken = jwtService.generateRefreshToken(savedMember);
