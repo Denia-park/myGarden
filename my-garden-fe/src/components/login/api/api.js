@@ -29,20 +29,3 @@ export function loginApi(email, password) {
             return null;
         });
 }
-
-export function checkApi() {
-    axios.get('/api/auth/check')
-        .then(res => {
-            const data = res.data;
-            const id = data.data;
-
-            store.commit('setAccount', id);
-
-            return id;
-        })
-        .catch(error => {
-            console.log(error);
-
-            store.commit('setAccount', 0);
-        });
-}
