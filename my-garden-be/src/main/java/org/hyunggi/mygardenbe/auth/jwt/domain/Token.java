@@ -54,6 +54,8 @@ public class Token {
     }
 
     public void refresh(final String refreshTokenText) {
+        Assert.hasText(refreshTokenText, "토큰은 null 혹은 빈 문자열이 될 수 없습니다.");
+        
         this.tokenText = refreshTokenText;
         this.revoked = false;
         this.expired = false;

@@ -173,4 +173,19 @@ class TokenTest {
         assertEquals(refreshTokenText, token.getTokenText());
         assertTrue(isNewTokenValid);
     }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @DisplayName("refresh()를 할 때, 주어진 text가 null 혹은 빈 문자열이면 예외가 발생한다.")
+    void refresh_nullAndEmptyTokenText(String refreshTokenText) {
+        //given
+        final Token token = Token.createBearerToken("tokenText");
+
+        //when, then
+        assertThatThrownBy(() -> {
+            token.refresh(refreshTokenText);
+        })
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("토큰은 null 혹은 빈 문자열이 될 수 없습니다.");
+    }
 }

@@ -78,4 +78,21 @@ class TokenEntityTest {
         assertEquals(token.isRevoked(), tokenFromEntity.isRevoked());
         assertEquals(token.isExpired(), tokenFromEntity.isExpired());
     }
+
+    @Test
+    @DisplayName("update 메서드를 통해 Token 객체를 업데이트할 수 있다.")
+    void update() {
+        //given
+        final Token token = Token.createBearerToken("tokenText");
+        final Long memberId = 1L;
+        final TokenEntity tokenEntity = TokenEntity.of(token, memberId);
+
+        final Token newToken = Token.createBearerToken("newTokenText");
+
+        //when
+        tokenEntity.update(newToken);
+
+        //then
+        assertThat(tokenEntity.getTokenText()).isEqualTo(newToken.getTokenText());
+    }
 }

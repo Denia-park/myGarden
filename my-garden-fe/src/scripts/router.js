@@ -2,7 +2,7 @@ import DailyRoutine from "@/pages/DailyRoutine.vue";
 import Login from "@/pages/Login.vue";
 import {createRouter, createWebHistory} from "vue-router";
 import NotFound from "@/pages/NotFound.vue";
-import SignUp from "@/components/signup/SignUp.vue";
+import SignUp from "@/pages/SignUp.vue";
 
 const routes = [
     {path: '/login', component: Login},
