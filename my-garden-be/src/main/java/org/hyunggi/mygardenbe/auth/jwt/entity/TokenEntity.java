@@ -52,4 +52,13 @@ public class TokenEntity extends BaseEntity {
     public Token toDomain() {
         return Token.of(this.tokenText, this.tokenType, this.revoked, this.expired);
     }
+
+    public void update(final Token token) {
+        Assert.notNull(token, "토큰은 null이 될 수 없습니다.");
+
+        this.tokenText = token.getTokenText();
+        this.tokenType = token.getTokenType();
+        this.revoked = token.isRevoked();
+        this.expired = token.isExpired();
+    }
 }
