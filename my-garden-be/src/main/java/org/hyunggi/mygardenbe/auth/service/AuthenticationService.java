@@ -89,4 +89,33 @@ public class AuthenticationService {
         return tokenRepository.findTokenByUserEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("해당하는 유저의 토큰을 찾을 수 없습니다."));
     }
+
+    @Transactional
+    public AuthenticationResponse refresh(final String refreshToken) {
+        final TokenEntity tokenEntity = getRefreshTokenByTokenText(refreshToken);
+        final Token token = tokenEntity.toDomain();
+
+        final MemberEntity member = getMemberById(tokenEntity.getMemberId());
+
+        final String newAccessToken = jwtService.generateAccessToken(member);
+        final String newRefreshToken = jwtService.generateRefreshToken(member);
+
+        token.refresh(newRefreshToken);
+        tokenEntity.update(token);
+
+        return AuthenticationResponse.builder()
+                .accessToken(newAccessToken)
+                .refreshToken(newRefreshToken)
+                .build();
+    }
+
+    private TokenEntity getRefreshTokenByTokenText(final String refreshToken) {
+        return tokenRepository.findByTokenText(refreshToken)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 리프레시 토큰입니다."));
+    }
+
+    private MemberEntity getMemberById(final Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 회원입니다."));
+    }
 }
