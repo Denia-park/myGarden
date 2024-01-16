@@ -5,12 +5,16 @@ const setup = () => {
     axios.interceptors.request.use(
         (config) => {
             const WHITE_LIST = ["/api/auth/signup", "/api/auth/login"];
+            const USING_REFRESH_TOKEN_URL_LIST = ["/api/auth/logout"];
 
             if (WHITE_LIST.includes(config.url)) {
                 return config;
             }
 
             let token = store.getters.getAccessToken;
+            if (USING_REFRESH_TOKEN_URL_LIST.includes(config.url)) {
+                token = store.getters.getRefreshToken;
+            }
 
             if (token) {
                 config.headers["Authorization"] = `Bearer ${token}`;
