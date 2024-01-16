@@ -2,6 +2,7 @@ package org.hyunggi.mygardenbe.auth.service;
 
 import org.assertj.core.groups.Tuple;
 import org.hyunggi.mygardenbe.IntegrationTestSupport;
+import org.hyunggi.mygardenbe.auth.jwt.domain.Token;
 import org.hyunggi.mygardenbe.auth.jwt.domain.TokenType;
 import org.hyunggi.mygardenbe.auth.jwt.entity.TokenEntity;
 import org.hyunggi.mygardenbe.auth.jwt.repository.TokenRepository;
@@ -12,7 +13,9 @@ import org.hyunggi.mygardenbe.member.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -29,6 +32,8 @@ class AuthenticationServiceTest extends IntegrationTestSupport {
     private MemberRepository memberRepository;
     @Autowired
     private TokenRepository tokenRepository;
+    @Autowired
+    private LogoutHandler logoutHandler;
 
     @Test
     @DisplayName("회원 가입을 하면, Member와 refreshToken을 데이터베이스에 저장하고 Member의 ID를 반환한다. ")
@@ -98,5 +103,34 @@ class AuthenticationServiceTest extends IntegrationTestSupport {
         //JWT에서 iss는 초 단위의 시간을 나타내므로, 문자 변경을 하지 않으면 로그인과의 시간차이가 1초 이하로 나타나서 테스트가 실패한다.
 
         return tokenText + " ";
+    }
+
+    @Test
+    @DisplayName("로그아웃이 되면, 토큰 데이터베이스에 저장된 refreshToken의 revoked 및 expired가 true로 업데이트된다.")
+    void logout() {
+        //given
+        final String email = "test@test.com";
+        final String password = "test1234!";
+
+        final Long memberId = authenticationService.signUp(email, password);
+        final AuthenticationResponse response = authenticationService.login(email, password);
+
+        final TokenEntity oldRefreshToken = tokenRepository.findByMemberId(memberId).get();
+        final Token oldToken = oldRefreshToken.toDomain();
+
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("Authorization", "Bearer " + response.refreshToken());
+
+        //when
+        logoutHandler.logout(request, null, null);
+
+        //then
+        final TokenEntity newRefreshToken = tokenRepository.findByMemberId(memberId).get();
+        final Token newToken = newRefreshToken.toDomain();
+
+        assertThat(oldToken.isRevoked()).isFalse();
+        assertThat(oldToken.isExpired()).isFalse();
+        assertThat(newToken.isRevoked()).isTrue();
+        assertThat(newToken.isExpired()).isTrue();
     }
 }

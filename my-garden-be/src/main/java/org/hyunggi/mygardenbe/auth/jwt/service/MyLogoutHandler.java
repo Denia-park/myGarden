@@ -31,7 +31,8 @@ public class MyLogoutHandler implements LogoutHandler {
         if (storedToken != null) {
             final Token token = storedToken.toDomain();
             token.revoke();
-            tokenRepository.save(TokenEntity.of(token, storedToken.getMemberId()));
+            storedToken.update(token);
+            tokenRepository.save(storedToken);
         }
     }
 }

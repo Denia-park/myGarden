@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hyunggi.mygardenbe.auth.controller.AuthenticationController;
 import org.hyunggi.mygardenbe.auth.jwt.domain.TokenType;
 import org.hyunggi.mygardenbe.auth.jwt.service.JwtService;
@@ -21,6 +22,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @RequiredArgsConstructor
+@Slf4j
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
@@ -31,6 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
         String accessTokenText = JwtAuthUtil.extractTokenTextFromRequestHeader(request, TokenType.BEARER);
+        log.info("request [{}] url: {}, accessToken: {}", request.getMethod(), request.getRequestURI(), accessTokenText);
 
         if (accessTokenText == null || isAuthApiPath(request)) {
             filterChain.doFilter(request, response);
