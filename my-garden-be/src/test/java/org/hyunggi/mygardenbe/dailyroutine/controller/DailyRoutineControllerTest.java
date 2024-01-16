@@ -46,11 +46,11 @@ class DailyRoutineControllerTest extends ControllerTestSupportWithMockUser {
 
     @ParameterizedTest
     @CsvSource({
-            ", 2023-10-01T23:00:00",
-            "2023-10-01T22:00:00, "
+            ", 2023-10-01T23:00:00, 데일리 루틴의 시작 시간은 비어있을 수 없습니다.",
+            "2023-10-01T22:00:00, , 데일리 루틴의 종료 시간은 비어있을 수 없습니다."
     })
     @DisplayName("Daily Routine을 등록할 때, 시작시간 혹은 종료시간을 입력하지 않으면 요청에 실패한다.")
-    void throwExceptionWhenStartTimeOrEndTimeIsNull(final String startDateTime, final String endDateTime) throws Exception {
+    void throwExceptionWhenStartTimeOrEndTimeIsNull(final String startDateTime, final String endDateTime, final String exceptionMessage) throws Exception {
         //given
         final PostRequest request = PostRequest.builder()
                 .startDateTime(startDateTime)
@@ -65,7 +65,8 @@ class DailyRoutineControllerTest extends ControllerTestSupportWithMockUser {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request))
                 )
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value(exceptionMessage));
     }
 
     @Test
@@ -85,7 +86,8 @@ class DailyRoutineControllerTest extends ControllerTestSupportWithMockUser {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request))
                 )
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("데일리 루틴의 타입은 비어있을 수 없습니다."));
     }
 
     @Test
@@ -105,7 +107,8 @@ class DailyRoutineControllerTest extends ControllerTestSupportWithMockUser {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request))
                 )
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("데일리 루틴의 설명은 null이 될 수 없습니다."));
     }
 
     @Test
@@ -142,18 +145,19 @@ class DailyRoutineControllerTest extends ControllerTestSupportWithMockUser {
 
     @ParameterizedTest
     @CsvSource({
-            ", 2023-10-01T23:00:00",
-            "2023-10-01T22:00:00, "
+            ", 2023-10-01T23:00:00, 데일리 루틴의 시작 시간은 null이 될 수 없습니다.",
+            "2023-10-01T22:00:00, , 데일리 루틴의 종료 시간은 null이 될 수 없습니다."
     })
     @DisplayName("Daily Routine 목록을 조회할 때, 시작시간 혹은 종료시간을 입력하지 않으면 요청에 실패한다.")
-    void throwExceptionWhenStartDateTimeOrEndDateTimeIsNull(final String startDateTime, final String endDateTime) throws Exception {
+    void throwExceptionWhenStartDateTimeOrEndDateTimeIsNull(final String startDateTime, final String endDateTime, final String exceptionMessage) throws Exception {
         //given, when, then
         mockMvc.perform(
                         get("/api/daily-routine")
                                 .param("startDateTime", startDateTime)
                                 .param("endDateTime", endDateTime)
                 )
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value(exceptionMessage));
     }
 
     @Test

@@ -58,7 +58,8 @@ class AuthenticationControllerTest extends ControllerTestSupport {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request))
                 )
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("이메일은 null이 될 수 없습니다."));
     }
 
     @Test
@@ -76,7 +77,8 @@ class AuthenticationControllerTest extends ControllerTestSupport {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request))
                 )
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("이메일 형식이 올바르지 않습니다."));
     }
 
     @ParameterizedTest
@@ -95,7 +97,8 @@ class AuthenticationControllerTest extends ControllerTestSupport {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request))
                 )
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("비밀번호는 null이 될 수 없습니다."));
     }
 
     @Test
@@ -151,7 +154,8 @@ class AuthenticationControllerTest extends ControllerTestSupport {
                                         )
                                 )
                 )
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("이메일은 null이 될 수 없습니다."));
     }
 
     @ParameterizedTest
@@ -174,7 +178,8 @@ class AuthenticationControllerTest extends ControllerTestSupport {
                                         )
                                 )
                 )
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("비밀번호는 null이 될 수 없습니다."));
     }
 
     @Test
@@ -229,6 +234,7 @@ class AuthenticationControllerTest extends ControllerTestSupport {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request))
                 )
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("리프레시 토큰은 비어있을 수 없습니다."));
     }
 }
