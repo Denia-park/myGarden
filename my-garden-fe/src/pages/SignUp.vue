@@ -1,7 +1,7 @@
 <script setup>
 import {router} from "@/scripts/router.js";
 import {ref} from "vue";
-import {signupApi} from "@/components/signup/api/api.js";
+import {signupApi} from "@/components/auth/signup/api/api.js";
 
 const form = ref({
   email: '',

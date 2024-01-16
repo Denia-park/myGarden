@@ -2,20 +2,46 @@
 import {store} from "@/scripts/store.js";
 import {router} from "@/scripts/router.js";
 import {computed} from "vue";
+import {logoutApi} from "@/components/auth/logout/api/api.js";
 
-function logout() {
-  store.commit('setAccount', 0);
-  sessionStorage.removeItem('id');
+function login() {
+  closeHeader();
   router.push('/login');
 }
 
+function dailyRoutine() {
+  closeHeader();
+  router.push('/daily-routine');
+}
+
+function logout() {
+  logoutApi()
+      .then((msg) => {
+        if (msg === null) {
+          alert('로그아웃에 실패했습니다.');
+          return;
+        }
+
+        alert('로그아웃 되었습니다.');
+        goToHome();
+      });
+}
+
 function goToHome() {
+  closeHeader();
   router.push(homeUrl.value);
 }
 
 const homeUrl = computed(() => {
   return store.getters.getAccessToken ? '/daily-routine' : '/login';
 });
+
+const closeHeader = () => {
+  const navbarHeader = document.getElementById('navbarHeader');
+
+  navbarHeader.classList.remove('show');
+}
+
 </script>
 
 <template>
@@ -27,11 +53,11 @@ const homeUrl = computed(() => {
             <h4 class="text-white">Page</h4>
             <ul class="list-unstyled">
               <li>
-                <router-link v-if="!store.state.account.accessToken" class="text-white" to="/login">로그인</router-link>
+                <a v-if="!store.state.account.accessToken" class="text-white" href="#" @click="login">로그인</a>
                 <a v-else class="text-white" href="#" @click="logout">로그아웃</a>
               </li>
               <li>
-                <router-link class="text-white" to="/">하루 일과</router-link>
+                <a class="text-white" href="#" @click="dailyRoutine">하루 일과</a>
               </li>
               <li><a class="text-white" href="#">정리 게시판</a></li>
               <li><a class="text-white" href="#">하루 습관</a></li>
