@@ -19,7 +19,6 @@ public class JwtExceptionHandlerFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response);
         } catch (InvalidTokenRequestException e) {
-            //토큰의 유효기간 만료
             setErrorResponse(response, e.getMessage());
         }
     }
