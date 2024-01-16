@@ -17,6 +17,10 @@ public class ApiResponse<T> {
         this.data = data;
     }
 
+    public static <T> ApiResponse<T> ok() {
+        return ok(null);
+    }
+
     public static <T> ApiResponse<T> ok(final T data) {
         return of(HttpStatus.OK, data);
     }
