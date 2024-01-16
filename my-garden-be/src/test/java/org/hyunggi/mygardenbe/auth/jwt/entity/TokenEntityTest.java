@@ -9,7 +9,6 @@ import org.junit.jupiter.params.provider.NullSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TokenEntityTest {
 
@@ -25,8 +24,8 @@ class TokenEntityTest {
 
         //then
         assertThat(tokenEntity).isNotNull();
-        assertEquals(token.getTokenText(), tokenEntity.getTokenText());
-        assertEquals(memberId, tokenEntity.getMemberId());
+        assertThat(tokenEntity.getTokenText()).isEqualTo(token.getTokenText());
+        assertThat(tokenEntity.getMemberId()).isEqualTo(memberId);
     }
 
     @Test
@@ -73,10 +72,10 @@ class TokenEntityTest {
 
         //then
         assertThat(tokenFromEntity).isNotNull();
-        assertEquals(token.getTokenText(), tokenFromEntity.getTokenText());
-        assertEquals(token.getTokenType(), tokenFromEntity.getTokenType());
-        assertEquals(token.isRevoked(), tokenFromEntity.isRevoked());
-        assertEquals(token.isExpired(), tokenFromEntity.isExpired());
+        assertThat(tokenFromEntity.getTokenText()).isEqualTo(token.getTokenText());
+        assertThat(tokenFromEntity.getTokenType()).isEqualTo(token.getTokenType());
+        assertThat(tokenFromEntity.isRevoked()).isEqualTo(token.isRevoked());
+        assertThat(tokenFromEntity.isExpired()).isEqualTo(token.isExpired());
     }
 
     @Test
