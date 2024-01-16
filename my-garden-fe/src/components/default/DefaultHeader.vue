@@ -2,20 +2,35 @@
 import {store} from "@/scripts/store.js";
 import {router} from "@/scripts/router.js";
 import {computed} from "vue";
+import {logoutApi} from "@/components/auth/logout/api/api.js";
 
 function logout() {
-  store.commit('setAccount', 0);
-  sessionStorage.removeItem('id');
-  router.push('/login');
+  logoutApi()
+      .then((msg) => {
+        if (msg === null) {
+          alert('로그아웃에 실패했습니다.');
+          return;
+        }
+
+        alert('로그아웃 되었습니다.');
+        goToHome();
+      });
 }
 
 function goToHome() {
+  closeHeader();
   router.push(homeUrl.value);
 }
 
 const homeUrl = computed(() => {
   return store.getters.getAccessToken ? '/daily-routine' : '/login';
 });
+
+const closeHeader = () => {
+  const navbarHeader = document.getElementById('navbarHeader');
+
+  navbarHeader.classList.remove('show');
+}
 </script>
 
 <template>

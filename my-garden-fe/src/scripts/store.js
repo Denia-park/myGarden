@@ -14,6 +14,10 @@ export const store = createStore({
             state.account.accessToken = payload.accessToken;
             state.account.refreshToken = payload.refreshToken;
         },
+        clearToken(state) {
+            state.account.accessToken = '';
+            state.account.refreshToken = '';
+        }
     },
     actions: {
         initializeTokenFromSessionStorage({commit}) {
