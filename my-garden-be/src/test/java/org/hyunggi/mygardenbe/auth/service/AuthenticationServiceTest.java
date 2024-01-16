@@ -2,6 +2,7 @@ package org.hyunggi.mygardenbe.auth.service;
 
 import org.assertj.core.groups.Tuple;
 import org.hyunggi.mygardenbe.IntegrationTestSupport;
+import org.hyunggi.mygardenbe.auth.controller.request.RefreshRequest;
 import org.hyunggi.mygardenbe.auth.jwt.domain.Token;
 import org.hyunggi.mygardenbe.auth.jwt.domain.TokenType;
 import org.hyunggi.mygardenbe.auth.jwt.entity.TokenEntity;
@@ -132,5 +133,41 @@ class AuthenticationServiceTest extends IntegrationTestSupport {
         assertThat(oldToken.isExpired()).isFalse();
         assertThat(newToken.isRevoked()).isTrue();
         assertThat(newToken.isExpired()).isTrue();
+    }
+
+    @Test
+    @DisplayName("refresh 메서드가 호출 되면, 전달받은 refreshToken으로 accessToken 및 refreshToken을 재발급 받아서 반환하고," +
+            " 토큰 데이터베이스에는 새로 생성된 refreshToken 정보로 업데이트된다.")
+    void refresh() {
+        //given
+        final String email = "test@test.com";
+        final String password = "test1234!";
+
+        final Long memberId = authenticationService.signUp(email, password);
+        final AuthenticationResponse oldResponse = authenticationService.login(email, password);
+
+        final TokenEntity oldRefreshToken = tokenRepository.findByMemberId(memberId).get();
+        final String oldAccessTokenText = changeTokenTextForCheckingUpdate(oldResponse.accessToken());
+        final String oldRefreshTokenText = changeTokenTextForCheckingUpdate(oldResponse.refreshToken());
+
+        final RefreshRequest refreshRequest = new RefreshRequest(oldRefreshToken.getTokenText());
+
+        //when
+        final AuthenticationResponse newResponse = authenticationService.refresh(refreshRequest.refreshToken());
+
+        //then
+        //  반환된 Token 확인
+        final String newAccessToken = newResponse.accessToken();
+        final String newRefreshToken = newResponse.refreshToken();
+
+        assertThat(newAccessToken).isNotNull();
+        assertThat(newRefreshToken).isNotNull();
+
+        //  Token이 업데이트 되었는지 확인
+        final TokenEntity newRefreshTokenEntity = tokenRepository.findByTokenText(newRefreshToken).get();
+
+        assertThat(newAccessToken).isNotEqualTo(oldAccessTokenText);
+        assertThat(newRefreshToken).isNotEqualTo(oldRefreshTokenText);
+        assertThat(newRefreshTokenEntity.getTokenText()).isEqualTo(newRefreshToken);
     }
 }
