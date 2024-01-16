@@ -7,20 +7,16 @@ export function loginApi(email, password) {
         password: password
     })
         .then(res => {
-            const data = res.data;
-            const id = data.data;
+            const data = res.data.data;
+            const accessToken = data.accessToken;
+            const refreshToken = data.refreshToken;
 
-            store.commit('setAccount', id);
+            store.commit('setAccessToken', accessToken);
+            store.commit('setRefreshToken', refreshToken);
+
             alert("로그인에 성공했습니다.");
 
-            sessionStorage.setItem('id', id);
-
-            return id;
-
-            // return {
-            // accessToken: data.accessToken,
-            // refreshToken: data.refreshToken
-            // };
+            return 'success';
         })
         .catch(error => {
             alert("로그인에 실패했습니다.");
