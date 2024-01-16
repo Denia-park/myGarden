@@ -8,9 +8,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.mockito.BDDMockito;
 import org.springframework.http.MediaType;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -156,7 +159,7 @@ class AuthenticationControllerTest extends ControllerTestSupport {
     void loginWithNullPassword(final String password) throws Exception {
         //given
         final String email = "test@test.com";
-        
+
         //when, then
         mockMvc.perform(
                         post("/api/auth/login")
@@ -171,5 +174,19 @@ class AuthenticationControllerTest extends ControllerTestSupport {
                                 )
                 )
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("로그아웃을 한다.")
+    void logout() throws Exception {
+        //when, then
+        mockMvc.perform(
+                        post("/api/auth/logout")
+                )
+                .andExpect(status().isOk());
+
+        BDDMockito.then(myLogoutHandler)
+                .should(times(1))
+                .logout(any(), any(), any());
     }
 }
