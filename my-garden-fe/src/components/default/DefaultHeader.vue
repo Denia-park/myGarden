@@ -1,12 +1,21 @@
 <script setup>
 import {store} from "@/scripts/store.js";
 import {router} from "@/scripts/router.js";
+import {computed} from "vue";
 
 function logout() {
   store.commit('setAccount', 0);
   sessionStorage.removeItem('id');
   router.push('/login');
 }
+
+function goToHome() {
+  router.push(homeUrl.value);
+}
+
+const homeUrl = computed(() => {
+  return store.getters.getAccessToken ? '/daily-routine' : '/login';
+});
 </script>
 
 <template>
@@ -18,7 +27,7 @@ function logout() {
             <h4 class="text-white">Page</h4>
             <ul class="list-unstyled">
               <li>
-                <router-link v-if="!$store.state.account.id" class="text-white" to="/login">로그인</router-link>
+                <router-link v-if="!store.state.account.accessToken" class="text-white" to="/login">로그인</router-link>
                 <a v-else class="text-white" href="#" @click="logout">로그아웃</a>
               </li>
               <li>
@@ -42,10 +51,10 @@ function logout() {
     </div>
     <div class="navbar navbar-dark bg-dark shadow-sm">
       <div class="container">
-        <router-link class="navbar-brand d-flex align-items-center" to="/">
+        <a class="navbar-brand d-flex align-items-center" href="#" @click="goToHome">
           <i class="fa-brands fa-pagelines"></i>
           <strong class="title">myGarden</strong>
-        </router-link>
+        </a>
         <button aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
                 data-bs-target="#navbarHeader" data-bs-toggle="collapse" type="button">
           <span class="navbar-toggler-icon"></span>
