@@ -1,7 +1,7 @@
 <script setup>
 
 import {ref} from "vue";
-import {loginApi} from "@/components/login/api/api.js";
+import {loginApi} from "@/components/auth/login/api/api.js";
 import {router} from "@/scripts/router.js";
 
 
