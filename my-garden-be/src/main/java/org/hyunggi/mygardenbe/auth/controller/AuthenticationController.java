@@ -3,6 +3,7 @@ package org.hyunggi.mygardenbe.auth.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.hyunggi.mygardenbe.auth.controller.request.LoginRequest;
+import org.hyunggi.mygardenbe.auth.controller.request.RefreshRequest;
 import org.hyunggi.mygardenbe.auth.controller.request.SignupRequest;
 import org.hyunggi.mygardenbe.auth.service.AuthenticationService;
 import org.hyunggi.mygardenbe.auth.service.response.AuthenticationResponse;
@@ -30,6 +31,13 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ApiResponse<AuthenticationResponse> login(@RequestBody @Valid LoginRequest request) {
         final AuthenticationResponse response = authenticationService.login(request.email(), request.password());
+
+        return ApiResponse.ok(response);
+    }
+
+    @PostMapping("/refresh")
+    public ApiResponse<AuthenticationResponse> refresh(@RequestBody @Valid RefreshRequest request) {
+        final AuthenticationResponse response = authenticationService.refresh(request.refreshToken());
 
         return ApiResponse.ok(response);
     }

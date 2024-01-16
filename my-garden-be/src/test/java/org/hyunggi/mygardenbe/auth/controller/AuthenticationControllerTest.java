@@ -2,6 +2,7 @@ package org.hyunggi.mygardenbe.auth.controller;
 
 import org.hyunggi.mygardenbe.ControllerTestSupport;
 import org.hyunggi.mygardenbe.auth.controller.request.LoginRequest;
+import org.hyunggi.mygardenbe.auth.controller.request.RefreshRequest;
 import org.hyunggi.mygardenbe.auth.controller.request.SignupRequest;
 import org.hyunggi.mygardenbe.auth.service.response.AuthenticationResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -188,5 +189,46 @@ class AuthenticationControllerTest extends ControllerTestSupport {
         BDDMockito.then(myLogoutHandler)
                 .should(times(1))
                 .logout(any(), any(), any());
+    }
+
+    @Test
+    @DisplayName("리프레시 토큰을 이용해 토큰을 재발급 받는다.")
+    void refresh() throws Exception {
+        //given
+        final RefreshRequest request = new RefreshRequest("refreshToken");
+
+        given(authenticationService.refresh(request.refreshToken()))
+                .willReturn(
+                        AuthenticationResponse.builder()
+                                .accessToken("newAccessToken")
+                                .refreshToken("newRefreshToken")
+                                .build()
+                );
+
+        //when, then
+        mockMvc.perform(
+                        post("/api/auth/refresh")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.accessToken").value("newAccessToken"))
+                .andExpect(jsonPath("$.data.refreshToken").value("newRefreshToken"));
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @DisplayName("리프레시 토큰을 이용해 토큰을 재발급 받을 때 리프레시 토큰이 null 혹은 비어있으면 400을 반환한다.")
+    void refreshWithNullRefreshToken(final String refreshToken) throws Exception {
+        //given
+        final RefreshRequest request = new RefreshRequest(refreshToken);
+
+        //when, then
+        mockMvc.perform(
+                        post("/api/auth/refresh")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request))
+                )
+                .andExpect(status().isBadRequest());
     }
 }
