@@ -1,5 +1,6 @@
 package org.hyunggi.mygardenbe.auth.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hyunggi.mygardenbe.auth.jwt.domain.Token;
 import org.hyunggi.mygardenbe.auth.jwt.entity.TokenEntity;
@@ -86,6 +87,6 @@ public class AuthenticationService {
 
     private TokenEntity getTokenByEmail(final String email) {
         return tokenRepository.findTokenByUserEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 유저의 토큰을 찾을 수 없습니다."));
+                .orElseThrow(() -> new EntityNotFoundException("해당하는 유저의 토큰을 찾을 수 없습니다."));
     }
 }
