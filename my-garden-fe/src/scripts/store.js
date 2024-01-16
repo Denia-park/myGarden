@@ -10,11 +10,9 @@ export const store = createStore({
         }
     },
     mutations: {
-        setAccessToken(state, payload) {
-            state.account.accessToken = payload;
-        },
-        setRefreshToken(state, payload) {
-            state.account.refreshToken = payload;
+        setToken(state, payload) {
+            state.account.accessToken = payload.accessToken;
+            state.account.refreshToken = payload.refreshToken;
         },
     },
 })
