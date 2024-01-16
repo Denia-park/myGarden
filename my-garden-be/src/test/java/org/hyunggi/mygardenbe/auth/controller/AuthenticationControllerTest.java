@@ -4,7 +4,6 @@ import org.hyunggi.mygardenbe.ControllerTestSupport;
 import org.hyunggi.mygardenbe.auth.controller.request.LoginRequest;
 import org.hyunggi.mygardenbe.auth.controller.request.SignupRequest;
 import org.hyunggi.mygardenbe.auth.service.response.AuthenticationResponse;
-import org.hyunggi.mygardenbe.common.ApiTestUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -102,8 +101,6 @@ class AuthenticationControllerTest extends ControllerTestSupport {
         final String email = "test@test.com";
         final String password = "test1234!";
 
-        ApiTestUtil.signUp(mockMvc, email, password);
-
         given(authenticationService.login(email, password))
                 .willReturn(
                         AuthenticationResponse.builder()
@@ -137,8 +134,6 @@ class AuthenticationControllerTest extends ControllerTestSupport {
         //given
         final String password = "test1234!";
 
-        ApiTestUtil.signUp(mockMvc, "test@test.com", "test1234!");
-
         //when, then
         mockMvc.perform(
                         post("/api/auth/login")
@@ -161,9 +156,7 @@ class AuthenticationControllerTest extends ControllerTestSupport {
     void loginWithNullPassword(final String password) throws Exception {
         //given
         final String email = "test@test.com";
-
-        ApiTestUtil.signUp(mockMvc, "test@test.com", "test1234!");
-
+        
         //when, then
         mockMvc.perform(
                         post("/api/auth/login")

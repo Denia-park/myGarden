@@ -8,7 +8,6 @@ import org.junit.jupiter.params.provider.NullSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 class TokenTest {
     @Test
@@ -25,10 +24,10 @@ class TokenTest {
 
         //then
         assertThat(token).isNotNull();
-        assertEquals(tokenText, token.getTokenText());
-        assertEquals(tokenType, token.getTokenType());
-        assertFalse(token.isRevoked());
-        assertFalse(token.isExpired());
+        assertThat(token.getTokenText()).isEqualTo(tokenText);
+        assertThat(token.getTokenType()).isEqualTo(tokenType);
+        assertThat(token.isRevoked()).isFalse();
+        assertThat(token.isExpired()).isFalse();
     }
 
     @ParameterizedTest
@@ -36,9 +35,7 @@ class TokenTest {
     @DisplayName("정적 메서드 of의 입력으로 tokenText가 null 혹은 빈 문자열이면 예외가 발생한다.")
     void of_nullAndEmptyTokenText(final String tokenText) {
         //when, when
-        assertThatThrownBy(() -> {
-            Token.of(tokenText, TokenType.BEARER, false, false);
-        })
+        assertThatThrownBy(() -> Token.of(tokenText, TokenType.BEARER, false, false))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("토큰은 null 혹은 빈 문자열이 될 수 없습니다.");
     }
@@ -48,9 +45,7 @@ class TokenTest {
     @DisplayName("정적 메서드 of의 입력으로 tokenType이 null이면 예외가 발생한다.")
     void of_nullTokenType(final TokenType tokenType) {
         //when, when
-        assertThatThrownBy(() -> {
-            Token.of("tokenText", tokenType, false, false);
-        })
+        assertThatThrownBy(() -> Token.of("tokenText", tokenType, false, false))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("토큰 타입은 null이 될 수 없습니다.");
     }
@@ -66,10 +61,10 @@ class TokenTest {
 
         //then
         assertThat(token).isNotNull();
-        assertEquals(tokenText, token.getTokenText());
-        assertEquals(TokenType.BEARER, token.getTokenType());
-        assertFalse(token.isRevoked());
-        assertFalse(token.isExpired());
+        assertThat(token.getTokenText()).isEqualTo(tokenText);
+        assertThat(token.getTokenType()).isEqualTo(TokenType.BEARER);
+        assertThat(token.isRevoked()).isFalse();
+        assertThat(token.isExpired()).isFalse();
     }
 
     @Test
@@ -82,7 +77,7 @@ class TokenTest {
         final boolean valid = token.isValid();
 
         //then
-        assertTrue(valid);
+        assertThat(valid).isTrue();
     }
 
     @Test
@@ -95,7 +90,7 @@ class TokenTest {
         token.expire();
 
         //then
-        assertTrue(token.isExpired());
+        assertThat(token.isExpired()).isTrue();
     }
 
     @Test
@@ -108,8 +103,8 @@ class TokenTest {
         token.revoke();
 
         //then
-        assertTrue(token.isRevoked());
-        assertTrue(token.isExpired());
+        assertThat(token.isRevoked()).isTrue();
+        assertThat(token.isExpired()).isTrue();
     }
 
     @Test
@@ -123,7 +118,7 @@ class TokenTest {
         final boolean valid = token.isValid();
 
         //then
-        assertFalse(valid);
+        assertThat(valid).isFalse();
     }
 
     @Test
@@ -137,7 +132,7 @@ class TokenTest {
         final boolean valid = token.isValid();
 
         //then
-        assertFalse(valid);
+        assertThat(valid).isFalse();
     }
 
     @Test
@@ -151,7 +146,7 @@ class TokenTest {
         final boolean sameTokenText = token.isSameTokenText(tokenText);
 
         //then
-        assertTrue(sameTokenText);
+        assertThat(sameTokenText).isTrue();
     }
 
     @Test
@@ -169,9 +164,9 @@ class TokenTest {
         final boolean isNewTokenValid = token.isValid();
 
         //then
-        assertFalse(isOldTokenValid);
-        assertEquals(refreshTokenText, token.getTokenText());
-        assertTrue(isNewTokenValid);
+        assertThat(isOldTokenValid).isFalse();
+        assertThat(token.getTokenText()).isEqualTo(refreshTokenText);
+        assertThat(isNewTokenValid).isTrue();
     }
 
     @ParameterizedTest
@@ -182,9 +177,7 @@ class TokenTest {
         final Token token = Token.createBearerToken("tokenText");
 
         //when, then
-        assertThatThrownBy(() -> {
-            token.refresh(refreshTokenText);
-        })
+        assertThatThrownBy(() -> token.refresh(refreshTokenText))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("토큰은 null 혹은 빈 문자열이 될 수 없습니다.");
     }
