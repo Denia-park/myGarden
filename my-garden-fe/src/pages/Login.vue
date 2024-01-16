@@ -19,7 +19,7 @@ function submit() {
           return;
         }
 
-        router.push('/');
+        router.push('/daily-routine');
       })
 }
 
