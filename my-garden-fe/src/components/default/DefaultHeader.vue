@@ -18,7 +18,7 @@ function logout() {
             <h4 class="text-white">Page</h4>
             <ul class="list-unstyled">
               <li>
-                <router-link v-if="!$store.state.account.id" class="text-white" to="/login">로그인</router-link>
+                <router-link v-if="!$store.state.account.accessToken" class="text-white" to="/login">로그인</router-link>
                 <a v-else class="text-white" href="#" @click="logout">로그아웃</a>
               </li>
               <li>
