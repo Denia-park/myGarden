@@ -8,11 +8,9 @@ export function loginApi(email, password) {
     })
         .then(res => {
             const data = res.data.data;
-            const accessToken = data.accessToken;
-            const refreshToken = data.refreshToken;
 
-            store.commit('setAccessToken', accessToken);
-            store.commit('setRefreshToken', refreshToken);
+            store.commit('setToken', data);
+            sessionStorage.setItem('token', JSON.stringify(data));
 
             alert("로그인에 성공했습니다.");
 
