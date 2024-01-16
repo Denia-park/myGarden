@@ -1,5 +1,6 @@
 import axios from "axios";
 import {store} from "@/scripts/store.js";
+import {router} from "@/scripts/router.js";
 
 const setup = () => {
     axios.interceptors.request.use(
@@ -59,6 +60,7 @@ const setup = () => {
             }
 
             if (err.response.status === 403) {
+                await router.push('/login');
                 return Promise.reject(err.response.data);
             }
 
