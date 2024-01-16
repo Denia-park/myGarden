@@ -1,5 +1,6 @@
 import axios from "axios";
 import {store} from "@/scripts/store.js";
+import {router} from "@/scripts/router.js";
 
 const setup = () => {
     axios.interceptors.request.use(
@@ -27,48 +28,45 @@ const setup = () => {
         }
     );
 
-    // axios.interceptors.response.use(
-    //     (res) => {
-    //         return res;
-    //     },
-    //     async (err) => {
-    //         const originalConfig = err.config;
-    //
-    //         if (err.response) {
-    //             return Promise.reject(err);
-    //         }
-    //
-    //         // Access Token이 만료됨
-    //         if (err.response.status === 401 && !originalConfig._retry) {
-    //             originalConfig._retry = true;
-    //
-    //             try {
-    //                 const result = await refreshTokenApi();
-    //
-    //                 if (!result) {
-    //                     return Promise.reject(err);
-    //                 }
-    //
-    //                 store.commit('setToken', result);
-    //                 sessionStorage.setItem('token', JSON.stringify(result));
-    //
-    //                 return axios(originalConfig);
-    //             } catch (_error) {
-    //                 if (_error.response?.data) {
-    //                     return Promise.reject(_error.response.data);
-    //                 }
-    //
-    //                 return Promise.reject(_error);
-    //             }
-    //         }
-    //
-    //         if (err.response.status === 403 && err.response.data) {
-    //             return Promise.reject(err.response.data);
-    //         }
-    //
-    //         return Promise.reject(err);
-    //     }
-    // );
+    axios.interceptors.response.use(
+        (res) => {
+            return res;
+        },
+        async (err) => {
+            const originalConfig = err.config;
+
+            // Access Token이 만료됨
+            if (err && err.response.status === 401 && !originalConfig._retry) {
+                originalConfig._retry = true;
+
+                try {
+                    const result = await refreshTokenApi();
+
+                    if (!result) {
+                        return Promise.reject(err);
+                    }
+
+                    store.commit('setToken', result);
+                    sessionStorage.setItem('token', JSON.stringify(result));
+
+                    return axios(originalConfig);
+                } catch (_error) {
+                    if (_error.response?.data) {
+                        return Promise.reject(_error.response.data);
+                    }
+
+                    return Promise.reject(_error);
+                }
+            }
+
+            if (err.response.status === 403) {
+                await router.push('/login');
+                return Promise.reject(err.response.data);
+            }
+
+            return Promise.reject(err);
+        }
+    );
 };
 
 const refreshTokenApi = async () => {
@@ -79,7 +77,6 @@ const refreshTokenApi = async () => {
             return res.data.data;
         })
         .catch(error => {
-            console.log(error);
             return null;
         });
 };

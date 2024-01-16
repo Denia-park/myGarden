@@ -113,19 +113,6 @@ function postRoutine() {
   localStorage.setItem("todayLastStartDateTime", endDate.value);
 }
 
-function logData() {
-  console.log("startDate : " + startDate.value)
-  console.log("endDate : " + endDate.value)
-  console.log("content : " + content.value)
-  console.log("routineType : " + routineType.value)
-}
-
-/*
-TODO
-  2. 삭제 로직 구현
-    2-1. api 호출
- */
-
 function updateRoutine() {
   if (!updateValidate()) {
     return;

@@ -35,7 +35,6 @@ export function getDailyRoutineApi(startDateTime, endDateTime) {
         })
         .catch(error => {
             alert('일정을 불러오는데 실패했습니다.')
-            console.log(error);
         });
 }
 
@@ -73,7 +72,7 @@ export function postDailyRoutineApi(startDate, endDate, routineType, content) {
         })
         .catch(error => {
             alert("등록에 실패했습니다.");
-            console.log(error);
+
         });
 }
 
@@ -101,7 +100,7 @@ export function updateDailyRoutineApi(id, startDate, endDate, routineType, conte
         })
         .catch(error => {
             alert("수정에 실패했습니다.");
-            console.log(error);
+
         });
 }
 
@@ -113,6 +112,6 @@ export function deleteDailyRoutineApi(id) {
         })
         .catch(error => {
             alert("삭제에 실패했습니다.");
-            console.log(error);
+
         });
 }

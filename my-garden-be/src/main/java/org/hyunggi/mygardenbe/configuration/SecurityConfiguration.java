@@ -3,6 +3,7 @@ package org.hyunggi.mygardenbe.configuration;
 import lombok.RequiredArgsConstructor;
 import org.hyunggi.mygardenbe.auth.controller.AuthenticationController;
 import org.hyunggi.mygardenbe.auth.jwt.filter.JwtAuthenticationFilter;
+import org.hyunggi.mygardenbe.auth.jwt.filter.JwtExceptionHandlerFilter;
 import org.hyunggi.mygardenbe.common.view.filter.HistoryModeFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,6 +50,7 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(myAuthenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtExceptionHandlerFilter(), JwtAuthenticationFilter.class)
                 .addFilterBefore(new HistoryModeFilter(), AuthorizationFilter.class)
                 .logout(logout ->
                         logout.logoutUrl(AuthenticationController.AUTH_BASE_API_PATH + "/logout")
