@@ -4,13 +4,17 @@ export const store = createStore({
     state() {
         return {
             account: {
-                id: 0
+                accessToken: '',
+                refreshToken: ''
             }
         }
     },
     mutations: {
-        setAccount(state, payload) {
-            state.account.id = payload;
-        }
+        setAccessToken(state, payload) {
+            state.account.accessToken = payload;
+        },
+        setRefreshToken(state, payload) {
+            state.account.refreshToken = payload;
+        },
     },
 })
