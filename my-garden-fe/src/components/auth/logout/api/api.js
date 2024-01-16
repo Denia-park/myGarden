@@ -6,12 +6,10 @@ export function logoutApi(email, password) {
         .then(res => {
             store.commit('clearToken');
             sessionStorage.removeItem('token');
-            
+
             return 'success';
         })
         .catch(error => {
-            console.log(error);
-
             return null;
         });
 }

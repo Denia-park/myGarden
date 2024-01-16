@@ -16,8 +16,11 @@ function submit() {
   loginApi(email, password)
       .then(response => {
         if (response === null) {
+          alert("로그인에 실패했습니다.");
+
           return;
         }
+        alert("로그인에 성공했습니다.");
 
         router.push('/daily-routine');
       })
