@@ -25,11 +25,17 @@ export const store = createStore({
     },
     actions: {
         initializeTokenFromSessionStorage({commit}) {
-            const token = JSON.parse(sessionStorage.getItem('token'));
+            try {
+                const tokenString = sessionStorage.getItem('token');
+                const token = tokenString ? JSON.parse(tokenString) : null;
 
-            if (!token) return;
-            commit('setToken', token);
-        }
+                if (token?.accessToken && token.refreshToken) {
+                    commit('setToken', token);
+                }
+            } catch (error) {
+                console.error("Error parsing token from session storage:", error);
+            }
+        },
     },
     getters: {
         getAccessToken(state) {
