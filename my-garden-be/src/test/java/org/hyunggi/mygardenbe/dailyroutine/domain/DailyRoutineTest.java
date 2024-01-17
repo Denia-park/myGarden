@@ -37,6 +37,27 @@ class DailyRoutineTest {
     }
 
     @Test
+    @DisplayName("정적 메서드 of를 통해 객체를 생성할 때, 루틴 타입이 없으면 예외가 발생한다.")
+    void throwExceptionWhenRoutineTypeIsEmpty() {
+        //given
+        final RoutineTime routineTime = RoutineTime.of(
+                LocalDateTime.of(2023, 12, 14, 9, 0, 0),
+                LocalDateTime.of(2023, 12, 14, 10, 0, 0)
+        );
+        final String routineType = "";
+        final String routineDescription = "낮잠";
+
+        //when, then
+        assertThatThrownBy(() -> DailyRoutine.of(
+                routineTime,
+                routineType,
+                routineDescription
+        ))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("데일리 루틴의 타입은 비어있을 수 없습니다.");
+    }
+
+    @Test
     @DisplayName("update 메서드를 통해 객체를 수정할 수 있다.")
     void update() {
         //given
