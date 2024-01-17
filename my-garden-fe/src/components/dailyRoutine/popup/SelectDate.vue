@@ -30,6 +30,7 @@ function handleClickOutside(event) {
 </script>
 <template>
   <button class="date-button btn btn-success" @click="openModal">조회 날짜 선택</button>
+  <h4 v-if="selectedDate" class="date-text">선택한 날짜 : {{ selectedDate }}</h4>
 
   <!-- 모달 바깥쪽 클릭 시 closeModal 호출 -->
   <div v-if="showModal" class="modal" @click="handleClickOutside">
@@ -40,8 +41,6 @@ function handleClickOutside(event) {
       <span class="close" @click="closeModal">close</span>
     </div>
   </div>
-
-  <h4 v-if="selectedDate" class="date-text">선택한 날짜 : {{ selectedDate }}</h4>
 </template>
 
 <style scoped>
@@ -49,7 +48,7 @@ function handleClickOutside(event) {
   position: absolute;
   top: 0;
   right: 0;
-  margin-top: 10px;
+  margin-top: 3px;
   margin-right: 10px;
 }
 
@@ -57,7 +56,7 @@ function handleClickOutside(event) {
   position: absolute;
   top: 0;
   right: 0;
-  margin-top: 50px;
+  margin-top: 42px;
   margin-right: 10px;
 }
 

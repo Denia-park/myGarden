@@ -12,7 +12,7 @@ defineProps({
 
 h1 {
   text-align: center;
-  font-size: 60px;
+  font-size: 50px;
   margin-top: 10px;
   margin-bottom: 20px;
 }

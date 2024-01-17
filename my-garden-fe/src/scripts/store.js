@@ -1,11 +1,13 @@
 import {createStore} from 'vuex'
+import {parseJwt} from "@/scripts/parseJwt.js";
 
 export const store = createStore({
     state() {
         return {
             account: {
                 accessToken: '',
-                refreshToken: ''
+                refreshToken: '',
+                roles: []
             }
         }
     },
@@ -17,14 +19,33 @@ export const store = createStore({
         clearToken(state) {
             state.account.accessToken = '';
             state.account.refreshToken = '';
-        }
+        },
+        setRoles(state, payload) {
+            state.account.roles = Array.isArray(payload) ? payload : [];
+        },
     },
     actions: {
         initializeTokenFromSessionStorage({commit}) {
-            const token = JSON.parse(sessionStorage.getItem('token'));
+            try {
+                const tokenString = sessionStorage.getItem('token');
+                const token = tokenString ? JSON.parse(tokenString) : null;
 
-            if (!token) return;
-            commit('setToken', token);
+                if (token?.accessToken && token.refreshToken) {
+                    commit('setToken', token);
+                }
+            } catch (error) {
+                console.error("Error parsing token from session storage:", error);
+            }
+        },
+        initializeAuthenticationRoles({commit}, context) {
+            const accessToken = context.getters.getAccessToken;
+
+            if (!accessToken) return;
+
+            const payload = parseJwt(accessToken);
+            const roles = payload.roles.split(',');
+
+            commit('setRoles', roles);
         }
     },
     getters: {
