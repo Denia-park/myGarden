@@ -61,24 +61,9 @@ public class JwtService {
             body = jwtParser
                     .parseClaimsJws(token)
                     .getBody();
-        } catch (ExpiredJwtException e) {
-            final String errorMessage = String.format("Request to parse expired JWT -> token : %s, msg : %s", token, e.getMessage());
-            log.warn(errorMessage);
-            throw new InvalidTokenRequestException(errorMessage);
-        } catch (UnsupportedJwtException e) {
-            final String errorMessage = String.format("Request to parse unsupported JWT -> token : %s, msg : %s", token, e.getMessage());
-            log.warn(errorMessage);
-            throw new InvalidTokenRequestException(errorMessage);
-        } catch (MalformedJwtException e) {
-            final String errorMessage = String.format("Request to parse invalid JWT -> token : %s, msg : %s", token, e.getMessage());
-            log.warn(errorMessage);
-            throw new InvalidTokenRequestException(errorMessage);
-        } catch (SignatureException e) {
-            final String errorMessage = String.format("Request to parse JWT with invalid signature -> token : %s, msg : %s", token, e.getMessage());
-            log.warn(errorMessage);
-            throw new InvalidTokenRequestException(errorMessage);
-        } catch (IllegalArgumentException e) {
-            final String errorMessage = String.format("Request to parse illegal argument -> inputText : %s, msg : %s", token, e.getMessage());
+        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException |
+                 SignatureException | IllegalArgumentException e) {
+            final String errorMessage = String.format("JWT getClaimsBody Exception %s -> token : %s, msg : %s", e.getClass().getName(), token, e.getMessage());
             log.warn(errorMessage);
             throw new InvalidTokenRequestException(errorMessage);
         }
