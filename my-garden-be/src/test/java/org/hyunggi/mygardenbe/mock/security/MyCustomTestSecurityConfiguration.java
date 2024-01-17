@@ -14,7 +14,7 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 public class MyCustomTestSecurityConfiguration {
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http, LogoutHandler mylogoutHandler) throws Exception {
-        final JwtAuthenticationFilter jwtAuthFilterForTest = new JwtAuthenticationFilter(null, null);
+        final JwtAuthenticationFilter jwtAuthFilterForTest = new JwtAuthenticationFilter(null);
         final AuthenticationProvider authenticationProviderForTest = new TestingAuthenticationProvider();
 
         return new SecurityConfiguration(

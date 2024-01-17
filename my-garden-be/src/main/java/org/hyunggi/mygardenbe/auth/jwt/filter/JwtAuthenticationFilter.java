@@ -1,5 +1,6 @@
 package org.hyunggi.mygardenbe.auth.jwt.filter;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,8 +14,6 @@ import org.hyunggi.mygardenbe.auth.jwt.util.JwtAuthUtil;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -26,7 +25,6 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -40,23 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        String userEmail = jwtService.extractUsername(accessTokenText);
-
-        if (userEmail != null && isUserNotAuthenticated()) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
-
-            if (jwtService.isTokenValid(accessTokenText, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
-
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                SecurityContextHolder.getContext().setAuthentication(authToken);
-            }
-        }
+        setAuthenticationIfTokenIsValid(request, accessTokenText);
 
         filterChain.doFilter(request, response);
     }
@@ -65,7 +47,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return request.getServletPath().contains(AuthenticationController.AUTH_BASE_API_PATH);
     }
 
+    private void setAuthenticationIfTokenIsValid(final HttpServletRequest request, final String accessTokenText) {
+        final Claims claims = jwtService.extractAllClaims(accessTokenText);
+        final String userEmail = claims.getSubject();
+        final String rolesText = claims.get("roles", String.class);
+
+        if (userEmail != null && isUserNotAuthenticated()) {
+            UsernamePasswordAuthenticationToken authToken = buildAuthToken(userEmail, rolesText);
+
+            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+            SecurityContextHolder.getContext().setAuthentication(authToken);
+        }
+    }
+
     private boolean isUserNotAuthenticated() {
         return SecurityContextHolder.getContext().getAuthentication() == null;
+    }
+
+    private UsernamePasswordAuthenticationToken buildAuthToken(final String userEmail, final String rolesText) {
+        return new UsernamePasswordAuthenticationToken(
+                userEmail,
+                null,
+                jwtService.convertStringToAuthorities(rolesText)
+        );
     }
 }
