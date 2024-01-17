@@ -8,15 +8,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.hyunggi.mygardenbe.common.exception.InvalidTokenRequestException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -31,16 +28,7 @@ public class JwtService {
     @Value("${application.security.jwt.refresh-token.expiration}")
     private long refreshExpiration;
 
-    public String extractUsername(final String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
-
-    private <T> T extractClaim(final String token, final Function<Claims, T> claimsResolver) {
-        Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
-    }
-
-    private Claims extractAllClaims(final String token) {
+    public Claims extractAllClaims(final String token) {
         final JwtParser jwtParser = getJwtParser();
 
         return getClaimsBody(jwtParser, token);
@@ -106,21 +94,11 @@ public class JwtService {
                 .collect(Collectors.joining(","));
     }
 
-    public boolean isTokenValid(final String token, final UserDetails userDetails) {
-        String username = extractUsername(token);
+    public Collection<? extends GrantedAuthority> convertStringToAuthorities(final String rolesText) {
+        final String[] roles = rolesText.split(",");
 
-        return (username.equals(userDetails.getUsername())) && isNotTokenExpired(token);
-    }
-
-    private boolean isNotTokenExpired(final String token) {
-        return !isTokenExpired(token);
-    }
-
-    private boolean isTokenExpired(final String token) {
-        return extractExpiration(token).before(new Date());
-    }
-
-    private Date extractExpiration(final String token) {
-        return extractClaim(token, Claims::getExpiration);
+        return Arrays.stream(roles)
+                .map(SimpleGrantedAuthority::new)
+                .toList();
     }
 }
