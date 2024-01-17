@@ -5,7 +5,8 @@ export const store = createStore({
         return {
             account: {
                 accessToken: '',
-                refreshToken: ''
+                refreshToken: '',
+                roles: []
             }
         }
     },
@@ -17,7 +18,10 @@ export const store = createStore({
         clearToken(state) {
             state.account.accessToken = '';
             state.account.refreshToken = '';
-        }
+        },
+        setRoles(state, payload) {
+            state.account.roles = Array.isArray(payload) ? payload : [];
+        },
     },
     actions: {
         initializeTokenFromSessionStorage({commit}) {
