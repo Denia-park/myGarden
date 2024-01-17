@@ -12,7 +12,7 @@ const updateDate = ref(getTodayDate());
 </script>
 <template>
   <div id="header">
-    <PageTitle :input-name="'하루 일과 기록'"/>
+    <PageTitle :input-name="'하루 일과'"/>
     <SelectDate @update-date="date => updateDate = date"/>
   </div>
   <div id="wrapper">
