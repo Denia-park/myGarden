@@ -7,14 +7,17 @@ import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.hyunggi.mygardenbe.common.exception.InvalidTokenRequestException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -63,7 +66,8 @@ public class JwtService {
                     .getBody();
         } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException |
                  SignatureException | IllegalArgumentException e) {
-            final String errorMessage = String.format("JWT getClaimsBody Exception %s -> token : %s, msg : %s", e.getClass().getName(), token, e.getMessage());
+            final String errorMessage = String.format("JWT getClaimsBody Exception [%s] -> token : %s, msg : %s",
+                    e.getClass().getName(), token, e.getMessage());
             log.warn(errorMessage);
             throw new InvalidTokenRequestException(errorMessage);
         }
@@ -80,6 +84,8 @@ public class JwtService {
     }
 
     private String buildToken(final Map<String, Object> extraClaims, final UserDetails userDetails, final long expiration) {
+        addRolesToClaims(extraClaims, userDetails);
+
         return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
@@ -87,6 +93,17 @@ public class JwtService {
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    private void addRolesToClaims(final Map<String, Object> extraClaims, final UserDetails userDetails) {
+        String authorities = convertString(userDetails.getAuthorities());
+        extraClaims.put("roles", authorities);
+    }
+
+    private String convertString(final Collection<? extends GrantedAuthority> authorities) {
+        return authorities.stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
     }
 
     public boolean isTokenValid(final String token, final UserDetails userDetails) {
