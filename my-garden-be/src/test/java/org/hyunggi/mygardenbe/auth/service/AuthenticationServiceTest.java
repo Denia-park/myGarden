@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 class AuthenticationServiceTest extends IntegrationTestSupport {
@@ -69,6 +70,20 @@ class AuthenticationServiceTest extends IntegrationTestSupport {
 
         //  반환된 Member ID 확인
         assertThat(memberId).isEqualTo(savedMemberId);
+    }
+
+    @Test
+    @DisplayName("이미 존재하는 이메일로 회원 가입을 하면, IllegalArgumentException을 던진다.")
+    void signUpWithDuplicateEmail() {
+        //given
+        final String email = "test@test.com";
+        final String password = "test1234!";
+        authenticationService.signUp(email, password);
+
+        //when, then
+        assertThatThrownBy(() -> authenticationService.signUp(email, password))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("이미 존재하는 이메일입니다.");
     }
 
     @Test
