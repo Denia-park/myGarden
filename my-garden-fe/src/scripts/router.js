@@ -6,9 +6,9 @@ import SignUp from "@/pages/SignUp.vue";
 
 const routes = [
     {path: '/login', component: Login},
-    {path: '/daily-routine', component: DailyRoutine},
     {path: '/signup', component: SignUp},
     {path: '/notFound', component: NotFound},
+    {path: '/daily-routine', component: DailyRoutine, meta: {permitRoles: ['ROLE_USER', 'ROLE_ADMIN']}},
 
     {path: '/', redirect: '/login'},
     {path: '/:pathMatch(.*)*', redirect: '/notFound'}
