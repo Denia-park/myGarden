@@ -40,12 +40,24 @@ public class MemberEntity extends BaseEntity implements UserDetails {
     }
 
     public static MemberEntity of(final Member member, final PasswordEncoder passwordEncoder) {
+        validate(member, passwordEncoder);
+        
         return MemberEntity.builder()
                 .email(member.getEmail())
                 .password(passwordEncoder.encode(member.getPassword()))
                 .role(Role.USER)
                 .enabled(true)
                 .build();
+    }
+
+    private static void validate(final Member member, final PasswordEncoder passwordEncoder) {
+        if (member == null) {
+            throw new IllegalArgumentException("Member는 null이 될 수 없습니다.");
+        }
+
+        if (passwordEncoder == null) {
+            throw new IllegalArgumentException("PasswordEncoder는 null이 될 수 없습니다.");
+        }
     }
 
     @Override
