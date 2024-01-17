@@ -48,13 +48,6 @@ public class MemberEntity extends BaseEntity implements UserDetails {
                 .build();
     }
 
-    public Member toDomain() {
-        return new Member(
-                email,
-                password
-        );
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.role.getAuthorities();
