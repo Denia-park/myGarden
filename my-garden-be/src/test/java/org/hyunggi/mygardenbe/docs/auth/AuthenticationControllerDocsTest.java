@@ -125,8 +125,7 @@ class AuthenticationControllerDocsTest extends RestDocsSupport {
         mockMvc.perform(
                         post("/api/auth/refresh")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(request)
-                                )
+                                .content(objectMapper.writeValueAsString(request))
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.accessToken").value("newAccessToken"))
