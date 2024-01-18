@@ -56,8 +56,8 @@ class AuthenticationControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("password").description("회원 가입할 비밀번호")
                         ),
                         responseFields(
-                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("코드"),
-                                fieldWithPath("status").type(JsonFieldType.STRING).description("상태"),
+                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("HTTP 상태 코드"),
+                                fieldWithPath("status").type(JsonFieldType.STRING).description("HTTP 상태"),
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
                                 fieldWithPath("data").type(JsonFieldType.NUMBER).description("회원 DB ID")
                         )
@@ -98,8 +98,8 @@ class AuthenticationControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("password").description("로그인할 비밀번호")
                         ),
                         responseFields(
-                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("코드"),
-                                fieldWithPath("status").type(JsonFieldType.STRING).description("상태"),
+                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("HTTP 상태 코드"),
+                                fieldWithPath("status").type(JsonFieldType.STRING).description("HTTP 상태"),
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
                                 fieldWithPath("data.accessToken").type(JsonFieldType.STRING).description("액세스 토큰"),
                                 fieldWithPath("data.refreshToken").type(JsonFieldType.STRING).description("리프레시 토큰")
@@ -137,8 +137,8 @@ class AuthenticationControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("refreshToken").description("리프레시 토큰")
                         ),
                         responseFields(
-                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("코드"),
-                                fieldWithPath("status").type(JsonFieldType.STRING).description("상태"),
+                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("HTTP 상태 코드"),
+                                fieldWithPath("status").type(JsonFieldType.STRING).description("HTTP 상태"),
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
                                 fieldWithPath("data.accessToken").type(JsonFieldType.STRING).description("신규 액세스 토큰"),
                                 fieldWithPath("data.refreshToken").type(JsonFieldType.STRING).description("신규 리프레시 토큰")

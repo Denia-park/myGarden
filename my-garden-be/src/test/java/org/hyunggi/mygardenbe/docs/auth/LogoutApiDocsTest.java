@@ -36,8 +36,8 @@ class LogoutApiDocsTest extends ControllerTestSupport {
                                 fieldWithPath("refreshToken").optional().description("로그아웃할 리프레시 토큰")
                         )
                         , responseFields(
-                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("코드"),
-                                fieldWithPath("status").type(JsonFieldType.STRING).description("상태"),
+                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("HTTP 상태 코드"),
+                                fieldWithPath("status").type(JsonFieldType.STRING).description("HTTP 상태"),
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
                                 fieldWithPath("data").type(JsonFieldType.NULL).description("응답 없음")
                         )
