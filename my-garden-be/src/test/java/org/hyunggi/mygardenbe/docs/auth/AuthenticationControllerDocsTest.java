@@ -31,7 +31,7 @@ class AuthenticationControllerDocsTest extends RestDocsSupport {
     @DisplayName("회원 가입을 한다.")
     void signup() throws Exception {
         // given
-        SignupRequest request = new SignupRequest(
+        final SignupRequest request = new SignupRequest(
                 "test@test.com",
                 "test1234!"
         );
@@ -66,7 +66,7 @@ class AuthenticationControllerDocsTest extends RestDocsSupport {
     @DisplayName("로그인을 한다.")
     void login() throws Exception {
         // given
-        SignupRequest request = new SignupRequest(
+        final SignupRequest request = new SignupRequest(
                 "test@test.com",
                 "test1234!"
         );
