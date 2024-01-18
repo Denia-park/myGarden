@@ -32,7 +32,7 @@ class LogoutApiDocsTest extends ControllerTestSupport {
                 .andDo(document("auth/logout"
                         , preprocessRequest(prettyPrint())
                         , preprocessResponse(prettyPrint())
-                        , requestHeaders(headerWithName("Authorization").description("로그아웃할 리프레시 토큰 ['Bearer {refreshToken}']"))
+                        , requestHeaders(headerWithName("Authorization").description("로그아웃할 리프레시 토큰 [Bearer {refreshToken}]"))
                         , responseFields(
                                 fieldWithPath("code").type(JsonFieldType.NUMBER).description("HTTP 상태 코드"),
                                 fieldWithPath("status").type(JsonFieldType.STRING).description("HTTP 상태"),
