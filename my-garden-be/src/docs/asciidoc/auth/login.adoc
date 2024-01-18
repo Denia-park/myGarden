@@ -1,4 +1,4 @@
-[[auth]]
+[[auth-login]]
 === LOGIN [로그인]
 
 ==== HTTP Request
