@@ -1,4 +1,4 @@
-[[auth]]
+[[auth-refresh]]
 === REFRESH [토큰 리프레쉬]
 
 ==== HTTP Request

@@ -2,6 +2,7 @@ package org.hyunggi.mygardenbe.docs.dailyroutine;
 
 import org.hyunggi.mygardenbe.dailyroutine.controller.DailyRoutineController;
 import org.hyunggi.mygardenbe.dailyroutine.controller.request.PostRequest;
+import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineType;
 import org.hyunggi.mygardenbe.dailyroutine.service.DailyRoutineService;
 import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineResponse;
 import org.hyunggi.mygardenbe.docs.RestDocsSupport;
@@ -15,6 +16,8 @@ import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.util.List;
 
+import static org.hyunggi.mygardenbe.docs.util.RestDocsUtil.allEnumString;
+import static org.hyunggi.mygardenbe.docs.util.RestDocsUtil.field;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -65,8 +68,10 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
                         , preprocessRequest(prettyPrint())
                         , preprocessResponse(prettyPrint())
                         , queryParameters(
-                                parameterWithName("startDateTime").description("조회 시작일시 (yyyy-MM-ddTHH:mm:ss)"),
-                                parameterWithName("endDateTime").description("조회 종료일시 (yyyy-MM-ddTHH:mm:ss)")
+                                parameterWithName("startDateTime").description("조회 시작일시")
+                                        .attributes(field("constraints", "yyyy-MM-ddTHH:mm:ss")),
+                                parameterWithName("endDateTime").description("조회 종료일시")
+                                        .attributes(field("constraints", "yyyy-MM-ddTHH:mm:ss"))
                         )
                         , responseFields(
                                 fieldWithPath("code").type(JsonFieldType.NUMBER).description("HTTP 상태 코드"),
@@ -74,9 +79,12 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
                                 fieldWithPath("data").type(JsonFieldType.ARRAY).description("데이터 (TimeBlock 목록)"),
                                 fieldWithPath("data[].id").type(JsonFieldType.NUMBER).description("ID"),
-                                fieldWithPath("data[].startDateTime").type(JsonFieldType.STRING).description("시작일시"),
-                                fieldWithPath("data[].endDateTime").type(JsonFieldType.STRING).description("종료일시"),
-                                fieldWithPath("data[].routineType").type(JsonFieldType.STRING).description("루틴 타입"),
+                                fieldWithPath("data[].startDateTime").type(JsonFieldType.STRING).description("시작일시")
+                                        .attributes(field("constraints", "yyyy-MM-ddTHH:mm:ss")),
+                                fieldWithPath("data[].endDateTime").type(JsonFieldType.STRING).description("종료일시")
+                                        .attributes(field("constraints", "yyyy-MM-ddTHH:mm:ss")),
+                                fieldWithPath("data[].routineType").type(JsonFieldType.STRING).description("루틴 타입")
+                                        .attributes(field("constraints", allEnumString(RoutineType.class))),
                                 fieldWithPath("data[].routineDescription").type(JsonFieldType.STRING).description("루틴 설명")
                         )
                 ));
@@ -110,9 +118,12 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
                         , preprocessRequest(prettyPrint())
                         , preprocessResponse(prettyPrint())
                         , requestFields(
-                                fieldWithPath("startDateTime").type(JsonFieldType.STRING).description("시작일시 (yyyy-MM-ddTHH:mm:ss)"),
-                                fieldWithPath("endDateTime").type(JsonFieldType.STRING).description("종료일시 (yyyy-MM-ddTHH:mm:ss)"),
-                                fieldWithPath("routineType").type(JsonFieldType.STRING).description("루틴 타입"),
+                                fieldWithPath("startDateTime").type(JsonFieldType.STRING).description("시작일시")
+                                        .attributes(field("constraints", "yyyy-MM-ddTHH:mm:ss (※종료일시와 24시간 이상 차이 날 수 없습니다.)")),
+                                fieldWithPath("endDateTime").type(JsonFieldType.STRING).description("종료일시")
+                                        .attributes(field("constraints", "yyyy-MM-ddTHH:mm:ss (※시작일시와 24시간 이상 차이 날 수 없습니다.)")),
+                                fieldWithPath("routineType").type(JsonFieldType.STRING).description("루틴 타입")
+                                        .attributes(field("constraints", allEnumString(RoutineType.class))),
                                 fieldWithPath("routineDescription").type(JsonFieldType.STRING).description("루틴 설명")
                         )
                         , responseFields(
@@ -155,9 +166,12 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
                                 parameterWithName("id").description("수정할 TimeBlock ID")
                         )
                         , requestFields(
-                                fieldWithPath("startDateTime").type(JsonFieldType.STRING).description("시작일시 (yyyy-MM-ddTHH:mm:ss)"),
-                                fieldWithPath("endDateTime").type(JsonFieldType.STRING).description("종료일시 (yyyy-MM-ddTHH:mm:ss)"),
-                                fieldWithPath("routineType").type(JsonFieldType.STRING).description("루틴 타입"),
+                                fieldWithPath("startDateTime").type(JsonFieldType.STRING).description("시작일시")
+                                        .attributes(field("constraints", "yyyy-MM-ddTHH:mm:ss (※종료일시와 24시간 이상 차이 날 수 없습니다.)")),
+                                fieldWithPath("endDateTime").type(JsonFieldType.STRING).description("종료일시")
+                                        .attributes(field("constraints", "yyyy-MM-ddTHH:mm:ss (※시작일시와 24시간 이상 차이 날 수 없습니다.)")),
+                                fieldWithPath("routineType").type(JsonFieldType.STRING).description("루틴 타입")
+                                        .attributes(field("constraints", allEnumString(RoutineType.class))),
                                 fieldWithPath("routineDescription").type(JsonFieldType.STRING).description("루틴 설명")
                         )
                         , responseFields(

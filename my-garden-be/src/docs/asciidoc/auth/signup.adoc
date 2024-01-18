@@ -1,4 +1,4 @@
-[[auth]]
+[[auth-signup]]
 === SIGNUP [회원가입]
 
 ==== HTTP Request

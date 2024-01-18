@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import static org.hyunggi.mygardenbe.docs.util.RestDocsUtil.field;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -52,8 +53,8 @@ class AuthenticationControllerDocsTest extends RestDocsSupport {
                         , preprocessRequest(prettyPrint())
                         , preprocessResponse(prettyPrint())
                         , requestFields(
-                                fieldWithPath("email").description("회원 가입할 이메일"),
-                                fieldWithPath("password").description("회원 가입할 비밀번호")
+                                fieldWithPath("email").description("회원 가입할 이메일").attributes(field("constraints", "이메일 형식에 맞아야 합니다.")),
+                                fieldWithPath("password").description("회원 가입할 비밀번호").attributes(field("constraints", "비밀번호는 8자 이상 20자 이하여야 하며, 영문자, 숫자, 특수문자를 각각 1개 이상씩 포함해야 합니다."))
                         ),
                         responseFields(
                                 fieldWithPath("code").type(JsonFieldType.NUMBER).description("HTTP 상태 코드"),
@@ -134,7 +135,7 @@ class AuthenticationControllerDocsTest extends RestDocsSupport {
                         , preprocessRequest(prettyPrint())
                         , preprocessResponse(prettyPrint())
                         , requestFields(
-                                fieldWithPath("refreshToken").description("리프레시 토큰")
+                                fieldWithPath("refreshToken").description("기존 리프레시 토큰")
                         ),
                         responseFields(
                                 fieldWithPath("code").type(JsonFieldType.NUMBER).description("HTTP 상태 코드"),
