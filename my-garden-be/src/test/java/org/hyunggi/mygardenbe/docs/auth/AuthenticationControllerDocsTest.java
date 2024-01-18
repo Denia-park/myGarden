@@ -3,6 +3,7 @@ package org.hyunggi.mygardenbe.docs.auth;
 import org.hyunggi.mygardenbe.auth.controller.AuthenticationController;
 import org.hyunggi.mygardenbe.auth.controller.request.SignupRequest;
 import org.hyunggi.mygardenbe.auth.service.AuthenticationService;
+import org.hyunggi.mygardenbe.auth.service.response.AuthenticationResponse;
 import org.hyunggi.mygardenbe.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -57,6 +58,48 @@ class AuthenticationControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("status").type(JsonFieldType.STRING).description("상태"),
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
                                 fieldWithPath("data").type(JsonFieldType.NUMBER).description("회원 DB ID")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("로그인을 한다.")
+    void login() throws Exception {
+        // given
+        SignupRequest request = new SignupRequest(
+                "test@test.com",
+                "test1234!"
+        );
+
+        BDDMockito.given(authenticationService.login(Mockito.any(), Mockito.any()))
+                .willReturn(
+                        AuthenticationResponse.builder()
+                                .accessToken("accessToken")
+                                .refreshToken("refreshToken")
+                                .build()
+                );
+
+        // when, then
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.accessToken").value("accessToken"))
+                .andExpect(jsonPath("$.data.refreshToken").value("refreshToken"))
+                .andDo(document("auth/login"
+                        , preprocessRequest(prettyPrint())
+                        , preprocessResponse(prettyPrint())
+                        , requestFields(
+                                fieldWithPath("email").description("로그인할 이메일"),
+                                fieldWithPath("password").description("로그인할 비밀번호")
+                        ),
+                        responseFields(
+                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("코드"),
+                                fieldWithPath("status").type(JsonFieldType.STRING).description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
+                                fieldWithPath("data.accessToken").type(JsonFieldType.STRING).description("액세스 토큰"),
+                                fieldWithPath("data.refreshToken").type(JsonFieldType.STRING).description("리프레시 토큰")
                         )
                 ));
     }
