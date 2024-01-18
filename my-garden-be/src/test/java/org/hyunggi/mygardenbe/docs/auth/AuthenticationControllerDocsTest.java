@@ -1,6 +1,7 @@
 package org.hyunggi.mygardenbe.docs.auth;
 
 import org.hyunggi.mygardenbe.auth.controller.AuthenticationController;
+import org.hyunggi.mygardenbe.auth.controller.request.RefreshRequest;
 import org.hyunggi.mygardenbe.auth.controller.request.SignupRequest;
 import org.hyunggi.mygardenbe.auth.service.AuthenticationService;
 import org.hyunggi.mygardenbe.auth.service.response.AuthenticationResponse;
@@ -102,6 +103,46 @@ class AuthenticationControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
                                 fieldWithPath("data.accessToken").type(JsonFieldType.STRING).description("액세스 토큰"),
                                 fieldWithPath("data.refreshToken").type(JsonFieldType.STRING).description("리프레시 토큰")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("리프레시 토큰으로 액세스 토큰을 재발급 받는다.")
+    void refresh() throws Exception {
+        final RefreshRequest request = new RefreshRequest("refreshToken");
+
+        // given
+        BDDMockito.given(authenticationService.refresh(Mockito.any()))
+                .willReturn(
+                        AuthenticationResponse.builder()
+                                .accessToken("newAccessToken")
+                                .refreshToken("newRefreshToken")
+                                .build()
+                );
+
+        // when, then
+        mockMvc.perform(
+                        post("/api/auth/refresh")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)
+                                )
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.accessToken").value("newAccessToken"))
+                .andExpect(jsonPath("$.data.refreshToken").value("newRefreshToken"))
+                .andDo(document("auth/refresh"
+                        , preprocessRequest(prettyPrint())
+                        , preprocessResponse(prettyPrint())
+                        , requestFields(
+                                fieldWithPath("refreshToken").description("리프레시 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("코드"),
+                                fieldWithPath("status").type(JsonFieldType.STRING).description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
+                                fieldWithPath("data.accessToken").type(JsonFieldType.STRING).description("신규 액세스 토큰"),
+                                fieldWithPath("data.refreshToken").type(JsonFieldType.STRING).description("신규 리프레시 토큰")
                         )
                 ));
     }

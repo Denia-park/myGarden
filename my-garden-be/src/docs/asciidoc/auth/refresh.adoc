@@ -1,0 +1,12 @@
+[[auth]]
+=== REFRESH [토큰 리프레쉬]
+
+==== HTTP Request
+
+include::{snippets}/auth/refresh/http-request.adoc[]
+include::{snippets}/auth/refresh/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/auth/refresh/http-response.adoc[]
+include::{snippets}/auth/refresh/response-fields.adoc[]
