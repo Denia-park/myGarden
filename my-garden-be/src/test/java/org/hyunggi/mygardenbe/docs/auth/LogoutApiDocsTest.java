@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import static org.hyunggi.mygardenbe.docs.util.RestDocsUtil.field;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -32,7 +33,10 @@ class LogoutApiDocsTest extends ControllerTestSupport {
                 .andDo(document("auth/logout"
                         , preprocessRequest(prettyPrint())
                         , preprocessResponse(prettyPrint())
-                        , requestHeaders(headerWithName("Authorization").description("로그아웃할 리프레시 토큰 [Bearer {refreshToken}]"))
+                        , requestHeaders(
+                                headerWithName("Authorization").optional().description("로그아웃할 리프레시 토큰")
+                                        .attributes(field("constraints", "Bearer {refreshToken}"))
+                        )
                         , responseFields(
                                 fieldWithPath("code").type(JsonFieldType.NUMBER).description("HTTP 상태 코드"),
                                 fieldWithPath("status").type(JsonFieldType.STRING).description("HTTP 상태"),
