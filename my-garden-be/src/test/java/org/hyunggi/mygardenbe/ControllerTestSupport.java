@@ -9,6 +9,7 @@ import org.hyunggi.mygardenbe.dailyroutine.controller.DailyRoutineController;
 import org.hyunggi.mygardenbe.dailyroutine.service.DailyRoutineService;
 import org.hyunggi.mygardenbe.mock.security.MyCustomTestSecurityConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
@@ -29,6 +30,7 @@ import org.springframework.test.web.servlet.MockMvc;
                 @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = MyCustomTestSecurityConfiguration.class)
         }
 )
+@AutoConfigureRestDocs
 public abstract class ControllerTestSupport {
     @Autowired
     protected MockMvc mockMvc;

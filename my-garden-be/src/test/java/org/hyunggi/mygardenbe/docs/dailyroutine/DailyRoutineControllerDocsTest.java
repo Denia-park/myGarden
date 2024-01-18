@@ -69,8 +69,8 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
                                 parameterWithName("endDateTime").description("조회 종료일시 (yyyy-MM-ddTHH:mm:ss)")
                         )
                         , responseFields(
-                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("코드"),
-                                fieldWithPath("status").type(JsonFieldType.STRING).description("상태"),
+                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("HTTP 상태 코드"),
+                                fieldWithPath("status").type(JsonFieldType.STRING).description("HTTP 상태"),
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
                                 fieldWithPath("data").type(JsonFieldType.ARRAY).description("데이터 (TimeBlock 목록)"),
                                 fieldWithPath("data[].id").type(JsonFieldType.NUMBER).description("ID"),
@@ -116,8 +116,8 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("routineDescription").type(JsonFieldType.STRING).description("루틴 설명")
                         )
                         , responseFields(
-                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("코드"),
-                                fieldWithPath("status").type(JsonFieldType.STRING).description("상태"),
+                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("HTTP 상태 코드"),
+                                fieldWithPath("status").type(JsonFieldType.STRING).description("HTTP 상태"),
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
                                 fieldWithPath("data").type(JsonFieldType.ARRAY).description("데이터 (등록된 TimeBlock ID 목록)")
                         )
@@ -161,8 +161,8 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("routineDescription").type(JsonFieldType.STRING).description("루틴 설명")
                         )
                         , responseFields(
-                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("코드"),
-                                fieldWithPath("status").type(JsonFieldType.STRING).description("상태"),
+                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("HTTP 상태 코드"),
+                                fieldWithPath("status").type(JsonFieldType.STRING).description("HTTP 상태"),
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
                                 fieldWithPath("data").type(JsonFieldType.NUMBER).description("데이터 (수정된 TimeBlock ID)")
                         )
@@ -191,8 +191,8 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
                                 parameterWithName("id").description("삭제할 TimeBlock ID")
                         )
                         , responseFields(
-                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("코드"),
-                                fieldWithPath("status").type(JsonFieldType.STRING).description("상태"),
+                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("HTTP 상태 코드"),
+                                fieldWithPath("status").type(JsonFieldType.STRING).description("HTTP 상태"),
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
                                 fieldWithPath("data").type(JsonFieldType.NUMBER).description("데이터 (삭제된 TimeBlock ID)")
                         )

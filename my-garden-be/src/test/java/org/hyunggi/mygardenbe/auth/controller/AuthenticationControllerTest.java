@@ -183,13 +183,15 @@ class AuthenticationControllerTest extends ControllerTestSupport {
     }
 
     @Test
-    @DisplayName("로그아웃을 한다.")
+    @DisplayName("리프레시 토큰을 이용해 로그아웃을 한다.")
     void logout() throws Exception {
         //when, then
         mockMvc.perform(
                         post("/api/auth/logout")
+                                .header("Authorization", "Bearer refreshToken")
                 )
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").doesNotExist());
 
         BDDMockito.then(myLogoutHandler)
                 .should(times(1))

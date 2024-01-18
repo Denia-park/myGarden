@@ -1,0 +1,12 @@
+[[auth]]
+=== SIGNUP [회원가입]
+
+==== HTTP Request
+
+include::{snippets}/auth/signup/http-request.adoc[]
+include::{snippets}/auth/signup/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/auth/signup/http-response.adoc[]
+include::{snippets}/auth/signup/response-fields.adoc[]
