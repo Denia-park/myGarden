@@ -5,6 +5,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.hyunggi.mygardenbe.common.exception.InvalidTokenRequestException;
 import org.hyunggi.mygardenbe.common.response.ApiResponse;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+@Slf4j
 public class JwtExceptionHandlerFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -33,7 +35,10 @@ public class JwtExceptionHandlerFilter extends OncePerRequestFilter {
         try {
             response.getWriter().write(objectMapper.writeValueAsString(apiResponse));
         } catch (IOException e) {
-            e.printStackTrace();
+            final String jwtExceptionHandlerFilter = "JwtExceptionHandlerFilter error";
+
+            log.warn(jwtExceptionHandlerFilter, e);
+            throw new IllegalArgumentException(jwtExceptionHandlerFilter);
         }
     }
 }
