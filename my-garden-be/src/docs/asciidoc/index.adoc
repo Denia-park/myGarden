@@ -9,14 +9,6 @@ endif::snippets[]
 :toclevels: 2
 :sectlinks:
 
-[[daily-routine]]
-== Daily Routine [하루 일과]
-
-include::dailyroutine/get.adoc[]
-include::dailyroutine/post.adoc[]
-include::dailyroutine/put.adoc[]
-include::dailyroutine/delete.adoc[]
-
 [[authentication]]
 == Authentication [인증]
 
@@ -24,3 +16,11 @@ include::auth/signup.adoc[]
 include::auth/login.adoc[]
 include::auth/logout.adoc[]
 include::auth/refresh.adoc[]
+
+[[daily-routine]]
+== Daily Routine [하루 일과]
+
+include::dailyroutine/get.adoc[]
+include::dailyroutine/post.adoc[]
+include::dailyroutine/put.adoc[]
+include::dailyroutine/delete.adoc[]
