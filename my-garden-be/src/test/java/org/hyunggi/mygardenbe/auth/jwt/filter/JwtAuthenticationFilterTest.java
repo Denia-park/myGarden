@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
@@ -27,7 +28,9 @@ class JwtAuthenticationFilterTest extends IntegrationTestSupport {
     private AuthenticationService authenticationService;
     @Autowired
     private JwtService jwtService;
-    
+    @Autowired
+    private UserDetailsService userDetailsService;
+
     @Test
     @DisplayName("Token에서 정보를 빼내어 Authentication 객체를 만들어 SecurityContext에 저장한다")
     void doFilterInternal() throws ServletException, IOException {
@@ -43,7 +46,7 @@ class JwtAuthenticationFilterTest extends IntegrationTestSupport {
         request.addHeader("Authorization", "Bearer " + accessToken);
 
         //when
-        final JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtService);
+        final JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtService, userDetailsService);
         jwtAuthenticationFilter.doFilterInternal(request, new MockHttpServletResponse(), new MockFilterChain());
 
         final SecurityContext context = SecurityContextHolder.getContext();
@@ -56,5 +59,7 @@ class JwtAuthenticationFilterTest extends IntegrationTestSupport {
                 .hasSize(1)
                 .extracting(GrantedAuthority::getAuthority)
                 .containsExactly("ROLE_USER");
+
+        context.setAuthentication(null);
     }
 }
