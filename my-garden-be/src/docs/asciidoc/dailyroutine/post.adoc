@@ -4,6 +4,7 @@
 ==== HTTP Request
 
 include::{snippets}/daily-routine/post-daily-routine/http-request.adoc[]
+include::{snippets}/daily-routine/post-daily-routine/request-headers.adoc[]
 include::{snippets}/daily-routine/post-daily-routine/request-fields.adoc[]
 
 ==== HTTP Response

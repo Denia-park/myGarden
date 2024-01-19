@@ -5,6 +5,7 @@
 
 include::{snippets}/daily-routine/delete-daily-routine/http-request.adoc[]
 include::{snippets}/daily-routine/delete-daily-routine/path-parameters.adoc[]
+include::{snippets}/daily-routine/delete-daily-routine/request-headers.adoc[]
 
 ==== HTTP Response
 
