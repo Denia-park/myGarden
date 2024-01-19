@@ -19,6 +19,8 @@ import java.util.List;
 import static org.hyunggi.mygardenbe.docs.util.RestDocsUtil.allEnumString;
 import static org.hyunggi.mygardenbe.docs.util.RestDocsUtil.field;
 import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -40,6 +42,7 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
     @DisplayName("Daily Routine 목록을 조회한다.")
     void getDailyRoutine() throws Exception {
         //given
+        String accessToken = "accessToken";
         BDDMockito.given(dailyRoutineService.getDailyRoutine(any(), any(), any()))
                 .willReturn(
                         List.of(
@@ -61,6 +64,7 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
                         get("/api/daily-routine")
                                 .param("startDateTime", startDateTime)
                                 .param("endDateTime", endDateTime)
+                                .header("Authorization", "Bearer " + accessToken)
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data").isArray())
@@ -72,6 +76,10 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
                                         .attributes(field("constraints", "yyyy-MM-ddTHH:mm:ss")),
                                 parameterWithName("endDateTime").description("조회 종료일시")
                                         .attributes(field("constraints", "yyyy-MM-ddTHH:mm:ss"))
+                        )
+                        , requestHeaders(
+                                headerWithName("Authorization").description("access token")
+                                        .attributes(field("constraints", "Bearer {accessToken}"))
                         )
                         , responseFields(
                                 fieldWithPath("code").type(JsonFieldType.NUMBER).description("HTTP 상태 코드"),
@@ -94,6 +102,8 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
     @DisplayName("Daily Routine를 등록한다.")
     void postDailyRoutine() throws Exception {
         //given
+        String accessToken = "accessToken";
+
         final PostRequest request = PostRequest.builder()
                 .startDateTime("2023-10-01T22:00:00")
                 .endDateTime("2023-10-01T23:00:00")
@@ -109,6 +119,7 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
         //when, then
         mockMvc.perform(
                         post("/api/daily-routine")
+                                .header("Authorization", "Bearer " + accessToken)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request))
                 )
@@ -117,6 +128,10 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
                 .andDo(document("daily-routine/post-daily-routine"
                         , preprocessRequest(prettyPrint())
                         , preprocessResponse(prettyPrint())
+                        , requestHeaders(
+                                headerWithName("Authorization").description("access token")
+                                        .attributes(field("constraints", "Bearer {accessToken}"))
+                        )
                         , requestFields(
                                 fieldWithPath("startDateTime").type(JsonFieldType.STRING).description("시작일시")
                                         .attributes(field("constraints", "yyyy-MM-ddTHH:mm:ss (※종료일시와 24시간 이상 차이 날 수 없습니다.)")),
@@ -139,6 +154,8 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
     @DisplayName("Daily Routine를 수정한다.")
     void putDailyRoutine() throws Exception {
         //given
+        String accessToken = "accessToken";
+
         final PostRequest request = PostRequest.builder()
                 .startDateTime("2023-10-01T22:00:00")
                 .endDateTime("2023-10-01T23:00:00")
@@ -154,6 +171,7 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
         //when, then
         mockMvc.perform(
                         RestDocumentationRequestBuilders.put("/api/daily-routine/{id}", 1L)
+                                .header("Authorization", "Bearer " + accessToken)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request))
                 )
@@ -164,6 +182,10 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
                         , preprocessResponse(prettyPrint())
                         , pathParameters(
                                 parameterWithName("id").description("수정할 TimeBlock ID")
+                        )
+                        , requestHeaders(
+                                headerWithName("Authorization").description("access token")
+                                        .attributes(field("constraints", "Bearer {accessToken}"))
                         )
                         , requestFields(
                                 fieldWithPath("startDateTime").type(JsonFieldType.STRING).description("시작일시")
@@ -187,6 +209,8 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
     @DisplayName("Daily Routine을 삭제한다.")
     void deleteDailyRoutine() throws Exception {
         //given
+        String accessToken = "accessToken";
+        
         BDDMockito.given(dailyRoutineService.deleteDailyRoutine(any(), any()))
                 .willReturn(
                         1L
@@ -195,6 +219,7 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
         //when, then
         mockMvc.perform(
                         RestDocumentationRequestBuilders.delete("/api/daily-routine/{id}", 1L)
+                                .header("Authorization", "Bearer " + accessToken)
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data").isNumber())
@@ -203,6 +228,10 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
                         , preprocessResponse(prettyPrint())
                         , pathParameters(
                                 parameterWithName("id").description("삭제할 TimeBlock ID")
+                        )
+                        , requestHeaders(
+                                headerWithName("Authorization").description("access token")
+                                        .attributes(field("constraints", "Bearer {accessToken}"))
                         )
                         , responseFields(
                                 fieldWithPath("code").type(JsonFieldType.NUMBER).description("HTTP 상태 코드"),
