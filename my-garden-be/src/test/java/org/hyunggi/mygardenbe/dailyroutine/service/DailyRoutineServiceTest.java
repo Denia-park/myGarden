@@ -9,9 +9,14 @@ import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineType;
 import org.hyunggi.mygardenbe.dailyroutine.entity.DailyRoutineEntity;
 import org.hyunggi.mygardenbe.dailyroutine.repository.DailyRoutineRepository;
 import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineResponse;
+import org.hyunggi.mygardenbe.member.domain.Member;
+import org.hyunggi.mygardenbe.member.entity.MemberEntity;
+import org.hyunggi.mygardenbe.member.repository.MemberRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -28,6 +33,19 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
     private DailyRoutineService dailyRoutineService;
     @Autowired
     private DailyRoutineRepository dailyRoutineRepository;
+    @Autowired
+    private MemberRepository memberRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    private MemberEntity member;
+
+    @BeforeEach
+    void memberSetUp() {
+        Member memberDomain = new Member("test@test.com", "test1234!");
+
+        member = memberRepository.save(MemberEntity.of(memberDomain, passwordEncoder));
+    }
 
     @Test
     @DisplayName("dailyRoutines를 DB에 등록하고, id 목록을 반환한다.")
@@ -77,13 +95,13 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         final List<RoutineTime> routineTimes = List.of(routineTimeSample1, routineTimeSample2);
         final RoutineType routineType = RoutineType.STUDY;
         final String routineDescription = "자바 스터디";
-        dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription);
+        dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription, member);
 
         //when
         final List<DailyRoutineResponse> dailyRoutineResponses = dailyRoutineService.getDailyRoutine(
                 LocalDateTime.of(2021, 10, 1, 0, 0, 0),
-                LocalDateTime.of(2021, 10, 2, 23, 59, 59)
-        );
+                LocalDateTime.of(2021, 10, 2, 23, 59, 59),
+                member);
 
         //then
         assertThat(dailyRoutineResponses).hasSize(2)

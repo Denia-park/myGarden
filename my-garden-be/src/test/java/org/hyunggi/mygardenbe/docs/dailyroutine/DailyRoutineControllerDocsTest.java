@@ -40,7 +40,7 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
     @DisplayName("Daily Routine 목록을 조회한다.")
     void getDailyRoutine() throws Exception {
         //given
-        BDDMockito.given(dailyRoutineService.getDailyRoutine(any(), any()))
+        BDDMockito.given(dailyRoutineService.getDailyRoutine(any(), any(), any()))
                 .willReturn(
                         List.of(
                                 DailyRoutineResponse.builder()
