@@ -25,10 +25,10 @@ public class DailyRoutineService {
     private final DailyRoutineRepository dailyRoutineRepository;
 
     @Transactional
-    public List<Long> postDailyRoutine(final List<RoutineTime> routineTimes, final RoutineType routineType, final String routineDescription) {
+    public List<Long> postDailyRoutine(final List<RoutineTime> routineTimes, final RoutineType routineType, final String routineDescription, final MemberEntity member) {
         final List<DailyRoutine> dailyRoutines = convertDailyRoutines(routineTimes, routineType, routineDescription);
 
-        return extractIds(dailyRoutineRepository.saveAll(DailyRoutineEntity.of(dailyRoutines)));
+        return extractIds(dailyRoutineRepository.saveAll(DailyRoutineEntity.of(dailyRoutines, member.getId())));
     }
 
     private List<DailyRoutine> convertDailyRoutines(final List<RoutineTime> routineTimes, final RoutineType routineType, final String routineDescription) {

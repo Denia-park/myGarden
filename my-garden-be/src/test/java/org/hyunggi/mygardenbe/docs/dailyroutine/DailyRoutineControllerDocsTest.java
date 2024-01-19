@@ -101,7 +101,7 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
                 .routineDescription("자바 스터디")
                 .build();
 
-        BDDMockito.given(dailyRoutineService.postDailyRoutine(any(), any(), any()))
+        BDDMockito.given(dailyRoutineService.postDailyRoutine(any(), any(), any(), any()))
                 .willReturn(
                         List.of(1L)
                 );

@@ -30,7 +30,7 @@ public class DailyRoutineController {
     }
 
     @PostMapping("/api/daily-routine")
-    public ApiResponse<List<Long>> postDailyRoutine(@RequestBody @Valid final PostRequest request) {
+    public ApiResponse<List<Long>> postDailyRoutine(@RequestBody @Valid final PostRequest request, @LoginUserEntity MemberEntity member) {
         final List<RoutineTime> routineTimes = TimeSplitter.split(
                 RoutineTime.of(
                         LocalDateTime.parse(request.startDateTime()),
@@ -39,9 +39,9 @@ public class DailyRoutineController {
         );
         final RoutineType routineType = RoutineType.valueOf(request.routineType());
 
-        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, request.routineDescription());
+        final List<Long> dailyRoutineIds = dailyRoutineService.postDailyRoutine(routineTimes, routineType, request.routineDescription(), member);
 
-        return ApiResponse.ok(ids);
+        return ApiResponse.ok(dailyRoutineIds);
     }
 
     @PutMapping("/api/daily-routine/{id}")

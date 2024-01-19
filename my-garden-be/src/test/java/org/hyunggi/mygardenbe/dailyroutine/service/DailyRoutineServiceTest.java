@@ -58,7 +58,7 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         final String routineDescription = "자바 스터디";
 
         //when
-        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription);
+        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription, member);
 
         //then
         final List<DailyRoutineEntity> dailyRoutines = dailyRoutineRepository.findAll();
