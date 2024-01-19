@@ -117,6 +117,29 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
     }
 
     @Test
+    @DisplayName("Daily Routine 목록을 조회할 때, 본인의 Daily Routine만 조회할 수 있다.")
+    void getDailyRoutine_OnlyMine() {
+        //given
+        MemberEntity anotherMember = memberRepository.save(MemberEntity.of(new Member("anotherMember@test.com", "test1234!"), passwordEncoder));
+
+        final RoutineTime routineTimeSample1 = getRoutineTimeSample1();
+        final RoutineTime routineTimeSample2 = getRoutineTimeSample2();
+        final List<RoutineTime> routineTimes = List.of(routineTimeSample1, routineTimeSample2);
+        final RoutineType routineType = RoutineType.STUDY;
+        final String routineDescription = "자바 스터디";
+        dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription, member);
+
+        //when
+        final List<DailyRoutineResponse> dailyRoutineResponses = dailyRoutineService.getDailyRoutine(
+                LocalDateTime.of(2021, 10, 1, 0, 0, 0),
+                LocalDateTime.of(2021, 10, 2, 23, 59, 59),
+                anotherMember);
+
+        //then
+        assertThat(dailyRoutineResponses).isEmpty();
+    }
+
+    @Test
     @DisplayName("Daily Routine를 수정한다.")
     void putDailyRoutine() {
         //given
@@ -234,5 +257,39 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         //then
         final Optional<DailyRoutineEntity> findDailyRoutineEntity = dailyRoutineRepository.findById(postId);
         assertThat(findDailyRoutineEntity).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Daily Routine를 삭제할 때, 존재하지 않는 ID를 입력하면 예외가 발생한다.")
+    void deleteDailyRoutine_IdIsNotExist() {
+        //given
+        final List<RoutineTime> routineTimes = List.of(getRoutineTimeSample2());
+        final RoutineType routineType = RoutineType.STUDY;
+        final String routineDescription = "자바 스터디";
+        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription, member);
+        final Long postId = ids.get(0);
+
+        //when, then
+        assertThatThrownBy(() -> dailyRoutineService.deleteDailyRoutine(postId + 1, member))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessageContaining("해당하는 ID의 DailyRoutine이 존재하지 않습니다.");
+    }
+
+    @Test
+    @DisplayName("Daily Routine를 삭제할 때, 본인의 Daily Routine만 삭제할 수 있다.")
+    void deleteDailyRoutine_OnlyMine() {
+        //given
+        MemberEntity anotherMember = memberRepository.save(MemberEntity.of(new Member("another@test.com", "test1234!"), passwordEncoder));
+
+        final List<RoutineTime> routineTimes = List.of(getRoutineTimeSample2());
+        final RoutineType routineType = RoutineType.STUDY;
+        final String routineDescription = "자바 스터디";
+        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription, member);
+        final Long postId = ids.get(0);
+
+        //when, then
+        assertThatThrownBy(() -> dailyRoutineService.deleteDailyRoutine(postId, anotherMember))
+                .isInstanceOf(BusinessException.class)
+                .hasMessageContaining("본인의 DailyRoutine만 수정 및 삭제할 수 있습니다.");
     }
 }
