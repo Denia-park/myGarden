@@ -187,7 +187,7 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
     @DisplayName("Daily Routine을 삭제한다.")
     void deleteDailyRoutine() throws Exception {
         //given
-        BDDMockito.given(dailyRoutineService.deleteDailyRoutine(any()))
+        BDDMockito.given(dailyRoutineService.deleteDailyRoutine(any(), any()))
                 .willReturn(
                         1L
                 );

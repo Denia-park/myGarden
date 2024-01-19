@@ -57,9 +57,9 @@ public class DailyRoutineController {
         return ApiResponse.ok(updatedId);
     }
 
-    @DeleteMapping("/api/daily-routine/{id}")
-    public ApiResponse<Long> deleteDailyRoutine(@PathVariable final Long id) {
-        final Long deletedId = dailyRoutineService.deleteDailyRoutine(id);
+    @DeleteMapping("/api/daily-routine/{timeBlockId}")
+    public ApiResponse<Long> deleteDailyRoutine(@PathVariable final Long timeBlockId, @LoginUserEntity MemberEntity member) {
+        final Long deletedId = dailyRoutineService.deleteDailyRoutine(timeBlockId, member);
 
         return ApiResponse.ok(deletedId);
     }

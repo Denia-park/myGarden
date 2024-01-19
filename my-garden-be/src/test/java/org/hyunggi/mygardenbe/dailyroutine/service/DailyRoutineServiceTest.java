@@ -215,7 +215,7 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         //when, then
         assertThatThrownBy(() -> dailyRoutineService.putDailyRoutine(postId, updateRoutineTime, updateRoutineType, updateRoutineDescription, anotherMember))
                 .isInstanceOf(BusinessException.class)
-                .hasMessageContaining("본인의 DailyRoutine만 수정할 수 있습니다.");
+                .hasMessageContaining("본인의 DailyRoutine만 수정 및 삭제할 수 있습니다.");
     }
 
     @Test
@@ -225,11 +225,11 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         final List<RoutineTime> routineTimes = List.of(getRoutineTimeSample2());
         final RoutineType routineType = RoutineType.STUDY;
         final String routineDescription = "자바 스터디";
-        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription);
+        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription, member);
         final Long postId = ids.get(0);
 
         //when
-        dailyRoutineService.deleteDailyRoutine(postId);
+        dailyRoutineService.deleteDailyRoutine(postId, member);
 
         //then
         final Optional<DailyRoutineEntity> findDailyRoutineEntity = dailyRoutineRepository.findById(postId);
