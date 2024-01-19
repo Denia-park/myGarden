@@ -2,12 +2,14 @@ package org.hyunggi.mygardenbe.dailyroutine.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.hyunggi.mygardenbe.common.exception.BusinessException;
 import org.hyunggi.mygardenbe.dailyroutine.domain.DailyRoutine;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineTime;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineType;
 import org.hyunggi.mygardenbe.dailyroutine.entity.DailyRoutineEntity;
 import org.hyunggi.mygardenbe.dailyroutine.repository.DailyRoutineRepository;
 import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineResponse;
+import org.hyunggi.mygardenbe.member.entity.MemberEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,10 +26,10 @@ public class DailyRoutineService {
     private final DailyRoutineRepository dailyRoutineRepository;
 
     @Transactional
-    public List<Long> postDailyRoutine(final List<RoutineTime> routineTimes, final RoutineType routineType, final String routineDescription) {
+    public List<Long> postDailyRoutine(final List<RoutineTime> routineTimes, final RoutineType routineType, final String routineDescription, final MemberEntity member) {
         final List<DailyRoutine> dailyRoutines = convertDailyRoutines(routineTimes, routineType, routineDescription);
 
-        return extractIds(dailyRoutineRepository.saveAll(DailyRoutineEntity.of(dailyRoutines)));
+        return extractIds(dailyRoutineRepository.saveAll(DailyRoutineEntity.of(dailyRoutines, member.getId())));
     }
 
     private List<DailyRoutine> convertDailyRoutines(final List<RoutineTime> routineTimes, final RoutineType routineType, final String routineDescription) {
@@ -42,8 +44,8 @@ public class DailyRoutineService {
                 .toList();
     }
 
-    public List<DailyRoutineResponse> getDailyRoutine(final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
-        final List<DailyRoutineEntity> dailyRoutineEntities = dailyRoutineRepository.findAllByDateTimeBetween(startDateTime, endDateTime);
+    public List<DailyRoutineResponse> getDailyRoutine(final LocalDateTime startDateTime, final LocalDateTime endDateTime, final MemberEntity member) {
+        final List<DailyRoutineEntity> dailyRoutineEntities = dailyRoutineRepository.findAllByDateTimeBetween(startDateTime, endDateTime, member.getId());
         final Map<Long, DailyRoutine> dailyRoutines = convertMapWithKeyAndDailyRoutine(dailyRoutineEntities);
 
         return convertDailyRoutineResponses(dailyRoutines);
@@ -62,24 +64,32 @@ public class DailyRoutineService {
     }
 
     @Transactional
-    public Long putDailyRoutine(final Long id, final RoutineTime routineTime, final RoutineType routineType, final String description) {
-        final DailyRoutineEntity dailyRoutineEntity = getDailyRoutineEntity(id);
+    public Long putDailyRoutine(final Long timeBlockId, final RoutineTime routineTime, final RoutineType routineType, final String description, final MemberEntity member) {
+        final DailyRoutineEntity dailyRoutineEntity = getDailyRoutineEntity(timeBlockId, member);
         final DailyRoutine dailyRoutine = dailyRoutineEntity.toDomain();
 
         dailyRoutine.update(routineTime, routineType, description);
         dailyRoutineEntity.update(dailyRoutine);
 
-        return id;
+        return timeBlockId;
     }
 
-    private DailyRoutineEntity getDailyRoutineEntity(final Long id) {
-        return dailyRoutineRepository.findById(id)
+    private DailyRoutineEntity getDailyRoutineEntity(final Long timeBlockId, final MemberEntity member) {
+        final DailyRoutineEntity dailyRoutineEntity = dailyRoutineRepository.findById(timeBlockId)
                 .orElseThrow(() -> new EntityNotFoundException("해당하는 ID의 DailyRoutine이 존재하지 않습니다."));
+
+        if (!dailyRoutineEntity.getMemberId().equals(member.getId())) {
+            throw new BusinessException("본인의 DailyRoutine만 수정 및 삭제할 수 있습니다.");
+        }
+
+        return dailyRoutineEntity;
     }
 
     @Transactional
-    public Long deleteDailyRoutine(final Long id) {
-        dailyRoutineRepository.deleteById(id);
-        return id;
+    public Long deleteDailyRoutine(final Long timeBlockId, final MemberEntity member) {
+        final DailyRoutineEntity dailyRoutineEntity = getDailyRoutineEntity(timeBlockId, member);
+
+        dailyRoutineRepository.deleteById(dailyRoutineEntity.getId());
+        return timeBlockId;
     }
 }

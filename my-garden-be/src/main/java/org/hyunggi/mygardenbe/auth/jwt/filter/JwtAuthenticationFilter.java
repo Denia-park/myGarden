@@ -14,6 +14,8 @@ import org.hyunggi.mygardenbe.auth.jwt.util.JwtAuthUtil;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -25,6 +27,7 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -50,10 +53,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private void setAuthenticationIfTokenIsValid(final HttpServletRequest request, final String accessTokenText) {
         final Claims claims = jwtService.extractAllClaims(accessTokenText);
         final String userEmail = claims.getSubject();
-        final String rolesText = claims.get("roles", String.class);
 
         if (userEmail != null && isUserNotAuthenticated()) {
-            UsernamePasswordAuthenticationToken authToken = buildAuthToken(userEmail, rolesText);
+            UsernamePasswordAuthenticationToken authToken = buildAuthToken(userEmail);
 
             authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
@@ -65,11 +67,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return SecurityContextHolder.getContext().getAuthentication() == null;
     }
 
-    private UsernamePasswordAuthenticationToken buildAuthToken(final String userEmail, final String rolesText) {
+    private UsernamePasswordAuthenticationToken buildAuthToken(final String userEmail) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+
         return new UsernamePasswordAuthenticationToken(
-                userEmail,
+                userDetails,
                 null,
-                jwtService.convertStringToAuthorities(rolesText)
+                userDetails.getAuthorities()
         );
     }
 }

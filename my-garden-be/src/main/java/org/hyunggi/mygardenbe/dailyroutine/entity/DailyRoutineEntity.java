@@ -23,28 +23,33 @@ public class DailyRoutineEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private RoutineType routineType;
     private String routineDescription;
+    @Column(nullable = false)
+    private Long memberId;
 
-    private DailyRoutineEntity(final RoutineTime routineTime, final RoutineType routineType, final String routineDescription) {
+    private DailyRoutineEntity(final RoutineTime routineTime, final RoutineType routineType, final String routineDescription, final Long memberId) {
         this.routineTime = routineTime;
         this.routineType = routineType;
         this.routineDescription = routineDescription;
+        this.memberId = memberId;
     }
 
-    public static DailyRoutineEntity of(final DailyRoutine dailyRoutine) {
+    public static DailyRoutineEntity of(final DailyRoutine dailyRoutine, final Long memberId) {
         Assert.isTrue(dailyRoutine != null, "데일리 루틴은 null이 될 수 없습니다.");
+        Assert.isTrue(memberId != null && memberId > 0, "멤버 아이디는 null이 될 수 없고 0보다 커야 합니다.");
 
         return new DailyRoutineEntity(
                 dailyRoutine.getRoutineTime(),
                 dailyRoutine.getRoutineType(),
-                dailyRoutine.getRoutineDescription()
+                dailyRoutine.getRoutineDescription(),
+                memberId
         );
     }
 
-    public static List<DailyRoutineEntity> of(final List<DailyRoutine> dailyRoutines) {
+    public static List<DailyRoutineEntity> of(final List<DailyRoutine> dailyRoutines, final Long memberId) {
         Assert.isTrue(dailyRoutines != null, "데일리 루틴은 null이 될 수 없습니다.");
-        
+
         return dailyRoutines.stream()
-                .map(DailyRoutineEntity::of)
+                .map(dailyRoutine -> of(dailyRoutine, memberId))
                 .toList();
     }
 

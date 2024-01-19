@@ -25,28 +25,31 @@ class DailyRoutineRepositoryTest extends IntegrationTestSupport {
     @DisplayName("원하는 기간의 DailyRoutine만을 조회한다.")
     void findAllByDateTimeBetween() {
         //given
+        final Long memberId = 1L;
+
         final List<DailyRoutine> dailyRoutines = List.of(
                 createDailyRoutine(12, 16),
                 createDailyRoutine(12, 17)
         );
 
-        dailyRoutineRepository.saveAll(DailyRoutineEntity.of(dailyRoutines));
+        dailyRoutineRepository.saveAll(DailyRoutineEntity.of(dailyRoutines, memberId));
 
         //when
         final List<DailyRoutineEntity> foundDailyRoutines = dailyRoutineRepository.findAllByDateTimeBetween(
                 LocalDateTime.of(2023, 12, 17, 0, 0, 0),
-                LocalDateTime.of(2023, 12, 17, 23, 59, 59)
-        );
+                LocalDateTime.of(2023, 12, 17, 23, 59, 59),
+                memberId);
 
         //then
         assertThat(foundDailyRoutines).hasSize(1)
-                .extracting("routineTime.startDateTime", "routineTime.endDateTime", "routineType", "routineDescription")
+                .extracting("routineTime.startDateTime", "routineTime.endDateTime", "routineType", "routineDescription", "memberId")
                 .containsExactly(
                         Tuple.tuple(
                                 LocalDateTime.of(2023, 12, 17, 22, 0, 0),
                                 LocalDateTime.of(2023, 12, 17, 23, 59, 59),
                                 RoutineType.STUDY,
-                                "자바 스터디"
+                                "자바 스터디",
+                                memberId
                         )
                 );
     }

@@ -9,9 +9,14 @@ import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineType;
 import org.hyunggi.mygardenbe.dailyroutine.entity.DailyRoutineEntity;
 import org.hyunggi.mygardenbe.dailyroutine.repository.DailyRoutineRepository;
 import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineResponse;
+import org.hyunggi.mygardenbe.member.domain.Member;
+import org.hyunggi.mygardenbe.member.entity.MemberEntity;
+import org.hyunggi.mygardenbe.member.repository.MemberRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -28,6 +33,19 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
     private DailyRoutineService dailyRoutineService;
     @Autowired
     private DailyRoutineRepository dailyRoutineRepository;
+    @Autowired
+    private MemberRepository memberRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    private MemberEntity member;
+
+    @BeforeEach
+    void memberSetUp() {
+        Member memberDomain = new Member("test@test.com", "test1234!");
+
+        member = memberRepository.save(MemberEntity.of(memberDomain, passwordEncoder));
+    }
 
     @Test
     @DisplayName("dailyRoutines를 DB에 등록하고, id 목록을 반환한다.")
@@ -40,7 +58,7 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         final String routineDescription = "자바 스터디";
 
         //when
-        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription);
+        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription, member);
 
         //then
         final List<DailyRoutineEntity> dailyRoutines = dailyRoutineRepository.findAll();
@@ -77,13 +95,13 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         final List<RoutineTime> routineTimes = List.of(routineTimeSample1, routineTimeSample2);
         final RoutineType routineType = RoutineType.STUDY;
         final String routineDescription = "자바 스터디";
-        dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription);
+        dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription, member);
 
         //when
         final List<DailyRoutineResponse> dailyRoutineResponses = dailyRoutineService.getDailyRoutine(
                 LocalDateTime.of(2021, 10, 1, 0, 0, 0),
-                LocalDateTime.of(2021, 10, 2, 23, 59, 59)
-        );
+                LocalDateTime.of(2021, 10, 2, 23, 59, 59),
+                member);
 
         //then
         assertThat(dailyRoutineResponses).hasSize(2)
@@ -105,7 +123,7 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         final List<RoutineTime> routineTimes = List.of(getRoutineTimeSample2());
         final RoutineType routineType = RoutineType.STUDY;
         final String routineDescription = "자바 스터디";
-        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription);
+        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription, member);
         final Long postId = ids.get(0);
 
         final RoutineTime updateRoutineTime = RoutineTime.of(
@@ -116,7 +134,7 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         final String updateRoutineDescription = "운동";
 
         //when
-        final Long putId = dailyRoutineService.putDailyRoutine(postId, updateRoutineTime, updateRoutineType, updateRoutineDescription);
+        final Long putId = dailyRoutineService.putDailyRoutine(postId, updateRoutineTime, updateRoutineType, updateRoutineDescription, member);
 
         //then
         final DailyRoutineEntity dailyRoutine = dailyRoutineRepository.findById(postId).get();
@@ -131,12 +149,12 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("Daily Routine을 수정할 때, 존재하지 않는 ID를 입력하면 예외가 발생한다.")
-    void throwExceptionWhenIdIsNotExist() {
+    void putDailyRoutine_IdIsNotExist() {
         //given
         final List<RoutineTime> routineTimes = List.of(getRoutineTimeSample2());
         final RoutineType routineType = RoutineType.STUDY;
         final String routineDescription = "자바 스터디";
-        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription);
+        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription, member);
         final Long postId = ids.get(0);
 
         final RoutineTime updateRoutineTime = RoutineTime.of(
@@ -147,19 +165,19 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         final String updateRoutineDescription = "운동";
 
         //when, then
-        assertThatThrownBy(() -> dailyRoutineService.putDailyRoutine(postId + 1, updateRoutineTime, updateRoutineType, updateRoutineDescription))
+        assertThatThrownBy(() -> dailyRoutineService.putDailyRoutine(postId + 1, updateRoutineTime, updateRoutineType, updateRoutineDescription, member))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("해당하는 ID의 DailyRoutine이 존재하지 않습니다.");
     }
 
     @Test
     @DisplayName("수정한 Daily Routine의 날짜가 오늘 날짜가 아니면 예외가 발생한다.")
-    void throwExceptionWhenUpdateDailyRoutineIsNotToday() {
+    void putDailyRoutine_UpdateDailyRoutineIsNotToday() {
         //given
         final List<RoutineTime> routineTimes = List.of(getRoutineTimeSample2());
         final RoutineType routineType = RoutineType.STUDY;
         final String routineDescription = "자바 스터디";
-        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription);
+        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription, member);
         final Long postId = ids.get(0);
 
         final RoutineTime updateRoutineTime = RoutineTime.of(
@@ -170,9 +188,34 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         final String updateRoutineDescription = "운동";
 
         //when, then
-        assertThatThrownBy(() -> dailyRoutineService.putDailyRoutine(postId, updateRoutineTime, updateRoutineType, updateRoutineDescription))
+        assertThatThrownBy(() -> dailyRoutineService.putDailyRoutine(postId, updateRoutineTime, updateRoutineType, updateRoutineDescription, member))
                 .isInstanceOf(BusinessException.class)
                 .hasMessageContaining("동일한 날짜의 시간으로만 수정할 수 있습니다.");
+    }
+
+    @Test
+    @DisplayName("본인의 Daily Routine만 수정할 수 있다.")
+    void putDailyRoutine_UpdateDailyRoutineIsNotMine() {
+        //given
+        MemberEntity anotherMember = memberRepository.save(MemberEntity.of(new Member("another@test.com", "test1234!"), passwordEncoder));
+
+        final List<RoutineTime> routineTimes = List.of(getRoutineTimeSample2());
+        final RoutineType routineType = RoutineType.STUDY;
+        final String routineDescription = "자바 스터디";
+        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription, member);
+        final Long postId = ids.get(0);
+
+        final RoutineTime updateRoutineTime = RoutineTime.of(
+                LocalDateTime.of(2021, 10, 2, 0, 0, 0),
+                LocalDateTime.of(2021, 10, 2, 3, 30, 0)
+        );
+        final RoutineType updateRoutineType = RoutineType.EXERCISE;
+        final String updateRoutineDescription = "운동";
+
+        //when, then
+        assertThatThrownBy(() -> dailyRoutineService.putDailyRoutine(postId, updateRoutineTime, updateRoutineType, updateRoutineDescription, anotherMember))
+                .isInstanceOf(BusinessException.class)
+                .hasMessageContaining("본인의 DailyRoutine만 수정 및 삭제할 수 있습니다.");
     }
 
     @Test
@@ -182,11 +225,11 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         final List<RoutineTime> routineTimes = List.of(getRoutineTimeSample2());
         final RoutineType routineType = RoutineType.STUDY;
         final String routineDescription = "자바 스터디";
-        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription);
+        final List<Long> ids = dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription, member);
         final Long postId = ids.get(0);
 
         //when
-        dailyRoutineService.deleteDailyRoutine(postId);
+        dailyRoutineService.deleteDailyRoutine(postId, member);
 
         //then
         final Optional<DailyRoutineEntity> findDailyRoutineEntity = dailyRoutineRepository.findById(postId);

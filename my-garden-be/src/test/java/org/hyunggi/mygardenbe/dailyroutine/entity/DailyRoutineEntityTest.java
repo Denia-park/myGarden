@@ -1,5 +1,6 @@
 package org.hyunggi.mygardenbe.dailyroutine.entity;
 
+import org.assertj.core.groups.Tuple;
 import org.hyunggi.mygardenbe.dailyroutine.domain.DailyRoutine;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineTime;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineType;
@@ -17,6 +18,7 @@ class DailyRoutineEntityTest {
     @DisplayName("dailyRoutine을 이용해서 dailyRoutineEntity를 생성할 수 있다.")
     void of() {
         //given
+        final Long memberId = 1L;
         final DailyRoutine dailyRoutine = getDailyRoutine(
                 getRoutineTime(9, 10),
                 "SLEEP",
@@ -24,13 +26,14 @@ class DailyRoutineEntityTest {
         );
 
         //when
-        final DailyRoutineEntity dailyRoutineEntity = DailyRoutineEntity.of(dailyRoutine);
+        final DailyRoutineEntity dailyRoutineEntity = DailyRoutineEntity.of(dailyRoutine, memberId);
 
         //then
         assertThat(dailyRoutineEntity).isNotNull();
         assertThat(dailyRoutineEntity.getRoutineTime()).isEqualTo(getRoutineTime(9, 10));
         assertThat(dailyRoutineEntity.getRoutineType()).isEqualTo(RoutineType.SLEEP);
         assertThat(dailyRoutineEntity.getRoutineDescription()).isEqualTo("낮잠");
+        assertThat(dailyRoutineEntity.getMemberId()).isEqualTo(memberId);
     }
 
     private RoutineTime getRoutineTime(final int startHour, final int endHour) {
@@ -52,6 +55,7 @@ class DailyRoutineEntityTest {
     @DisplayName("dailyRoutine List를 이용해서 dailyRoutineEntity를 생성할 수 있다.")
     void of_listOfDailyRoutine() {
         //given
+        final Long memberId = 1L;
 
         final DailyRoutine dailyRoutine1 = getDailyRoutine(
                 getRoutineTime(9, 10),
@@ -67,23 +71,40 @@ class DailyRoutineEntityTest {
         List<DailyRoutine> dailyRoutines = List.of(dailyRoutine1, dailyRoutine2);
 
         //when
-        final List<DailyRoutineEntity> dailyRoutineEntities = DailyRoutineEntity.of(dailyRoutines);
+        final List<DailyRoutineEntity> dailyRoutineEntities = DailyRoutineEntity.of(dailyRoutines, memberId);
 
         //then
         assertThat(dailyRoutineEntities).isNotNull()
-                .hasSize(2);
+                .hasSize(2)
+                .extracting("routineTime", "routineType", "routineDescription", "memberId")
+                .containsExactly(
+                        Tuple.tuple(
+                                getRoutineTime(9, 10),
+                                RoutineType.SLEEP,
+                                "낮잠",
+                                memberId
+                        ),
+                        Tuple.tuple(
+                                getRoutineTime(10, 11),
+                                RoutineType.STUDY,
+                                "공부",
+                                memberId
+                        )
+                );
     }
 
     @Test
     @DisplayName("dailyRoutineEntity를 이용해서 dailyRoutine을 생성할 수 있다.")
     void toDomain() {
         //given
+        final Long memberId = 1L;
+
         final DailyRoutine savedDailyRoutine = getDailyRoutine(
                 getRoutineTime(9, 10),
                 "SLEEP",
                 "낮잠"
         );
-        final DailyRoutineEntity dailyRoutineEntity = DailyRoutineEntity.of(savedDailyRoutine);
+        final DailyRoutineEntity dailyRoutineEntity = DailyRoutineEntity.of(savedDailyRoutine, memberId);
 
         //when
         final DailyRoutine dailyRoutine = dailyRoutineEntity.toDomain();
@@ -99,12 +120,14 @@ class DailyRoutineEntityTest {
     @DisplayName("dailyRoutine를 이용해서 dailyRoutineEntity를 수정할 수 있다.")
     void update() {
         //given
+        final Long memberId = 1L;
+
         final DailyRoutine savedDailyRoutine = getDailyRoutine(
                 getRoutineTime(9, 10),
                 "SLEEP",
                 "낮잠"
         );
-        final DailyRoutineEntity dailyRoutineEntity = DailyRoutineEntity.of(savedDailyRoutine);
+        final DailyRoutineEntity dailyRoutineEntity = DailyRoutineEntity.of(savedDailyRoutine, memberId);
 
         //when
         final DailyRoutine newDailyRoutine = getDailyRoutine(
@@ -119,5 +142,6 @@ class DailyRoutineEntityTest {
         assertThat(dailyRoutineEntity.getRoutineTime()).isEqualTo(newDailyRoutine.getRoutineTime());
         assertThat(dailyRoutineEntity.getRoutineType()).isEqualTo(newDailyRoutine.getRoutineType());
         assertThat(dailyRoutineEntity.getRoutineDescription()).isEqualTo(newDailyRoutine.getRoutineDescription());
+        assertThat(dailyRoutineEntity.getMemberId()).isEqualTo(memberId);
     }
 }

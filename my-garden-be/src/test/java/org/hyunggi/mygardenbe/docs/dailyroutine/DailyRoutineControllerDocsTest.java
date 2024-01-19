@@ -40,7 +40,7 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
     @DisplayName("Daily Routine 목록을 조회한다.")
     void getDailyRoutine() throws Exception {
         //given
-        BDDMockito.given(dailyRoutineService.getDailyRoutine(any(), any()))
+        BDDMockito.given(dailyRoutineService.getDailyRoutine(any(), any(), any()))
                 .willReturn(
                         List.of(
                                 DailyRoutineResponse.builder()
@@ -101,7 +101,7 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
                 .routineDescription("자바 스터디")
                 .build();
 
-        BDDMockito.given(dailyRoutineService.postDailyRoutine(any(), any(), any()))
+        BDDMockito.given(dailyRoutineService.postDailyRoutine(any(), any(), any(), any()))
                 .willReturn(
                         List.of(1L)
                 );
@@ -146,7 +146,7 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
                 .routineDescription("자바 스터디")
                 .build();
 
-        BDDMockito.given(dailyRoutineService.putDailyRoutine(any(), any(), any(), any()))
+        BDDMockito.given(dailyRoutineService.putDailyRoutine(any(), any(), any(), any(), any()))
                 .willReturn(
                         1L
                 );
@@ -187,7 +187,7 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
     @DisplayName("Daily Routine을 삭제한다.")
     void deleteDailyRoutine() throws Exception {
         //given
-        BDDMockito.given(dailyRoutineService.deleteDailyRoutine(any()))
+        BDDMockito.given(dailyRoutineService.deleteDailyRoutine(any(), any()))
                 .willReturn(
                         1L
                 );
