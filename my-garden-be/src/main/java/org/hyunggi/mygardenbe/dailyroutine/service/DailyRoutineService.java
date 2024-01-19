@@ -2,6 +2,7 @@ package org.hyunggi.mygardenbe.dailyroutine.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.hyunggi.mygardenbe.common.exception.BusinessException;
 import org.hyunggi.mygardenbe.dailyroutine.domain.DailyRoutine;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineTime;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineType;
@@ -63,19 +64,25 @@ public class DailyRoutineService {
     }
 
     @Transactional
-    public Long putDailyRoutine(final Long id, final RoutineTime routineTime, final RoutineType routineType, final String description) {
-        final DailyRoutineEntity dailyRoutineEntity = getDailyRoutineEntity(id);
+    public Long putDailyRoutine(final Long timeBlockId, final RoutineTime routineTime, final RoutineType routineType, final String description, final MemberEntity member) {
+        final DailyRoutineEntity dailyRoutineEntity = getDailyRoutineEntity(timeBlockId, member);
         final DailyRoutine dailyRoutine = dailyRoutineEntity.toDomain();
 
         dailyRoutine.update(routineTime, routineType, description);
         dailyRoutineEntity.update(dailyRoutine);
 
-        return id;
+        return timeBlockId;
     }
 
-    private DailyRoutineEntity getDailyRoutineEntity(final Long id) {
-        return dailyRoutineRepository.findById(id)
+    private DailyRoutineEntity getDailyRoutineEntity(final Long timeBlockId, final MemberEntity member) {
+        final DailyRoutineEntity dailyRoutineEntity = dailyRoutineRepository.findById(timeBlockId)
                 .orElseThrow(() -> new EntityNotFoundException("해당하는 ID의 DailyRoutine이 존재하지 않습니다."));
+
+        if (!dailyRoutineEntity.getMemberId().equals(member.getId())) {
+            throw new BusinessException("본인의 DailyRoutine만 수정할 수 있습니다.");
+        }
+
+        return dailyRoutineEntity;
     }
 
     @Transactional

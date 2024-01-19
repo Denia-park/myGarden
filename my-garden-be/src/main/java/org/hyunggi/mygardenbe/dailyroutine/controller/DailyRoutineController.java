@@ -44,15 +44,15 @@ public class DailyRoutineController {
         return ApiResponse.ok(dailyRoutineIds);
     }
 
-    @PutMapping("/api/daily-routine/{id}")
-    public ApiResponse<Long> putDailyRoutine(@PathVariable final Long id, @RequestBody @Valid final PostRequest request) {
+    @PutMapping("/api/daily-routine/{timeBlockId}")
+    public ApiResponse<Long> putDailyRoutine(@PathVariable final Long timeBlockId, @RequestBody @Valid final PostRequest request, @LoginUserEntity MemberEntity member) {
         final RoutineTime routineTime = RoutineTime.of(
                 LocalDateTime.parse(request.startDateTime()),
                 LocalDateTime.parse(request.endDateTime())
         );
         final RoutineType routineType = RoutineType.valueOf(request.routineType());
 
-        final Long updatedId = dailyRoutineService.putDailyRoutine(id, routineTime, routineType, request.routineDescription());
+        final Long updatedId = dailyRoutineService.putDailyRoutine(timeBlockId, routineTime, routineType, request.routineDescription(), member);
 
         return ApiResponse.ok(updatedId);
     }

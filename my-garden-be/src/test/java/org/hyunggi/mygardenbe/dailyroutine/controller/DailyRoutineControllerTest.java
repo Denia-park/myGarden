@@ -170,7 +170,7 @@ class DailyRoutineControllerTest extends ControllerTestSupportWithMockUser {
                 .routineType("STUDY")
                 .routineDescription("자바 스터디")
                 .build();
-        BDDMockito.given(dailyRoutineService.putDailyRoutine(any(), any(), any(), any()))
+        BDDMockito.given(dailyRoutineService.putDailyRoutine(any(), any(), any(), any(), any()))
                 .willReturn(1L);
 
         //when, then
