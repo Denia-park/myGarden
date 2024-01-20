@@ -1,10 +1,10 @@
 <script setup>
 import PageTitle from "@/components/default/PageTitle.vue";
-import DrawDailyRoutine from "@/components/dailyRoutine/draw/DrawDailyRoutine.vue";
 import InputDailyRoutine from "@/components/dailyRoutine/input/InputDailyRoutine.vue";
 import SelectDate from "@/components/dailyRoutine/popup/SelectDate.vue";
 import {ref} from "vue";
 import {getTodayDate} from "@/components/dailyRoutine/api/api.js";
+import DrawDailyRoutine from "@/components/dailyRoutine/draw/DrawDailyRoutine.vue";
 
 const updateBlock = ref({});
 const updateDate = ref(getTodayDate());
@@ -23,7 +23,7 @@ const updateDate = ref(getTodayDate());
 
 <style scoped>
 #header {
-  max-width: 1216px;
+  max-width: 1280px;
   margin: auto;
   position: relative;
   text-align: center;
@@ -34,8 +34,10 @@ const updateDate = ref(getTodayDate());
   margin: 0 auto;
   font-weight: normal;
 
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
   padding: 0 2rem;
 }
 

@@ -100,7 +100,7 @@ function blockStyle(block, partOfDay) {
   return {
     position: `absolute`,
     backgroundColor: block.color,
-    top: `${startTop - offset}px`,
+    top: `${startTop - 1 - offset}px`, // 1px for border
     height: `${duration}px`,
     border: `1px solid black`,
   };
@@ -196,20 +196,21 @@ function updateBlock(block) {
 <style scoped>
 #schedule-container {
   display: flex; /* Arrange morning and afternoon sections side by side */
+  justify-content: center; /* Center align the morning and afternoon sections */
+  flex-wrap: wrap;
 }
 
 .schedule-section {
   display: flex;
   flex-direction: column; /* Stack label and schedule vertically */
   align-items: center; /* Center align the label and schedule blocks */
-  height: 800px;
+  height: 750px;
 }
 
 .schedule-label {
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bold;
-  margin-bottom: 10px; /* Space between label and schedule blocks */
 }
 
 .schedule-half {
@@ -218,14 +219,13 @@ function updateBlock(block) {
   flex-direction: column;
   border: 1px solid #ccc;
   margin: 0 10px;
-  width: 300px;
+  width: 250px;
   height: 720px;
 }
 
 /*time-block 내부 font 관련 설정*/
 .time-block {
   width: 100%;
-  margin: 2px 0;
   color: black;
   font-size: 1.2rem;
   text-align: center;
