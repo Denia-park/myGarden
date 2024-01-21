@@ -4,13 +4,9 @@ import DateInput from "@/components/dailyRoutine/input/DateInput.vue";
 import ContentInput from "@/components/dailyRoutine/input/ContentInput.vue";
 import TypeInput from "@/components/dailyRoutine/input/TypeInput.vue";
 import {onMounted, ref, watch} from "vue";
-import {
-  deleteDailyRoutineApi,
-  getTodayDate,
-  postDailyRoutineApi,
-  updateDailyRoutineApi
-} from "@/components/dailyRoutine/api/api.js";
+import {deleteDailyRoutineApi, postDailyRoutineApi, updateDailyRoutineApi} from "@/components/dailyRoutine/api/api.js";
 import {store} from "@/scripts/store.js";
+import {getTodayDate} from "@/components/dailyRoutine/api/util.js";
 
 const startDate = ref('');
 const endDate = ref('');

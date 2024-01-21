@@ -1,7 +1,7 @@
 <script setup>
 import {ref} from "vue";
-import {getTodayDate} from "@/components/dailyRoutine/api/api.js";
 import {store} from "@/scripts/store.js";
+import {getTodayDate} from "@/components/dailyRoutine/api/util.js";
 
 const showModal = ref(false);
 const selectedDate = ref(getTodayDate());

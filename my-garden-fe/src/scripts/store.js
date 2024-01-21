@@ -1,6 +1,6 @@
 import {createStore} from 'vuex'
 import {parseJwt} from "@/scripts/parseJwt.js";
-import {getTodayDate} from "@/components/dailyRoutine/api/api.js";
+import {getTodayDate} from "@/components/dailyRoutine/api/util.js";
 
 export const store = createStore({
     state() {
