@@ -1,6 +1,8 @@
 <script setup>
 import {store} from "@/scripts/store.js";
 import {timeToMinutes} from "@/components/dailyRoutine/api/util.js";
+import RoutineTooltip from "@/components/dailyRoutine/draw/RoutineTooltip.vue";
+import {ref} from "vue";
 
 const props = defineProps({
   partOfDay: {
@@ -13,19 +15,7 @@ const props = defineProps({
   },
 });
 
-
-function calculateDuration(block) {
-  const start = timeToMinutes(block.displayStartTime);
-  const end = timeToMinutes(block.displayEndTime);
-  return end - start;
-}
-
-function getOffset(partOfDay) {
-  const afternoonStrings = ['오후', 'PM', 'pm', 'afternoon'];
-
-  // 720 === 1px per minute, 12 hours * 60 minutes
-  return afternoonStrings.includes(partOfDay) ? 720 : 0; // 12:00 ~ 24:00
-}
+const tooltipHover = ref(false);
 
 function blockStyle(block, partOfDay) {
   const duration = calculateDuration(block);
@@ -77,18 +67,19 @@ function updateBlock(block) {
     <div class="schedule-label">{{ partOfDay }}</div>
     <div class="schedule-half">
       <div v-for="(block, index) in scheduleArray" :key="`${index}`"
-           :style="blockStyle(block, partOfDay)"
-           class="time-block my-tooltip"
-           @click="updateBlock(block)">
+           :style="blockStyle(block, partOfDay)" class="time-block"
+           @click="updateBlock(block)"
+           @mouseleave="tooltipHover = false" @mouseover="tooltipHover = true">
+
         <div v-if="isEnoughHeightBlock(block)">
           {{ buildTimeText(block) }}
         </div>
-        <span :class="[partOfDay === '오전' ? 'tooltip-left' : 'tooltip-right', 'tooltip-text']">
-            <span v-if="isNotEnoughHeightBlock(block)">
-              {{ buildTimeText(block) }}
-            </span>
-            {{ buildTooltipMessage(block) }}
-          </span>
+        <RoutineTooltip :hover="tooltipHover"
+                        :is-enough-height-block="isEnoughHeightBlock(block)"
+                        :part-of-day="partOfDay"
+                        :time-text="buildTimeText(block)"
+                        :tooltip-text="block.routineDescription === '' ? block.routineType : block.routineDescription"
+        />
       </div>
     </div>
   </div>
@@ -125,60 +116,5 @@ function updateBlock(block) {
   color: black;
   font-size: 1.2rem;
   text-align: center;
-}
-
-.my-tooltip {
-  position: relative;
-  display: block;
-}
-
-.my-tooltip .tooltip-text {
-  visibility: hidden; /* 이벤트가 없으면 툴팁 영역을 숨김 */
-  width: 180px; /* 툴팁 영역의 넓이를 설정 */
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-
-  position: absolute; /* 절대 위치를 사용 */
-  z-index: 1;
-}
-
-.my-tooltip:hover .tooltip-text {
-  visibility: visible; /* hover 이벤트 발생시 영역을 보여줌 */
-}
-
-.my-tooltip .tooltip-text::after {
-  content: " "; /* 정사각형 영역 사용 */
-  position: absolute; /* 절대 위치 사용 */
-  border-style: solid;
-  border-width: 5px; /* 테두리 넓이를 5px 로 설정 */
-}
-
-.my-tooltip .tooltip-left {
-  top: -5px; /* 영역의 위치를 -5 만큼 위로 이동 */
-  right: 105%; /* 왼쪽에 생성해야하므로 영역을 오른쪽에서 105% 이동 */
-}
-
-.my-tooltip .tooltip-left::after {
-  top: 50%; /* 사각형 영역이 중앙에 오도록 위치 */
-  left: 100%; /* 왼쪽에서 100% 위치에 오도록 위치 */
-  margin-top: -5px;
-
-  /* 사각형의 테두리에서 왼쪽만 노출 */
-  border-color: transparent transparent transparent black;
-}
-
-.my-tooltip .tooltip-right {
-  top: -5px;
-  left: 105%;
-}
-
-.my-tooltip .tooltip-right::after {
-  top: 50%;
-  right: 100%;
-  margin-top: -5px;
-  border-color: transparent black transparent transparent;
 }
 </style>
