@@ -37,7 +37,8 @@ const options = {
       position: 'right',
       labels: {
         font: {
-          size: 20
+          size: 20,
+          weight: 'bold',
         }
       }
     },
