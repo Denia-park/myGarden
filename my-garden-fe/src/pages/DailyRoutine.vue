@@ -1,23 +1,17 @@
 <script setup>
 import PageTitle from "@/components/default/PageTitle.vue";
-import InputDailyRoutine from "@/components/dailyRoutine/input/InputDailyRoutine.vue";
 import SelectDate from "@/components/dailyRoutine/popup/SelectDate.vue";
-import {ref} from "vue";
-import {getTodayDate} from "@/components/dailyRoutine/api/api.js";
-import DrawDailyRoutine from "@/components/dailyRoutine/draw/DrawDailyRoutine.vue";
-
-const updateBlock = ref({});
-const updateDate = ref(getTodayDate());
-
+import LeftSide from "@/components/dailyRoutine/side/LeftSide.vue";
+import RightSide from "@/components/dailyRoutine/side/RightSide.vue";
 </script>
 <template>
   <div id="header">
     <PageTitle :input-name="'하루 일과'"/>
-    <SelectDate @update-date="date => updateDate = date"/>
+    <SelectDate/>
   </div>
   <div id="wrapper">
-    <InputDailyRoutine :update-block="updateBlock"/>
-    <DrawDailyRoutine :update-date="updateDate" @update-block="(block) => updateBlock = block"/>
+    <LeftSide/>
+    <RightSide/>
   </div>
 </template>
 
