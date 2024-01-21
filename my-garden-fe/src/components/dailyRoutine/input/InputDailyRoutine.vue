@@ -190,7 +190,7 @@ watch(() => store.getters.getEditBlock, (newVal) => {
 .data-container {
   display: flex;
   flex-direction: column;
-  height: 750px; /* Fulls viewport height */
+  height: 380px;
   text-align: center;
   margin: 0 auto;
   padding: 0px 10px 0px 10px;
