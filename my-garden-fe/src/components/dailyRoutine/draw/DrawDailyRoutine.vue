@@ -11,7 +11,10 @@ watch(() => store.getters.getViewDate, (newDate) => {
 
       getDailyRoutineApi(targetStartDateTime, targetEndDateTime)
           .then(response => {
-            splitSchedule.value = processSchedule(response.allDateTimeDataArray);
+            const timeBlockArray = processSchedule(response.allDateTimeDataArray);
+
+            splitSchedule.value = timeBlockArray;
+            store.commit('setTimeBlockArray', timeBlockArray);
           })
     }, {immediate: true}
 );
@@ -20,7 +23,7 @@ function processSchedule(schedule) {
   const NOON_STRING = '12:00';
   const noon = timeToMinutes(NOON_STRING);
 
-  function createMorningBlock(block, startTime, end, endTime) {
+  function createMorningBlock(block, startTime, end, endTime, totalMinutes) {
     return {
       id: block.id,
       routineType: block.routineType,
@@ -29,10 +32,11 @@ function processSchedule(schedule) {
       displayEndTime: end > noon ? NOON_STRING : endTime,
       partOfDay: 'morning',
       routineDescription: block.routineDescription,
+      totalMinutes: totalMinutes,
     };
   }
 
-  function createAfternoonBlock(block, start, startTime, endTime) {
+  function createAfternoonBlock(block, start, startTime, endTime, totalMinutes) {
     return {
       id: block.id,
       routineType: block.routineType,
@@ -41,6 +45,7 @@ function processSchedule(schedule) {
       displayEndTime: endTime,
       partOfDay: 'afternoon',
       routineDescription: block.routineDescription,
+      totalMinutes: totalMinutes,
     };
   }
 
@@ -48,16 +53,17 @@ function processSchedule(schedule) {
     const startTime = extractTime(block.startDateTime);
     const endTime = extractTime(block.endDateTime);
 
-    const start = timeToMinutes(startTime);
-    const end = timeToMinutes(endTime);
+    const startTimeMin = timeToMinutes(startTime);
+    const endTimeMin = timeToMinutes(endTime);
+    const totalMinutes = endTimeMin - startTimeMin;
     const splitBlocks = [];
 
-    if (start < noon) {
-      splitBlocks.push(createMorningBlock(block, startTime, end, endTime));
+    if (startTimeMin < noon) {
+      splitBlocks.push(createMorningBlock(block, startTime, endTimeMin, endTime, totalMinutes));
     }
 
-    if (end > noon) {
-      splitBlocks.push(createAfternoonBlock(block, start, startTime, endTime));
+    if (endTimeMin > noon) {
+      splitBlocks.push(createAfternoonBlock(block, startTimeMin, startTime, endTime, totalMinutes));
     }
 
     return splitBlocks;

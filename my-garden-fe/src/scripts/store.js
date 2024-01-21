@@ -20,7 +20,8 @@ export const store = createStore({
                 '휴식': '#4de4ff',
                 '게임': '#e76c0c',
                 '기타': '#cd4dff',
-            }
+            },
+            timeBlockArray: []
         }
     },
     mutations: {
@@ -40,6 +41,9 @@ export const store = createStore({
         },
         setViewDate(state, payload) {
             state.viewDate = payload;
+        },
+        setTimeBlockArray(state, payload) {
+            state.timeBlockArray = payload;
         }
     },
     actions: {
@@ -81,6 +85,9 @@ export const store = createStore({
         },
         getViewDate(state) {
             return state.viewDate;
-        }
+        },
+        getTimeBlockArray(state) {
+            return state.timeBlockArray;
+        },
     }
 });
