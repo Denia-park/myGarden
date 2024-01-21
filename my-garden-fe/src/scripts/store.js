@@ -1,5 +1,6 @@
 import {createStore} from 'vuex'
 import {parseJwt} from "@/scripts/parseJwt.js";
+import {getTodayDate} from "@/components/dailyRoutine/api/api.js";
 
 export const store = createStore({
     state() {
@@ -9,6 +10,8 @@ export const store = createStore({
                 refreshToken: '',
                 roles: []
             },
+            editBlock: {},
+            viewDate: getTodayDate(),
             colorMap: {
                 '운동': '#b23f3f',
                 '수면': '#a0a0a0',
@@ -32,6 +35,12 @@ export const store = createStore({
         setRoles(state, payload) {
             state.account.roles = Array.isArray(payload) ? payload : [];
         },
+        setEditBlock(state, payload) {
+            state.editBlock = payload;
+        },
+        setViewDate(state, payload) {
+            state.viewDate = payload;
+        }
     },
     actions: {
         initializeTokenFromSessionStorage({commit}) {
@@ -67,5 +76,11 @@ export const store = createStore({
         getColors(state) {
             return state.colorMap;
         },
+        getEditBlock(state) {
+            return state.editBlock;
+        },
+        getViewDate(state) {
+            return state.viewDate;
+        }
     }
 });

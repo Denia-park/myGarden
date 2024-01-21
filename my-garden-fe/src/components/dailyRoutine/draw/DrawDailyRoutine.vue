@@ -3,15 +3,10 @@ import {computed, ref, watch} from "vue";
 import {getDailyRoutineApi, getTargetDateTimeRange} from "@/components/dailyRoutine/api/api.js";
 import {store} from "@/scripts/store.js";
 
-const props = defineProps({
-  updateDate: String,
-});
-
 const SHOW_TEXT_PIXELS = 30;
 const splitSchedule = ref([]);
-const emit = defineEmits(['updateBlock'])
 
-watch(() => props.updateDate, (newDate) => {
+watch(() => store.getters.getViewDate, (newDate) => {
       const {targetStartDateTime, targetEndDateTime} = getTargetDateTimeRange(newDate);
 
       getDailyRoutineApi(targetStartDateTime, targetEndDateTime)
@@ -138,7 +133,7 @@ const afternoonSchedule = computed(() => {
 function updateBlock(block) {
   block.lastUpdated = new Date().toISOString();
 
-  emit('updateBlock', block);
+  store.commit('setEditBlock', block);
 }
 </script>
 

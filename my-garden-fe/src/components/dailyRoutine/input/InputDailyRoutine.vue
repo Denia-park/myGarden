@@ -10,16 +10,13 @@ import {
   postDailyRoutineApi,
   updateDailyRoutineApi
 } from "@/components/dailyRoutine/api/api.js";
+import {store} from "@/scripts/store.js";
 
 const startDate = ref('');
 const endDate = ref('');
 const content = ref('');
 const routineType = ref('STUDY');
 const isUpdateMode = ref(false);
-
-const props = defineProps({
-  updateBlock: Object
-});
 
 onMounted(() => {
   getLastStartDateTime();
@@ -112,7 +109,7 @@ function updateRoutine() {
     return;
   }
 
-  updateDailyRoutineApi(props.updateBlock.id, startDate.value, endDate.value, routineType.value, content.value);
+  updateDailyRoutineApi(store.getters.getEditBlock.id, startDate.value, endDate.value, routineType.value, content.value);
 }
 
 function updateValidate() {
@@ -146,10 +143,10 @@ function cancelUpdate() {
 }
 
 function deleteRoutine() {
-  deleteDailyRoutineApi(props.updateBlock.id);
+  deleteDailyRoutineApi(store.getters.getEditBlock.id);
 }
 
-watch(() => props.updateBlock, (newVal) => {
+watch(() => store.getters.getEditBlock, (newVal) => {
       const updateStartDateTime = getTodayDate() + `T${newVal.displayStartTime}`;
 
       if (updateStartDateTime !== startDate.value) {

@@ -1,11 +1,10 @@
 <script setup>
 import {ref} from "vue";
 import {getTodayDate} from "@/components/dailyRoutine/api/api.js";
+import {store} from "@/scripts/store.js";
 
 const showModal = ref(false);
 const selectedDate = ref(getTodayDate());
-
-const emit = defineEmits(["update-date"]);
 
 function openModal() {
   showModal.value = true;
@@ -18,7 +17,7 @@ function closeModal() {
 function updateDate(event) {
   selectedDate.value = event.target.value;
   closeModal();
-  emit("update-date", selectedDate.value);
+  store.commit("setViewDate", selectedDate.value);
 }
 
 function handleClickOutside(event) {
