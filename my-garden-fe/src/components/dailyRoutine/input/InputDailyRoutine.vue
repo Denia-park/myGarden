@@ -193,7 +193,7 @@ watch(() => store.getters.getEditBlock, (newVal) => {
   height: 380px;
   text-align: center;
   margin: 0 auto;
-  padding: 0px 10px 0px 10px;
+  padding: 0 10px 0 10px;
 }
 
 p {

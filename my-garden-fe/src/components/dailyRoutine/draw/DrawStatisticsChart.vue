@@ -5,17 +5,8 @@ import {Chart} from "chart.js/auto";
 import {store} from "@/scripts/store.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
-const data = {
-  labels: [],
-  datasets: [{
-    data: [],
-    backgroundColor: []
-  }]
-};
-
-let allTotalMinutesSum = 0;
-
 const colorMap = store.getters.getColors;
+let allTotalMinutesSum = 0;
 
 const options = {
   responsive: true,
@@ -73,6 +64,14 @@ const options = {
   }
 };
 
+const data = {
+  labels: [],
+  datasets: [{
+    data: [],
+    backgroundColor: []
+  }]
+};
+
 const config = {
   type: 'pie',
   plugins: [ChartDataLabels],
@@ -81,6 +80,7 @@ const config = {
 };
 
 let myChart;
+
 onMounted(() => {
   myChart = new Chart(
       document.getElementById('chartCanvas'),
@@ -88,33 +88,49 @@ onMounted(() => {
   );
 });
 
-watch(() => store.getters.getTimeBlockArray, (newVal) => {
-  allTotalMinutesSum = 0;
-  const statisticData = {};
-  // 타입에 맞춰서 시간을 합산.
+function updateDataSet(statisticData) {
+  Object.entries(statisticData)
+      .map(([key, value]) => {
+        return {
+          routineType: key,
+          routineColor: colorMap[key],
+          routineTime: value,
+        };
+      })
+      .sort((a, b) => {
+        return b.routineTime - a.routineTime;
+      })
+      .forEach((timeBlock) => {
+        myChart.data.labels.push(timeBlock.routineType);
+        myChart.data.datasets[0].data.push(timeBlock.routineTime);
+        myChart.data.datasets[0].backgroundColor.push(timeBlock.routineColor);
+      });
+}
+
+function calculateStatisticDataFromTimeBlockArray(newVal, statisticData) {
+  let tempSumTotalMinutes = 0;
+
   newVal.forEach((timeBlock) => {
     if (statisticData[timeBlock.routineType]) {
       statisticData[timeBlock.routineType] += timeBlock.totalMinutes;
     } else {
       statisticData[timeBlock.routineType] = timeBlock.totalMinutes;
     }
-    allTotalMinutesSum += timeBlock.totalMinutes;
+
+    tempSumTotalMinutes += timeBlock.totalMinutes;
   });
 
+  return tempSumTotalMinutes;
+}
+
+watch(() => store.getters.getTimeBlockArray, (timeBlockArray) => {
+  const statisticData = {};
+
+  // 타입에 맞춰서 시간을 합산.
+  allTotalMinutesSum = calculateStatisticDataFromTimeBlockArray(timeBlockArray, statisticData);
+
   //statisticData를 배열로 변환.
-  Object.entries(statisticData).map(([key, value]) => {
-    return {
-      routineType: key,
-      routineColor: colorMap[key],
-      routineTime: value,
-    };
-  }).sort((a, b) => {
-    return b.routineTime - a.routineTime;
-  }).forEach((timeBlock) => {
-    myChart.data.labels.push(timeBlock.routineType);
-    myChart.data.datasets[0].data.push(timeBlock.routineTime);
-    myChart.data.datasets[0].backgroundColor.push(timeBlock.routineColor);
-  });
+  updateDataSet(statisticData);
 
   myChart.update();
 });

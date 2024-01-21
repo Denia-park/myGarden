@@ -1,78 +1,42 @@
 <script setup>
-import {computed, ref, watch} from "vue";
+import {ref, watch} from "vue";
 import {getDailyRoutineApi, getTargetDateTimeRange} from "@/components/dailyRoutine/api/api.js";
 import {store} from "@/scripts/store.js";
 
+const NOON_STRING = '12:00';
+const noonMin = timeToMinutes(NOON_STRING);
 const SHOW_TEXT_PIXELS = 30;
-const splitSchedule = ref([]);
 
-watch(() => store.getters.getViewDate, (newDate) => {
-      const {targetStartDateTime, targetEndDateTime} = getTargetDateTimeRange(newDate);
+const morningSchedule = ref([]);
+const afternoonSchedule = ref([]);
 
-      getDailyRoutineApi(targetStartDateTime, targetEndDateTime)
-          .then(response => {
-            const timeBlockArray = processSchedule(response.allDateTimeDataArray);
+function convertRoutineToTimeBlockArray(schedule) {
+  const tempTimeBlockArray = [];
 
-            splitSchedule.value = timeBlockArray;
-            store.commit('setTimeBlockArray', timeBlockArray);
-          })
-    }, {immediate: true}
-);
-
-function processSchedule(schedule) {
-  const NOON_STRING = '12:00';
-  const noon = timeToMinutes(NOON_STRING);
-
-  function createMorningBlock(block, startTime, end, endTime, totalMinutes) {
-    return {
-      id: block.id,
-      routineType: block.routineType,
-      color: findMatchingColor(block.routineType),
-      displayStartTime: startTime,
-      displayEndTime: end > noon ? NOON_STRING : endTime,
-      partOfDay: 'morning',
-      routineDescription: block.routineDescription,
-      totalMinutes: totalMinutes,
-    };
-  }
-
-  function createAfternoonBlock(block, start, startTime, endTime, totalMinutes) {
-    return {
-      id: block.id,
-      routineType: block.routineType,
-      color: findMatchingColor(block.routineType),
-      displayStartTime: start < noon ? NOON_STRING : startTime,
-      displayEndTime: endTime,
-      partOfDay: 'afternoon',
-      routineDescription: block.routineDescription,
-      totalMinutes: totalMinutes,
-    };
-  }
-
-  return schedule.flatMap(block => {
+  schedule.forEach(block => {
     const startTime = extractTime(block.startDateTime);
     const endTime = extractTime(block.endDateTime);
 
-    const startTimeMin = timeToMinutes(startTime);
-    const endTimeMin = timeToMinutes(endTime);
-    const totalMinutes = endTimeMin - startTimeMin;
-    const splitBlocks = [];
+    if (timeToMinutes(startTime) < noonMin) {
+      const timeBlock = createTimeBlock(block, startTime, endTime, 'morning');
 
-    if (startTimeMin < noon) {
-      splitBlocks.push(createMorningBlock(block, startTime, endTimeMin, endTime, totalMinutes));
+      morningSchedule.value.push(timeBlock);
+      tempTimeBlockArray.push(timeBlock);
     }
 
-    if (endTimeMin > noon) {
-      splitBlocks.push(createAfternoonBlock(block, startTimeMin, startTime, endTime, totalMinutes));
-    }
+    if (noonMin < timeToMinutes(endTime)) {
+      const timeBlock = createTimeBlock(block, startTime, endTime, 'afternoon');
 
-    return splitBlocks;
+      afternoonSchedule.value.push(timeBlock);
+      tempTimeBlockArray.push(timeBlock);
+    }
   });
+
+  return tempTimeBlockArray;
 }
 
 function extractTime(dateTime) {
-  const [date, time] = dateTime.split('T');
-  return time.slice(0, 5);
+  return dateTime.split('T')[1].slice(0, 5);
 }
 
 function timeToMinutes(time) {
@@ -80,10 +44,32 @@ function timeToMinutes(time) {
   return hours * 60 + minutes;
 }
 
-function findMatchingColor(type) {
-  const colorMap = store.state.colorMap;
+function createTimeBlock(block, startTime, endTime, partOfDay) {
+  let startTimeMin = timeToMinutes(startTime);
+  let endTimeMin = timeToMinutes(endTime);
 
-  return colorMap[type];
+  const scheduleDefaultData = {
+    id: block.id,
+    routineType: block.routineType,
+    color: findMatchingColor(block.routineType),
+    routineDescription: block.routineDescription,
+  };
+
+  if (partOfDay === 'morning') {
+    scheduleDefaultData.displayStartTime = startTime;
+    scheduleDefaultData.displayEndTime = noonMin < endTimeMin ? NOON_STRING : endTime; // 오전에 시작해서 오후에 끝나는 경우를 고려함
+    scheduleDefaultData.totalMinutes = (noonMin < endTimeMin ? noonMin : endTimeMin) - startTimeMin;
+  } else if (partOfDay === 'afternoon') {
+    scheduleDefaultData.displayStartTime = startTimeMin < noonMin ? NOON_STRING : startTime; // 오전에 시작해서 오후에 끝나는 경우를 고려함
+    scheduleDefaultData.displayEndTime = endTime;
+    scheduleDefaultData.totalMinutes = endTimeMin - (startTimeMin < noonMin ? noonMin : startTimeMin);
+  }
+
+  return scheduleDefaultData;
+}
+
+function findMatchingColor(type) {
+  return (store.state.colorMap)[type];
 }
 
 function blockStyle(block, partOfDay) {
@@ -128,19 +114,21 @@ function isNotEnoughHeightBlock(block) {
   return !isEnoughHeightBlock(block);
 }
 
-const morningSchedule = computed(() => {
-  return splitSchedule.value.filter(block => block.partOfDay === 'morning');
-});
-
-const afternoonSchedule = computed(() => {
-  return splitSchedule.value.filter(block => block.partOfDay === 'afternoon');
-});
-
 function updateBlock(block) {
   block.lastUpdated = new Date().toISOString();
 
   store.commit('setEditBlock', block);
 }
+
+watch(() => store.getters.getViewDate, (newDate) => {
+      const {targetStartDateTime, targetEndDateTime} = getTargetDateTimeRange(newDate);
+
+      getDailyRoutineApi(targetStartDateTime, targetEndDateTime)
+          .then(response => {
+            store.commit('setTimeBlockArray', convertRoutineToTimeBlockArray(response.allDateTimeDataArray));
+          })
+    }, {immediate: true}
+);
 </script>
 
 <template>
