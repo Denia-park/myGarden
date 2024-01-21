@@ -1,6 +1,7 @@
 <script setup>
 import {computed, ref, watch} from "vue";
 import {getDailyRoutineApi, getTargetDateTimeRange} from "@/components/dailyRoutine/api/api.js";
+import {store} from "@/scripts/store.js";
 
 const props = defineProps({
   updateDate: String,
@@ -79,15 +80,7 @@ function timeToMinutes(time) {
 }
 
 function findMatchingColor(type) {
-  const colorMap = {
-    '운동': '#b23f3f',
-    '수면': '#a0a0a0',
-    '식사': '#70db70',
-    '공부': '#ffdb4d',
-    '휴식': '#4de4ff',
-    '게임': '#e76c0c',
-    '기타': '#cd4dff',
-  };
+  const colorMap = store.state.colorMap;
 
   return colorMap[type];
 }

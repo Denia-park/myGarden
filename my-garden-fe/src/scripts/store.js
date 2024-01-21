@@ -8,6 +8,15 @@ export const store = createStore({
                 accessToken: '',
                 refreshToken: '',
                 roles: []
+            },
+            colorMap: {
+                '운동': '#b23f3f',
+                '수면': '#a0a0a0',
+                '식사': '#70db70',
+                '공부': '#ffdb4d',
+                '휴식': '#4de4ff',
+                '게임': '#e76c0c',
+                '기타': '#cd4dff',
             }
         }
     },
@@ -54,6 +63,9 @@ export const store = createStore({
         },
         getRefreshToken(state) {
             return state.account.refreshToken;
-        }
+        },
+        getColors(state) {
+            return state.colorMap;
+        },
     }
 });
