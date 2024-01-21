@@ -20,7 +20,6 @@ export function getDailyRoutineApi(startDateTime, endDateTime) {
             };
         })
         .catch(error => {
-            console.log(error)
             alert('일정을 불러오는데 실패했습니다.')
         });
 }
