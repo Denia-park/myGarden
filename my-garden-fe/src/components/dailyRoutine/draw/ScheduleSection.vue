@@ -41,8 +41,17 @@ function blockStyle(block, partOfDay) {
   };
 }
 
-function buildTooltipMessage(block) {
-  return block.routineDescription === "" ? block.routineType : block.routineDescription;
+function calculateDuration(block) {
+  const start = timeToMinutes(block.displayStartTime);
+  const end = timeToMinutes(block.displayEndTime);
+  return end - start;
+}
+
+function getOffset(partOfDay) {
+  const afternoonStrings = ['오후', 'PM', 'pm', 'afternoon'];
+
+  // 720 === 1px per minute, 12 hours * 60 minutes
+  return afternoonStrings.includes(partOfDay) ? 720 : 0; // 12:00 ~ 24:00
 }
 
 function buildTimeText(block) {
@@ -53,10 +62,6 @@ function isEnoughHeightBlock(block) {
   const SHOW_TEXT_PIXELS = 30;
 
   return calculateDuration(block) >= SHOW_TEXT_PIXELS;
-}
-
-function isNotEnoughHeightBlock(block) {
-  return !isEnoughHeightBlock(block);
 }
 
 function updateBlock(block) {
