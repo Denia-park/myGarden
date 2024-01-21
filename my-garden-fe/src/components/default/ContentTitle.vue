@@ -11,7 +11,7 @@ defineProps({
 <style scoped>
 h2 {
   text-align: center;
-  font-size: 40px;
-  margin-bottom: 20px;
+  font-size: 35px;
+  margin-bottom: 10px;
 }
 </style>

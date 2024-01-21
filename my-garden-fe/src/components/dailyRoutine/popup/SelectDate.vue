@@ -1,11 +1,10 @@
 <script setup>
 import {ref} from "vue";
-import {getTodayDate} from "@/components/dailyRoutine/api/api.js";
+import {store} from "@/scripts/store.js";
+import {getTodayDate} from "@/components/dailyRoutine/api/util.js";
 
 const showModal = ref(false);
 const selectedDate = ref(getTodayDate());
-
-const emit = defineEmits(["update-date"]);
 
 function openModal() {
   showModal.value = true;
@@ -18,7 +17,7 @@ function closeModal() {
 function updateDate(event) {
   selectedDate.value = event.target.value;
   closeModal();
-  emit("update-date", selectedDate.value);
+  store.commit("setViewDate", selectedDate.value);
 }
 
 function handleClickOutside(event) {
@@ -29,8 +28,10 @@ function handleClickOutside(event) {
 }
 </script>
 <template>
-  <button class="date-button btn btn-success" @click="openModal">조회 날짜 선택</button>
-  <h4 v-if="selectedDate" class="date-text">선택한 날짜 : {{ selectedDate }}</h4>
+  <div class="date-wrapper">
+    <button class="date-button btn btn-success" @click="openModal">조회 날짜 선택</button>
+    <h4 v-if="selectedDate" class="date-text">선택한 날짜 : {{ selectedDate }}</h4>
+  </div>
 
   <!-- 모달 바깥쪽 클릭 시 closeModal 호출 -->
   <div v-if="showModal" class="modal" @click="handleClickOutside">
@@ -50,6 +51,8 @@ function handleClickOutside(event) {
   right: 0;
   margin-top: 3px;
   margin-right: 10px;
+
+  width: 150px;
 }
 
 .date-text {
@@ -58,6 +61,31 @@ function handleClickOutside(event) {
   right: 0;
   margin-top: 42px;
   margin-right: 10px;
+
+  font-size: 1.3rem;
+}
+
+@media (max-width: 750px) {
+  .date-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .date-button {
+    position: relative;
+
+    width: 150px;
+    margin-top: 3px;
+    margin-right: 10px;
+  }
+
+  .date-text {
+    position: relative;
+
+    margin-top: 10px;
+    margin-right: 10px;
+  }
 }
 
 .modal {
@@ -78,7 +106,7 @@ function handleClickOutside(event) {
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 600px;
+  width: 500px;
 }
 
 .close {

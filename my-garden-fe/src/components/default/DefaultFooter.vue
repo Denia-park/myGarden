@@ -8,8 +8,8 @@
       <p class="float-end mb-1">
         <a href="#">Back to top</a>
       </p>
-      <p class="mb-1">myGarden 서비스에 많은 관심 부탁드립니다.
-        [ <a href="https://github.com/Denia-park/myGarden">Project Github Link</a> ]
+      <p class="mb-1">myGarden 서비스에 많은 관심 부탁드립니다.</p>
+      <p class="mb-1"> [ <a href="https://github.com/Denia-park/myGarden">Project Github Link</a> ]
       </p>
     </div>
   </footer>

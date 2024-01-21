@@ -36,11 +36,17 @@ p {
 textarea {
   width: 100%;
   padding: 10px;
-  font-size: 1.2em;
+  font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
-  height: 300px;
+  height: 100px;
 
   margin-bottom: 10px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 </style>

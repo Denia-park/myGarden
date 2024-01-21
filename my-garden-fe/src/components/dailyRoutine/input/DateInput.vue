@@ -11,9 +11,9 @@ const emit = defineEmits(['changeDate'])
 const dateTime = ref('');
 
 watch(() => [props.startDateTime, props.endDateTime], (newValue) => {
-  if (props.inputName === '시작') {
+  if (props.inputName === '시작 시간') {
     dateTime.value = newValue[0];
-  } else if (props.inputName === '끝') {
+  } else if (props.inputName === '끝난 시간') {
     dateTime.value = newValue[1];
   }
 });
@@ -34,16 +34,20 @@ p {
   margin-bottom: 10px;
 }
 
-.input-group {
-  margin-bottom: 10px;
-}
-
-input[type="datetime-local"] {
+input {
   width: 100%;
   padding: 10px;
-  font-size: 19px;
+  font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  width: 40%;
 }
 
 </style>

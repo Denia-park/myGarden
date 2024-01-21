@@ -1,5 +1,6 @@
 import {createStore} from 'vuex'
 import {parseJwt} from "@/scripts/parseJwt.js";
+import {getTodayDate} from "@/components/dailyRoutine/api/util.js";
 
 export const store = createStore({
     state() {
@@ -8,7 +9,19 @@ export const store = createStore({
                 accessToken: '',
                 refreshToken: '',
                 roles: []
-            }
+            },
+            editBlock: {},
+            viewDate: getTodayDate(),
+            colorMap: {
+                '운동': '#b23f3f',
+                '수면': '#a0a0a0',
+                '식사': '#70db70',
+                '공부': '#ffdb4d',
+                '휴식': '#4de4ff',
+                '게임': '#e76c0c',
+                '기타': '#cd4dff',
+            },
+            timeBlockArray: []
         }
     },
     mutations: {
@@ -23,6 +36,15 @@ export const store = createStore({
         setRoles(state, payload) {
             state.account.roles = Array.isArray(payload) ? payload : [];
         },
+        setEditBlock(state, payload) {
+            state.editBlock = payload;
+        },
+        setViewDate(state, payload) {
+            state.viewDate = payload;
+        },
+        setTimeBlockArray(state, payload) {
+            state.timeBlockArray = payload;
+        }
     },
     actions: {
         initializeTokenFromSessionStorage({commit}) {
@@ -54,6 +76,18 @@ export const store = createStore({
         },
         getRefreshToken(state) {
             return state.account.refreshToken;
-        }
+        },
+        getColors(state) {
+            return state.colorMap;
+        },
+        getEditBlock(state) {
+            return state.editBlock;
+        },
+        getViewDate(state) {
+            return state.viewDate;
+        },
+        getTimeBlockArray(state) {
+            return state.timeBlockArray;
+        },
     }
 });

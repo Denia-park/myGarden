@@ -4,22 +4,15 @@ import DateInput from "@/components/dailyRoutine/input/DateInput.vue";
 import ContentInput from "@/components/dailyRoutine/input/ContentInput.vue";
 import TypeInput from "@/components/dailyRoutine/input/TypeInput.vue";
 import {onMounted, ref, watch} from "vue";
-import {
-  deleteDailyRoutineApi,
-  getTodayDate,
-  postDailyRoutineApi,
-  updateDailyRoutineApi
-} from "@/components/dailyRoutine/api/api.js";
+import {deleteDailyRoutineApi, postDailyRoutineApi, updateDailyRoutineApi} from "@/components/dailyRoutine/api/api.js";
+import {store} from "@/scripts/store.js";
+import {getTodayDate} from "@/components/dailyRoutine/api/util.js";
 
 const startDate = ref('');
 const endDate = ref('');
 const content = ref('');
 const routineType = ref('STUDY');
 const isUpdateMode = ref(false);
-
-const props = defineProps({
-  updateBlock: Object
-});
 
 onMounted(() => {
   getLastStartDateTime();
@@ -94,16 +87,10 @@ function validate() {
     return true;
   }
 
-  if (!validateContentLength()) {
-    return false;
-  }
-
-  return true;
+  return validateContentLength();
 }
 
 function postRoutine() {
-  // logData();
-
   if (!validate()) {
     return;
   }
@@ -118,7 +105,7 @@ function updateRoutine() {
     return;
   }
 
-  updateDailyRoutineApi(props.updateBlock.id, startDate.value, endDate.value, routineType.value, content.value);
+  updateDailyRoutineApi(store.getters.getEditBlock.id, startDate.value, endDate.value, routineType.value, content.value);
 }
 
 function updateValidate() {
@@ -152,10 +139,10 @@ function cancelUpdate() {
 }
 
 function deleteRoutine() {
-  deleteDailyRoutineApi(props.updateBlock.id);
+  deleteDailyRoutineApi(store.getters.getEditBlock.id);
 }
 
-watch(() => props.updateBlock, (newVal) => {
+watch(() => store.getters.getEditBlock, (newVal) => {
       const updateStartDateTime = getTodayDate() + `T${newVal.displayStartTime}`;
 
       if (updateStartDateTime !== startDate.value) {
@@ -172,10 +159,13 @@ watch(() => props.updateBlock, (newVal) => {
 
 <template>
   <div class="data-container">
-    <ContentTitle :input-name="'한 일 등록'"/>
-    <DateInput :input-name="'시작'" :start-date-time="startDate" @change-date="date => startDate = date"/>
-    <DateInput :end-date-time="endDate" :input-name="'끝'" @change-date="date => endDate = date"/>
-    <TypeInput :input-name="'타입'" :routine-type="routineType" @change-type="type => routineType = type"/>
+    <ContentTitle :input-name="'일과 등록'"/>
+    <div class="time-input-group">
+      <DateInput :input-name="'시작 시간'" :start-date-time="startDate" @change-date="date => startDate = date"/>
+      <DateInput :end-date-time="endDate" :input-name="'끝난 시간'" @change-date="date => endDate = date"/>
+      <TypeInput :input-name="'타입'" :routine-type="routineType" @change-type="type => routineType = type"/>
+    </div>
+
     <ContentInput :content="content" :input-name="'내용'" @submit="submit"
                   @change-content="typingContent => content = typingContent"/>
 
@@ -196,24 +186,35 @@ watch(() => props.updateBlock, (newVal) => {
 .data-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  height: 800px; /* Fulls viewport height */
+  height: 380px;
   text-align: center;
   margin: 0 auto;
-  padding: 20px;
-  width: 100%;
+  padding: 0 10px 0 10px;
+}
+
+p {
+  font-size: 15px;
+  margin-bottom: 0;
 }
 
 .submitBtnBox button {
-  width: 100%;
-  margin-bottom: 10px;
+  width: 60%;
+  margin-bottom: 3px;
 }
 
 .editBtnBox button {
   margin-left: 10px;
   margin-right: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 3px;
   width: 26%
+}
+
+.time-input-group {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+
+  align-items: center;
 }
 
 </style>
