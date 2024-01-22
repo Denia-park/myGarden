@@ -14,6 +14,10 @@ const afternoonSchedule = ref([]);
 function convertRoutineToTimeBlockArray(schedule) {
   const tempTimeBlockArray = [];
 
+  //기존 데이터 초기화
+  morningSchedule.value.length = 0;
+  afternoonSchedule.value.length = 0;
+
   schedule.forEach(block => {
     const startTime = extractTime(block.startDateTime);
     const endTime = extractTime(block.endDateTime);
