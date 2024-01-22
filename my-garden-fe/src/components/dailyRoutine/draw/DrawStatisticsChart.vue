@@ -90,6 +90,11 @@ onMounted(() => {
 });
 
 function updateDataSetFrom(statisticData) {
+  // 기존에 존재하는 데이터를 모두 삭제
+  myChart.data.labels.length = 0;
+  myChart.data.datasets[0].data.length = 0;
+  myChart.data.datasets[0].backgroundColor.length = 0;
+
   Object.entries(statisticData)
       .map(([key, value]) => {
         return {
