@@ -1,6 +1,6 @@
 <script setup>
 
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import {loginApi} from "@/components/auth/login/api/api.js";
 import {router} from "@/scripts/router.js";
 
@@ -9,6 +9,24 @@ const form = ref({
   email: '',
   password: '',
 })
+
+const rememberMe = ref(false);
+
+function setRememberMe(email, password) {
+  if (!rememberMe.value) {
+    localStorage.removeItem("rememberMe");
+    localStorage.removeItem("userAccount");
+    return;
+  }
+
+  const userAccount = {
+    email: email,
+    password: password
+  };
+
+  localStorage.setItem("rememberMe", "true");
+  localStorage.setItem("userAccount", JSON.stringify(userAccount));
+}
 
 function submit() {
   const {email, password} = form.value;
@@ -22,6 +40,8 @@ function submit() {
         }
         alert("로그인에 성공했습니다.");
 
+        setRememberMe(email, password);
+
         router.push('/daily-routine');
       })
 }
@@ -29,6 +49,23 @@ function submit() {
 function goToSignup() {
   router.push('/signup');
 }
+
+function initializeForm() {
+  const savedRememberMe = localStorage.getItem("rememberMe");
+  const userAccount = localStorage.getItem("userAccount");
+
+  if (savedRememberMe === "true" && userAccount !== null) {
+    rememberMe.value = true;
+    const userAccountJson = JSON.parse(userAccount);
+
+    form.value.email = userAccountJson.email;
+    form.value.password = userAccountJson.password;
+  }
+}
+
+onMounted(() => {
+  initializeForm();
+});
 
 </script>
 
@@ -54,10 +91,11 @@ function goToSignup() {
           </div>
 
           <div class="form-check text-start my-3">
-            <!--            <input id="flexCheckDefault" class="form-check-input" type="checkbox" value="remember-me">-->
-            <!--            <label class="form-check-label" for="flexCheckDefault">-->
-            <!--              Remember me-->
-            <!--            </label>-->
+            <input id="flexCheckDefault" v-model="rememberMe" class="form-check-input" type="checkbox">
+            <label class="form-check-label" for="flexCheckDefault">
+              Remember me
+              <span style="font-size: 13px">(※ Only use this option on private computer)</span>
+            </label>
           </div>
           <button class="btn btn-primary w-100 py-2" @click="submit">Login</button>
           <button class="btn btn-success w-100 py-2" @click="goToSignup">Sign up</button>
