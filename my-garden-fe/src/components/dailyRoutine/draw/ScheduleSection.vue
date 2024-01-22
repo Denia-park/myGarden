@@ -15,7 +15,7 @@ const props = defineProps({
   },
 });
 
-const tooltipHover = ref(false);
+const hoverTimeBlockId = ref(0);
 
 function blockStyle(block, partOfDay) {
   const duration = calculateDuration(block);
@@ -69,14 +69,15 @@ function updateBlock(block) {
       <div v-for="(block, index) in scheduleArray" :key="`${index}`"
            :style="blockStyle(block, partOfDay)" class="time-block"
            @click="updateBlock(block)"
-           @mouseleave="tooltipHover = false" @mouseover="tooltipHover = true">
+           @mouseleave="hoverTimeBlockId = 0" @mouseover="hoverTimeBlockId = block.id">
 
         <div v-if="isEnoughHeightBlock(block)">
           {{ buildTimeText(block) }}
         </div>
-        <RoutineTooltip :hover="tooltipHover"
+        <RoutineTooltip :hover-time-block-id="hoverTimeBlockId"
                         :is-enough-height-block="isEnoughHeightBlock(block)"
                         :part-of-day="partOfDay"
+                        :time-block-id="block.id"
                         :time-text="buildTimeText(block)"
                         :tooltip-text="block.routineDescription === '' ? block.routineType : block.routineDescription"
         />
