@@ -89,7 +89,7 @@ onMounted(() => {
   );
 });
 
-function updateDataSet(statisticData) {
+function updateDataSetFrom(statisticData) {
   Object.entries(statisticData)
       .map(([key, value]) => {
         return {
@@ -108,10 +108,10 @@ function updateDataSet(statisticData) {
       });
 }
 
-function calculateStatisticDataFromTimeBlockArray(newVal, statisticData) {
+function calculateStatisticDataFromTimeBlockArray(timeBlockArray, statisticData) {
   let tempSumTotalMinutes = 0;
 
-  newVal.forEach((timeBlock) => {
+  timeBlockArray.forEach((timeBlock) => {
     if (statisticData[timeBlock.routineType]) {
       statisticData[timeBlock.routineType] += timeBlock.totalMinutes;
     } else {
@@ -130,8 +130,8 @@ watch(() => store.getters.getTimeBlockArray, (timeBlockArray) => {
   // 타입에 맞춰서 시간을 합산.
   allTotalMinutesSum = calculateStatisticDataFromTimeBlockArray(timeBlockArray, statisticData);
 
-  //statisticData를 배열로 변환.
-  updateDataSet(statisticData);
+  //statisticData를 pie Chart의 DataSet에 삽입
+  updateDataSetFrom(statisticData);
 
   myChart.update();
 });
