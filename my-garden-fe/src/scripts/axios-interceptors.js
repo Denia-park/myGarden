@@ -2,6 +2,8 @@ import axios from "axios";
 import {store} from "@/scripts/store.js";
 import {router} from "@/scripts/router.js";
 
+let isRefreshing = false;
+
 const setup = () => {
     axios.interceptors.request.use(
         (config) => {
@@ -36,8 +38,8 @@ const setup = () => {
             const originalConfig = err.config;
 
             // Access Token이 만료됨
-            if (err && err.response.status === 401 && !originalConfig._retry) {
-                originalConfig._retry = true;
+            if (err && err.response.status === 401 && !isRefreshing) {
+                isRefreshing = true;
 
                 try {
                     const result = await refreshTokenApi();
@@ -57,10 +59,26 @@ const setup = () => {
 
                     return Promise.reject(_error);
                 }
+            } else if (err && err.response.status === 400 && isRefreshing) {
+                isRefreshing = false;
+
+                // Refresh Token이 만료되었거나, 다른 이유로 인해 재시도를 하지 못한 경우 (다른 브라우저에서 로그아웃, 다른 브라우저에서 로그인 등)
+                //로그인 정보 삭제, 세션 스토리지 삭제
+                store.commit('clearToken');
+                sessionStorage.removeItem('token');
+
+                alert("로그인이 필요합니다.")
+
+                //로그인 페이지로 이동
+                await router.push('/login');
+
+                return Promise.reject(err.response.data);
             }
 
             if (err.response.status === 403) {
-                await router.push('/login');
+                isRefreshing = false;
+
+                await router.push('/notFound');
                 return Promise.reject(err.response.data);
             }
 
