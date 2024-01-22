@@ -1,7 +1,5 @@
 <script setup>
 
-import {computed} from "vue";
-
 const props = defineProps({
   partOfDay: {
     type: String,
@@ -19,24 +17,39 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  hover: {
-    type: Boolean,
+  timeBlockId: {
+    type: Number,
     required: true,
-  }
+  },
+  hoverTimeBlockId: {
+    type: Number,
+    required: true,
+  },
 });
 
-//부모에서 hover 이벤트 발생시 영역을 보여줌
-const tooltipStyle = computed(() => {
+function updateTooltipClass() {
   return {
-    //hover 이벤트가 없으면 툴팁 영역을 숨김
-    visibility: props.hover ? 'visible' : 'hidden',
-  }
-});
+    'tooltip-text': true,
+    'tooltip-left': props.partOfDay === '오전',
+    'tooltip-right': props.partOfDay === '오후',
+  };
+}
+
+function updateVisible() {
+  return {
+    visibility: isTooltipVisible() ? 'visible' : 'hidden',
+  };
+}
+
+function isTooltipVisible() {
+  return props.timeBlockId === props.hoverTimeBlockId;
+}
 
 </script>
 <template>
   <div class="my-tooltip">
-    <span :class="['tooltip-text', partOfDay === '오전' ? 'tooltip-left' : 'tooltip-right']" :style="tooltipStyle">
+    <span :class="updateTooltipClass()"
+          :style="updateVisible()">
       <span v-if="!isEnoughHeightBlock">
         {{ timeText }}
       </span>
