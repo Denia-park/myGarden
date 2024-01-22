@@ -1,4 +1,5 @@
 <script setup>
+import {onMounted, ref} from "vue";
 
 const props = defineProps({
   partOfDay: {
@@ -27,6 +28,10 @@ const props = defineProps({
   },
 });
 
+const tooltipRef = ref(null);
+const tooltipTextRef = ref(null);
+const tooltipHeightOffset = ref(0);
+
 function updateTooltipClass() {
   return {
     'tooltip-text': true,
@@ -45,10 +50,34 @@ function isTooltipVisible() {
   return props.timeBlockId === props.hoverTimeBlockId;
 }
 
+function calculateTooltipOffset() {
+  if (!tooltipRef.value) return;
+
+  const parentRect = tooltipRef.value.parentElement.getBoundingClientRect();
+  const tooltipTextRect = tooltipTextRef.value.getBoundingClientRect();
+
+  // tooltip 높이를 보정한다. (timeBlock이랑 높이가 맞지 않으면 보기가 좋지 않으므로)
+  // (tooltip 높이의 절반) + (부모 영역과 tooltip 영역의 y 차이를 2로 나눈 값의 절대값)
+  let tempTooltipHeightOffset = (tooltipTextRect.height / 2) + Math.abs((parentRect.y - tooltipTextRect.y) / 2);
+
+  // tooltip 보정 높이가 너무 많아서, 화면의 상단을 벗어나는 경우 보정 높이를 줄인다.
+  if (tempTooltipHeightOffset > parentRect.y) {
+    tempTooltipHeightOffset -= 60;
+  }
+
+  //top을 음수로 지정해야 위로 올라가기 때문에, 음수로 변환한다.
+  tooltipHeightOffset.value = -1 * tempTooltipHeightOffset;
+}
+
+onMounted(() => {
+  calculateTooltipOffset();
+});
+
 </script>
 <template>
-  <div class="my-tooltip">
-    <span :class="updateTooltipClass()"
+  <div ref="tooltipRef" class="my-tooltip">
+    <span ref="tooltipTextRef"
+          :class="updateTooltipClass()"
           :style="updateVisible()">
       <span v-if="!isEnoughHeightBlock">
         {{ timeText }}
@@ -85,7 +114,7 @@ function isTooltipVisible() {
 }
 
 .my-tooltip .tooltip-left {
-  top: -5px; /* 영역의 위치를 -5 만큼 위로 이동 */
+  top: v-bind(tooltipHeightOffset+ 'px'); /* tooltip의 위치를 tooltipHeightOffset 만큼 보정 */
   right: 105%; /* 왼쪽에 생성해야하므로 영역을 오른쪽에서 105% 이동 */
 }
 
@@ -99,7 +128,7 @@ function isTooltipVisible() {
 }
 
 .my-tooltip .tooltip-right {
-  top: -5px;
+  top: v-bind(tooltipHeightOffset+ 'px'); /* tooltip의 위치를 tooltipHeightOffset 만큼 보정 */
   left: 105%;
 }
 
