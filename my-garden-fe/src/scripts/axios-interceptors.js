@@ -60,7 +60,7 @@ const setup = () => {
             }
 
             if (err.response.status === 403) {
-                await router.push('/login');
+                await router.push('/notFound');
                 return Promise.reject(err.response.data);
             }
 
