@@ -49,6 +49,8 @@ function createTimeBlock(block, startTime, endTime, partOfDay) {
     routineType: block.routineType,
     color: (store.state.colorMap)[block.routineType],
     routineDescription: block.routineDescription,
+    startDate: block.startDateTime.split('T')[0],
+    endDate: block.endDateTime.split('T')[0],
   };
 
   if (partOfDay === 'morning') {
