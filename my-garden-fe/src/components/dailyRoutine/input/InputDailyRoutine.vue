@@ -143,11 +143,11 @@ function deleteRoutine() {
 }
 
 watch(() => store.getters.getEditBlock, (newVal) => {
-      const updateStartDateTime = newVal.startDate + `T${newVal.displayStartTime}`;
+      const updateStartDateTime = newVal.startDate + 'T' + newVal.displayStartTime;
 
       if (updateStartDateTime !== startDate.value) {
         startDate.value = updateStartDateTime;
-        endDate.value = newVal.endDate + `T${newVal.displayEndTime}`;
+        endDate.value = newVal.endDate + 'T' + newVal.displayEndTime;
         routineType.value = newVal.routineType;
         content.value = newVal.routineDescription;
         isUpdateMode.value = true;
