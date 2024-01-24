@@ -28,7 +28,7 @@ repositories {
 }
 
 dependencies {
-    //Spring wen
+    //Spring web
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
     //Spring Actuator
