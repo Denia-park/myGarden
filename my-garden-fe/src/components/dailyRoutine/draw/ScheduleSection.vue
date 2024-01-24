@@ -16,6 +16,8 @@ const props = defineProps({
 });
 
 const hoverTimeBlockId = ref(0);
+const morningStrings = ['오전', 'AM', 'am', 'morning'];
+const afternoonStrings = ['오후', 'PM', 'pm', 'afternoon'];
 
 function blockStyle(block, partOfDay) {
   const duration = calculateDuration(block);
@@ -38,8 +40,6 @@ function calculateDuration(block) {
 }
 
 function getOffset(partOfDay) {
-  const afternoonStrings = ['오후', 'PM', 'pm', 'afternoon'];
-
   // 720 === 1px per minute, 12 hours * 60 minutes
   return afternoonStrings.includes(partOfDay) ? 720 : 0; // 12:00 ~ 24:00
 }
@@ -60,13 +60,17 @@ function updateBlock(block) {
   store.commit('setEditBlock', block);
 }
 
+function convertEng(partOfDay) {
+  return morningStrings.includes(partOfDay) ? 'morning' : 'afternoon';
+}
+
 </script>
 
 <template>
   <div id="morning-schedule" class="schedule-section">
     <div class="schedule-label">{{ partOfDay }}</div>
     <div class="schedule-half">
-      <div v-for="(block, index) in scheduleArray" :key="`${index}`"
+      <div v-for="block in scheduleArray" :key="`${convertEng(partOfDay)}-${block.id}`"
            :style="blockStyle(block, partOfDay)" class="time-block"
            @click="updateBlock(block)"
            @mouseleave="hoverTimeBlockId = 0" @mouseover="hoverTimeBlockId = block.id">
