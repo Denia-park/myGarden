@@ -11,7 +11,7 @@
   * [트러블 슈팅](#트러블-슈팅)
     * [Front (Vue.js)](#front-vuejs)
     * [Back (Spring Boot)](#back-spring-boot)
-  * [API Docs (Spring Rest Docs로 작성됨)](#api-docs-spring-rest-docs로-작성됨)
+  * [API Docs (Spring Rest Docs)](#api-docs-spring-rest-docs)
   * [TestCoverage](#testcoverage)
   * [프로젝트 폴더 구조](#프로젝트-폴더-구조)
     * [Front (Vue.js)](#front-vuejs-1)
@@ -29,7 +29,7 @@
 >
 > Il faut vivre comme on pense, sinon tôt ou tard on finit par penser comme on a vécu.
 
-`myGarden` 프로젝트는 내 삶에 있어서 조금 더 주도성을 가지기 위해, 내 행동들을 기록하고 확인하며 관리하기 위해 제작된 개인 사이드 프로젝트입니다.
+`myGarden` 프로젝트는 내 삶에 있어서 조금 더 주도성을 가지기 위해, 내 행동들을 기록하고 확인하며 관리하기 위해 제작된 `개인 사이드 프로젝트`입니다.
 
 (프로젝트 기간 : 2023년 12월 12일 ~ 계속 진행중)
 
@@ -41,10 +41,11 @@
   - `Java 17`
   - `Javascript`
 - **Frontend**
-  - `Vue.js`
+  - `Vue.js 3.0`
   - `Vuex`
   - `Vue Router`
   - `Axios`
+  - `Chart.js`
   - `Bootstrap`
 - **Backend**
   - `Spring Boot 3.2.0`
@@ -76,9 +77,9 @@
 ### 로그인
 
 - 로그인을 할 수 있다.
-  - `Remeber Me`를 체크하면, LocalStorage에 계정 정보를 저장한다.
+  - `Remeber Me`를 체크하면, `LocalStorage`에 계정 정보를 저장한다.
   - 이메일 형식에 맞지 않거나, 비밀번호가 틀리면 로그인에 실패한다.
-  - 로그인에 성공하면, JWT를 발급받는다.
+  - 로그인에 성공하면, `JWT`를 발급받는다.
   - `AccessToken`은 30분 동안 유효하고, `RefreshToken`은 7일 동안 동안 유효하다.
 
   ![로그인](./docs/daily-routine/gif/DailyRoutine-Login.gif)
@@ -127,7 +128,7 @@
 3. [[AWS EC2 - Amazon Linux 2023 OS] 포트 리다이렉트(port redirect )하며 발생한 이슈 정리](https://velog.io/@as9587/AWS-EC2-Amazon-Linux-2023-OS-%ED%8F%AC%ED%8A%B8-%EB%A6%AC%EB%8B%A4%EC%9D%B4%EB%A0%89%ED%8A%B8port-redirect-%ED%95%98%EB%A9%B0-%EB%B0%9C%EC%83%9D%ED%95%9C-%EC%9D%B4%EC%8A%88-%EC%A0%95%EB%A6%AC)
 4. [spring MVC에서 Vue history mode 설정하기 (spring security 사용 중)](https://velog.io/@as9587/spring-MVC%EC%97%90%EC%84%9C-Vue-history-mode-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0-spring-security-%EC%82%AC%EC%9A%A9-%EC%A4%91)
 
-## API Docs (Spring Rest Docs로 작성됨)
+## API Docs (Spring Rest Docs)
 
 - 홈페이지의 API Docs를 참고해주세요.
   - [API Docs](http://my-garden.shop/docs/index.html)
@@ -308,10 +309,10 @@
 
 ## 아키텍처
 
-- `Front` : Vue.js 3.0
-- `Back` : Spring Boot 3.2
-- `DevOps` : AWS EC2, AWS RDS, AWS Parameter Store
-- `DB` : MySQL (AWS RDS)
+- `Front` : `Vue.js`
+- `Back` : `Spring Boot`
+- `DevOps` : `AWS EC2`, `AWS RDS`, `AWS Parameter Store`
+- `DB` : `MySQL (AWS RDS)`
 
 ![Architecture](./docs/architecture/Architecture-240124.png)
 
