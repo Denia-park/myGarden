@@ -59,9 +59,9 @@ const closeHeader = () => {
               <li>
                 <a class="text-white" href="#" @click="dailyRoutine">하루 일과</a>
               </li>
-              <li><a class="text-white" href="#">정리 게시판</a></li>
-              <li><a class="text-white" href="#">하루 습관</a></li>
-              <li><a class="text-white" href="#">명언 정리</a></li>
+              <!--              <li><a class="text-white" href="#">정리 게시판</a></li>-->
+              <!--              <li><a class="text-white" href="#">하루 습관</a></li>-->
+              <!--              <li><a class="text-white" href="#">명언 정리</a></li>-->
             </ul>
           </div>
           <div class="col-sm-4 offset-md-1 py-4">
