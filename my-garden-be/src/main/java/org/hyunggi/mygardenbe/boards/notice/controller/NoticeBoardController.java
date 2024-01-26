@@ -21,19 +21,19 @@ public class NoticeBoardController {
 
     @GetMapping("/list")
     public ApiResponse<CustomPage<NoticeBoardResponse>> getDailyRoutine(@ModelAttribute final GetRequest getRequest) {
-        final GetRequest.SearchDate searchDate = getRequest.getSearchDate();
-        final GetRequest.SearchCondition searchCondition = getRequest.getSearchCondition();
-        final GetRequest.SearchPaging searchPaging = getRequest.getSearchPaging();
+        final CustomPage<NoticeBoardResponse> noticeBoardResponses = getNoticeBoards(getRequest.getSearchDate(), getRequest.getSearchCondition(), getRequest.getSearchPaging());
 
-        CustomPage<NoticeBoardResponse> noticeBoardResponses = noticeBoardService.getNoticeBoards(
+        return ApiResponse.ok(noticeBoardResponses);
+    }
+
+    private CustomPage<NoticeBoardResponse> getNoticeBoards(final GetRequest.SearchDate searchDate, final GetRequest.SearchCondition searchCondition, final GetRequest.SearchPaging searchPaging) {
+        return noticeBoardService.getNoticeBoards(
                 searchDate.startDate(),
                 searchDate.endDate(),
                 searchCondition.category(),
                 searchCondition.searchText(),
                 buildPagable(searchPaging)
         );
-
-        return ApiResponse.ok(noticeBoardResponses);
     }
 
     private PageRequest buildPagable(final GetRequest.SearchPaging searchPaging) {
