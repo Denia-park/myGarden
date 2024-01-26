@@ -248,21 +248,21 @@ class GetRequestTest {
                 .build();
 
         //when
-        final GetRequest getRequest = GetRequest.builder()
-                .searchDate(searchDate)
-                .searchCondition(searchCondition)
-                .searchPaging(searchPaging)
-                .build();
+        final GetRequest getRequest = GetRequest.of(searchDate, searchCondition, searchPaging);
 
         //then
-        assertThat(getRequest.getStartDate()).isEqualTo(LocalDate.now().minusMonths(1));
-        assertThat(getRequest.getEndDate()).isEqualTo(LocalDate.now());
-        assertThat(getRequest.getCategory()).isEmpty();
-        assertThat(getRequest.getSearchText()).isEmpty();
-        assertThat(getRequest.getCurrentPage()).isZero();
-        assertThat(getRequest.getPageSize()).isEqualTo(10);
-        assertThat(getRequest.getSort()).isEqualTo("writtenAt");
-        assertThat(getRequest.getOrder()).isEqualTo("desc");
+        final GetRequest.SearchDate requestSearchDate = getRequest.getSearchDate();
+        final GetRequest.SearchCondition requestSearchCondition = getRequest.getSearchCondition();
+        final GetRequest.SearchPaging requestSearchPaging = getRequest.getSearchPaging();
+
+        assertThat(requestSearchDate.startDate()).isEqualTo(LocalDate.now().minusMonths(1));
+        assertThat(requestSearchDate.endDate()).isEqualTo(LocalDate.now());
+        assertThat(requestSearchCondition.category()).isEmpty();
+        assertThat(requestSearchCondition.searchText()).isEmpty();
+        assertThat(requestSearchPaging.currentPage()).isZero();
+        assertThat(requestSearchPaging.pageSize()).isEqualTo(10);
+        assertThat(requestSearchPaging.sort()).isEqualTo("writtenAt");
+        assertThat(requestSearchPaging.order()).isEqualTo("desc");
     }
 
     @ParameterizedTest
@@ -277,14 +277,8 @@ class GetRequestTest {
                 .order(order)
                 .build();
 
-        final GetRequest getRequest = GetRequest.builder()
-                .searchDate(buildDefaultSearchDate())
-                .searchCondition(buildDefaultSearchCondition())
-                .searchPaging(searchPaging)
-                .build();
-
         //when
-        final Sort.Direction sortDirection = getRequest.convertOrderToSortDirection();
+        final Sort.Direction sortDirection = searchPaging.convertOrderToSortDirection();
 
         //then
         assertThat(sortDirection).isEqualTo(expected);
@@ -295,19 +289,5 @@ class GetRequestTest {
                 Arguments.of("desc", Sort.Direction.DESC),
                 Arguments.of("asc", Sort.Direction.ASC)
         );
-    }
-
-    private GetRequest.SearchDate buildDefaultSearchDate() {
-        return GetRequest.SearchDate.builder()
-                .startDate(null)
-                .endDate(null)
-                .build();
-    }
-
-    private GetRequest.SearchCondition buildDefaultSearchCondition() {
-        return GetRequest.SearchCondition.builder()
-                .category(null)
-                .searchText(null)
-                .build();
     }
 }

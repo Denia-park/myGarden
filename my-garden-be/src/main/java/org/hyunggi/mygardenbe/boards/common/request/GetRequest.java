@@ -9,32 +9,25 @@ import java.util.stream.Stream;
 
 @Getter
 public final class GetRequest {
-    private final LocalDate startDate;
-    private final LocalDate endDate;
-    private final String category;
-    private final String searchText;
-    private final Integer currentPage;
-    private final Integer pageSize;
-    private final String sort;
-    private final String order;
+    private final SearchDate searchDate;
+    private final SearchCondition searchCondition;
+    private final SearchPaging searchPaging;
 
     @Builder
-    public GetRequest(final SearchDate searchDate, final SearchCondition searchCondition, final SearchPaging searchPaging) {
-        this.startDate = searchDate.startDate();
-        this.endDate = searchDate.endDate();
-        this.category = searchCondition.category();
-        this.searchText = searchCondition.searchText();
-        this.currentPage = searchPaging.currentPage();
-        this.pageSize = searchPaging.pageSize();
-        this.sort = searchPaging.sort();
-        this.order = searchPaging.order();
+    public GetRequest(final LocalDate startDate, final LocalDate endDate, final String category, final String searchText, final Integer currentPage, final Integer pageSize, final String sort, final String order) {
+        this.searchDate = new SearchDate(startDate, endDate);
+        this.searchCondition = new SearchCondition(category, searchText);
+        this.searchPaging = new SearchPaging(currentPage, pageSize, sort, order);
     }
 
-    public Sort.Direction convertOrderToSortDirection() {
-        if (order.equals("desc"))
-            return Sort.Direction.DESC;
-        else
-            return Sort.Direction.ASC;
+    private GetRequest(final SearchDate searchDate, final SearchCondition searchCondition, final SearchPaging searchPaging) {
+        this.searchDate = searchDate;
+        this.searchCondition = searchCondition;
+        this.searchPaging = searchPaging;
+    }
+
+    public static GetRequest of(final SearchDate searchDate, final SearchCondition searchCondition, final SearchPaging searchPaging) {
+        return new GetRequest(searchDate, searchCondition, searchPaging);
     }
 
     @Builder
@@ -145,6 +138,13 @@ public final class GetRequest {
                     .filter(o -> o.equals(order))
                     .findAny()
                     .orElseThrow(() -> new IllegalArgumentException("정렬 순서는 asc, desc 중 하나여야 합니다."));
+        }
+
+        public Sort.Direction convertOrderToSortDirection() {
+            if (order.equals("desc"))
+                return Sort.Direction.DESC;
+            else
+                return Sort.Direction.ASC;
         }
     }
 }
