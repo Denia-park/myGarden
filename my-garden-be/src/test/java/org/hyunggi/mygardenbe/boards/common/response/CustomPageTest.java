@@ -7,6 +7,7 @@ import org.springframework.data.domain.*;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class CustomPageTest {
     @Test
@@ -30,5 +31,17 @@ class CustomPageTest {
         assertThat(customPage.getPageSize()).isEqualTo(pageSize);
         assertThat(customPage.getIsFirst()).isTrue();
         assertThat(customPage.getIsLast()).isTrue();
+    }
+
+    @Test
+    @DisplayName("Page 객체가 null일 경우, IllegalArgumentException이 발생한다.")
+    void CustomPage_NullPage() {
+        //given
+        final Page<Integer> page = null;
+
+        //when, then
+        assertThatThrownBy(() -> CustomPage.of(page))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Page 객체는 null이 될 수 없습니다.");
     }
 }

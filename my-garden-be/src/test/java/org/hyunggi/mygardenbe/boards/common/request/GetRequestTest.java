@@ -290,4 +290,25 @@ class GetRequestTest {
                 Arguments.of("asc", Sort.Direction.ASC)
         );
     }
+
+    @Test
+    @DisplayName("SearchPaging의 현재 페이지로 1이상의 정수를 넣으면, 요청 페이지의 -1된 값을 반환한다.")
+    void currentPage() {
+        //given
+        final Integer currentPage = 2;
+        final Integer pageSize = 10;
+        final String sort = "writtenAt";
+        final String order = "desc";
+
+        //when
+        final GetRequest.SearchPaging searchPaging = GetRequest.SearchPaging.builder()
+                .currentPage(currentPage)
+                .pageSize(pageSize)
+                .sort(sort)
+                .order(order)
+                .build();
+
+        //then
+        assertThat(searchPaging.currentPage()).isEqualTo(1);
+    }
 }
