@@ -92,7 +92,7 @@
 
 .button {
   width: 75px;
-  background: black;
+  background: dodgerblue;
   color: white;
   border: none;
   border-radius: 5px;
