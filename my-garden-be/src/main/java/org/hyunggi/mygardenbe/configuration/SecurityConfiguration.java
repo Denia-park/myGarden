@@ -11,6 +11,7 @@ import org.hyunggi.mygardenbe.common.response.ApiResponse;
 import org.hyunggi.mygardenbe.common.view.filter.HistoryModeFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -22,10 +23,12 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.io.IOException;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 @RequiredArgsConstructor
 @Configuration
@@ -40,6 +43,7 @@ public class SecurityConfiguration {
             "/favicon.ico",
             "/",
             "/index.html",
+            "/api/boards/notice/list"
     };
 
     private final JwtAuthenticationFilter jwtAuthFilter;
@@ -52,6 +56,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req ->
                         req
                                 .requestMatchers(WHITE_LIST_URL).permitAll()
+                                .requestMatchers(getOnlyAdminAccessNoticeApi()).hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
@@ -71,6 +76,14 @@ public class SecurityConfiguration {
         return http.build();
     }
 
+    private RequestMatcher[] getOnlyAdminAccessNoticeApi() {
+        return new RequestMatcher[]{
+                antMatcher(HttpMethod.POST, "/api/boards/notice"),
+                antMatcher(HttpMethod.PUT, "/api/boards/notice/**"),
+                antMatcher(HttpMethod.DELETE, "/api/boards/notice/**")
+        };
+    }
+
     private void initializeResponse(final HttpServletResponse res) {
         res.setStatus(HttpServletResponse.SC_OK);
         res.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -82,7 +95,7 @@ public class SecurityConfiguration {
             res.getWriter().write(objectMapper.writeValueAsString(apiResponse));
         } catch (IOException e) {
             final String logoutSuccessHandlerError = "LogoutSuccessHandler error";
-            
+
             log.warn(logoutSuccessHandlerError, e);
             throw new IllegalArgumentException(logoutSuccessHandlerError);
         }
