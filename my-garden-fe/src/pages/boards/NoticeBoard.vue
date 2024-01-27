@@ -1,7 +1,7 @@
 <script setup>
-import TableContents from "@/pages/boards/TableContents.vue";
 import SearchForm from "@/components/boards/common/SearchForm.vue";
 import PaginationForm from "@/components/boards/common/PaginationForm.vue";
+import TableContents from "@/components/boards/common/TableContents.vue";
 </script>
 
 <template>
