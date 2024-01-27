@@ -39,14 +39,14 @@ function isAuthorized(permitRoles, authenticationState) {
 const routerBeforeEach = (router) => {
     router.beforeEach((to, from, next) => {
         // Token 값을 기반으로 account의 roles를 초기화
-        if (!store?.state?.account?.roles.length) {
+        if (!store.getters.getRoles.length) {
             store.dispatch('initializeAuthenticationRoles', store);
         }
 
         // authenticationState는 유저가 로그인이 되어있는지 아닌지 값을 가져와 판별해준다.
         const authenticationState = {
-            isLogin: !!store?.state?.account?.accessToken,
-            roles: store?.state?.account?.roles,
+            isLogin: store.getters.getAccessToken,
+            roles: store.getters.getRoles,
         }
         // permitRoles에서는 라우터에서 메타 속성을 정의해준 값이 담겨진다.
         // undefined, [], ["ROLE_USER"], ["ROLE_ADMIN"]가 올 수 있다.

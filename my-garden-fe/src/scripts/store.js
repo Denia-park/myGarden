@@ -77,6 +77,9 @@ export const store = createStore({
         getRefreshToken(state) {
             return state.account.refreshToken;
         },
+        getRoles(state) {
+            return state.account.roles;
+        },
         getColors(state) {
             return state.colorMap;
         },
