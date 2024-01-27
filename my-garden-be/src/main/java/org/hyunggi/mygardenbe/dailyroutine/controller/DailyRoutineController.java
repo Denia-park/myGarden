@@ -18,18 +18,19 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/daily-routine")
 @RequiredArgsConstructor
 public class DailyRoutineController {
     private final DailyRoutineService dailyRoutineService;
 
-    @GetMapping("/api/daily-routine")
+    @GetMapping
     public ApiResponse<List<DailyRoutineResponse>> getDailyRoutine(@ModelAttribute @Valid final GetRequest getRequest, @LoginUserEntity MemberEntity member) {
         final List<DailyRoutineResponse> dailyRoutineResponses = dailyRoutineService.getDailyRoutine(getRequest.startDateTime(), getRequest.endDateTime(), member);
 
         return ApiResponse.ok(dailyRoutineResponses);
     }
 
-    @PostMapping("/api/daily-routine")
+    @PostMapping
     public ApiResponse<List<Long>> postDailyRoutine(@RequestBody @Valid final PostRequest request, @LoginUserEntity MemberEntity member) {
         final List<RoutineTime> routineTimes = TimeSplitter.split(
                 RoutineTime.of(
@@ -44,7 +45,7 @@ public class DailyRoutineController {
         return ApiResponse.ok(dailyRoutineIds);
     }
 
-    @PutMapping("/api/daily-routine/{timeBlockId}")
+    @PutMapping("/{timeBlockId}")
     public ApiResponse<Long> putDailyRoutine(@PathVariable final Long timeBlockId, @RequestBody @Valid final PostRequest request, @LoginUserEntity MemberEntity member) {
         final RoutineTime routineTime = RoutineTime.of(
                 LocalDateTime.parse(request.startDateTime()),
@@ -57,7 +58,7 @@ public class DailyRoutineController {
         return ApiResponse.ok(updatedId);
     }
 
-    @DeleteMapping("/api/daily-routine/{timeBlockId}")
+    @DeleteMapping("/{timeBlockId}")
     public ApiResponse<Long> deleteDailyRoutine(@PathVariable final Long timeBlockId, @LoginUserEntity MemberEntity member) {
         final Long deletedId = dailyRoutineService.deleteDailyRoutine(timeBlockId, member);
 
