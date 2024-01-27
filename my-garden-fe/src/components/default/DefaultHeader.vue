@@ -4,14 +4,23 @@ import {router} from "@/scripts/router.js";
 import {computed} from "vue";
 import {logoutApi} from "@/components/auth/logout/api/api.js";
 
-function login() {
+function useRoute(route) {
   closeHeader();
-  router.push('/login');
-}
 
-function dailyRoutine() {
-  closeHeader();
-  router.push('/daily-routine');
+  switch (route) {
+    case 'login':
+      router.push('/login');
+      break;
+    case 'dailyRoutine':
+      router.push('/daily-routine');
+      break;
+    case 'logout':
+      logout();
+      break;
+    default:
+      alert('잘못된 접근입니다.');
+      break;
+  }
 }
 
 function logout() {
@@ -53,11 +62,15 @@ const closeHeader = () => {
             <h4 class="text-white">Page</h4>
             <ul class="list-unstyled">
               <li>
-                <a v-if="!store.state.account.accessToken" class="text-white" href="#" @click="login">로그인</a>
-                <a v-else class="text-white" href="#" @click="logout">로그아웃</a>
+                <a v-if="!store.state.account.accessToken" class="text-white" href="#" @click="useRoute('login')">
+                  로그인
+                </a>
+                <a v-else class="text-white" href="#" @click="useRoute('logout')">
+                  로그아웃
+                </a>
               </li>
               <li>
-                <a class="text-white" href="#" @click="dailyRoutine">하루 일과</a>
+                <a class="text-white" href="#" @click="useRoute('dailyRoutine')">하루 일과</a>
               </li>
               <!--              <li><a class="text-white" href="#">정리 게시판</a></li>-->
               <!--              <li><a class="text-white" href="#">하루 습관</a></li>-->
