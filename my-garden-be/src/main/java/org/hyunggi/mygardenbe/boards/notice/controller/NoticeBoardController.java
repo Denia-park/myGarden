@@ -40,7 +40,7 @@ public class NoticeBoardController {
         return PageRequest.of(
                 searchPaging.currentPage(),
                 searchPaging.pageSize(),
-                Sort.by(searchPaging.convertOrderToSortDirection(), searchPaging.sort())
+                Sort.by(searchPaging.convertOrderToSortDirection(), searchPaging.sort(), "id")
         );
     }
 }
