@@ -3,27 +3,39 @@ import SearchForm from "@/components/boards/common/SearchForm.vue";
 import PaginationForm from "@/components/boards/common/PaginationForm.vue";
 import TableContents from "@/components/boards/common/TableContents.vue";
 
-import {ref, watch} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {getNoticeBoardListApi} from "@/components/boards/notice/api/api.js";
 import {store} from "@/scripts/store.js";
 import {getOneMonthAgoDate, getTodayDate} from "@/components/dailyRoutine/api/util.js";
 
 const noticePage = ref({});
 const noticeTotalCount = ref(0);
-const categories = ref([]);
-const startDate = ref(getTodayDate());
-const endDate = ref(getOneMonthAgoDate());
+//TODO: 서버에서부터 카테고리를 받아와야 함
+const categories = ref([
+  {value: "", text: "전체 분류"},
+  {value: "category1", text: "카테고리 테스트1"},
+  {value: "category2", text: "카테고리 테스트2"},
+]);
+const startDate = ref(getOneMonthAgoDate());
+const endDate = ref(getTodayDate());
 
 function isAdminAccount() {
   return store.getters.getRoles.includes("ROLE_ADMIN");
 }
 
-getNoticeBoardListApi().then(response => {
-  noticePage.value = response;
-});
+function getNoticeBoardList(parameter) {
+  getNoticeBoardListApi(parameter)
+      .then(response => {
+        noticePage.value = response;
+      });
+}
 
 watch(() => noticePage.value, () => {
   noticeTotalCount.value = noticePage.value.content.length;
+});
+
+onMounted(() => {
+  getNoticeBoardList();
 });
 </script>
 
@@ -31,8 +43,8 @@ watch(() => noticePage.value, () => {
   <div class="wrapper">
     <h1>공지사항</h1>
 
-    <!--TODO: 검색 조건 (날짜, 카테고리) 전달해야 함 -->
-    <SearchForm :categories="categories" :end-date="endDate" :start-date="startDate"/>
+    <SearchForm :categories="categories" :end-date="endDate" :start-date="startDate"
+                @search="getNoticeBoardList"/>
 
     <div class="total-content-wrapper">
       총 <span> {{ noticeTotalCount }}</span>개의 글이 있습니다.

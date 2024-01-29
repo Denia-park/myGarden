@@ -1,7 +1,14 @@
 import axios from "axios";
 
-export function getNoticeBoardListApi(queryParameter) {
-    return axios.get(`/api/boards/notice/list`)
+export function getNoticeBoardListApi(parameters) {
+    let queryParameter = '';
+    if (parameters) {
+        queryParameter = Object.entries(parameters)
+            .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+            .join('&');
+    }
+    
+    return axios.get(`/api/boards/notice/list?${queryParameter}`)
         .then(({data}) => {
             return data.data;
         })

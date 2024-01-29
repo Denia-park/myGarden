@@ -17,39 +17,57 @@ const props = defineProps({
   },
 });
 
+const emits = defineEmits(["search"]);
+
 const startDate = ref(props.startDate);
 const endDate = ref(props.endDate);
+const category = ref("");
+const searchText = ref("");
+const pageSize = ref(10);
+const sort = ref("writtenAt");
+const order = ref("desc");
+
+function search() {
+  emits("search", {
+    startDate: startDate.value,
+    endDate: endDate.value,
+    category: category.value,
+    searchText: searchText.value,
+    pageSize: pageSize.value,
+    sort: sort.value,
+    order: order.value,
+  });
+}
 </script>
 
 <template>
-  <form action="" class="filter-wrapper" method="get">
+  <div class="filter-wrapper">
     <div class="filter-top-wrapper">
       <div class="reg-date">
         <span id="regDateText">
             등록일
         </span>
-        <input id="regEndDate" v-model="endDate" class="filter-height text-align-center" name="regEndDate" type="date">
-        -
         <input id="regStartDate" v-model="startDate" class="filter-height text-align-center" name="regStartDate"
                type="date">
+        -
+        <input id="regEndDate" v-model="endDate" class="filter-height text-align-center" name="regEndDate" type="date">
       </div>
       <div class="search">
-        <!-- TODO: 카테고리는 부모한테서 받아와야 함 -->
-        <select id="category" class="filter-height" name="searchCategory">
-          <option value="all">전체 분류</option>
-          <option value="title">제목</option>
-          <option value="content">내용</option>
-          <option value="titleContent">제목 + 내용</option>
+        <select id="category" v-model="category" class="filter-height" name="searchCategory">
+          <option v-for="category in categories" :key="category.value" :value="category.value">
+            {{ category.text }}
+          </option>
         </select>
-        <input id="searchBox" class="filter-height" name="searchText" placeholder="검색어를 입력해주세요. (제목 + 내용)"
-               type="text">
-        <button class="button filter-height" type="submit">검색
-        </button>
+        <input id="searchBox" v-model="searchText" class="filter-height" name="searchText"
+               placeholder="검색어를 입력해주세요. (제목 + 내용)"
+               type="text"
+               @keyup.enter="search">
+        <button class="button filter-height" type="submit" @click="search">검색</button>
       </div>
     </div>
     <div class="filter-bot-wrapper">
       <div class="page-size-form ">
-        <select id="pageSize" class="filter-height" name="pageSize">
+        <select id="pageSize" v-model="pageSize" class="filter-height" name="pageSize" @change="search">
           <option value="10">10</option>
           <option value="20">20</option>
           <option value="30">30</option>
@@ -60,18 +78,19 @@ const endDate = ref(props.endDate);
       </div>
       <div class="page-sort-form">
         정렬
-        <select id="sort" class="filter-height" name="sort">
+        <select id="sort" v-model="sort" class="filter-height" name="sort" @change="search">
+          <option value="writtenAt">등록일시</option>
           <option value="category">분류</option>
           <option value="title">제목</option>
           <option value="views">조회수</option>
         </select>
-        <select id="order" class="filter-height" name="order">
+        <select id="order" v-model="order" class="filter-height" name="order" @change="search">
           <option value="desc">내림차순</option>
           <option value="asc">오름차순</option>
         </select>
       </div>
     </div>
-  </form>
+  </div>
 </template>
 
 <style scoped>
