@@ -7,6 +7,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  categories: {
+    type: Array,
+    required: true,
+  },
 });
 
 const pageNumberOffset = ref(0);
@@ -21,6 +25,11 @@ function isWrittenIn7days(writtenAt) {
 watch(() => props.tableContentPage.currentPage, () => {
   pageNumberOffset.value = (props.tableContentPage.currentPage - 1) * props.tableContentPage.pageSize;
 });
+
+function convertCategoryCodeToText(categoryCode) {
+  const category = props.categories.find(category => category.code === categoryCode);
+  return category.text;
+}
 
 </script>
 
@@ -40,7 +49,7 @@ watch(() => props.tableContentPage.currentPage, () => {
     <tr v-for="(notice,index) in tableContentPage.content" :key="notice.id">
       <th scope="row">{{ props.tableContentPage.totalElements - (index + pageNumberOffset) }}
       </th>
-      <td>{{ notice.category }}</td>
+      <td>{{ convertCategoryCodeToText(notice.category) }}</td>
       <td class="table-title">
         <!--TODO: 제목 클릭시 상세 페이지로 이동, Query Parameter 모두 가지고 이동-->
         <a class="title_link" href="#">

@@ -1,21 +1,16 @@
 <script setup>
-import SearchForm from "@/components/boards/common/SearchForm.vue";
 import PaginationForm from "@/components/boards/common/PaginationForm.vue";
 import TableContents from "@/components/boards/common/TableContents.vue";
 
 import {onMounted, ref, watch} from "vue";
-import {getNoticeBoardListApi} from "@/components/boards/notice/api/api.js";
+import {getNoticeBoardCategoryApi, getNoticeBoardListApi} from "@/components/boards/notice/api/api.js";
 import {store} from "@/scripts/store.js";
 import {getOneMonthAgoDate, getTodayDate} from "@/components/dailyRoutine/api/util.js";
+import SearchForm from "@/components/boards/common/SearchForm.vue";
 
 const noticePage = ref({});
 const noticeTotalCount = ref(0);
-//TODO: 서버에서부터 카테고리를 받아와야 함
-const categories = ref([
-  {value: "", text: "전체 분류"},
-  {value: "category1", text: "카테고리 테스트1"},
-  {value: "category2", text: "카테고리 테스트2"},
-]);
+const categories = ref([]);
 const queryParameter = ref({
   startDate: getOneMonthAgoDate(),
   endDate: getTodayDate(),
@@ -37,10 +32,20 @@ function pageChange(currentPage) {
 }
 
 function getNoticeBoardList(parameter) {
-  queryParameter.value = parameter;
+  if (parameter) {
+    queryParameter.value = parameter;
+  }
+
   getNoticeBoardListApi(parameter)
       .then(response => {
         noticePage.value = response;
+      });
+}
+
+function getNoticeBoardCategory() {
+  getNoticeBoardCategoryApi()
+      .then(response => {
+        categories.value = response;
       });
 }
 
@@ -49,6 +54,7 @@ watch(() => noticePage.value, () => {
 });
 
 onMounted(() => {
+  getNoticeBoardCategory();
   getNoticeBoardList();
 });
 </script>
@@ -64,7 +70,7 @@ onMounted(() => {
       총 <span> {{ noticeTotalCount }}</span>개의 글이 있습니다.
     </div>
 
-    <TableContents :table-content-page="noticePage"/>
+    <TableContents :categories="categories" :table-content-page="noticePage"/>
 
     <PaginationForm :page-info="noticePage" @page-change="pageChange"/>
 

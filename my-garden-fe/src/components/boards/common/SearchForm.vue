@@ -52,7 +52,8 @@ function search() {
       </div>
       <div class="search">
         <select id="category" v-model="category" class="filter-height" name="searchCategory">
-          <option v-for="category in categories" :key="category.value" :value="category.value">
+          <option value="">전체 분류</option>
+          <option v-for="category in categories" :key="category.code" :value="category.code">
             {{ category.text }}
           </option>
         </select>
