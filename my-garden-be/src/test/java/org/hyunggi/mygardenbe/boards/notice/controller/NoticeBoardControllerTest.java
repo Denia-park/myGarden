@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class NoticeBoardControllerTest extends ControllerTestSupport {
 
     @Test
-    @DisplayName("공지사항을 조회한다.")
+    @DisplayName("공지사항 목록을 조회한다.")
     void getDailyRoutine_withoutPagination() throws Exception {
         //given
         Pageable pageable = PageRequest.of(0, 10, Sort.by("writtenAt", "id").descending());
@@ -100,5 +100,41 @@ class NoticeBoardControllerTest extends ControllerTestSupport {
 
     private String getFirstSort(final Pageable pageable) {
         return pageable.getSort().toString().split(",")[0];
+    }
+
+    @Test
+    @DisplayName("공지사항을 조회한다.")
+    void getNoticeBoard() throws Exception {
+        //given
+        NoticeBoardResponse noticeBoardResponse = NoticeBoardResponse.builder()
+                .id(1L)
+                .title("공지사항 제목1")
+                .content("공지사항 내용1")
+                .category("공지")
+                .isImportant(true)
+                .views(0)
+                .writer("작성자1")
+                .writtenAt("2021-01-01 00:00:00")
+                .build();
+
+        BDDMockito.given(noticeBoardService.getNoticeBoard(any()))
+                .willReturn(noticeBoardResponse);
+
+        //when
+        mockMvc.perform(
+                        get("/api/boards/notice/1")
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.id").value(1L))
+                .andExpect(jsonPath("$.data.title").value("공지사항 제목1"))
+                .andExpect(jsonPath("$.data.content").value("공지사항 내용1"))
+                .andExpect(jsonPath("$.data.category").value("공지"))
+                .andExpect(jsonPath("$.data.isImportant").value(true))
+                .andExpect(jsonPath("$.data.views").value(0))
+                .andExpect(jsonPath("$.data.writer").value("작성자1"))
+                .andExpect(jsonPath("$.data.writtenAt").value("2021-01-01 00:00:00"));
+
+        //then
+        BDDMockito.verify(noticeBoardService).getNoticeBoard(1L);
     }
 }

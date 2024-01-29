@@ -4,14 +4,16 @@ import {createRouter, createWebHistory} from "vue-router";
 import NotFound from "@/pages/NotFound.vue";
 import SignUp from "@/pages/SignUp.vue";
 import {store} from "@/scripts/store.js";
-import NoticeBoard from "@/pages/boards/notice/NoticeBoardList.vue";
+import NoticeBoardList from "@/pages/boards/notice/NoticeBoardList.vue";
+import NoticeBoardView from "@/pages/boards/notice/NoticeBoardView.vue";
 
 const routes = [
     {path: '/login', component: Login},
     {path: '/signup', component: SignUp},
     {path: '/notFound', component: NotFound},
     {path: '/daily-routine', component: DailyRoutine, meta: {permitRoles: ['ROLE_USER', 'ROLE_ADMIN']}},
-    {path: '/boards/notice', component: NoticeBoard},
+    {path: '/boards/notice', component: NoticeBoardList},
+    {path: '/boards/notice/:boardId', component: NoticeBoardView},
 
     {path: '/', redirect: '/login'},
     {path: '/:pathMatch(.*)*', redirect: '/notFound'}

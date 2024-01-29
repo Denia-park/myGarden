@@ -1,6 +1,7 @@
 <script setup>
 
 import {ref, watch} from "vue";
+import {convertCategoryCodeToText} from "./util/util.js";
 
 const props = defineProps({
   tableContentPage: {
@@ -26,11 +27,6 @@ watch(() => props.tableContentPage.currentPage, () => {
   pageNumberOffset.value = (props.tableContentPage.currentPage - 1) * props.tableContentPage.pageSize;
 });
 
-function convertCategoryCodeToText(categoryCode) {
-  const category = props.categories.find(category => category.code === categoryCode);
-  return category.text;
-}
-
 </script>
 
 <template>
@@ -49,7 +45,7 @@ function convertCategoryCodeToText(categoryCode) {
     <tr v-for="(notice,index) in tableContentPage.content" :key="notice.id">
       <th scope="row">{{ props.tableContentPage.totalElements - (index + pageNumberOffset) }}
       </th>
-      <td>{{ convertCategoryCodeToText(notice.category) }}</td>
+      <td>{{ convertCategoryCodeToText(props.categories, notice.category) }}</td>
       <td class="table-title">
         <!--TODO: 제목 클릭시 상세 페이지로 이동, Query Parameter 모두 가지고 이동-->
         <a class="title_link" href="#">

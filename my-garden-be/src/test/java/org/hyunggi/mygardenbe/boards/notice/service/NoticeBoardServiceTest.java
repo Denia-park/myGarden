@@ -1,5 +1,6 @@
 package org.hyunggi.mygardenbe.boards.notice.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.hyunggi.mygardenbe.IntegrationTestSupport;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
 import org.hyunggi.mygardenbe.boards.notice.entity.NoticeBoardEntity;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -250,5 +252,46 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
         assertThatThrownBy(() -> noticeBoardService.getNoticeBoards(startDate, endDate, category, searchText, pageable))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("페이징 정보는 null이 될 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("공지사항을 조회한다.")
+    void getNoticeBoard() {
+        // given
+        NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
+                "title",
+                "content",
+                "category",
+                true,
+                "writer",
+                LocalDateTime.of(2024, 1, 27, 12, 0, 0),
+                1L
+        );
+        noticeBoardRepository.save(noticeBoardEntity);
+
+        // when
+        final NoticeBoardResponse noticeBoard = noticeBoardService.getNoticeBoard(noticeBoardEntity.getId());
+
+        // then
+        assertThat(noticeBoard.getId()).isEqualTo(noticeBoardEntity.getId());
+        assertThat(noticeBoard.getTitle()).isEqualTo(noticeBoardEntity.getTitle());
+        assertThat(noticeBoard.getContent()).isEqualTo(noticeBoardEntity.getContent());
+        assertThat(noticeBoard.getCategory()).isEqualTo(noticeBoardEntity.getCategory());
+        assertThat(noticeBoard.getIsImportant()).isEqualTo(noticeBoardEntity.getIsImportant());
+        assertThat(noticeBoard.getWriter()).isEqualTo(noticeBoardEntity.getWriter());
+        assertThat(noticeBoard.getWrittenAt()).isEqualTo(noticeBoardEntity.getWrittenAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        assertThat(noticeBoard.getViews()).isEqualTo(noticeBoardEntity.getViews());
+    }
+
+    @Test
+    @DisplayName("공지사항을 조회할 때, 존재하지 않는 공지사항이면, EntityNotFoundException이 발생한다.")
+    void getNoticeBoardWithNonExistNoticeBoard() {
+        // given
+        Long nonExistNoticeBoardId = 1L;
+
+        // when,then
+        assertThatThrownBy(() -> noticeBoardService.getNoticeBoard(nonExistNoticeBoardId))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("해당 게시글이 존재하지 않습니다.");
     }
 }
