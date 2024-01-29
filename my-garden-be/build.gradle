@@ -37,6 +37,9 @@ dependencies {
     //Spring Jpa
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
+    //P6Spy [설정 : application.yml(decorator.datasource.p6spy.enable-logging : true)]
+    //implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.1")
+
     //Spring Validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
