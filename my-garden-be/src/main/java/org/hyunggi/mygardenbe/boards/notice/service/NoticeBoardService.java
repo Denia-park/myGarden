@@ -2,9 +2,10 @@ package org.hyunggi.mygardenbe.boards.notice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
+import org.hyunggi.mygardenbe.boards.notice.repository.NoticeBoardCategoryRepository;
 import org.hyunggi.mygardenbe.boards.notice.repository.NoticeBoardRepository;
+import org.hyunggi.mygardenbe.boards.notice.service.response.NoticeBoardCategoryResponse;
 import org.hyunggi.mygardenbe.boards.notice.service.response.NoticeBoardResponse;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NoticeBoardService {
     private final NoticeBoardRepository noticeBoardRepository;
+    private final NoticeBoardCategoryRepository noticeBoardCategoryService;
 
     public CustomPage<NoticeBoardResponse> getNoticeBoards(final LocalDate startDate, final LocalDate endDate, final String category, final String searchText, final Pageable pageable) {
         validateArguments(startDate, endDate, category, searchText, pageable);
@@ -47,38 +49,36 @@ public class NoticeBoardService {
     }
 
     private CustomPage<NoticeBoardResponse> findAllInDateRange(final Pageable pageable, final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
-        final List<NoticeBoardResponse> noticeBoardResponses = noticeBoardRepository.findAllInDateRange(startDateTime, endDateTime, pageable)
-                .stream()
-                .map(NoticeBoardResponse::of)
-                .toList();
-
-        return CustomPage.of(new PageImpl<>(noticeBoardResponses, pageable, noticeBoardResponses.size()));
+        return CustomPage.of(
+                noticeBoardRepository.findAllInDateRange(startDateTime, endDateTime, pageable)
+                        .map(NoticeBoardResponse::of)
+        );
     }
 
     private CustomPage<NoticeBoardResponse> findAllInDateRangeByCategory(final String category, final Pageable pageable, final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
-        final List<NoticeBoardResponse> noticeBoardResponses = noticeBoardRepository.findAllInDateRangeByCategory(startDateTime, endDateTime, category, pageable)
-                .stream()
-                .map(NoticeBoardResponse::of)
-                .toList();
-
-        return CustomPage.of(new PageImpl<>(noticeBoardResponses, pageable, noticeBoardResponses.size()));
+        return CustomPage.of(
+                noticeBoardRepository.findAllInDateRangeByCategory(startDateTime, endDateTime, category, pageable)
+                        .map(NoticeBoardResponse::of)
+        );
     }
 
     private CustomPage<NoticeBoardResponse> findAllInDateRangeWithTextSearch(final String searchText, final Pageable pageable, final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
-        final List<NoticeBoardResponse> noticeBoardResponses = noticeBoardRepository.findAllInDateRangeWithTextSearch(startDateTime, endDateTime, searchText, pageable)
-                .stream()
-                .map(NoticeBoardResponse::of)
-                .toList();
-
-        return CustomPage.of(new PageImpl<>(noticeBoardResponses, pageable, noticeBoardResponses.size()));
+        return CustomPage.of(
+                noticeBoardRepository.findAllInDateRangeWithTextSearch(startDateTime, endDateTime, searchText, pageable)
+                        .map(NoticeBoardResponse::of)
+        );
     }
 
     private CustomPage<NoticeBoardResponse> findAllInDateRangeByCategoryWithTextSearch(final String category, final String searchText, final Pageable pageable, final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
-        final List<NoticeBoardResponse> noticeBoardResponses = noticeBoardRepository.findAllInDateRangeByCategoryWithTextSearch(startDateTime, endDateTime, category, searchText, pageable)
-                .stream()
-                .map(NoticeBoardResponse::of)
-                .toList();
+        return CustomPage.of(
+                noticeBoardRepository.findAllInDateRangeByCategoryWithTextSearch(startDateTime, endDateTime, category, searchText, pageable)
+                        .map(NoticeBoardResponse::of)
+        );
+    }
 
-        return CustomPage.of(new PageImpl<>(noticeBoardResponses, pageable, noticeBoardResponses.size()));
+    public List<NoticeBoardCategoryResponse> getCategories() {
+        return noticeBoardCategoryService.findAll().stream()
+                .map(NoticeBoardCategoryResponse::of)
+                .toList();
     }
 }

@@ -27,7 +27,7 @@ class NoticeBoardControllerTest extends ControllerTestSupport {
     @DisplayName("공지사항을 조회한다.")
     void getDailyRoutine_withoutPagination() throws Exception {
         //given
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("writtenAt").descending());
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("writtenAt", "id").descending());
 
         List<NoticeBoardResponse> noticeBoardResponses = List.of(
                 NoticeBoardResponse.builder()
@@ -80,9 +80,9 @@ class NoticeBoardControllerTest extends ControllerTestSupport {
         final String currentPage = String.valueOf(pageable.getPageNumber());
         final String pageSize = String.valueOf(pageable.getPageSize());
 
-        final String[] sortOrderString = pageable.getSort().toString().split(":");
+        final String[] sortOrderString = getFirstSort(pageable).split(": ");
         final String sort = sortOrderString[0];
-        final String order = sortOrderString[1].toLowerCase().trim();
+        final String order = sortOrderString[1].toLowerCase();
 
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
 
@@ -96,5 +96,9 @@ class NoticeBoardControllerTest extends ControllerTestSupport {
         queryParams.add("order", order);
 
         return queryParams;
+    }
+
+    private String getFirstSort(final Pageable pageable) {
+        return pageable.getSort().toString().split(",")[0];
     }
 }

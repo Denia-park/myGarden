@@ -1,29 +1,80 @@
 <script setup>
-import SearchForm from "@/pages/boards/SearchForm.vue";
-import PaginationForm from "@/pages/boards/PaginationForm.vue";
-import TableContents from "@/pages/boards/TableContents.vue";
+import PaginationForm from "@/components/boards/common/PaginationForm.vue";
+import TableContents from "@/components/boards/common/TableContents.vue";
+
+import {onMounted, ref, watch} from "vue";
+import {getNoticeBoardCategoryApi, getNoticeBoardListApi} from "@/components/boards/notice/api/api.js";
+import {store} from "@/scripts/store.js";
+import {getOneMonthAgoDate, getTodayDate} from "@/components/dailyRoutine/api/util.js";
+import SearchForm from "@/components/boards/common/SearchForm.vue";
+
+const noticePage = ref({});
+const noticeTotalCount = ref(0);
+const categories = ref([]);
+const queryParameter = ref({
+  startDate: getOneMonthAgoDate(),
+  endDate: getTodayDate(),
+  category: "",
+  searchText: "",
+  currentPage: 1,
+  pageSize: 10,
+  sort: "writtenAt",
+  order: "desc"
+});
+
+function isAdminAccount() {
+  return store.getters.getRoles.includes("ROLE_ADMIN");
+}
+
+function pageChange(currentPage) {
+  queryParameter.value.currentPage = currentPage;
+  getNoticeBoardList(queryParameter.value);
+}
+
+function getNoticeBoardList(parameter) {
+  if (parameter) {
+    queryParameter.value = parameter;
+  }
+
+  getNoticeBoardListApi(parameter)
+      .then(response => {
+        noticePage.value = response;
+      });
+}
+
+function getNoticeBoardCategory() {
+  getNoticeBoardCategoryApi()
+      .then(response => {
+        categories.value = response;
+      });
+}
+
+watch(() => noticePage.value, () => {
+  noticeTotalCount.value = noticePage.value.totalElements;
+});
+
+onMounted(() => {
+  getNoticeBoardCategory();
+  getNoticeBoardList();
+});
 </script>
 
 <template>
   <div class="wrapper">
     <h1>공지사항</h1>
 
-    <!--TODO: 검색 조건 (날짜, 카테고리) 전달해야 함 -->
-    <SearchForm/>
+    <SearchForm :categories="categories" :query-parameter="queryParameter"
+                @search="getNoticeBoardList"/>
 
-    <!--TODO: 전체 몇개의 글인지 표시-->
-    <div id="total_content_num">
-      <p>총 100개의 글이 있습니다.</p>
+    <div class="total-content-wrapper">
+      총 <span> {{ noticeTotalCount }}</span>개의 글이 있습니다.
     </div>
 
-    <!--TODO: 테이블 컨텐츠 전달해야 함 -->
-    <TableContents/>
+    <TableContents :categories="categories" :table-content-page="noticePage"/>
 
-    <!--TODO: 페이지 정보 전달해야 함 -->
-    <PaginationForm/>
+    <PaginationForm :page-info="noticePage" @page-change="pageChange"/>
 
-    <!-- TODO: 내가 admin인 경우에만 `등록` 버튼 활성화 -->
-    <button class="button filter-height align_left" onclick="location.href='post'" type="button">등록</button>
+    <button v-if="isAdminAccount()" class="button filter-height align_left" type="button">등록</button>
   </div>
 </template>
 
@@ -45,11 +96,15 @@ h1 {
   margin: 30px 0;
 }
 
-#total_content_num {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 20px;
+.total-content-wrapper {
+  margin: 10px 0 10px 0;
 }
+
+.total-content-wrapper span {
+  font-size: 15px;
+  font-weight: bold;
+}
+
 
 .filter-height {
   height: 35px;
@@ -57,7 +112,7 @@ h1 {
 
 .button {
   width: 75px;
-  background: black;
+  background: dodgerblue;
   color: white;
   border: none;
   border-radius: 5px;
