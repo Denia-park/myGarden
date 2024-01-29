@@ -31,7 +31,7 @@ function getNoticeBoardList(parameter) {
 }
 
 watch(() => noticePage.value, () => {
-  noticeTotalCount.value = noticePage.value.content.length;
+  noticeTotalCount.value = noticePage.value.totalElements;
 });
 
 onMounted(() => {
