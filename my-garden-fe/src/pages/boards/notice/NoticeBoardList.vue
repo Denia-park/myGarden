@@ -8,6 +8,7 @@ import {store} from "@/scripts/store.js";
 import {getOneMonthAgoDate, getTodayDate} from "@/components/dailyRoutine/api/util.js";
 import SearchForm from "@/components/boards/common/SearchForm.vue";
 import {router} from "@/scripts/router.js";
+import {useRoute} from "vue-router";
 
 const noticePage = ref({});
 const noticeTotalCount = ref(0);
@@ -63,8 +64,12 @@ watch(() => noticePage.value, () => {
 });
 
 onMounted(() => {
+  if (useRoute().query) {
+    queryParameter.value = useRoute().query;
+  }
+
   getNoticeBoardCategory();
-  getNoticeBoardList();
+  getNoticeBoardList(queryParameter.value);
 });
 </script>
 
