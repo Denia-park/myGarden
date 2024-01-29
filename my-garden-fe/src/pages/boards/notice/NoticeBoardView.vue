@@ -1,5 +1,23 @@
 <script setup>
+import {useRoute} from "vue-router";
+import {onMounted, ref} from "vue";
+import {getNoticeBoardCategoryApi, getNoticeBoardViewApi} from "@/components/boards/notice/api/api.js";
+import {convertCategoryCodeToText} from "@/components/boards/common/util/util.js";
 
+const route = useRoute()
+const board = ref({});
+const categories = ref([]);
+
+onMounted(() => {
+  getNoticeBoardCategoryApi()
+      .then(response => {
+        categories.value = response;
+      });
+  getNoticeBoardViewApi(route.params.boardId)
+      .then(response => {
+        board.value = response;
+      });
+});
 </script>
 
 <template>
@@ -7,21 +25,19 @@
     <h1>공지사항</h1>
 
     <div class="detail_title_box">
-      <span id="category">JAVA</span>
-      <p id="title">제목이 출력됩니다.</p>
-      <span id="writtenAt">2022.04.08 12:32</span>
-      <span id="writer">작성자</span>
+      <span id="category">{{ convertCategoryCodeToText(categories, board.category) }}</span>
+      <p id="title">{{ board.title }}</p>
+      <span id="writtenAt"> {{ board.writtenAt }} </span>
+      <span id="writer"> {{ board.writer }} </span>
     </div>
 
     <hr id="title_box_bot_line"/>
 
-    <div id="views"> 조회수:</div>
+    <div id="views"> 조회수: {{ board.views }}</div>
 
     <div class="detail_content_box">
       <div class="content">
-        이것은 내용입니다.이것은 내용입니다.이것은 내용입니다.이것은 내용입니다.이것은 내용입니다.이것은 내용입니다.
-        이것은 내용입니다.이것은 내용입니다.이것은 내용입니다.
-        이것은 내용입니다.이것은 내용입니다.
+        {{ board.content }}
       </div>
     </div>
 
@@ -59,7 +75,6 @@ h1 {
   align-items: center;
 
   font-size: 25px;
-
 }
 
 #category {
@@ -88,7 +103,7 @@ h1 {
 #views {
   font-size: 15px;
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   margin-right: 20px;
 
   text-align: right;
@@ -97,7 +112,9 @@ h1 {
 .detail_content_box {
   border: 1px solid black;
   padding: 15px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+
+  min-height: 400px;
 }
 
 .detail_bot_button_box {
