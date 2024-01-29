@@ -16,14 +16,28 @@ const categories = ref([
   {value: "category1", text: "카테고리 테스트1"},
   {value: "category2", text: "카테고리 테스트2"},
 ]);
-const startDate = ref(getOneMonthAgoDate());
-const endDate = ref(getTodayDate());
+const queryParameter = ref({
+  startDate: getOneMonthAgoDate(),
+  endDate: getTodayDate(),
+  category: "",
+  searchText: "",
+  currentPage: 1,
+  pageSize: 10,
+  sort: "writtenAt",
+  order: "desc"
+});
 
 function isAdminAccount() {
   return store.getters.getRoles.includes("ROLE_ADMIN");
 }
 
+function pageChange(currentPage) {
+  queryParameter.value.currentPage = currentPage;
+  getNoticeBoardList(queryParameter.value);
+}
+
 function getNoticeBoardList(parameter) {
+  queryParameter.value = parameter;
   getNoticeBoardListApi(parameter)
       .then(response => {
         noticePage.value = response;
@@ -43,7 +57,7 @@ onMounted(() => {
   <div class="wrapper">
     <h1>공지사항</h1>
 
-    <SearchForm :categories="categories" :end-date="endDate" :start-date="startDate"
+    <SearchForm :categories="categories" :query-parameter="queryParameter"
                 @search="getNoticeBoardList"/>
 
     <div class="total-content-wrapper">
@@ -52,8 +66,7 @@ onMounted(() => {
 
     <TableContents :table-content-page="noticePage"/>
 
-    <!--TODO: 페이지 정보 전달해야 함 -->
-    <PaginationForm/>
+    <PaginationForm :page-info="noticePage" @page-change="pageChange"/>
 
     <button v-if="isAdminAccount()" class="button filter-height align_left" type="button">등록</button>
   </div>

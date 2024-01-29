@@ -7,25 +7,22 @@ const props = defineProps({
     type: Array,
     required: true,
   },
-  startDate: {
-    type: String,
-    required: true,
-  },
-  endDate: {
-    type: String,
+  queryParameter: {
+    type: Object,
     required: true,
   },
 });
 
 const emits = defineEmits(["search"]);
 
-const startDate = ref(props.startDate);
-const endDate = ref(props.endDate);
-const category = ref("");
-const searchText = ref("");
-const pageSize = ref(10);
-const sort = ref("writtenAt");
-const order = ref("desc");
+const startDate = ref(props.queryParameter.startDate);
+const endDate = ref(props.queryParameter.endDate);
+const category = ref(props.queryParameter.category);
+const searchText = ref(props.queryParameter.searchText);
+const currentPage = ref(props.queryParameter.currentPage);
+const pageSize = ref(props.queryParameter.pageSize);
+const sort = ref(props.queryParameter.sort);
+const order = ref(props.queryParameter.order);
 
 function search() {
   emits("search", {
@@ -33,6 +30,7 @@ function search() {
     endDate: endDate.value,
     category: category.value,
     searchText: searchText.value,
+    currentPage: currentPage.value,
     pageSize: pageSize.value,
     sort: sort.value,
     order: order.value,
