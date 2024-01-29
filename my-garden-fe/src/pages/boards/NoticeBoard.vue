@@ -6,9 +6,13 @@ import TableContents from "@/components/boards/common/TableContents.vue";
 import {ref, watch} from "vue";
 import {getNoticeBoardListApi} from "@/components/boards/notice/api/api.js";
 import {store} from "@/scripts/store.js";
+import {getOneMonthAgoDate, getTodayDate} from "@/components/dailyRoutine/api/util.js";
 
 const noticePage = ref({});
 const noticeTotalCount = ref(0);
+const categories = ref([]);
+const startDate = ref(getTodayDate());
+const endDate = ref(getOneMonthAgoDate());
 
 function isAdminAccount() {
   return store.getters.getRoles.includes("ROLE_ADMIN");
@@ -28,7 +32,7 @@ watch(() => noticePage.value, () => {
     <h1>공지사항</h1>
 
     <!--TODO: 검색 조건 (날짜, 카테고리) 전달해야 함 -->
-    <SearchForm/>
+    <SearchForm :categories="categories" :end-date="endDate" :start-date="startDate"/>
 
     <div class="total-content-wrapper">
       총 <span> {{ noticeTotalCount }}</span>개의 글이 있습니다.

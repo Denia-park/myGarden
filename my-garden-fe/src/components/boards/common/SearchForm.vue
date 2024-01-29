@@ -1,5 +1,24 @@
 <script setup>
 
+import {ref} from "vue";
+
+const props = defineProps({
+  categories: {
+    type: Array,
+    required: true,
+  },
+  startDate: {
+    type: String,
+    required: true,
+  },
+  endDate: {
+    type: String,
+    required: true,
+  },
+});
+
+const startDate = ref(props.startDate);
+const endDate = ref(props.endDate);
 </script>
 
 <template>
@@ -9,10 +28,10 @@
         <span id="regDateText">
             등록일
         </span>
-        <!-- TODO: 등록일도 부모한테서 받아와야 함, 기본적으로 오늘로부터 한달내 조건 -->
-        <input id="regStartDate" class="filter-height text-align-center" name="regStartDate" type="date">
+        <input id="regEndDate" v-model="endDate" class="filter-height text-align-center" name="regEndDate" type="date">
         -
-        <input id="regEndDate" class="filter-height text-align-center" name="regEndDate" type="date">
+        <input id="regStartDate" v-model="startDate" class="filter-height text-align-center" name="regStartDate"
+               type="date">
       </div>
       <div class="search">
         <!-- TODO: 카테고리는 부모한테서 받아와야 함 -->
