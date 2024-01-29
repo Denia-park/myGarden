@@ -38,6 +38,10 @@ function search() {
 }
 
 watch(() => props.queryParameter, () => {
+  if (Object.keys(props.queryParameter).length === 0) {
+    return;
+  }
+
   startDate.value = props.queryParameter.startDate;
   endDate.value = props.queryParameter.endDate;
   category.value = props.queryParameter.category;
