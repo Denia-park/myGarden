@@ -43,8 +43,7 @@ public class SecurityConfiguration {
             "/favicon.ico",
             "/",
             "/index.html",
-            "/api/boards/notice/list",
-            "/api/boards/notice/categories",
+            "/api/boards/notice/**",
     };
 
     private final JwtAuthenticationFilter jwtAuthFilter;

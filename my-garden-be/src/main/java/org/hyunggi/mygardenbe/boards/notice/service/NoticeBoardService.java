@@ -1,7 +1,9 @@
 package org.hyunggi.mygardenbe.boards.notice.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
+import org.hyunggi.mygardenbe.boards.notice.entity.NoticeBoardEntity;
 import org.hyunggi.mygardenbe.boards.notice.repository.NoticeBoardCategoryRepository;
 import org.hyunggi.mygardenbe.boards.notice.repository.NoticeBoardRepository;
 import org.hyunggi.mygardenbe.boards.notice.service.response.NoticeBoardCategoryResponse;
@@ -80,5 +82,14 @@ public class NoticeBoardService {
         return noticeBoardCategoryService.findAll().stream()
                 .map(NoticeBoardCategoryResponse::of)
                 .toList();
+    }
+
+    public NoticeBoardResponse getNoticeBoard(final Long boardId) {
+        return NoticeBoardResponse.of(getNoticeBoardEntity(boardId));
+    }
+
+    private NoticeBoardEntity getNoticeBoardEntity(final Long boardId) {
+        return noticeBoardRepository.findById(boardId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 게시글이 존재하지 않습니다."));
     }
 }

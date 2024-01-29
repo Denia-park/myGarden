@@ -9,10 +9,7 @@ import org.hyunggi.mygardenbe.boards.notice.service.response.NoticeBoardResponse
 import org.hyunggi.mygardenbe.common.response.ApiResponse;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -50,5 +47,10 @@ public class NoticeBoardController {
     @GetMapping("/categories")
     public ApiResponse<List<NoticeBoardCategoryResponse>> getCategories() {
         return ApiResponse.ok(noticeBoardService.getCategories());
+    }
+
+    @GetMapping("/{boardId}")
+    public ApiResponse<NoticeBoardResponse> getNoticeBoard(@PathVariable final Long boardId) {
+        return ApiResponse.ok(noticeBoardService.getNoticeBoard(boardId));
     }
 }
