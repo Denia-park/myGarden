@@ -3,10 +3,18 @@ import {useRoute} from "vue-router";
 import {onMounted, ref} from "vue";
 import {getNoticeBoardCategoryApi, getNoticeBoardViewApi} from "@/components/boards/notice/api/api.js";
 import {convertCategoryCodeToText} from "@/components/boards/common/util/util.js";
+import {router} from "@/scripts/router.js";
 
 const route = useRoute()
 const board = ref({});
 const categories = ref([]);
+
+function goToList() {
+  router.push({
+    name: "NoticeBoardList",
+    query: route.query
+  });
+}
 
 onMounted(() => {
   getNoticeBoardCategoryApi()
@@ -44,8 +52,7 @@ onMounted(() => {
     <hr id="reply_box_bot_line"/>
 
     <div class="detail_bot_button_box">
-      <!--TODO: 목록으로 돌아갈때 쿼리파라미터 첨부해서 돌아가게 하기-->
-      <button id="list_btn">목록</button>
+      <button id="list_btn" @click="goToList">목록</button>
     </div>
   </div>
 </template>

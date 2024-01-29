@@ -12,8 +12,8 @@ const routes = [
     {path: '/signup', component: SignUp},
     {path: '/notFound', component: NotFound},
     {path: '/daily-routine', component: DailyRoutine, meta: {permitRoles: ['ROLE_USER', 'ROLE_ADMIN']}},
-    {path: '/boards/notice', component: NoticeBoardList},
-    {path: '/boards/notice/:boardId', component: NoticeBoardView},
+    {path: '/boards/notice', component: NoticeBoardList, name: 'NoticeBoardList'},
+    {path: '/boards/notice/:boardId', component: NoticeBoardView, name: 'NoticeBoardView'},
 
     {path: '/', redirect: '/login'},
     {path: '/:pathMatch(.*)*', redirect: '/notFound'}

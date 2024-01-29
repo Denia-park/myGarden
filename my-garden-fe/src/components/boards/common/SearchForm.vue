@@ -1,6 +1,6 @@
 <script setup>
 
-import {ref} from "vue";
+import {ref, watch} from "vue";
 
 const props = defineProps({
   categories: {
@@ -36,6 +36,21 @@ function search() {
     order: order.value,
   });
 }
+
+watch(() => props.queryParameter, () => {
+  if (Object.keys(props.queryParameter).length === 0) {
+    return;
+  }
+
+  startDate.value = props.queryParameter.startDate;
+  endDate.value = props.queryParameter.endDate;
+  category.value = props.queryParameter.category;
+  searchText.value = props.queryParameter.searchText;
+  currentPage.value = props.queryParameter.currentPage;
+  pageSize.value = props.queryParameter.pageSize;
+  sort.value = props.queryParameter.sort;
+  order.value = props.queryParameter.order;
+});
 </script>
 
 <template>
