@@ -4,7 +4,7 @@ import {createRouter, createWebHistory} from "vue-router";
 import NotFound from "@/pages/NotFound.vue";
 import SignUp from "@/pages/SignUp.vue";
 import {store} from "@/scripts/store.js";
-import NoticeBoard from "@/pages/boards/NoticeBoard.vue";
+import NoticeBoard from "@/pages/boards/notice/NoticeBoardList.vue";
 
 const routes = [
     {path: '/login', component: Login},
