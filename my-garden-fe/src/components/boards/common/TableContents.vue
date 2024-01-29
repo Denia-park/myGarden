@@ -14,6 +14,8 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits(['goToBoardView',]);
+
 const pageNumberOffset = ref(0);
 
 function isWrittenIn7days(writtenAt) {
@@ -47,8 +49,7 @@ watch(() => props.tableContentPage.currentPage, () => {
       </th>
       <td>{{ convertCategoryCodeToText(props.categories, notice.category) }}</td>
       <td class="table-title">
-        <!--TODO: 제목 클릭시 상세 페이지로 이동, Query Parameter 모두 가지고 이동-->
-        <a class="title_link" href="#">
+        <a class="title_link" href="#" @click="() => emit('goToBoardView', notice.id)">
           {{ notice.title }}
         </a>
         <span v-if="isWrittenIn7days(notice.writtenAt)" class="new-board">NEW</span>

@@ -7,6 +7,7 @@ import {getNoticeBoardCategoryApi, getNoticeBoardListApi} from "@/components/boa
 import {store} from "@/scripts/store.js";
 import {getOneMonthAgoDate, getTodayDate} from "@/components/dailyRoutine/api/util.js";
 import SearchForm from "@/components/boards/common/SearchForm.vue";
+import {router} from "@/scripts/router.js";
 
 const noticePage = ref({});
 const noticeTotalCount = ref(0);
@@ -49,6 +50,14 @@ function getNoticeBoardCategory() {
       });
 }
 
+function goToBoardView(boardId) {
+  router.push({
+    name: "NoticeBoardView",
+    params: {boardId: boardId},
+    query: queryParameter.value
+  });
+}
+
 watch(() => noticePage.value, () => {
   noticeTotalCount.value = noticePage.value.totalElements;
 });
@@ -70,7 +79,7 @@ onMounted(() => {
       총 <span> {{ noticeTotalCount }}</span>개의 글이 있습니다.
     </div>
 
-    <TableContents :categories="categories" :table-content-page="noticePage"/>
+    <TableContents :categories="categories" :table-content-page="noticePage" @go-to-board-view="goToBoardView"/>
 
     <PaginationForm :page-info="noticePage" @page-change="pageChange"/>
 
