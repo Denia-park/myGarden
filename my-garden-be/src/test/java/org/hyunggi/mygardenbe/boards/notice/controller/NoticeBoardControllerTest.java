@@ -1,9 +1,9 @@
 package org.hyunggi.mygardenbe.boards.notice.controller;
 
 import org.hyunggi.mygardenbe.ControllerTestSupport;
+import org.hyunggi.mygardenbe.boards.common.response.BoardCategoryResponse;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
 import org.hyunggi.mygardenbe.boards.notice.controller.request.PostRequest;
-import org.hyunggi.mygardenbe.boards.notice.service.response.NoticeBoardCategoryResponse;
 import org.hyunggi.mygardenbe.boards.notice.service.response.NoticeBoardResponse;
 import org.hyunggi.mygardenbe.member.domain.Role;
 import org.hyunggi.mygardenbe.mock.security.WithMyCustomUser;
@@ -146,10 +146,10 @@ class NoticeBoardControllerTest extends ControllerTestSupport {
     @DisplayName("공지사항 카테고리 목록을 조회한다.")
     void getCategories() throws Exception {
         //given
-        final List<NoticeBoardCategoryResponse> categories = List.of(
-                new NoticeBoardCategoryResponse("project", "프로젝트"),
-                new NoticeBoardCategoryResponse("alarm", "알람"),
-                new NoticeBoardCategoryResponse("study", "스터디"));
+        final List<BoardCategoryResponse> categories = List.of(
+                new BoardCategoryResponse("project", "프로젝트"),
+                new BoardCategoryResponse("alarm", "알람"),
+                new BoardCategoryResponse("study", "스터디"));
 
         BDDMockito.given(noticeBoardService.getCategories())
                 .willReturn(categories);

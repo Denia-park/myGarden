@@ -2,12 +2,12 @@ package org.hyunggi.mygardenbe.boards.notice.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.hyunggi.mygardenbe.boards.common.repository.BoardCategoryRepository;
+import org.hyunggi.mygardenbe.boards.common.response.BoardCategoryResponse;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
 import org.hyunggi.mygardenbe.boards.notice.controller.request.PostRequest;
 import org.hyunggi.mygardenbe.boards.notice.entity.NoticeBoardEntity;
-import org.hyunggi.mygardenbe.boards.notice.repository.NoticeBoardCategoryRepository;
 import org.hyunggi.mygardenbe.boards.notice.repository.NoticeBoardRepository;
-import org.hyunggi.mygardenbe.boards.notice.service.response.NoticeBoardCategoryResponse;
 import org.hyunggi.mygardenbe.boards.notice.service.response.NoticeBoardResponse;
 import org.hyunggi.mygardenbe.member.entity.MemberEntity;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NoticeBoardService {
     private final NoticeBoardRepository noticeBoardRepository;
-    private final NoticeBoardCategoryRepository noticeBoardCategoryService;
+    private final BoardCategoryRepository noticeBoardCategoryService;
 
     public CustomPage<NoticeBoardResponse> getNoticeBoards(final LocalDate startDate, final LocalDate endDate, final String category, final String searchText, final Pageable pageable) {
         validateArguments(startDate, endDate, category, searchText, pageable);
@@ -81,9 +81,9 @@ public class NoticeBoardService {
         );
     }
 
-    public List<NoticeBoardCategoryResponse> getCategories() {
+    public List<BoardCategoryResponse> getCategories() {
         return noticeBoardCategoryService.findAll().stream()
-                .map(NoticeBoardCategoryResponse::of)
+                .map(BoardCategoryResponse::of)
                 .toList();
     }
 

@@ -2,10 +2,10 @@ package org.hyunggi.mygardenbe.boards.notice.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.hyunggi.mygardenbe.boards.common.request.GetRequest;
+import org.hyunggi.mygardenbe.boards.common.response.BoardCategoryResponse;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
 import org.hyunggi.mygardenbe.boards.notice.controller.request.PostRequest;
 import org.hyunggi.mygardenbe.boards.notice.service.NoticeBoardService;
-import org.hyunggi.mygardenbe.boards.notice.service.response.NoticeBoardCategoryResponse;
 import org.hyunggi.mygardenbe.boards.notice.service.response.NoticeBoardResponse;
 import org.hyunggi.mygardenbe.common.auth.LoginUserEntity;
 import org.hyunggi.mygardenbe.common.response.ApiResponse;
@@ -48,7 +48,7 @@ public class NoticeBoardController {
     }
 
     @GetMapping("/categories")
-    public ApiResponse<List<NoticeBoardCategoryResponse>> getCategories() {
+    public ApiResponse<List<BoardCategoryResponse>> getCategories() {
         return ApiResponse.ok(noticeBoardService.getCategories());
     }
 
