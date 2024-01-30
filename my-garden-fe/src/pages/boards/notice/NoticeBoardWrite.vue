@@ -2,8 +2,11 @@
 
 import {router} from "@/scripts/router.js";
 import {useRoute} from "vue-router";
+import {getNoticeBoardCategoryApi} from "@/components/boards/notice/api/api.js";
+import {onMounted, ref} from "vue";
 
 const route = useRoute();
+const categories = ref([]);
 
 function goToPage(pageName) {
   router.push({
@@ -11,6 +14,17 @@ function goToPage(pageName) {
     query: route?.query
   });
 }
+
+function getNoticeBoardCategory() {
+  getNoticeBoardCategoryApi()
+      .then(response => {
+        categories.value = response;
+      });
+}
+
+onMounted(() => {
+  getNoticeBoardCategory();
+});
 </script>
 
 <template>
@@ -26,10 +40,10 @@ function goToPage(pageName) {
           <th scope="row">분류<span class="t_red">*</span></th>
           <td>
             <select id="category" class="tbox01" name="category">
-              <option value="all">분류 선택</option>
-              <option value="java">Java</option>
-              <option value="javascript">JavaScript</option>
-              <option value="database">DataBase</option>
+              <option value="">분류 선택</option>
+              <option v-for="category in categories" :key="category.code" :value="category.code">
+                {{ category.text }}
+              </option>
             </select>
           </td>
         </tr>
