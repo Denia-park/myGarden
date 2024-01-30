@@ -4,6 +4,7 @@ import {onMounted, ref} from "vue";
 import {getNoticeBoardCategoryApi, getNoticeBoardViewApi} from "@/components/boards/notice/api/api.js";
 import {convertCategoryCodeToText} from "@/components/boards/common/util/util.js";
 import {router} from "@/scripts/router.js";
+import {store} from "@/scripts/store.js";
 
 const route = useRoute()
 const board = ref({});
@@ -12,6 +13,18 @@ const categories = ref([]);
 function goToList() {
   router.push({
     name: "NoticeBoardList",
+    query: route.query
+  });
+}
+
+function isAdminAccount() {
+  return store.getters.getRoles.includes("ROLE_ADMIN");
+}
+
+function goToEdit() {
+  router.push({
+    name: "NoticeBoardEdit",
+    params: {boardId: route.params.boardId},
     query: route.query
   });
 }
@@ -53,6 +66,7 @@ onMounted(() => {
 
     <div class="detail_bot_button_box">
       <button id="list_btn" @click="goToList">목록</button>
+      <button v-if="isAdminAccount" id="edit_btn" @click="goToEdit">수정</button>
     </div>
   </div>
 </template>
@@ -135,6 +149,15 @@ h1 {
   color: white;
   border: none;
   border-radius: 5px;
+}
+
+#edit_btn {
+  width: 150px;
+  background: dodgerblue;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-left: 20px;
 }
 
 </style>

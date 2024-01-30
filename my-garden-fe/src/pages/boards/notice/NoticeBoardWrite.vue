@@ -2,12 +2,17 @@
 
 import {router} from "@/scripts/router.js";
 import {useRoute} from "vue-router";
-import {getNoticeBoardCategoryApi} from "@/components/boards/notice/api/api.js";
+import {getNoticeBoardCategoryApi, getNoticeBoardViewApi} from "@/components/boards/notice/api/api.js";
 import {onMounted, ref} from "vue";
 import {postBoardApi} from "@/components/boards/common/api/api.js";
 
 const route = useRoute();
 const categories = ref([]);
+const boardId = route.params?.boardId;
+
+function isEditPage() {
+  return boardId !== undefined;
+}
 
 function goToPage(pageName) {
   router.push({
@@ -42,7 +47,7 @@ function validate(category, title, content) {
   return false;
 }
 
-function saveBoard() {
+function saveBoard(boardId) {
   const category = document.getElementById("category").value;
   const title = document.getElementById("board_writer").value;
   const content = document.getElementById("board_content").value;
@@ -59,11 +64,24 @@ function saveBoard() {
     isImportant: isImportant
   };
 
-  postBoardApi('notice', board);
+  postBoardApi('notice', board, boardId);
+}
+
+function fillInputFromResponse(response) {
+  document.getElementById("category").value = response.category;
+  document.getElementById("board_writer").value = response.title;
+  document.getElementById("board_content").value = response.content;
+  document.getElementById("isImportant").checked = response.isImportant;
 }
 
 onMounted(() => {
   getNoticeBoardCategory();
+  if (isEditPage()) {
+    getNoticeBoardViewApi(boardId)
+        .then(response => {
+          fillInputFromResponse(response);
+        });
+  }
 });
 </script>
 
@@ -106,7 +124,8 @@ onMounted(() => {
     </div>
 
     <div class="post_bot_button_box">
-      <button id="save_btn" @click="saveBoard()">저장</button>
+      <button v-if="isEditPage()" id="edit_btn" @click="saveBoard(boardId)">수정</button>
+      <button v-else id="save_btn" @click="saveBoard()">저장</button>
       <button id="cancel_btn" @click="goToPage('NoticeBoardList')">취소</button>
     </div>
   </div>
@@ -202,6 +221,12 @@ textarea.textarea01 {
 .post_bot_button_box button#cancel_btn {
   background-color: lightgray;
   color: black;
+}
+
+.post_bot_button_box button#edit_btn {
+  background: dodgerblue;
+  color: white;
+  margin-right: 20px;
 }
 
 </style>
