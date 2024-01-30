@@ -2,11 +2,11 @@ package org.hyunggi.mygardenbe.boards.notice.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.hyunggi.mygardenbe.IntegrationTestSupport;
+import org.hyunggi.mygardenbe.boards.common.entity.BoardCategoryEntity;
+import org.hyunggi.mygardenbe.boards.common.repository.BoardCategoryRepository;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
 import org.hyunggi.mygardenbe.boards.notice.controller.request.PostRequest;
-import org.hyunggi.mygardenbe.boards.notice.entity.NoticeBoardCategoryEntity;
 import org.hyunggi.mygardenbe.boards.notice.entity.NoticeBoardEntity;
-import org.hyunggi.mygardenbe.boards.notice.repository.NoticeBoardCategoryRepository;
 import org.hyunggi.mygardenbe.boards.notice.repository.NoticeBoardRepository;
 import org.hyunggi.mygardenbe.boards.notice.service.response.NoticeBoardResponse;
 import org.hyunggi.mygardenbe.member.domain.Member;
@@ -37,7 +37,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @Autowired
     NoticeBoardService noticeBoardService;
     @Autowired
-    NoticeBoardCategoryRepository noticeBoardCategoryRepository;
+    BoardCategoryRepository boardCategoryRepository;
     @Autowired
     MemberRepository memberRepository;
     @Autowired
@@ -54,8 +54,8 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
         final Member anotherMemberDomain = new Member("test2@test.com", "test1234!", Role.ADMIN, true);
         anotherMember = memberRepository.save(MemberEntity.of(anotherMemberDomain, passwordEncoder));
 
-        final NoticeBoardCategoryEntity noticeBoardCategoryEntity = new NoticeBoardCategoryEntity("project", "프로젝트");
-        noticeBoardCategoryRepository.save(noticeBoardCategoryEntity);
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("project", "프로젝트", "notice");
+        boardCategoryRepository.save(boardCategoryEntity);
     }
 
     @Test

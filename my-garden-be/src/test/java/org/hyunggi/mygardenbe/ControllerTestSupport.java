@@ -5,6 +5,8 @@ import org.hyunggi.mygardenbe.auth.controller.AuthenticationController;
 import org.hyunggi.mygardenbe.auth.jwt.filter.JwtAuthenticationFilter;
 import org.hyunggi.mygardenbe.auth.jwt.service.MyLogoutHandler;
 import org.hyunggi.mygardenbe.auth.service.AuthenticationService;
+import org.hyunggi.mygardenbe.boards.common.controller.BoardCategoryController;
+import org.hyunggi.mygardenbe.boards.common.service.BoardCategoryService;
 import org.hyunggi.mygardenbe.boards.notice.controller.NoticeBoardController;
 import org.hyunggi.mygardenbe.boards.notice.service.NoticeBoardService;
 import org.hyunggi.mygardenbe.dailyroutine.controller.DailyRoutineController;
@@ -22,7 +24,8 @@ import org.springframework.test.web.servlet.MockMvc;
         controllers = {
                 AuthenticationController.class,
                 DailyRoutineController.class,
-                NoticeBoardController.class
+                NoticeBoardController.class,
+                BoardCategoryController.class
         },
 
         excludeFilters = {
@@ -52,4 +55,7 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected NoticeBoardService noticeBoardService;
+
+    @MockBean
+    protected BoardCategoryService boardCategoryService;
 }

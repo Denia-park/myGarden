@@ -46,7 +46,7 @@ function deleteBoard() {
 }
 
 onMounted(() => {
-  getNoticeBoardCategoryApi()
+  getNoticeBoardCategoryApi('notice')
       .then(response => {
         categories.value = response;
       });

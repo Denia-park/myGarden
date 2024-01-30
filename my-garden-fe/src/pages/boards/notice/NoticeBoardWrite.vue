@@ -14,16 +14,23 @@ function isEditPage() {
   return boardId !== undefined;
 }
 
-function goToPage(pageName, boardId) {
-  router.push({
-    name: pageName,
-    params: {boardId: boardId},
-    query: route.query
-  });
+function goToBackPage(pageName, boardId) {
+  if (isEditPage()) {
+    router.push({
+      name: pageName + 'View',
+      params: {boardId: boardId},
+      query: route.query
+    });
+  } else {
+    router.push({
+      name: pageName + 'List',
+      query: route.query
+    });
+  }
 }
 
 function getNoticeBoardCategory() {
-  getNoticeBoardCategoryApi()
+  getNoticeBoardCategoryApi('notice')
       .then(response => {
         categories.value = response;
       });
@@ -127,7 +134,7 @@ onMounted(() => {
     <div class="post_bot_button_box">
       <button v-if="isEditPage()" id="edit_btn" @click="saveBoard(boardId)">수정</button>
       <button v-else id="save_btn" @click="saveBoard()">저장</button>
-      <button id="cancel_btn" @click="goToPage('NoticeBoardView', boardId)">취소</button>
+      <button id="cancel_btn" @click="goToBackPage('NoticeBoard', boardId)">취소</button>
     </div>
   </div>
 </template>

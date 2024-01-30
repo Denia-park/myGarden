@@ -5,7 +5,6 @@ import org.hyunggi.mygardenbe.boards.common.request.GetRequest;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
 import org.hyunggi.mygardenbe.boards.notice.controller.request.PostRequest;
 import org.hyunggi.mygardenbe.boards.notice.service.NoticeBoardService;
-import org.hyunggi.mygardenbe.boards.notice.service.response.NoticeBoardCategoryResponse;
 import org.hyunggi.mygardenbe.boards.notice.service.response.NoticeBoardResponse;
 import org.hyunggi.mygardenbe.common.auth.LoginUserEntity;
 import org.hyunggi.mygardenbe.common.response.ApiResponse;
@@ -13,8 +12,6 @@ import org.hyunggi.mygardenbe.member.entity.MemberEntity;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/boards/notice")
@@ -45,11 +42,6 @@ public class NoticeBoardController {
                 searchPaging.pageSize(),
                 Sort.by(searchPaging.convertOrderToSortDirection(), searchPaging.sort(), "id")
         );
-    }
-
-    @GetMapping("/categories")
-    public ApiResponse<List<NoticeBoardCategoryResponse>> getCategories() {
-        return ApiResponse.ok(noticeBoardService.getCategories());
     }
 
     @GetMapping("/{boardId}")
