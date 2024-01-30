@@ -569,4 +569,26 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("해당 게시글의 작성자가 아닙니다.");
     }
+
+    @Test
+    @DisplayName("공지사항을 삭제한다.")
+    void deleteNoticeBoard() {
+        // given
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
+                "title",
+                "content",
+                "category",
+                true,
+                "writer",
+                LocalDateTime.of(2024, 1, 27, 12, 0, 0),
+                member.getId()
+        );
+        noticeBoardRepository.save(noticeBoardEntity);
+
+        // when
+        final Long noticeBoardId = noticeBoardService.deleteNoticeBoard(noticeBoardEntity.getId(), member);
+
+        // then
+        assertThat(noticeBoardRepository.findById(noticeBoardId)).isEmpty();
+    }
 }

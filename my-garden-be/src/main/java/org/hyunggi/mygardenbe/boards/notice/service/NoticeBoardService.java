@@ -132,12 +132,13 @@ public class NoticeBoardService {
         return member.getEmail().split("@")[0];
     }
 
+    @Transactional
     public Long putNoticeBoard(final Long boardId, final PostRequest postRequest, final MemberEntity member) {
         validatePutRequest(boardId, postRequest);
 
         final NoticeBoardEntity noticeBoardEntity = getNoticeBoardEntity(boardId);
 
-        validateBoardWithMember(member, noticeBoardEntity);
+        validateBoardWriter(member, noticeBoardEntity);
 
         noticeBoardEntity.update(
                 postRequest.title(),
@@ -146,10 +147,10 @@ public class NoticeBoardService {
                 postRequest.isImportant()
         );
 
-        return noticeBoardRepository.save(noticeBoardEntity).getId();
+        return boardId;
     }
 
-    private void validateBoardWithMember(final MemberEntity member, final NoticeBoardEntity noticeBoardEntity) {
+    private void validateBoardWriter(final MemberEntity member, final NoticeBoardEntity noticeBoardEntity) {
         if (!noticeBoardEntity.isWriter(member.getId())) {
             throw new IllegalArgumentException("해당 게시글의 작성자가 아닙니다.");
         }
@@ -161,5 +162,18 @@ public class NoticeBoardService {
 
         noticeBoardCategoryService.findByCode(postRequest.category())
                 .orElseThrow(() -> new EntityNotFoundException("해당 분류가 존재하지 않습니다."));
+    }
+
+    @Transactional
+    public Long deleteNoticeBoard(final Long boardId, final MemberEntity member) {
+        validateBoardId(boardId);
+
+        final NoticeBoardEntity noticeBoardEntity = getNoticeBoardEntity(boardId);
+
+        validateBoardWriter(member, noticeBoardEntity);
+
+        noticeBoardRepository.delete(noticeBoardEntity);
+
+        return boardId;
     }
 }

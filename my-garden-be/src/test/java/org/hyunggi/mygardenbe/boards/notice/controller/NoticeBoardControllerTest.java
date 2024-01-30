@@ -225,4 +225,23 @@ class NoticeBoardControllerTest extends ControllerTestSupport {
         //then
         BDDMockito.verify(noticeBoardService).putNoticeBoard(eq(1L), eq(postRequest), any());
     }
+
+    @Test
+    @WithMyCustomUser(role = Role.ADMIN)
+    @DisplayName("공지사항을 삭제한다.")
+    void deleteNoticeBoard() throws Exception {
+        //given
+        BDDMockito.given(noticeBoardService.deleteNoticeBoard(any(), any()))
+                .willReturn(1L);
+
+        //when
+        mockMvc.perform(
+                        delete("/api/boards/notice/1")
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").value(1L));
+
+        //then
+        BDDMockito.verify(noticeBoardService).deleteNoticeBoard(eq(1L), any());
+    }
 }
