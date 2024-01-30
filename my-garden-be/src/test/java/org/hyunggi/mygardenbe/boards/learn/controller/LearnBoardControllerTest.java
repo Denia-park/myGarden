@@ -36,7 +36,7 @@ class LearnBoardControllerTest extends ControllerTestSupport {
                         .id(1L)
                         .title("TIL 제목1")
                         .content("TIL 내용1")
-                        .category("공지")
+                        .category("CS")
                         .views(0)
                         .writer("작성자1")
                         .writtenAt("2021-01-01 00:00:00")
@@ -49,13 +49,13 @@ class LearnBoardControllerTest extends ControllerTestSupport {
         //when
         mockMvc.perform(
                         get("/api/boards/learn/list")
-                                .queryParams(getQueryParams("2021-01-01", "2021-01-31", "공지", pageable))
+                                .queryParams(getQueryParams("2021-01-01", "2021-01-31", "CS", pageable))
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.content[0].id").value(1L))
                 .andExpect(jsonPath("$.data.content[0].title").value("TIL 제목1"))
                 .andExpect(jsonPath("$.data.content[0].content").value("TIL 내용1"))
-                .andExpect(jsonPath("$.data.content[0].category").value("공지"))
+                .andExpect(jsonPath("$.data.content[0].category").value("CS"))
                 .andExpect(jsonPath("$.data.content[0].views").value(0))
                 .andExpect(jsonPath("$.data.content[0].writer").value("작성자1"))
                 .andExpect(jsonPath("$.data.content[0].writtenAt").value("2021-01-01 00:00:00"))
@@ -70,7 +70,7 @@ class LearnBoardControllerTest extends ControllerTestSupport {
         BDDMockito.verify(learnBoardService).getLearnBoards(
                 LocalDate.of(2021, 1, 1),
                 LocalDate.of(2021, 1, 31),
-                "공지",
+                "CS",
                 "",
                 pageable
         );
@@ -110,7 +110,7 @@ class LearnBoardControllerTest extends ControllerTestSupport {
                 .id(1L)
                 .title("TIL 제목1")
                 .content("TIL 내용1")
-                .category("공지")
+                .category("CS")
                 .views(0)
                 .writer("작성자1")
                 .writtenAt("2021-01-01 00:00:00")
@@ -127,7 +127,7 @@ class LearnBoardControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.data.id").value(1L))
                 .andExpect(jsonPath("$.data.title").value("TIL 제목1"))
                 .andExpect(jsonPath("$.data.content").value("TIL 내용1"))
-                .andExpect(jsonPath("$.data.category").value("공지"))
+                .andExpect(jsonPath("$.data.category").value("CS"))
                 .andExpect(jsonPath("$.data.views").value(0))
                 .andExpect(jsonPath("$.data.writer").value("작성자1"))
                 .andExpect(jsonPath("$.data.writtenAt").value("2021-01-01 00:00:00"));
@@ -145,7 +145,7 @@ class LearnBoardControllerTest extends ControllerTestSupport {
         final PostRequest postRequest = PostRequest.builder()
                 .title("TIL 제목1")
                 .content("TIL 내용1")
-                .category("공지")
+                .category("CS")
                 .build();
 
         BDDMockito.given(learnBoardService.postLearnBoard(any(), any()))
@@ -172,7 +172,7 @@ class LearnBoardControllerTest extends ControllerTestSupport {
         final PostRequest postRequest = PostRequest.builder()
                 .title("TIL 제목1")
                 .content("TIL 내용1")
-                .category("공지")
+                .category("CS")
                 .build();
 
         BDDMockito.given(learnBoardService.putLearnBoard(any(), any(), any()))
