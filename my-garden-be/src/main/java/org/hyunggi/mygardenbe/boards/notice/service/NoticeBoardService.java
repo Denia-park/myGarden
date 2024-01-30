@@ -89,10 +89,15 @@ public class NoticeBoardService {
 
     @Transactional
     public NoticeBoardResponse getNoticeBoard(final Long boardId) {
+        validateBoardId(boardId);
         final NoticeBoardEntity noticeBoardEntity = getNoticeBoardEntity(boardId);
         noticeBoardEntity.increaseViewCount();
         
         return NoticeBoardResponse.of(noticeBoardEntity);
+    }
+
+    private void validateBoardId(final Long boardId) {
+        Assert.isTrue(boardId != null && boardId > 0, "boardId는 null이 될 수 없고 0보다 커야합니다.");
     }
 
     private NoticeBoardEntity getNoticeBoardEntity(final Long boardId) {
