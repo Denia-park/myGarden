@@ -54,7 +54,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
         final Member anotherMemberDomain = new Member("test2@test.com", "test1234!", Role.ADMIN, true);
         anotherMember = memberRepository.save(MemberEntity.of(anotherMemberDomain, passwordEncoder));
 
-        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("project", "프로젝트");
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("project", "프로젝트", "notice");
         boardCategoryRepository.save(boardCategoryEntity);
     }
 
