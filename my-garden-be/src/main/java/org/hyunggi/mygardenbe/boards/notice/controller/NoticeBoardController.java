@@ -61,4 +61,9 @@ public class NoticeBoardController {
     public ApiResponse<Long> postNoticeBoard(@RequestBody final PostRequest postRequest, @LoginUserEntity final MemberEntity member) {
         return ApiResponse.ok(noticeBoardService.postNoticeBoard(postRequest, member));
     }
+
+    @PutMapping("/{boardId}")
+    public ApiResponse<Long> putNoticeBoard(@PathVariable final Long boardId, @RequestBody final PostRequest postRequest, @LoginUserEntity final MemberEntity member) {
+        return ApiResponse.ok(noticeBoardService.putNoticeBoard(boardId, postRequest, member));
+    }
 }

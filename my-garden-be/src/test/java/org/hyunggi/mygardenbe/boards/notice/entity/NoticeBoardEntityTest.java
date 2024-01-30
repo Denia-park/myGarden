@@ -201,4 +201,44 @@ class NoticeBoardEntityTest {
         // then
         assertThat(noticeBoardEntity.getViews()).isEqualTo(1);
     }
+
+    @Test
+    @DisplayName("update() 메서드를 통해 NoticeEntity 객체의 필드를 업데이트할 수 있다.")
+    void update() {
+        // given
+        final String title = "title";
+        final String content = "content";
+        final String category = "category";
+        final Boolean isImportant = false;
+        final String writer = "writer";
+        final LocalDateTime writtenAt = LocalDateTime.now();
+        final Long memberId = 1L;
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(title, content, category, isImportant, writer, writtenAt, memberId);
+
+        final String updatedTitle = "updatedTitle";
+        final String updatedContent = "updatedContent";
+        final String updatedCategory = "updatedCategory";
+        final Boolean updatedIsImportant = true;
+
+        // when
+        noticeBoardEntity.update(updatedTitle, updatedContent, updatedCategory, updatedIsImportant);
+
+        // then
+        assertThat(noticeBoardEntity.getTitle()).isEqualTo(updatedTitle);
+        assertThat(noticeBoardEntity.getContent()).isEqualTo(updatedContent);
+        assertThat(noticeBoardEntity.getCategory()).isEqualTo(updatedCategory);
+        assertThat(noticeBoardEntity.getIsImportant()).isEqualTo(updatedIsImportant);
+    }
+
+    @Test
+    @DisplayName("isWriter() 메서드를 통해 작성자와 멤버가 같은 memberId를 가지는지 확인할 수 있다.")
+    void isWriter() {
+        // given
+        final Long memberId = 1L;
+        
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of("title", "content", "category", false, "writer", LocalDateTime.now(), memberId);
+
+        // when, then
+        assertThat(noticeBoardEntity.isWriter(memberId)).isTrue();
+    }
 }

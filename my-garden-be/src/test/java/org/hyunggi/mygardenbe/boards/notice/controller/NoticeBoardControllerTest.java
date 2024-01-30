@@ -22,8 +22,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -197,5 +196,33 @@ class NoticeBoardControllerTest extends ControllerTestSupport {
 
         //then
         BDDMockito.verify(noticeBoardService).postNoticeBoard(eq(postRequest), any());
+    }
+
+    @Test
+    @WithMyCustomUser(role = Role.ADMIN)
+    @DisplayName("공지사항을 수정한다.")
+    void putNoticeBoard() throws Exception {
+        //given
+        final PostRequest postRequest = PostRequest.builder()
+                .title("공지사항 제목1")
+                .content("공지사항 내용1")
+                .category("공지")
+                .isImportant(true)
+                .build();
+
+        BDDMockito.given(noticeBoardService.putNoticeBoard(any(), any(), any()))
+                .willReturn(1L);
+
+        //when
+        mockMvc.perform(
+                        put("/api/boards/notice/1")
+                                .contentType("application/json")
+                                .content(objectMapper.writeValueAsString(postRequest))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").value(1L));
+
+        //then
+        BDDMockito.verify(noticeBoardService).putNoticeBoard(eq(1L), eq(postRequest), any());
     }
 }
