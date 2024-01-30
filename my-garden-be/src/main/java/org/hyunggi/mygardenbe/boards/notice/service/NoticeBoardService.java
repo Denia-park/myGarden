@@ -3,11 +3,13 @@ package org.hyunggi.mygardenbe.boards.notice.service;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
+import org.hyunggi.mygardenbe.boards.notice.controller.request.PostRequest;
 import org.hyunggi.mygardenbe.boards.notice.entity.NoticeBoardEntity;
 import org.hyunggi.mygardenbe.boards.notice.repository.NoticeBoardCategoryRepository;
 import org.hyunggi.mygardenbe.boards.notice.repository.NoticeBoardRepository;
 import org.hyunggi.mygardenbe.boards.notice.service.response.NoticeBoardCategoryResponse;
 import org.hyunggi.mygardenbe.boards.notice.service.response.NoticeBoardResponse;
+import org.hyunggi.mygardenbe.member.entity.MemberEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -91,5 +93,32 @@ public class NoticeBoardService {
     private NoticeBoardEntity getNoticeBoardEntity(final Long boardId) {
         return noticeBoardRepository.findById(boardId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 게시글이 존재하지 않습니다."));
+    }
+
+    public Long postNoticeBoard(final PostRequest postRequest, final MemberEntity member) {
+        validatePostRequest(postRequest);
+
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
+                postRequest.title(),
+                postRequest.content(),
+                postRequest.category(),
+                postRequest.isImportant(),
+                getMemberEmailId(member),
+                LocalDateTime.now(),
+                member.getId()
+        );
+
+        return noticeBoardRepository.save(noticeBoardEntity).getId();
+    }
+
+    private void validatePostRequest(final PostRequest postRequest) {
+        Assert.isTrue(postRequest != null, "PostRequest는 null이 될 수 없습니다.");
+
+        noticeBoardCategoryService.findByCode(postRequest.category())
+                .orElseThrow(() -> new EntityNotFoundException("해당 분류가 존재하지 않습니다."));
+    }
+
+    private String getMemberEmailId(final MemberEntity member) {
+        return member.getEmail().split("@")[0];
     }
 }

@@ -2,7 +2,11 @@ package org.hyunggi.mygardenbe.boards.notice.controller;
 
 import org.hyunggi.mygardenbe.ControllerTestSupport;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
+import org.hyunggi.mygardenbe.boards.notice.controller.request.PostRequest;
+import org.hyunggi.mygardenbe.boards.notice.service.response.NoticeBoardCategoryResponse;
 import org.hyunggi.mygardenbe.boards.notice.service.response.NoticeBoardResponse;
+import org.hyunggi.mygardenbe.member.domain.Role;
+import org.hyunggi.mygardenbe.mock.security.WithMyCustomUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -17,12 +21,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class NoticeBoardControllerTest extends ControllerTestSupport {
-
     @Test
     @DisplayName("공지사항 목록을 조회한다.")
     void getDailyRoutine_withoutPagination() throws Exception {
@@ -136,5 +141,61 @@ class NoticeBoardControllerTest extends ControllerTestSupport {
 
         //then
         BDDMockito.verify(noticeBoardService).getNoticeBoard(1L);
+    }
+
+    @Test
+    @DisplayName("공지사항 카테고리 목록을 조회한다.")
+    void getCategories() throws Exception {
+        //given
+        List<NoticeBoardCategoryResponse> categories = List.of(
+                new NoticeBoardCategoryResponse("project", "프로젝트"),
+                new NoticeBoardCategoryResponse("alarm", "알람"),
+                new NoticeBoardCategoryResponse("study", "스터디"));
+
+        BDDMockito.given(noticeBoardService.getCategories())
+                .willReturn(categories);
+
+        //when
+        mockMvc.perform(
+                        get("/api/boards/notice/categories")
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0].code").value("project"))
+                .andExpect(jsonPath("$.data[0].text").value("프로젝트"))
+                .andExpect(jsonPath("$.data[1].code").value("alarm"))
+                .andExpect(jsonPath("$.data[1].text").value("알람"))
+                .andExpect(jsonPath("$.data[2].code").value("study"))
+                .andExpect(jsonPath("$.data[2].text").value("스터디"));
+
+        //then
+        BDDMockito.verify(noticeBoardService).getCategories();
+    }
+
+    @Test
+    @WithMyCustomUser(role = Role.ADMIN)
+    @DisplayName("공지사항을 작성한다.")
+    void postNoticeBoard() throws Exception {
+        //given
+        PostRequest postRequest = PostRequest.builder()
+                .title("공지사항 제목1")
+                .content("공지사항 내용1")
+                .category("공지")
+                .isImportant(true)
+                .build();
+
+        BDDMockito.given(noticeBoardService.postNoticeBoard(any(), any()))
+                .willReturn(1L);
+
+        //when
+        mockMvc.perform(
+                        post("/api/boards/notice")
+                                .contentType("application/json")
+                                .content(objectMapper.writeValueAsString(postRequest))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").value(1L));
+
+        //then
+        BDDMockito.verify(noticeBoardService).postNoticeBoard(eq(postRequest), any());
     }
 }

@@ -3,10 +3,13 @@ package org.hyunggi.mygardenbe.boards.notice.controller;
 import lombok.RequiredArgsConstructor;
 import org.hyunggi.mygardenbe.boards.common.request.GetRequest;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
+import org.hyunggi.mygardenbe.boards.notice.controller.request.PostRequest;
 import org.hyunggi.mygardenbe.boards.notice.service.NoticeBoardService;
 import org.hyunggi.mygardenbe.boards.notice.service.response.NoticeBoardCategoryResponse;
 import org.hyunggi.mygardenbe.boards.notice.service.response.NoticeBoardResponse;
+import org.hyunggi.mygardenbe.common.auth.LoginUserEntity;
 import org.hyunggi.mygardenbe.common.response.ApiResponse;
+import org.hyunggi.mygardenbe.member.entity.MemberEntity;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
@@ -52,5 +55,10 @@ public class NoticeBoardController {
     @GetMapping("/{boardId}")
     public ApiResponse<NoticeBoardResponse> getNoticeBoard(@PathVariable final Long boardId) {
         return ApiResponse.ok(noticeBoardService.getNoticeBoard(boardId));
+    }
+
+    @PostMapping
+    public ApiResponse<Long> postNoticeBoard(@RequestBody final PostRequest postRequest, @LoginUserEntity final MemberEntity member) {
+        return ApiResponse.ok(noticeBoardService.postNoticeBoard(postRequest, member));
     }
 }

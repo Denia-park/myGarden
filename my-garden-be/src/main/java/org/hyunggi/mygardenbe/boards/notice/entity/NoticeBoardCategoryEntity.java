@@ -18,7 +18,18 @@ public class NoticeBoardCategoryEntity extends BaseEntity {
     private String text;
 
     public NoticeBoardCategoryEntity(String code, String text) {
+        validateConstructor(code, text);
+
         this.code = code;
         this.text = text;
+    }
+
+    private void validateConstructor(final String code, final String text) {
+        if (code == null || code.isBlank()) {
+            throw new IllegalArgumentException("code는 null이거나 비어있을 수 없습니다.");
+        }
+        if (text == null || text.isBlank()) {
+            throw new IllegalArgumentException("text는 null이거나 비어있을 수 없습니다.");
+        }
     }
 }
