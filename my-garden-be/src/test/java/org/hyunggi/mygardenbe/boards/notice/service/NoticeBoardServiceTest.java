@@ -45,10 +45,10 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
 
     @BeforeEach
     void setUpEntity() {
-        Member memberDomain = new Member("test@test.com", "test1234!", Role.ADMIN, true);
+        final Member memberDomain = new Member("test@test.com", "test1234!", Role.ADMIN, true);
         member = memberRepository.save(MemberEntity.of(memberDomain, passwordEncoder));
 
-        NoticeBoardCategoryEntity noticeBoardCategoryEntity = new NoticeBoardCategoryEntity("project", "프로젝트");
+        final NoticeBoardCategoryEntity noticeBoardCategoryEntity = new NoticeBoardCategoryEntity("project", "프로젝트");
         noticeBoardCategoryRepository.save(noticeBoardCategoryEntity);
     }
 
@@ -56,11 +56,11 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("category 및 searchText 없이 조회를 하면, 기간 내의 모든 공지사항을 조회할 수 있다.")
     void getNoticeBoardsWithoutCategoryAndSearchText() {
         // given
-        LocalDate startDate = LocalDate.of(2024, 1, 26);
-        LocalDate endDate = startDate.plusDays(1);
-        String category = "";
-        String searchText = "";
-        Pageable pageable = PageRequest.of(0, 10);
+        final LocalDate startDate = LocalDate.of(2024, 1, 26);
+        final LocalDate endDate = startDate.plusDays(1);
+        final String category = "";
+        final String searchText = "";
+        final Pageable pageable = PageRequest.of(0, 10);
 
         noticeBoardRepository.save(buildNoticeBoardWith("title1", "content1", "category1"));
         noticeBoardRepository.save(buildNoticeBoardWith("title2", "content2", "category2"));
@@ -99,11 +99,11 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("category가 있고, searchText가 없으면, 기간 내의 해당 카테고리의 공지사항을 조회할 수 있다.")
     void getNoticeBoardsWithCategory() {
         // given
-        LocalDate startDate = LocalDate.of(2024, 1, 26);
-        LocalDate endDate = startDate.plusDays(1);
-        String category = "category1";
-        String searchText = "";
-        Pageable pageable = PageRequest.of(0, 10);
+        final LocalDate startDate = LocalDate.of(2024, 1, 26);
+        final LocalDate endDate = startDate.plusDays(1);
+        final String category = "category1";
+        final String searchText = "";
+        final Pageable pageable = PageRequest.of(0, 10);
 
         noticeBoardRepository.save(buildNoticeBoardWith("title1", "content1", "category1"));
         noticeBoardRepository.save(buildNoticeBoardWith("title2", "content2", "category2"));
@@ -128,11 +128,11 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("category가 없고, searchText가 있으면, 기간 내의 해당 검색어가 포함된 공지사항을 조회할 수 있다.")
     void getNoticeBoardsWithSearchText() {
         // given
-        LocalDate startDate = LocalDate.of(2024, 1, 26);
-        LocalDate endDate = startDate.plusDays(1);
-        String category = "";
-        String searchText = "11";
-        Pageable pageable = PageRequest.of(0, 10);
+        final LocalDate startDate = LocalDate.of(2024, 1, 26);
+        final LocalDate endDate = startDate.plusDays(1);
+        final String category = "";
+        final String searchText = "11";
+        final Pageable pageable = PageRequest.of(0, 10);
 
         noticeBoardRepository.save(buildNoticeBoardWith("title11", "content", "category1"));
         noticeBoardRepository.save(buildNoticeBoardWith("title2", "content2", "category2"));
@@ -158,11 +158,11 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("category가 있고, searchText가 있으면, 기간 내의 해당 카테고리의 검색어가 포함된 공지사항을 조회할 수 있다.")
     void getNoticeBoardsWithCategoryAndSearchText() {
         // given
-        LocalDate startDate = LocalDate.of(2024, 1, 26);
-        LocalDate endDate = startDate.plusDays(1);
-        String category = "category1";
-        String searchText = "11";
-        Pageable pageable = PageRequest.of(0, 10);
+        final LocalDate startDate = LocalDate.of(2024, 1, 26);
+        final LocalDate endDate = startDate.plusDays(1);
+        final String category = "category1";
+        final String searchText = "11";
+        final Pageable pageable = PageRequest.of(0, 10);
 
         noticeBoardRepository.save(buildNoticeBoardWith("title11", "content", "category1"));
         noticeBoardRepository.save(buildNoticeBoardWith("title2", "content2", "category2"));
@@ -187,11 +187,11 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("startDate가 null이면, IllegalArgumentException이 발생한다.")
     void getNoticeBoardsWithNullStartDate() {
         // given
-        LocalDate startDate = null;
-        LocalDate endDate = LocalDate.of(2024, 1, 26);
-        String category = "";
-        String searchText = "";
-        Pageable pageable = PageRequest.of(0, 10);
+        final LocalDate startDate = null;
+        final LocalDate endDate = LocalDate.of(2024, 1, 26);
+        final String category = "";
+        final String searchText = "";
+        final Pageable pageable = PageRequest.of(0, 10);
 
         // when,then
         assertThatThrownBy(() -> noticeBoardService.getNoticeBoards(startDate, endDate, category, searchText, pageable))
@@ -203,11 +203,11 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("endDate가 null이면, IllegalArgumentException이 발생한다.")
     void getNoticeBoardsWithNullEndDate() {
         // given
-        LocalDate startDate = LocalDate.of(2024, 1, 26);
-        LocalDate endDate = null;
-        String category = "";
-        String searchText = "";
-        Pageable pageable = PageRequest.of(0, 10);
+        final LocalDate startDate = LocalDate.of(2024, 1, 26);
+        final LocalDate endDate = null;
+        final String category = "";
+        final String searchText = "";
+        final Pageable pageable = PageRequest.of(0, 10);
 
         // when,then
         assertThatThrownBy(() -> noticeBoardService.getNoticeBoards(startDate, endDate, category, searchText, pageable))
@@ -219,11 +219,11 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("startDate가 endDate보다 늦으면, IllegalArgumentException이 발생한다.")
     void getNoticeBoardsWithStartDateAfterEndDate() {
         // given
-        LocalDate startDate = LocalDate.of(2024, 1, 26);
-        LocalDate endDate = startDate.minusDays(1);
-        String category = "";
-        String searchText = "";
-        Pageable pageable = PageRequest.of(0, 10);
+        final LocalDate startDate = LocalDate.of(2024, 1, 26);
+        final LocalDate endDate = startDate.minusDays(1);
+        final String category = "";
+        final String searchText = "";
+        final Pageable pageable = PageRequest.of(0, 10);
 
         // when,then
         assertThatThrownBy(() -> noticeBoardService.getNoticeBoards(startDate, endDate, category, searchText, pageable))
@@ -235,11 +235,11 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("category가 null이면, IllegalArgumentException이 발생한다.")
     void getNoticeBoardsWithNullCategory() {
         // given
-        LocalDate startDate = LocalDate.of(2024, 1, 26);
-        LocalDate endDate = LocalDate.of(2024, 1, 26);
-        String category = null;
-        String searchText = "";
-        Pageable pageable = PageRequest.of(0, 10);
+        final LocalDate startDate = LocalDate.of(2024, 1, 26);
+        final LocalDate endDate = LocalDate.of(2024, 1, 26);
+        final String category = null;
+        final String searchText = "";
+        final Pageable pageable = PageRequest.of(0, 10);
 
         // when,then
         assertThatThrownBy(() -> noticeBoardService.getNoticeBoards(startDate, endDate, category, searchText, pageable))
@@ -251,11 +251,11 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("searchText가 null이면, IllegalArgumentException이 발생한다.")
     void getNoticeBoardsWithNullSearchText() {
         // given
-        LocalDate startDate = LocalDate.of(2024, 1, 26);
-        LocalDate endDate = LocalDate.of(2024, 1, 26);
-        String category = "";
-        String searchText = null;
-        Pageable pageable = PageRequest.of(0, 10);
+        final LocalDate startDate = LocalDate.of(2024, 1, 26);
+        final LocalDate endDate = LocalDate.of(2024, 1, 26);
+        final String category = "";
+        final String searchText = null;
+        final Pageable pageable = PageRequest.of(0, 10);
 
         // when,then
         assertThatThrownBy(() -> noticeBoardService.getNoticeBoards(startDate, endDate, category, searchText, pageable))
@@ -267,11 +267,11 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("pageable이 null이면, IllegalArgumentException이 발생한다.")
     void getNoticeBoardsWithNullPageable() {
         // given
-        LocalDate startDate = LocalDate.of(2024, 1, 26);
-        LocalDate endDate = LocalDate.of(2024, 1, 26);
-        String category = "";
-        String searchText = "";
-        Pageable pageable = null;
+        final LocalDate startDate = LocalDate.of(2024, 1, 26);
+        final LocalDate endDate = LocalDate.of(2024, 1, 26);
+        final String category = "";
+        final String searchText = "";
+        final Pageable pageable = null;
 
         // when,then
         assertThatThrownBy(() -> noticeBoardService.getNoticeBoards(startDate, endDate, category, searchText, pageable))
@@ -283,7 +283,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("공지사항을 조회한다.")
     void getNoticeBoard() {
         // given
-        NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
                 "title",
                 "content",
                 "category",
@@ -309,10 +309,33 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     }
 
     @Test
+    @DisplayName("공지사항을 조회하면, 조회 수가 1 증가한다.")
+    void getNoticeBoardWithIncreaseViewCount() {
+        // given
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
+                "title",
+                "content",
+                "category",
+                true,
+                "writer",
+                LocalDateTime.of(2024, 1, 27, 12, 0, 0),
+                1L
+        );
+        noticeBoardRepository.save(noticeBoardEntity);
+        int beforeViews = noticeBoardEntity.getViews();
+
+        // when
+        final NoticeBoardResponse noticeBoard = noticeBoardService.getNoticeBoard(noticeBoardEntity.getId());
+
+        // then
+        assertThat(noticeBoard.getViews()).isEqualTo(beforeViews + 1);
+    }
+
+    @Test
     @DisplayName("공지사항을 조회할 때, 존재하지 않는 공지사항이면, EntityNotFoundException이 발생한다.")
     void getNoticeBoardWithNonExistNoticeBoard() {
         // given
-        Long nonExistNoticeBoardId = 1L;
+        final Long nonExistNoticeBoardId = 1L;
 
         // when,then
         assertThatThrownBy(() -> noticeBoardService.getNoticeBoard(nonExistNoticeBoardId))
@@ -324,7 +347,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("공지사항을 등록한다.")
     void postNoticeBoard() {
         // given
-        PostRequest postRequest = PostRequest.builder()
+        final PostRequest postRequest = PostRequest.builder()
                 .title("title")
                 .content("content")
                 .category("project")
@@ -349,7 +372,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("공지사항을 등록할 때, PostRequest가 null이면, IllegalArgumentException이 발생한다.")
     void postNoticeBoardWithNullPostRequest() {
         // given
-        PostRequest postRequest = null;
+        final PostRequest postRequest = null;
 
         // when,then
         assertThatThrownBy(() -> noticeBoardService.postNoticeBoard(postRequest, member))
@@ -361,7 +384,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("공지사항을 등록할 때, PostRequest의 category가 존재하지 않으면, EntityNotFoundException이 발생한다.")
     void postNoticeBoardWithNonExistCategory() {
         // given
-        PostRequest postRequest = PostRequest.builder()
+        final PostRequest postRequest = PostRequest.builder()
                 .title("title")
                 .content("content")
                 .category("nonExistCategory")
