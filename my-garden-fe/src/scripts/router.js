@@ -6,6 +6,7 @@ import SignUp from "@/pages/SignUp.vue";
 import {store} from "@/scripts/store.js";
 import NoticeBoardList from "@/pages/boards/notice/NoticeBoardList.vue";
 import NoticeBoardView from "@/pages/boards/notice/NoticeBoardView.vue";
+import NoticeBoardWrite from "@/pages/boards/notice/NoticeBoardWrite.vue";
 
 const routes = [
     {path: '/login', component: Login},
@@ -13,6 +14,7 @@ const routes = [
     {path: '/notFound', component: NotFound},
     {path: '/daily-routine', component: DailyRoutine, meta: {permitRoles: ['ROLE_USER', 'ROLE_ADMIN']}},
     {path: '/boards/notice', component: NoticeBoardList, name: 'NoticeBoardList'},
+    {path: '/boards/notice/write', component: NoticeBoardWrite, name: 'NoticeBoardWrite'},
     {path: '/boards/notice/:boardId', component: NoticeBoardView, name: 'NoticeBoardView'},
 
     {path: '/', redirect: '/login'},
