@@ -32,9 +32,9 @@ class NoticeBoardControllerTest extends ControllerTestSupport {
     @DisplayName("공지사항 목록을 조회한다.")
     void getDailyRoutine_withoutPagination() throws Exception {
         //given
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("writtenAt", "id").descending());
+        final Pageable pageable = PageRequest.of(0, 10, Sort.by("writtenAt", "id").descending());
 
-        List<NoticeBoardResponse> noticeBoardResponses = List.of(
+        final List<NoticeBoardResponse> noticeBoardResponses = List.of(
                 NoticeBoardResponse.builder()
                         .id(1L)
                         .title("공지사항 제목1")
@@ -89,7 +89,7 @@ class NoticeBoardControllerTest extends ControllerTestSupport {
         final String sort = sortOrderString[0];
         final String order = sortOrderString[1].toLowerCase();
 
-        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
 
         queryParams.add("startDate", startDate);
         queryParams.add("endDate", endDate);
@@ -111,7 +111,7 @@ class NoticeBoardControllerTest extends ControllerTestSupport {
     @DisplayName("공지사항을 조회한다.")
     void getNoticeBoard() throws Exception {
         //given
-        NoticeBoardResponse noticeBoardResponse = NoticeBoardResponse.builder()
+        final NoticeBoardResponse noticeBoardResponse = NoticeBoardResponse.builder()
                 .id(1L)
                 .title("공지사항 제목1")
                 .content("공지사항 내용1")
@@ -147,7 +147,7 @@ class NoticeBoardControllerTest extends ControllerTestSupport {
     @DisplayName("공지사항 카테고리 목록을 조회한다.")
     void getCategories() throws Exception {
         //given
-        List<NoticeBoardCategoryResponse> categories = List.of(
+        final List<NoticeBoardCategoryResponse> categories = List.of(
                 new NoticeBoardCategoryResponse("project", "프로젝트"),
                 new NoticeBoardCategoryResponse("alarm", "알람"),
                 new NoticeBoardCategoryResponse("study", "스터디"));
@@ -176,7 +176,7 @@ class NoticeBoardControllerTest extends ControllerTestSupport {
     @DisplayName("공지사항을 작성한다.")
     void postNoticeBoard() throws Exception {
         //given
-        PostRequest postRequest = PostRequest.builder()
+        final PostRequest postRequest = PostRequest.builder()
                 .title("공지사항 제목1")
                 .content("공지사항 내용1")
                 .category("공지")

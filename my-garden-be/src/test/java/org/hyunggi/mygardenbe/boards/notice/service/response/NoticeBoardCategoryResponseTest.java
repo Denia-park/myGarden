@@ -10,11 +10,11 @@ class NoticeBoardCategoryResponseTest {
     @DisplayName("NoticeBoardCategoryResponse 생성 테스트")
     void constructor() {
         // given
-        String code = "code";
-        String text = "text";
+        final String code = "code";
+        final String text = "text";
 
         // when
-        NoticeBoardCategoryResponse noticeBoardCategoryResponse = new NoticeBoardCategoryResponse(code, text);
+        final NoticeBoardCategoryResponse noticeBoardCategoryResponse = new NoticeBoardCategoryResponse(code, text);
 
         // then
         assertThat(noticeBoardCategoryResponse.code()).isEqualTo(code);

@@ -13,8 +13,8 @@ class NoticeBoardCategoryEntityTest {
     @DisplayName("NoticeCategoryEntity 생성 테스트")
     void constructor() {
         // given
-        String code = "code";
-        String text = "text";
+        final String code = "code";
+        final String text = "text";
 
         // when
         NoticeBoardCategoryEntity noticeBoardCategoryEntity = new NoticeBoardCategoryEntity(code, text);
@@ -29,7 +29,7 @@ class NoticeBoardCategoryEntityTest {
     @DisplayName("NoticeCategoryEntity 생성 테스트 - code가 null 혹은 비어있을 때")
     void constructorWithNullCode(final String code) {
         // given
-        String text = "text";
+        final String text = "text";
 
         // when, then
         assertThatThrownBy(() -> new NoticeBoardCategoryEntity(code, text))
@@ -42,7 +42,7 @@ class NoticeBoardCategoryEntityTest {
     @DisplayName("NoticeCategoryEntity 생성 테스트 - text가 null 혹은 비어있을 때")
     void constructorWithNullText(final String text) {
         // given
-        String code = "code";
+        final String code = "code";
 
         // when, then
         assertThatThrownBy(() -> new NoticeBoardCategoryEntity(code, text))

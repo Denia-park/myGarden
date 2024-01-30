@@ -26,7 +26,7 @@ class NoticeBoardEntityTest {
         final Long memberId = 1L;
 
         // when
-        NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(title, content, category, isImportant, writer, writtenAt, memberId);
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(title, content, category, isImportant, writer, writtenAt, memberId);
 
         // then
         assertThat(noticeBoardEntity.getTitle()).isEqualTo(title);
@@ -173,7 +173,7 @@ class NoticeBoardEntityTest {
         final String writer = "writer";
         final LocalDateTime writtenAt = LocalDateTime.now();
         final Long memberId = 1L;
-        NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(title, content, category, isImportant, writer, writtenAt, memberId);
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(title, content, category, isImportant, writer, writtenAt, memberId);
 
         // when
         noticeBoardEntity.setImportant();
@@ -193,7 +193,7 @@ class NoticeBoardEntityTest {
         final String writer = "writer";
         final LocalDateTime writtenAt = LocalDateTime.now();
         final Long memberId = 1L;
-        NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(title, content, category, isImportant, writer, writtenAt, memberId);
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(title, content, category, isImportant, writer, writtenAt, memberId);
 
         // when
         noticeBoardEntity.increaseViewCount();

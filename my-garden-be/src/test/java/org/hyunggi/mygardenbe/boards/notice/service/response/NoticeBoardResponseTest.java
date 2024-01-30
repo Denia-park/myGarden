@@ -13,7 +13,7 @@ class NoticeBoardResponseTest {
     @DisplayName("of 메서드를 통해서, NoticeBoardResponse 객체를 생성할 수 있다.")
     void of() {
         // given
-        NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of("title", "content", "category", "writer", 1L);
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of("title", "content", "category", "writer", 1L);
 
         // when
         final NoticeBoardResponse noticeBoardResponse = NoticeBoardResponse.of(noticeBoardEntity);
