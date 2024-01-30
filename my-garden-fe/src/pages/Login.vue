@@ -3,6 +3,7 @@
 import {onMounted, ref} from "vue";
 import {loginApi} from "@/components/auth/login/api/api.js";
 import {router} from "@/scripts/router.js";
+import {store} from "@/scripts/store.js";
 
 
 const form = ref({
@@ -41,6 +42,7 @@ function submit() {
         alert("로그인에 성공했습니다.");
 
         setRememberMe(email, password);
+        store.dispatch('initializeAuthenticationRoles', store);
 
         router.push('/daily-routine');
       })
