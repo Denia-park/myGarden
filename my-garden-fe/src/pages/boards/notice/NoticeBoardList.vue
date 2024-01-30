@@ -29,8 +29,6 @@ function isAdminAccount() {
 }
 
 function pageChange(currentPage) {
-  console.log(queryParameter.value)
-
   queryParameter.value.currentPage = currentPage;
   getNoticeBoardList(queryParameter.value);
 }
