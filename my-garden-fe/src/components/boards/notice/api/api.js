@@ -17,8 +17,8 @@ export function getNoticeBoardListApi(parameters) {
         });
 }
 
-export function getNoticeBoardCategoryApi() {
-    return axios.get(`/api/boards/notice/categories`)
+export function getNoticeBoardCategoryApi(boardType) {
+    return axios.get(`/api/boards/categories?boardType=${boardType}`)
         .then(({data}) => {
             return data.data;
         })

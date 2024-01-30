@@ -45,7 +45,7 @@ function getNoticeBoardList(parameter) {
 }
 
 function getNoticeBoardCategory() {
-  getNoticeBoardCategoryApi()
+  getNoticeBoardCategoryApi('notice')
       .then(response => {
         categories.value = response;
       });

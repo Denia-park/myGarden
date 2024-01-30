@@ -23,7 +23,7 @@ function goToPage(pageName, boardId) {
 }
 
 function getNoticeBoardCategory() {
-  getNoticeBoardCategoryApi()
+  getNoticeBoardCategoryApi('notice')
       .then(response => {
         categories.value = response;
       });
