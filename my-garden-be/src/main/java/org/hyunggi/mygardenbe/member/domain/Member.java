@@ -11,18 +11,22 @@ public class Member {
     private final boolean enabled;
 
     public Member(final String email, final String password) {
-        validateConstructor(email, password);
+        this(email, password, Role.USER, true);
+    }
+
+    public Member(final String email, final String password, final Role role, final boolean enabled) {
+        validateConstructor(email, password, role);
 
         this.email = email;
         this.password = password;
-        this.role = Role.USER;
-        this.enabled = true;
+        this.role = role;
+        this.enabled = enabled;
     }
 
-    private void validateConstructor(final String email, final String password) {
+    private void validateConstructor(final String email, final String password, final Role role) {
         validateEmail(email);
-
         validatePassword(password);
+        validateRole(role);
     }
 
     private void validateEmail(final String email) {
@@ -55,6 +59,12 @@ public class Member {
         String passwordRegex = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@!%*#?&])[A-Za-z\\d$@!%*#?&]{8,20}$";
         if (!password.matches(passwordRegex)) {
             throw new BusinessException("비밀번호는 8자 이상 20자 이하여야 하며, 영문자, 숫자, 특수문자를 각각 1개 이상씩 포함해야 합니다.");
+        }
+    }
+
+    private void validateRole(final Role role) {
+        if (role == null) {
+            throw new BusinessException("Role은 null이 될 수 없습니다.");
         }
     }
 }
