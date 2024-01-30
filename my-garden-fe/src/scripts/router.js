@@ -21,6 +21,12 @@ const routes = [
         name: 'NoticeBoardWrite',
         meta: {permitRoles: ['ROLE_ADMIN']}
     },
+    {
+        path: '/boards/notice/write/:boardId',
+        component: NoticeBoardWrite,
+        name: 'NoticeBoardEdit',
+        meta: {permitRoles: ['ROLE_ADMIN']}
+    },
 
     {path: '/', redirect: '/login'},
     {path: '/:pathMatch(.*)*', redirect: '/notFound'}
