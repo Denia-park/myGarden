@@ -29,6 +29,8 @@ function isAdminAccount() {
 }
 
 function pageChange(currentPage) {
+  console.log(queryParameter.value)
+
   queryParameter.value.currentPage = currentPage;
   getNoticeBoardList(queryParameter.value);
 }
@@ -71,7 +73,7 @@ watch(() => noticePage.value, () => {
 });
 
 onMounted(() => {
-  if (useRoute().query) {
+  if (Object.keys(useRoute().query).length !== 0) {
     queryParameter.value = useRoute().query;
   }
 
