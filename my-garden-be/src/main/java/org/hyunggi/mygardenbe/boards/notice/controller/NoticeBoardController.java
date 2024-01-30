@@ -35,11 +35,11 @@ public class NoticeBoardController {
                 searchDate.endDate(),
                 searchCondition.category(),
                 searchCondition.searchText(),
-                buildPagable(searchPaging)
+                buildPageable(searchPaging)
         );
     }
 
-    private PageRequest buildPagable(final GetRequest.SearchPaging searchPaging) {
+    private PageRequest buildPageable(final GetRequest.SearchPaging searchPaging) {
         return PageRequest.of(
                 searchPaging.currentPage(),
                 searchPaging.pageSize(),
