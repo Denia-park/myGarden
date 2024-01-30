@@ -66,4 +66,9 @@ public class NoticeBoardController {
     public ApiResponse<Long> putNoticeBoard(@PathVariable final Long boardId, @RequestBody final PostRequest postRequest, @LoginUserEntity final MemberEntity member) {
         return ApiResponse.ok(noticeBoardService.putNoticeBoard(boardId, postRequest, member));
     }
+
+    @DeleteMapping("/{boardId}")
+    public ApiResponse<Long> deleteNoticeBoard(@PathVariable final Long boardId, @LoginUserEntity final MemberEntity member) {
+        return ApiResponse.ok(noticeBoardService.deleteNoticeBoard(boardId, member));
+    }
 }
