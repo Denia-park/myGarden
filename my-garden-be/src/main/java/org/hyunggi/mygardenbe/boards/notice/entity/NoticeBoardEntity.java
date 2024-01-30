@@ -17,7 +17,7 @@ public class NoticeBoardEntity extends BaseEntity {
     private Long id;
     @Column(nullable = false, length = 100)
     private String title;
-    @Column(nullable = false, length = 2000)
+    @Column(nullable = false, length = 4000)
     private String content;
     @Column(nullable = false, length = 20)
     private String category;
