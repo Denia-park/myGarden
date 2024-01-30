@@ -3,14 +3,23 @@ package org.hyunggi.mygardenbe.boards.notice.service;
 import jakarta.persistence.EntityNotFoundException;
 import org.hyunggi.mygardenbe.IntegrationTestSupport;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
+import org.hyunggi.mygardenbe.boards.notice.controller.request.PostRequest;
+import org.hyunggi.mygardenbe.boards.notice.entity.NoticeBoardCategoryEntity;
 import org.hyunggi.mygardenbe.boards.notice.entity.NoticeBoardEntity;
+import org.hyunggi.mygardenbe.boards.notice.repository.NoticeBoardCategoryRepository;
 import org.hyunggi.mygardenbe.boards.notice.repository.NoticeBoardRepository;
 import org.hyunggi.mygardenbe.boards.notice.service.response.NoticeBoardResponse;
+import org.hyunggi.mygardenbe.member.domain.Member;
+import org.hyunggi.mygardenbe.member.domain.Role;
+import org.hyunggi.mygardenbe.member.entity.MemberEntity;
+import org.hyunggi.mygardenbe.member.repository.MemberRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -25,7 +34,23 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     NoticeBoardRepository noticeBoardRepository;
     @Autowired
     NoticeBoardService noticeBoardService;
+    @Autowired
+    NoticeBoardCategoryRepository noticeBoardCategoryRepository;
+    @Autowired
+    MemberRepository memberRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
+    private MemberEntity member;
+
+    @BeforeEach
+    void setUpEntity() {
+        Member memberDomain = new Member("test@test.com", "test1234!", Role.ADMIN, true);
+        member = memberRepository.save(MemberEntity.of(memberDomain, passwordEncoder));
+
+        NoticeBoardCategoryEntity noticeBoardCategoryEntity = new NoticeBoardCategoryEntity("project", "프로젝트");
+        noticeBoardCategoryRepository.save(noticeBoardCategoryEntity);
+    }
 
     @Test
     @DisplayName("category 및 searchText 없이 조회를 하면, 기간 내의 모든 공지사항을 조회할 수 있다.")
@@ -293,5 +318,59 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
         assertThatThrownBy(() -> noticeBoardService.getNoticeBoard(nonExistNoticeBoardId))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("해당 게시글이 존재하지 않습니다.");
+    }
+
+    @Test
+    @DisplayName("공지사항을 등록한다.")
+    void postNoticeBoard() {
+        // given
+        PostRequest postRequest = PostRequest.builder()
+                .title("title")
+                .content("content")
+                .category("project")
+                .isImportant(true)
+                .build();
+
+        // when
+        final Long noticeBoardId = noticeBoardService.postNoticeBoard(postRequest, member);
+
+        // then
+        final NoticeBoardEntity noticeBoardEntity = noticeBoardRepository.findById(noticeBoardId).get();
+
+        assertThat(noticeBoardEntity.getTitle()).isEqualTo("title");
+        assertThat(noticeBoardEntity.getContent()).isEqualTo("content");
+        assertThat(noticeBoardEntity.getCategory()).isEqualTo("project");
+        assertThat(noticeBoardEntity.getIsImportant()).isEqualTo((Boolean) true);
+        assertThat(noticeBoardEntity.getWriter()).isEqualTo(member.getEmail().split("@")[0]);
+        assertThat(noticeBoardEntity.getViews()).isZero();
+    }
+
+    @Test
+    @DisplayName("공지사항을 등록할 때, PostRequest가 null이면, IllegalArgumentException이 발생한다.")
+    void postNoticeBoardWithNullPostRequest() {
+        // given
+        PostRequest postRequest = null;
+
+        // when,then
+        assertThatThrownBy(() -> noticeBoardService.postNoticeBoard(postRequest, member))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("PostRequest는 null이 될 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("공지사항을 등록할 때, PostRequest의 category가 존재하지 않으면, EntityNotFoundException이 발생한다.")
+    void postNoticeBoardWithNonExistCategory() {
+        // given
+        PostRequest postRequest = PostRequest.builder()
+                .title("title")
+                .content("content")
+                .category("nonExistCategory")
+                .isImportant(true)
+                .build();
+
+        // when,then
+        assertThatThrownBy(() -> noticeBoardService.postNoticeBoard(postRequest, member))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("해당 분류가 존재하지 않습니다.");
     }
 }
