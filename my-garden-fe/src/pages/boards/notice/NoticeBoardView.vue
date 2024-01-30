@@ -1,7 +1,11 @@
 <script setup>
 import {useRoute} from "vue-router";
 import {onMounted, ref} from "vue";
-import {getNoticeBoardCategoryApi, getNoticeBoardViewApi} from "@/components/boards/notice/api/api.js";
+import {
+  deleteNoticeBoardApi,
+  getNoticeBoardCategoryApi,
+  getNoticeBoardViewApi
+} from "@/components/boards/notice/api/api.js";
 import {convertCategoryCodeToText} from "@/components/boards/common/util/util.js";
 import {router} from "@/scripts/router.js";
 import {store} from "@/scripts/store.js";
@@ -27,6 +31,18 @@ function goToEdit() {
     params: {boardId: route.params.boardId},
     query: route.query
   });
+}
+
+function deleteBoard() {
+  if (!confirm("정말 삭제하시겠습니까?")) {
+    return;
+  }
+
+  deleteNoticeBoardApi(route.params.boardId)
+      .then(() => {
+        alert("삭제되었습니다.");
+        goToList();
+      });
 }
 
 onMounted(() => {
@@ -67,7 +83,7 @@ onMounted(() => {
     <div class="detail_bot_button_box">
       <button id="list_btn" @click="goToList">목록</button>
       <button v-if="isAdminAccount" id="edit_btn" @click="goToEdit">수정</button>
-      <button v-if="isAdminAccount" id="delete_btn" @click="goToEdit">삭제</button>
+      <button v-if="isAdminAccount" id="delete_btn" @click="deleteBoard">삭제</button>
     </div>
   </div>
 </template>
