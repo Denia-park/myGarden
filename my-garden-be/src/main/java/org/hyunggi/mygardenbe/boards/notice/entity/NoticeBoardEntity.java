@@ -118,4 +118,8 @@ public class NoticeBoardEntity extends BaseEntity {
     public void setImportant() {
         this.isImportant = true;
     }
+
+    public void increaseViewCount() {
+        this.views++;
+    }
 }

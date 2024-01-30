@@ -12,6 +12,7 @@ import org.hyunggi.mygardenbe.boards.notice.service.response.NoticeBoardResponse
 import org.hyunggi.mygardenbe.member.entity.MemberEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
@@ -86,8 +87,12 @@ public class NoticeBoardService {
                 .toList();
     }
 
+    @Transactional
     public NoticeBoardResponse getNoticeBoard(final Long boardId) {
-        return NoticeBoardResponse.of(getNoticeBoardEntity(boardId));
+        final NoticeBoardEntity noticeBoardEntity = getNoticeBoardEntity(boardId);
+        noticeBoardEntity.increaseViewCount();
+        
+        return NoticeBoardResponse.of(noticeBoardEntity);
     }
 
     private NoticeBoardEntity getNoticeBoardEntity(final Long boardId) {

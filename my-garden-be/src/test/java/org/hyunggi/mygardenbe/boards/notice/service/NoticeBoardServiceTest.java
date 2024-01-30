@@ -309,6 +309,29 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     }
 
     @Test
+    @DisplayName("공지사항을 조회하면, 조회 수가 1 증가한다.")
+    void getNoticeBoardWithIncreaseViewCount() {
+        // given
+        NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
+                "title",
+                "content",
+                "category",
+                true,
+                "writer",
+                LocalDateTime.of(2024, 1, 27, 12, 0, 0),
+                1L
+        );
+        noticeBoardRepository.save(noticeBoardEntity);
+        int beforeViews = noticeBoardEntity.getViews();
+
+        // when
+        final NoticeBoardResponse noticeBoard = noticeBoardService.getNoticeBoard(noticeBoardEntity.getId());
+
+        // then
+        assertThat(noticeBoard.getViews()).isEqualTo(beforeViews + 1);
+    }
+
+    @Test
     @DisplayName("공지사항을 조회할 때, 존재하지 않는 공지사항이면, EntityNotFoundException이 발생한다.")
     void getNoticeBoardWithNonExistNoticeBoard() {
         // given

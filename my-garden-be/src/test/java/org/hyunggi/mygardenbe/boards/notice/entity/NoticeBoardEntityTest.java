@@ -181,4 +181,24 @@ class NoticeBoardEntityTest {
         // then
         assertThat(noticeBoardEntity.getIsImportant()).isTrue();
     }
+
+    @Test
+    @DisplayName("increaseViewCount() 메서드를 통해 viewCount를 1 증가시킬 수 있다.")
+    void increaseViewCount() {
+        // given
+        final String title = "title";
+        final String content = "content";
+        final String category = "category";
+        final Boolean isImportant = false;
+        final String writer = "writer";
+        final LocalDateTime writtenAt = LocalDateTime.now();
+        final Long memberId = 1L;
+        NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(title, content, category, isImportant, writer, writtenAt, memberId);
+
+        // when
+        noticeBoardEntity.increaseViewCount();
+
+        // then
+        assertThat(noticeBoardEntity.getViews()).isEqualTo(1);
+    }
 }
