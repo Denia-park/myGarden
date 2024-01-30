@@ -67,6 +67,7 @@ onMounted(() => {
     <div class="detail_bot_button_box">
       <button id="list_btn" @click="goToList">목록</button>
       <button v-if="isAdminAccount" id="edit_btn" @click="goToEdit">수정</button>
+      <button v-if="isAdminAccount" id="delete_btn" @click="goToEdit">삭제</button>
     </div>
   </div>
 </template>
@@ -154,6 +155,15 @@ h1 {
 #edit_btn {
   width: 150px;
   background: dodgerblue;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-left: 20px;
+}
+
+#delete_btn {
+  width: 150px;
+  background: red;
   color: white;
   border: none;
   border-radius: 5px;
