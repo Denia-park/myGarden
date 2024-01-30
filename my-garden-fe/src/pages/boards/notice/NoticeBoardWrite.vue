@@ -12,10 +12,10 @@
       <table aria-describedby="contentsWrite" class="post_table">
         <tbody id="tbody">
         <tr>
-          <th scope="row">카테고리<span class="t_red">*</span></th>
+          <th scope="row">분류<span class="t_red">*</span></th>
           <td>
             <select id="category" class="tbox01" name="category">
-              <option value="all">카테고리 선택</option>
+              <option value="all">분류 선택</option>
               <option value="java">Java</option>
               <option value="javascript">JavaScript</option>
               <option value="database">DataBase</option>
