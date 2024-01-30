@@ -1,5 +1,16 @@
 <script setup>
 
+import {router} from "@/scripts/router.js";
+import {useRoute} from "vue-router";
+
+const route = useRoute();
+
+function goToPage(pageName) {
+  router.push({
+    name: pageName,
+    query: route?.query
+  });
+}
 </script>
 
 <template>
@@ -36,7 +47,7 @@
 
     <div class="post_bot_button_box">
       <button id="save_btn">저장</button>
-      <button id="cancel_btn">취소</button>
+      <button id="cancel_btn" @click="goToPage('NoticeBoardList')">취소</button>
     </div>
   </div>
 </template>

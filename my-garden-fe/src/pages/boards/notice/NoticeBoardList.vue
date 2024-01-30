@@ -59,6 +59,13 @@ function goToBoardView(boardId) {
   });
 }
 
+function goToPage(pageName) {
+  router.push({
+    name: pageName,
+    query: queryParameter.value
+  });
+}
+
 watch(() => noticePage.value, () => {
   noticeTotalCount.value = noticePage.value.totalElements;
 });
@@ -88,7 +95,10 @@ onMounted(() => {
 
     <PaginationForm :page-info="noticePage" @page-change="pageChange"/>
 
-    <button v-if="isAdminAccount()" class="button filter-height align_left" type="button">등록</button>
+    <button v-if="isAdminAccount()" class="button filter-height align_left" type="button"
+            @click="() => goToPage('NoticeBoardWrite')">
+      등록
+    </button>
   </div>
 </template>
 
