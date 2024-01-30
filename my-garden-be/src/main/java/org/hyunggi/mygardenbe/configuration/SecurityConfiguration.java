@@ -55,8 +55,8 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
                         req
-                                .requestMatchers(WHITE_LIST_URL).permitAll()
                                 .requestMatchers(getOnlyAdminAccessNoticeApi()).hasRole("ADMIN")
+                                .requestMatchers(WHITE_LIST_URL).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
