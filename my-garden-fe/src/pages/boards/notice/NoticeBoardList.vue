@@ -9,6 +9,8 @@ import {getOneMonthAgoDate, getTodayDate} from "@/components/dailyRoutine/api/ut
 import SearchForm from "@/components/boards/common/SearchForm.vue";
 import {router} from "@/scripts/router.js";
 import {useRoute} from "vue-router";
+import TotalElementCounter from "@/components/boards/common/TotalElementCounter.vue";
+import WriteButton from "@/components/boards/common/WriteButton.vue";
 
 const noticePage = ref({});
 const noticeTotalCount = ref(0);
@@ -59,13 +61,6 @@ function goToBoardView(boardId) {
   });
 }
 
-function goToPage(pageName) {
-  router.push({
-    name: pageName,
-    query: queryParameter.value
-  });
-}
-
 watch(() => noticePage.value, () => {
   noticeTotalCount.value = noticePage.value.totalElements;
 });
@@ -87,18 +82,13 @@ onMounted(() => {
     <SearchForm :categories="categories" :query-parameter="queryParameter"
                 @search="getNoticeBoardList"/>
 
-    <div class="total-content-wrapper">
-      총 <span> {{ noticeTotalCount }}</span>개의 글이 있습니다.
-    </div>
+    <TotalElementCounter :total-element="noticeTotalCount"/>
 
     <TableContents :categories="categories" :table-content-page="noticePage" @go-to-board-view="goToBoardView"/>
 
     <PaginationForm :page-info="noticePage" @page-change="pageChange"/>
 
-    <button v-if="isAdminAccount()" class="button filter-height align_left" type="button"
-            @click="() => goToPage('NoticeBoardWrite')">
-      등록
-    </button>
+    <WriteButton :is-show="isAdminAccount()" :query-parameter="queryParameter" :write-page-name="'NoticeBoardWrite'"/>
   </div>
 </template>
 
@@ -120,30 +110,4 @@ h1 {
   margin: 30px 0;
 }
 
-.total-content-wrapper {
-  margin: 10px 0 10px 0;
-}
-
-.total-content-wrapper span {
-  font-size: 15px;
-  font-weight: bold;
-}
-
-
-.filter-height {
-  height: 35px;
-}
-
-.button {
-  width: 75px;
-  background: dodgerblue;
-  color: white;
-  border: none;
-  border-radius: 5px;
-}
-
-.align_left {
-  float: right;
-  margin-right: 10px;
-}
 </style>
