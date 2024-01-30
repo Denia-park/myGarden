@@ -2,7 +2,7 @@ import axios from "axios";
 import {store} from "@/scripts/store.js";
 import {router} from "@/scripts/router.js";
 
-let isRefreshing = false;
+let isRefreshing = 0;
 
 const setup = () => {
     axios.interceptors.request.use(
@@ -32,14 +32,15 @@ const setup = () => {
 
     axios.interceptors.response.use(
         (res) => {
+            isRefreshing = 0;
             return res;
         },
         async (err) => {
             const originalConfig = err.config;
 
             // Access Token이 만료됨
-            if (err && err.response.status === 401 && !isRefreshing) {
-                isRefreshing = true;
+            if (err && err.response.status === 401 && isRefreshing < 3) {
+                isRefreshing++;
 
                 try {
                     const result = await refreshTokenApi();
@@ -59,8 +60,8 @@ const setup = () => {
 
                     return Promise.reject(_error);
                 }
-            } else if (err && err.response.status === 400 && isRefreshing) {
-                isRefreshing = false;
+            } else if (err && err.response.status === 400 && isRefreshing > 3) {
+                isRefreshing = 0;
 
                 // Refresh Token이 만료되었거나, 다른 이유로 인해 재시도를 하지 못한 경우 (다른 브라우저에서 로그아웃, 다른 브라우저에서 로그인 등)
                 //로그인 정보 삭제, 세션 스토리지 삭제

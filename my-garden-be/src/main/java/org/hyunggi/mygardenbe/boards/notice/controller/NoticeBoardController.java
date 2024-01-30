@@ -35,11 +35,11 @@ public class NoticeBoardController {
                 searchDate.endDate(),
                 searchCondition.category(),
                 searchCondition.searchText(),
-                buildPagable(searchPaging)
+                buildPageable(searchPaging)
         );
     }
 
-    private PageRequest buildPagable(final GetRequest.SearchPaging searchPaging) {
+    private PageRequest buildPageable(final GetRequest.SearchPaging searchPaging) {
         return PageRequest.of(
                 searchPaging.currentPage(),
                 searchPaging.pageSize(),
@@ -60,5 +60,10 @@ public class NoticeBoardController {
     @PostMapping
     public ApiResponse<Long> postNoticeBoard(@RequestBody final PostRequest postRequest, @LoginUserEntity final MemberEntity member) {
         return ApiResponse.ok(noticeBoardService.postNoticeBoard(postRequest, member));
+    }
+
+    @PutMapping("/{boardId}")
+    public ApiResponse<Long> putNoticeBoard(@PathVariable final Long boardId, @RequestBody final PostRequest postRequest, @LoginUserEntity final MemberEntity member) {
+        return ApiResponse.ok(noticeBoardService.putNoticeBoard(boardId, postRequest, member));
     }
 }

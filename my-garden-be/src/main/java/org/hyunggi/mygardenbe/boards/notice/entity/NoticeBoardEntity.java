@@ -122,4 +122,24 @@ public class NoticeBoardEntity extends BaseEntity {
     public void increaseViewCount() {
         this.views++;
     }
+
+    public void update(final String title, final String content, final String category, final Boolean important) {
+        validateUpdate(title, content, category, important);
+
+        this.title = title;
+        this.content = content;
+        this.category = category;
+        this.isImportant = important;
+    }
+
+    private void validateUpdate(final String title, final String content, final String category, final Boolean important) {
+        validateTitle(title);
+        validateContent(content);
+        validateCategory(category);
+        validateIsImportant(important);
+    }
+
+    public boolean isWriter(final Long memberId) {
+        return this.memberId.equals(memberId);
+    }
 }

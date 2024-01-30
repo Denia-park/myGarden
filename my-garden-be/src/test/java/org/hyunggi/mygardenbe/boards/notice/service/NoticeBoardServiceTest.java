@@ -16,6 +16,8 @@ import org.hyunggi.mygardenbe.member.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -42,11 +44,15 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     private PasswordEncoder passwordEncoder;
 
     private MemberEntity member;
+    private MemberEntity anotherMember;
 
     @BeforeEach
     void setUpEntity() {
         final Member memberDomain = new Member("test@test.com", "test1234!", Role.ADMIN, true);
         member = memberRepository.save(MemberEntity.of(memberDomain, passwordEncoder));
+
+        final Member anotherMemberDomain = new Member("test2@test.com", "test1234!", Role.ADMIN, true);
+        anotherMember = memberRepository.save(MemberEntity.of(anotherMemberDomain, passwordEncoder));
 
         final NoticeBoardCategoryEntity noticeBoardCategoryEntity = new NoticeBoardCategoryEntity("project", "프로젝트");
         noticeBoardCategoryRepository.save(noticeBoardCategoryEntity);
@@ -331,6 +337,16 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
         assertThat(noticeBoard.getViews()).isEqualTo(beforeViews + 1);
     }
 
+    @ParameterizedTest
+    @CsvSource(value = {"0", "-1", ","})
+    @DisplayName("공지사항을 조회할 때, boardId가 null혹은 0보다 작으면, IllegalArgumentException이 발생한다.")
+    void getNoticeBoardWithNullBoardId(final Long boardId) {
+        // when,then
+        assertThatThrownBy(() -> noticeBoardService.getNoticeBoard(boardId))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("boardId는 null이 될 수 없고 0보다 커야합니다.");
+    }
+
     @Test
     @DisplayName("공지사항을 조회할 때, 존재하지 않는 공지사항이면, EntityNotFoundException이 발생한다.")
     void getNoticeBoardWithNonExistNoticeBoard() {
@@ -395,5 +411,162 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
         assertThatThrownBy(() -> noticeBoardService.postNoticeBoard(postRequest, member))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("해당 분류가 존재하지 않습니다.");
+    }
+
+    @Test
+    @DisplayName("공지사항을 수정한다.")
+    void putNoticeBoard() {
+        // given
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
+                "title",
+                "content",
+                "category",
+                true,
+                "writer",
+                LocalDateTime.of(2024, 1, 27, 12, 0, 0),
+                member.getId()
+        );
+        noticeBoardRepository.save(noticeBoardEntity);
+
+        final PostRequest postRequest = PostRequest.builder()
+                .title("title2")
+                .content("content2")
+                .category("project")
+                .isImportant(false)
+                .build();
+
+        // when
+        final Long noticeBoardId = noticeBoardService.putNoticeBoard(noticeBoardEntity.getId(), postRequest, member);
+
+        // then
+        final NoticeBoardEntity updatedNoticeBoardEntity = noticeBoardRepository.findById(noticeBoardId).get();
+
+        assertThat(updatedNoticeBoardEntity.getTitle()).isEqualTo("title2");
+        assertThat(updatedNoticeBoardEntity.getContent()).isEqualTo("content2");
+        assertThat(updatedNoticeBoardEntity.getCategory()).isEqualTo("project");
+        assertThat(updatedNoticeBoardEntity.getIsImportant()).isEqualTo((Boolean) false);
+    }
+
+    @Test
+    @DisplayName("공지사항을 수정할 때, boardId가 null이면, IllegalArgumentException이 발생한다.")
+    void putNoticeBoardWithNullBoardId() {
+        // given
+        final Long boardId = null;
+        final PostRequest postRequest = PostRequest.builder()
+                .title("title2")
+                .content("content2")
+                .category("project")
+                .isImportant(false)
+                .build();
+
+        // when,then
+        assertThatThrownBy(() -> noticeBoardService.putNoticeBoard(boardId, postRequest, member))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("boardId는 null이 될 수 없고 0보다 커야합니다.");
+    }
+
+    @Test
+    @DisplayName("공지사항을 수정할 때, boardId가 0보다 작으면, IllegalArgumentException이 발생한다.")
+    void putNoticeBoardWithNegativeBoardId() {
+        // given
+        final Long boardId = -1L;
+        final PostRequest postRequest = PostRequest.builder()
+                .title("title2")
+                .content("content2")
+                .category("project")
+                .isImportant(false)
+                .build();
+
+        // when,then
+        assertThatThrownBy(() -> noticeBoardService.putNoticeBoard(boardId, postRequest, member))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("boardId는 null이 될 수 없고 0보다 커야합니다.");
+    }
+
+    @Test
+    @DisplayName("공지사항을 수정할 때, PostRequest가 null이면, IllegalArgumentException이 발생한다.")
+    void putNoticeBoardWithNullPostRequest() {
+        // given
+        final Long boardId = 1L;
+        final PostRequest postRequest = null;
+
+        // when,then
+        assertThatThrownBy(() -> noticeBoardService.putNoticeBoard(boardId, postRequest, member))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("PostRequest는 null이 될 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("공지사항을 수정할 때, PostRequest의 category가 존재하지 않으면, EntityNotFoundException이 발생한다.")
+    void putNoticeBoardWithNonExistCategory() {
+        // given
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
+                "title",
+                "content",
+                "category",
+                true,
+                "writer",
+                LocalDateTime.of(2024, 1, 27, 12, 0, 0),
+                member.getId()
+        );
+        noticeBoardRepository.save(noticeBoardEntity);
+
+        final PostRequest postRequest = PostRequest.builder()
+                .title("title2")
+                .content("content2")
+                .category("nonExistCategory")
+                .isImportant(false)
+                .build();
+
+        // when,then
+        assertThatThrownBy(() -> noticeBoardService.putNoticeBoard(noticeBoardEntity.getId(), postRequest, member))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("해당 분류가 존재하지 않습니다.");
+    }
+
+    @Test
+    @DisplayName("공지사항을 수정할 때, 존재하지 않는 공지사항이면, EntityNotFoundException이 발생한다.")
+    void putNoticeBoardWithNonExistNoticeBoard() {
+        // given
+        final Long nonExistNoticeBoardId = 1L;
+        final PostRequest postRequest = PostRequest.builder()
+                .title("title2")
+                .content("content2")
+                .category("project")
+                .isImportant(false)
+                .build();
+
+        // when,then
+        assertThatThrownBy(() -> noticeBoardService.putNoticeBoard(nonExistNoticeBoardId, postRequest, member))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("해당 게시글이 존재하지 않습니다.");
+    }
+
+    @Test
+    @DisplayName("공지사항을 수정할 때, 작성자가 아니면, IllegalArgumentException이 발생한다.")
+    void putNoticeBoardWithNotWriter() {
+        // given
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
+                "title",
+                "content",
+                "category",
+                true,
+                "writer",
+                LocalDateTime.of(2024, 1, 27, 12, 0, 0),
+                member.getId()
+        );
+        noticeBoardRepository.save(noticeBoardEntity);
+
+        final PostRequest postRequest = PostRequest.builder()
+                .title("title2")
+                .content("content2")
+                .category("project")
+                .isImportant(false)
+                .build();
+
+        // when, then
+        assertThatThrownBy(() -> noticeBoardService.putNoticeBoard(noticeBoardEntity.getId(), postRequest, anotherMember))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("해당 게시글의 작성자가 아닙니다.");
     }
 }

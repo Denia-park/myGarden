@@ -18,7 +18,7 @@ import java.util.Collection;
 @Entity
 public class MemberEntity extends BaseEntity implements UserDetails {
     @Id
-    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(length = 50, nullable = false, unique = true)
     private String email;
