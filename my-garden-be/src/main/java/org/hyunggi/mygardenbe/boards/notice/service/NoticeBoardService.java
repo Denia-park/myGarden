@@ -2,9 +2,8 @@ package org.hyunggi.mygardenbe.boards.notice.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.hyunggi.mygardenbe.boards.common.repository.BoardCategoryRepository;
-import org.hyunggi.mygardenbe.boards.common.response.BoardCategoryResponse;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
+import org.hyunggi.mygardenbe.boards.common.service.BoardCategoryService;
 import org.hyunggi.mygardenbe.boards.notice.controller.request.PostRequest;
 import org.hyunggi.mygardenbe.boards.notice.entity.NoticeBoardEntity;
 import org.hyunggi.mygardenbe.boards.notice.repository.NoticeBoardRepository;
@@ -17,13 +16,12 @@ import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class NoticeBoardService {
     private final NoticeBoardRepository noticeBoardRepository;
-    private final BoardCategoryRepository noticeBoardCategoryService;
+    private final BoardCategoryService boardCategoryService;
 
     public CustomPage<NoticeBoardResponse> getNoticeBoards(final LocalDate startDate, final LocalDate endDate, final String category, final String searchText, final Pageable pageable) {
         validateArguments(startDate, endDate, category, searchText, pageable);
@@ -81,12 +79,6 @@ public class NoticeBoardService {
         );
     }
 
-    public List<BoardCategoryResponse> getCategories() {
-        return noticeBoardCategoryService.findAll().stream()
-                .map(BoardCategoryResponse::of)
-                .toList();
-    }
-
     @Transactional
     public NoticeBoardResponse getNoticeBoard(final Long boardId) {
         validateBoardId(boardId);
@@ -124,8 +116,7 @@ public class NoticeBoardService {
     private void validatePostRequest(final PostRequest postRequest) {
         Assert.isTrue(postRequest != null, "PostRequest는 null이 될 수 없습니다.");
 
-        noticeBoardCategoryService.findByCode(postRequest.category())
-                .orElseThrow(() -> new EntityNotFoundException("해당 분류가 존재하지 않습니다."));
+        boardCategoryService.validateCategoryWithBoardType(postRequest.category(), "notice");
     }
 
     private String getMemberEmailId(final MemberEntity member) {
@@ -160,8 +151,7 @@ public class NoticeBoardService {
         validateBoardId(boardId);
         Assert.isTrue(postRequest != null, "PostRequest는 null이 될 수 없습니다.");
 
-        noticeBoardCategoryService.findByCode(postRequest.category())
-                .orElseThrow(() -> new EntityNotFoundException("해당 분류가 존재하지 않습니다."));
+        boardCategoryService.validateCategoryWithBoardType(postRequest.category(), "notice");
     }
 
     @Transactional

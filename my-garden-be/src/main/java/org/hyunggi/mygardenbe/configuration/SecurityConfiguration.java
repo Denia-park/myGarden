@@ -44,6 +44,7 @@ public class SecurityConfiguration {
             "/",
             "/index.html",
             "/api/boards/notice/**",
+            "/api/boards/categories"
     };
 
     private final JwtAuthenticationFilter jwtAuthFilter;

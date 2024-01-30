@@ -1,7 +1,6 @@
 package org.hyunggi.mygardenbe.boards.notice.controller;
 
 import org.hyunggi.mygardenbe.ControllerTestSupport;
-import org.hyunggi.mygardenbe.boards.common.response.BoardCategoryResponse;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
 import org.hyunggi.mygardenbe.boards.notice.controller.request.PostRequest;
 import org.hyunggi.mygardenbe.boards.notice.service.response.NoticeBoardResponse;
@@ -142,33 +141,6 @@ class NoticeBoardControllerTest extends ControllerTestSupport {
         BDDMockito.verify(noticeBoardService).getNoticeBoard(1L);
     }
 
-    @Test
-    @DisplayName("공지사항 카테고리 목록을 조회한다.")
-    void getCategories() throws Exception {
-        //given
-        final List<BoardCategoryResponse> categories = List.of(
-                new BoardCategoryResponse("project", "프로젝트"),
-                new BoardCategoryResponse("alarm", "알람"),
-                new BoardCategoryResponse("study", "스터디"));
-
-        BDDMockito.given(noticeBoardService.getCategories())
-                .willReturn(categories);
-
-        //when
-        mockMvc.perform(
-                        get("/api/boards/notice/categories")
-                )
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data[0].code").value("project"))
-                .andExpect(jsonPath("$.data[0].text").value("프로젝트"))
-                .andExpect(jsonPath("$.data[1].code").value("alarm"))
-                .andExpect(jsonPath("$.data[1].text").value("알람"))
-                .andExpect(jsonPath("$.data[2].code").value("study"))
-                .andExpect(jsonPath("$.data[2].text").value("스터디"));
-
-        //then
-        BDDMockito.verify(noticeBoardService).getCategories();
-    }
 
     @Test
     @WithMyCustomUser(role = Role.ADMIN)
