@@ -1,5 +1,70 @@
 <script setup>
 
+import {router} from "@/scripts/router.js";
+import {useRoute} from "vue-router";
+import {getNoticeBoardCategoryApi} from "@/components/boards/notice/api/api.js";
+import {onMounted, ref} from "vue";
+import {postBoardApi} from "@/components/boards/common/api/api.js";
+
+const route = useRoute();
+const categories = ref([]);
+
+function goToPage(pageName) {
+  router.push({
+    name: pageName,
+    query: route?.query
+  });
+}
+
+function getNoticeBoardCategory() {
+  getNoticeBoardCategoryApi()
+      .then(response => {
+        categories.value = response;
+      });
+}
+
+function validate(category, title, content) {
+  if (category === "") {
+    alert("분류를 선택해주세요.");
+    return true;
+  }
+
+  if (title === "") {
+    alert("제목을 입력해주세요.");
+    return true;
+  }
+
+  if (content === "") {
+    alert("내용을 입력해주세요.");
+    return true;
+  }
+
+  return false;
+}
+
+function saveBoard() {
+  const category = document.getElementById("category").value;
+  const title = document.getElementById("board_writer").value;
+  const content = document.getElementById("board_content").value;
+  const isImportant = document.getElementById("isImportant").checked;
+
+  if (validate(category, title, content)) {
+    return;
+  }
+
+  const board = {
+    category: category,
+    title: title,
+    content: content,
+    isImportant: isImportant
+  };
+
+  postBoardApi('notice', board);
+}
+
+onMounted(() => {
+  getNoticeBoardCategory();
+});
 </script>
 
 <template>
@@ -15,10 +80,10 @@
           <th scope="row">분류<span class="t_red">*</span></th>
           <td>
             <select id="category" class="tbox01" name="category">
-              <option value="all">분류 선택</option>
-              <option value="java">Java</option>
-              <option value="javascript">JavaScript</option>
-              <option value="database">DataBase</option>
+              <option value="">분류 선택</option>
+              <option v-for="category in categories" :key="category.code" :value="category.code">
+                {{ category.text }}
+              </option>
             </select>
           </td>
         </tr>
@@ -30,13 +95,19 @@
           <th scope="row">내용<span class="t_red">*</span></th>
           <td><textarea id="board_content" class="textarea01" name="board_content"></textarea></td>
         </tr>
+        <tr>
+          <th scope="row">알림글</th>
+          <td>
+            <input id="isImportant" name="isImportant" type="checkbox" value="Y"/>
+          </td>
+        </tr>
         </tbody>
       </table>
     </div>
 
     <div class="post_bot_button_box">
-      <button id="save_btn">저장</button>
-      <button id="cancel_btn">취소</button>
+      <button id="save_btn" @click="saveBoard()">저장</button>
+      <button id="cancel_btn" @click="goToPage('NoticeBoardList')">취소</button>
     </div>
   </div>
 </template>
