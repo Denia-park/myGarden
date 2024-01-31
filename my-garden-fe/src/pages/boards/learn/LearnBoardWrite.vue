@@ -11,6 +11,7 @@ const route = useRoute();
 const categories = ref([]);
 const boardId = route.params?.boardId;
 const isImportantCheck = false;
+const content = ref("");
 
 function isEditPage() {
   return boardId !== undefined;
@@ -68,7 +69,7 @@ function saveBoard(board) {
 function fillInputFromResponse(response) {
   document.getElementById("category").value = response.category;
   document.getElementById("board_writer").value = response.title;
-  document.getElementById("board_content").value = response.content;
+  content.value = response.content;
   if (isImportantCheck) {
     document.getElementById("isImportant").checked = response.isImportant;
   }
@@ -86,8 +87,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <BoardWrite :board-id="boardId" :board-route-name="'LearnBoard'" :categories="categories"
-              :is-edit-page="isEditPage()" :is-important-check="isImportantCheck" :title="'공지사항'"
+  <BoardWrite :board-id="boardId" :board-route-name="'LearnBoard'" :categories="categories" :content="content"
+              :is-edit-page="isEditPage()" :is-important-check="isImportantCheck" :title="'TIL'"
               @goToBackPage="goToBackPage" @saveBoard="saveBoard"/>
 </template>
 
