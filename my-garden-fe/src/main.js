@@ -4,7 +4,34 @@ import {createApp} from 'vue'
 import App from './App.vue'
 import {store} from "@/scripts/store.js";
 import {router, routerBeforeEach} from "@/scripts/router.js";
+import VMdEditor from '@kangc/v-md-editor';
+import '@kangc/v-md-editor/lib/style/base-editor.css';
+import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js';
+import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
+
+// Prism
+import Prism from 'prismjs';
+// highlight code
+import 'prismjs/components/prism-json';
+import createCopyCodePlugin from "@kangc/v-md-editor/lib/plugins/copy-code/index.js";
+import '@kangc/v-md-editor/lib/plugins/copy-code/copy-code.css';
+import createTodoListPlugin from "@kangc/v-md-editor/lib/plugins/todo-list/index.js";
+import '@kangc/v-md-editor/lib/plugins/todo-list/todo-list.css';
+import createLineNumbertPlugin from "@kangc/v-md-editor/lib/plugins/line-number/index.js";
+import koKr from "@kangc/v-md-editor/es/lang/ko-KR.js";
+
+VMdEditor.use(vuepressTheme, {
+    Prism,
+    config: {
+        toc: {
+            includeLevel: [1, 2, 3, 4]
+        }
+    }
+}).use(createCopyCodePlugin())
+    .use(createTodoListPlugin())
+    .use(createLineNumbertPlugin())
+    .lang.use('ko-KR', koKr)
 
 routerBeforeEach(router);
 
-createApp(App).use(store).use(router).mount('#app')
+createApp(App).use(store).use(router).use(VMdEditor).mount('#app')

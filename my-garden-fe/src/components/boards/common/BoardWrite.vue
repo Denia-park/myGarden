@@ -1,5 +1,7 @@
 <script setup>
 
+import {ref, watch} from "vue";
+
 const props = defineProps({
   title: {
     type: String,
@@ -24,10 +26,16 @@ const props = defineProps({
   isImportantCheck: {
     type: Boolean,
     required: false
+  },
+  content: {
+    type: String,
+    required: false
   }
 });
 
 const emit = defineEmits(["saveBoard", "goToBackPage"]);
+
+const content = ref('');
 
 function goToBackPage() {
   emit('goToBackPage', props.boardRouteName, props.boardId)
@@ -36,12 +44,11 @@ function goToBackPage() {
 function save() {
   const category = document.getElementById("category").value;
   const title = document.getElementById("board_writer").value;
-  const content = document.getElementById("board_content").value;
 
   const board = {
     category: category,
     title: title,
-    content: content,
+    content: content.value,
   };
 
   if (props.isImportantCheck) {
@@ -54,6 +61,14 @@ function save() {
 
   emit('saveBoard', board);
 }
+
+function handleCopyCodeSuccess() {
+  alert('코드가 복사되었습니다.');
+}
+
+watch(() => props.content, () => {
+  content.value = props.content;
+});
 
 </script>
 
@@ -83,7 +98,9 @@ function save() {
         </tr>
         <tr>
           <th scope="row">내용<span class="t_red">*</span></th>
-          <td><textarea id="board_content" class="textarea01" name="board_content"></textarea></td>
+          <td>
+            <v-md-editor v-model="content" height="400px"></v-md-editor>
+          </td>
         </tr>
         <tr v-if="isImportantCheck">
           <th scope="row">알림글</th>
@@ -129,6 +146,7 @@ function save() {
   border-top: 1px solid #c9c9c9;
 
   width: 100%;
+  height: auto;
 }
 
 .post_table tbody th, .post_table tbody td {
@@ -160,13 +178,6 @@ td select {
   height: 32px;
 }
 
-/* textarea */
-textarea.textarea01 {
-  width: 100%;
-  height: 300px;
-  margin: 10px 0
-}
-
 .t_red {
   color: #f55500
 }
@@ -178,8 +189,6 @@ textarea.textarea01 {
 }
 
 .post_bot_button_box {
-  margin-top: 30px;
-
   display: flex;
   justify-content: center;
 }

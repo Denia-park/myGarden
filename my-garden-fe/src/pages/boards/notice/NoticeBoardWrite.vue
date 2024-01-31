@@ -10,6 +10,7 @@ import BoardWrite from "@/components/boards/common/BoardWrite.vue";
 const route = useRoute();
 const categories = ref([]);
 const boardId = route.params?.boardId;
+const content = ref("");
 
 function isEditPage() {
   return boardId !== undefined;
@@ -67,7 +68,7 @@ function saveBoard(board) {
 function fillInputFromResponse(response) {
   document.getElementById("category").value = response.category;
   document.getElementById("board_writer").value = response.title;
-  document.getElementById("board_content").value = response.content;
+  content.value = response.content;
   document.getElementById("isImportant").checked = response.isImportant;
 }
 
@@ -83,41 +84,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <BoardWrite :board-id="boardId" :board-route-name="'NoticeBoard'" :categories="categories"
+  <BoardWrite :board-id="boardId" :board-route-name="'NoticeBoard'" :categories="categories" :content="content"
               :is-edit-page="isEditPage()" :is-important-check="true" :title="'공지사항'"
               @goToBackPage="goToBackPage" @saveBoard="saveBoard"/>
 </template>
 
 <style scoped>
-
-.post_table tbody th, .post_table tbody td {
-  font-size: 15px;
-  font-weight: bold;
-
-  padding: 10px 15px;
-  color: #333;
-  background: #ececec;
-  border-bottom: 1px solid #c9c9c9;
-}
-
-.post_table tbody th {
-  width: 20%;
-  background: #d5d3d3;
-}
-
-.post_table tbody tr {
-  height: 50px;
-}
-
-td select {
-  width: 208px;
-  height: 32px;
-}
-
-.post_bot_button_box button {
-  border: none;
-  height: 30px;
-  width: 90px;
-}
 
 </style>

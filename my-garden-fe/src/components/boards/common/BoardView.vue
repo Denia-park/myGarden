@@ -40,9 +40,7 @@ const emit = defineEmits(["goToList", "goToEdit", "deleteBoard"]);
     <div id="views"> 조회수: {{ board.views }}</div>
 
     <div class="detail_content_box">
-      <div class="content">
-        {{ board.content }}
-      </div>
+      <v-md-editor :model-value="board.content" mode="preview"></v-md-editor>
     </div>
 
     <hr id="reply_box_bot_line"/>
@@ -116,7 +114,6 @@ h1 {
 
 .detail_content_box {
   border: 1px solid black;
-  padding: 15px;
   margin-bottom: 20px;
 
   min-height: 400px;
