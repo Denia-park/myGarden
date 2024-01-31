@@ -14,7 +14,7 @@ const props = defineProps({
     type: Array,
     required: true
   },
-  isAdminAccount: {
+  isAccessAccount: {
     type: Boolean,
     required: true
   }
@@ -49,8 +49,8 @@ const emit = defineEmits(["goToList", "goToEdit", "deleteBoard"]);
 
     <div class="detail_bot_button_box">
       <button id="list_btn" @click="() => emit('goToList')">목록</button>
-      <button v-if="isAdminAccount" id="edit_btn" @click="() => emit('goToEdit')">수정</button>
-      <button v-if="isAdminAccount" id="delete_btn" @click="() => emit('deleteBoard')">삭제</button>
+      <button v-if="isAccessAccount" id="edit_btn" @click="() => emit('goToEdit')">수정</button>
+      <button v-if="isAccessAccount" id="delete_btn" @click="() => emit('deleteBoard')">삭제</button>
     </div>
   </div>
 </template>

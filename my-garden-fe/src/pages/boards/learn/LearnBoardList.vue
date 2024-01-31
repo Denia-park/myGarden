@@ -3,17 +3,17 @@ import PaginationForm from "@/components/boards/common/PaginationForm.vue";
 import TableContents from "@/components/boards/common/TableContents.vue";
 
 import {onMounted, ref, watch} from "vue";
-import {getNoticeBoardCategoryApi, getNoticeBoardListApi} from "@/components/boards/notice/api/api.js";
+import {getLearnBoardCategoryApi, getLearnBoardListApi} from "@/components/boards/learn/api/api.js";
 import {getOneMonthAgoDate, getTodayDate} from "@/components/dailyRoutine/api/util.js";
 import SearchForm from "@/components/boards/common/SearchForm.vue";
 import {router} from "@/scripts/router.js";
 import {useRoute} from "vue-router";
 import TotalElementCounter from "@/components/boards/common/TotalElementCounter.vue";
 import WriteButton from "@/components/boards/common/WriteButton.vue";
-import {isAdminAccount} from "@/components/boards/common/util/util.js";
+import {isUserAccount} from "@/components/boards/common/util/util.js";
 
-const noticePage = ref({});
-const noticeTotalCount = ref(0);
+const learnPage = ref({});
+const learnTotalCount = ref(0);
 const categories = ref([]);
 const queryParameter = ref({
   startDate: getOneMonthAgoDate(),
@@ -28,22 +28,22 @@ const queryParameter = ref({
 
 function pageChange(currentPage) {
   queryParameter.value.currentPage = currentPage;
-  getNoticeBoardList(queryParameter.value);
+  getLearnBoardList(queryParameter.value);
 }
 
-function getNoticeBoardList(parameter) {
+function getLearnBoardList(parameter) {
   if (parameter) {
     queryParameter.value = parameter;
   }
 
-  getNoticeBoardListApi(parameter)
+  getLearnBoardListApi(parameter)
       .then(response => {
-        noticePage.value = response;
+        learnPage.value = response;
       });
 }
 
-function getNoticeBoardCategory() {
-  getNoticeBoardCategoryApi('notice')
+function getLearnBoardCategory() {
+  getLearnBoardCategoryApi('learn')
       .then(response => {
         categories.value = response;
       });
@@ -51,14 +51,14 @@ function getNoticeBoardCategory() {
 
 function goToBoardView(boardId) {
   router.push({
-    name: "NoticeBoardView",
+    name: "LearnBoardView",
     params: {boardId: boardId},
     query: queryParameter.value
   });
 }
 
-watch(() => noticePage.value, () => {
-  noticeTotalCount.value = noticePage.value.totalElements;
+watch(() => learnPage.value, () => {
+  learnTotalCount.value = learnPage.value.totalElements;
 });
 
 onMounted(() => {
@@ -66,25 +66,26 @@ onMounted(() => {
     queryParameter.value = useRoute().query;
   }
 
-  getNoticeBoardCategory();
-  getNoticeBoardList(queryParameter.value);
+  getLearnBoardCategory();
+  getLearnBoardList(queryParameter.value);
 });
 </script>
 
 <template>
   <div class="wrapper">
-    <h1>공지사항</h1>
+    <h1>TIL</h1>
 
     <SearchForm :categories="categories" :query-parameter="queryParameter"
-                @search="getNoticeBoardList"/>
+                @search="getLearnBoardList"/>
 
-    <TotalElementCounter :total-element="noticeTotalCount"/>
+    <TotalElementCounter :total-element="learnTotalCount"/>
 
-    <TableContents :categories="categories" :table-content-page="noticePage" @go-to-board-view="goToBoardView"/>
+    <TableContents :categories="categories" :table-content-page="learnPage" @go-to-board-view="goToBoardView"/>
 
-    <PaginationForm :page-info="noticePage" @page-change="pageChange"/>
+    <PaginationForm :page-info="learnPage" @page-change="pageChange"/>
 
-    <WriteButton :is-show="isAdminAccount()" :query-parameter="queryParameter" :write-page-name="'NoticeBoardWrite'"/>
+    <WriteButton :is-access-account="isUserAccount()" :query-parameter="queryParameter"
+                 :write-page-name="'LearnBoardWrite'"/>
   </div>
 </template>
 

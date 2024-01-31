@@ -2,7 +2,7 @@
 import {router} from "@/scripts/router.js";
 
 const props = defineProps({
-  isShow: {
+  isAccessAccount: {
     type: Boolean,
     required: true
   },
@@ -25,7 +25,7 @@ function goToPage(pageName) {
 </script>
 
 <template>
-  <button v-if="isShow" class="button filter-height align_left" type="button"
+  <button v-if="isAccessAccount" class="button filter-height align_left" type="button"
           @click="() => goToPage(writePageName)">
     등록
   </button>
