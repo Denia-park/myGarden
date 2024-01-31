@@ -2,13 +2,13 @@
 import {useRoute} from "vue-router";
 import {onMounted, ref} from "vue";
 import {
-  deleteNoticeBoardApi,
-  getNoticeBoardCategoryApi,
-  getNoticeBoardViewApi
-} from "@/components/boards/notice/api/api.js";
+  deleteLearnBoardApi,
+  getLearnBoardCategoryApi,
+  getLearnBoardViewApi
+} from "@/components/boards/learn/api/api.js";
 import {router} from "@/scripts/router.js";
 import BoardView from "@/components/boards/common/BoardView.vue";
-import {isAdminAccount} from "@/components/boards/common/util/util.js";
+import {isUserAccount} from "@/components/boards/common/util/util.js";
 
 const route = useRoute()
 const board = ref({});
@@ -16,14 +16,14 @@ const categories = ref([]);
 
 function goToList() {
   router.push({
-    name: "NoticeBoardList",
+    name: "LearnBoardList",
     query: route.query
   });
 }
 
 function goToEdit() {
   router.push({
-    name: "NoticeBoardEdit",
+    name: "LearnBoardEdit",
     params: {boardId: route.params.boardId},
     query: route.query
   });
@@ -34,7 +34,7 @@ function deleteBoard() {
     return;
   }
 
-  deleteNoticeBoardApi(route.params.boardId)
+  deleteLearnBoardApi(route.params.boardId)
       .then(() => {
         alert("삭제되었습니다.");
         goToList();
@@ -42,11 +42,11 @@ function deleteBoard() {
 }
 
 onMounted(() => {
-  getNoticeBoardCategoryApi('notice')
+  getLearnBoardCategoryApi('learn')
       .then(response => {
         categories.value = response;
       });
-  getNoticeBoardViewApi(route.params.boardId)
+  getLearnBoardViewApi(route.params.boardId)
       .then(response => {
         board.value = response;
       });
@@ -54,8 +54,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <BoardView :board="board" :categories="categories" :isAccessAccount="isAdminAccount()"
-             :title="'공지사항'"
+  <BoardView :board="board" :categories="categories" :isAccessAccount="isUserAccount()"
+             :title="'TIL'"
              @deleteBoard="deleteBoard" @goToEdit="goToEdit" @goToList="goToList"
   />
 </template>

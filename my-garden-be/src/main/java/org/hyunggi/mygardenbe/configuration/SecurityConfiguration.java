@@ -43,7 +43,6 @@ public class SecurityConfiguration {
             "/favicon.ico",
             "/",
             "/index.html",
-            "/api/boards/notice/**",
             "/api/boards/categories"
     };
 
@@ -57,6 +56,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req ->
                         req
                                 .requestMatchers(getOnlyAdminAccessNoticeApi()).hasRole("ADMIN")
+                                .requestMatchers(getFreeAccessApi()).permitAll()
                                 .requestMatchers(WHITE_LIST_URL).permitAll()
                                 .anyRequest().authenticated()
                 )
@@ -82,6 +82,13 @@ public class SecurityConfiguration {
                 antMatcher(HttpMethod.POST, "/api/boards/notice"),
                 antMatcher(HttpMethod.PUT, "/api/boards/notice/**"),
                 antMatcher(HttpMethod.DELETE, "/api/boards/notice/**")
+        };
+    }
+
+    private RequestMatcher[] getFreeAccessApi() {
+        return new RequestMatcher[]{
+                antMatcher(HttpMethod.GET, "/api/boards/notice/**"),
+                antMatcher(HttpMethod.GET, "/api/boards/learn/**"),
         };
     }
 

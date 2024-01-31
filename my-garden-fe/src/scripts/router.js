@@ -7,6 +7,9 @@ import {store} from "@/scripts/store.js";
 import NoticeBoardList from "@/pages/boards/notice/NoticeBoardList.vue";
 import NoticeBoardView from "@/pages/boards/notice/NoticeBoardView.vue";
 import NoticeBoardWrite from "@/pages/boards/notice/NoticeBoardWrite.vue";
+import LearnBoardList from "@/pages/boards/learn/LearnBoardList.vue";
+import LearnBoardView from "@/pages/boards/learn/LearnBoardView.vue";
+import LearnBoardWrite from "@/pages/boards/learn/LearnBoardWrite.vue";
 
 const routes = [
     {path: '/login', component: Login},
@@ -26,6 +29,20 @@ const routes = [
         component: NoticeBoardWrite,
         name: 'NoticeBoardEdit',
         meta: {permitRoles: ['ROLE_ADMIN']}
+    },
+    {path: '/boards/learn', component: LearnBoardList, name: 'LearnBoardList'},
+    {path: '/boards/learn/:boardId', component: LearnBoardView, name: 'LearnBoardView'},
+    {
+        path: '/boards/learn/write',
+        component: LearnBoardWrite,
+        name: 'LearnBoardWrite',
+        meta: {permitRoles: ['ROLE_USER', 'ROLE_ADMIN']}
+    },
+    {
+        path: '/boards/learn/write/:boardId',
+        component: LearnBoardWrite,
+        name: 'LearnBoardEdit',
+        meta: {permitRoles: ['ROLE_USER', 'ROLE_ADMIN']}
     },
 
     {path: '/', redirect: '/login'},

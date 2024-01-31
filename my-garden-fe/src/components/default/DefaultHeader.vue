@@ -17,6 +17,9 @@ function useRoute(route) {
     case 'noticeBoard':
       router.push('/boards/notice');
       break;
+    case 'learnBoard':
+      router.push('/boards/learn');
+      break;
     case 'logout':
       logout();
       break;
@@ -73,13 +76,14 @@ const closeHeader = () => {
                 </a>
               </li>
               <li>
+                <a class="text-white" href="#" @click="useRoute('noticeBoard')">공지사항</a>
+              </li>
+              <li>
                 <a class="text-white" href="#" @click="useRoute('dailyRoutine')">하루 일과</a>
               </li>
               <li>
-                <a class="text-white" href="#" @click="useRoute('noticeBoard')">공지사항</a>
+                <a class="text-white" href="#" @click="useRoute('learnBoard')">TIL</a>
               </li>
-              <!--              <li><a class="text-white" href="#">하루 습관</a></li>-->
-              <!--              <li><a class="text-white" href="#">명언 정리</a></li>-->
             </ul>
           </div>
           <div class="col-sm-4 offset-md-1 py-4">

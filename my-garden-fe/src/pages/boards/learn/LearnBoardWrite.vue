@@ -2,7 +2,7 @@
 
 import {router} from "@/scripts/router.js";
 import {useRoute} from "vue-router";
-import {getNoticeBoardCategoryApi, getNoticeBoardViewApi} from "@/components/boards/notice/api/api.js";
+import {getLearnBoardCategoryApi, getLearnBoardViewApi} from "@/components/boards/learn/api/api.js";
 import {onMounted, ref} from "vue";
 import {postBoardApi} from "@/components/boards/common/api/api.js";
 import BoardWrite from "@/components/boards/common/BoardWrite.vue";
@@ -10,6 +10,7 @@ import BoardWrite from "@/components/boards/common/BoardWrite.vue";
 const route = useRoute();
 const categories = ref([]);
 const boardId = route.params?.boardId;
+const isImportantCheck = false;
 
 function isEditPage() {
   return boardId !== undefined;
@@ -30,8 +31,8 @@ function goToBackPage(pageName, boardId) {
   }
 }
 
-function getNoticeBoardCategory() {
-  getNoticeBoardCategoryApi('notice')
+function getLearnBoardCategory() {
+  getLearnBoardCategoryApi('learn')
       .then(response => {
         categories.value = response;
       });
@@ -61,20 +62,22 @@ function saveBoard(board) {
     return;
   }
 
-  postBoardApi('notice', board, boardId);
+  postBoardApi('learn', board, boardId);
 }
 
 function fillInputFromResponse(response) {
   document.getElementById("category").value = response.category;
   document.getElementById("board_writer").value = response.title;
   document.getElementById("board_content").value = response.content;
-  document.getElementById("isImportant").checked = response.isImportant;
+  if (isImportantCheck) {
+    document.getElementById("isImportant").checked = response.isImportant;
+  }
 }
 
 onMounted(() => {
-  getNoticeBoardCategory();
+  getLearnBoardCategory();
   if (isEditPage()) {
-    getNoticeBoardViewApi(boardId)
+    getLearnBoardViewApi(boardId)
         .then(response => {
           fillInputFromResponse(response);
         });
@@ -83,8 +86,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <BoardWrite :board-id="boardId" :board-route-name="'NoticeBoard'" :categories="categories"
-              :is-edit-page="isEditPage()" :is-important-check="true" :title="'공지사항'"
+  <BoardWrite :board-id="boardId" :board-route-name="'LearnBoard'" :categories="categories"
+              :is-edit-page="isEditPage()" :is-important-check="isImportantCheck" :title="'공지사항'"
               @goToBackPage="goToBackPage" @saveBoard="saveBoard"/>
 </template>
 
