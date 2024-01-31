@@ -84,7 +84,8 @@ onMounted(() => {
 
     <PaginationForm :page-info="noticePage" @page-change="pageChange"/>
 
-    <WriteButton :is-show="isAdminAccount()" :query-parameter="queryParameter" :write-page-name="'NoticeBoardWrite'"/>
+    <WriteButton :is-access-account="isAdminAccount()" :query-parameter="queryParameter"
+                 :write-page-name="'NoticeBoardWrite'"/>
   </div>
 </template>
 
