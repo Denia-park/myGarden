@@ -25,9 +25,7 @@ public class DailyRoutineController {
 
     @GetMapping
     public ApiResponse<List<DailyRoutineResponse>> getDailyRoutine(@ModelAttribute @Valid final GetRequest getRequest, @LoginUserEntity MemberEntity member) {
-        final List<DailyRoutineResponse> dailyRoutineResponses = dailyRoutineService.getDailyRoutine(getRequest.startDateTime(), getRequest.endDateTime(), member);
-
-        return ApiResponse.ok(dailyRoutineResponses);
+        return ApiResponse.ok(dailyRoutineService.getDailyRoutine(getRequest.startDateTime(), getRequest.endDateTime(), member));
     }
 
     @PostMapping

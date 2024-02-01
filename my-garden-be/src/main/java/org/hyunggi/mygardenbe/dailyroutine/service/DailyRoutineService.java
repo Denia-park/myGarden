@@ -60,7 +60,7 @@ public class DailyRoutineService {
         return dailyRoutines.entrySet().stream()
                 .map(entry -> DailyRoutineResponse.of(entry.getKey(), entry.getValue()))
                 .sorted(Comparator.comparing(DailyRoutineResponse::startDateTime))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Transactional
