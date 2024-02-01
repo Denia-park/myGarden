@@ -1,0 +1,12 @@
+[[get-categories]]
+=== GET List [목록 조회]
+
+==== HTTP Request
+
+include::{snippets}/board-category/get-categories/http-request.adoc[]
+include::{snippets}/board-category/get-categories/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/board-category/get-categories/http-response.adoc[]
+include::{snippets}/board-category/get-categories/response-fields.adoc[]

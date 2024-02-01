@@ -25,6 +25,11 @@ include::dailyroutine/post.adoc[]
 include::dailyroutine/put.adoc[]
 include::dailyroutine/delete.adoc[]
 
+[[board-category]]
+== Board Category [게시판 카테고리]
+
+include::board/category/getList.adoc[]
+
 [[notice-board]]
 == Notice Board [공지사항]
 
