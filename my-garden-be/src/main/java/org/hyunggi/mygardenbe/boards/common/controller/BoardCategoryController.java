@@ -15,10 +15,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/boards/categories")
 public class BoardCategoryController {
-    private final BoardCategoryService noticeBoardService;
+    private final BoardCategoryService boardCategoryService;
 
     @GetMapping
     public ApiResponse<List<BoardCategoryResponse>> getCategories(@RequestParam final String boardType) {
-        return ApiResponse.ok(noticeBoardService.getCategories(boardType));
+        return ApiResponse.ok(boardCategoryService.getCategories(boardType));
     }
 }
