@@ -1,0 +1,13 @@
+[[delete-notice-board]]
+=== DELETE [삭제]
+
+==== HTTP Request
+
+include::{snippets}/notice-board/delete-notice-board/http-request.adoc[]
+include::{snippets}/notice-board/delete-notice-board/path-parameters.adoc[]
+include::{snippets}/notice-board/delete-notice-board/request-headers.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/notice-board/delete-notice-board/http-response.adoc[]
+include::{snippets}/notice-board/delete-notice-board/response-fields.adoc[]
