@@ -25,11 +25,16 @@ include::dailyroutine/post.adoc[]
 include::dailyroutine/put.adoc[]
 include::dailyroutine/delete.adoc[]
 
+[[board-category]]
+== Board Category [게시판 카테고리]
+
+include::board/category/getList.adoc[]
+
 [[notice-board]]
 == Notice Board [공지사항]
 
-include::noticeboard/getList.adoc[]
-include::noticeboard/getView.adoc[]
-include::noticeboard/post.adoc[]
-include::noticeboard/put.adoc[]
-include::noticeboard/delete.adoc[]
+include::board/notice/getList.adoc[]
+include::board/notice/getView.adoc[]
+include::board/notice/post.adoc[]
+include::board/notice/put.adoc[]
+include::board/notice/delete.adoc[]
