@@ -1,0 +1,12 @@
+[[get-learn-boards]]
+=== GET List [목록 조회]
+
+==== HTTP Request
+
+include::{snippets}/learn-board/get-learn-boards/http-request.adoc[]
+include::{snippets}/learn-board/get-learn-boards/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/learn-board/get-learn-boards/http-response.adoc[]
+include::{snippets}/learn-board/get-learn-boards/response-fields.adoc[]

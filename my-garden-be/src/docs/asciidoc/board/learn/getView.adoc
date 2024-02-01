@@ -1,0 +1,12 @@
+[[get-learn-board]]
+=== GET [조회]
+
+==== HTTP Request
+
+include::{snippets}/learn-board/get-learn-board/http-request.adoc[]
+include::{snippets}/learn-board/get-learn-board/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/learn-board/get-learn-board/http-response.adoc[]
+include::{snippets}/learn-board/get-learn-board/response-fields.adoc[]

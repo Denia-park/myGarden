@@ -1,0 +1,13 @@
+[[delete-learn-board]]
+=== DELETE [삭제]
+
+==== HTTP Request
+
+include::{snippets}/learn-board/delete-learn-board/http-request.adoc[]
+include::{snippets}/learn-board/delete-learn-board/path-parameters.adoc[]
+include::{snippets}/learn-board/delete-learn-board/request-headers.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/learn-board/delete-learn-board/http-response.adoc[]
+include::{snippets}/learn-board/delete-learn-board/response-fields.adoc[]

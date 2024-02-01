@@ -1,0 +1,14 @@
+[[put-learn-board]]
+=== PUT [수정]
+
+==== HTTP Request
+
+include::{snippets}/learn-board/put-learn-board/http-request.adoc[]
+include::{snippets}/learn-board/put-learn-board/path-parameters.adoc[]
+include::{snippets}/learn-board/put-learn-board/request-headers.adoc[]
+include::{snippets}/learn-board/put-learn-board/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/learn-board/put-learn-board/http-response.adoc[]
+include::{snippets}/learn-board/put-learn-board/response-fields.adoc[]

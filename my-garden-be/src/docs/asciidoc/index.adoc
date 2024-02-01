@@ -38,3 +38,12 @@ include::board/notice/getView.adoc[]
 include::board/notice/post.adoc[]
 include::board/notice/put.adoc[]
 include::board/notice/delete.adoc[]
+
+[[learn-board]]
+== Learn Board [TIL 게시판]
+
+include::board/learn/getList.adoc[]
+include::board/learn/getView.adoc[]
+include::board/learn/post.adoc[]
+include::board/learn/put.adoc[]
+include::board/learn/delete.adoc[]
