@@ -1,0 +1,13 @@
+[[post-notice-board]]
+=== POST [등록]
+
+==== HTTP Request
+
+include::{snippets}/notice-board/post-notice-board/http-request.adoc[]
+include::{snippets}/notice-board/post-notice-board/request-headers.adoc[]
+include::{snippets}/notice-board/post-notice-board/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/notice-board/post-notice-board/http-response.adoc[]
+include::{snippets}/notice-board/post-notice-board/response-fields.adoc[]

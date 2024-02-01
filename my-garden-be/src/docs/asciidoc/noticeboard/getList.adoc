@@ -1,0 +1,12 @@
+[[get-notice-boards]]
+=== GET List [목록 조회]
+
+==== HTTP Request
+
+include::{snippets}/notice-board/get-notice-boards/http-request.adoc[]
+include::{snippets}/notice-board/get-notice-boards/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/notice-board/get-notice-boards/http-response.adoc[]
+include::{snippets}/notice-board/get-notice-boards/response-fields.adoc[]

@@ -24,3 +24,12 @@ include::dailyroutine/get.adoc[]
 include::dailyroutine/post.adoc[]
 include::dailyroutine/put.adoc[]
 include::dailyroutine/delete.adoc[]
+
+[[notice-board]]
+== Notice Board [공지사항]
+
+include::noticeboard/getList.adoc[]
+include::noticeboard/getView.adoc[]
+include::noticeboard/post.adoc[]
+include::noticeboard/put.adoc[]
+include::noticeboard/delete.adoc[]

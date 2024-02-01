@@ -1,0 +1,14 @@
+[[put-notice-board]]
+=== PUT [수정]
+
+==== HTTP Request
+
+include::{snippets}/notice-board/put-notice-board/http-request.adoc[]
+include::{snippets}/notice-board/put-notice-board/path-parameters.adoc[]
+include::{snippets}/notice-board/put-notice-board/request-headers.adoc[]
+include::{snippets}/notice-board/put-notice-board/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/notice-board/put-notice-board/http-response.adoc[]
+include::{snippets}/notice-board/put-notice-board/response-fields.adoc[]
