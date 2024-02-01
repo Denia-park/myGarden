@@ -49,9 +49,18 @@ function validate(board) {
     alert("제목을 입력해주세요.");
     return true;
   }
+  if (board.title.length > 100) {
+    alert("제목은 100자 이내로 입력해주세요.");
+    return true;
+  }
 
   if (board.content === "") {
     alert("내용을 입력해주세요.");
+    return true;
+  }
+
+  if (board.content.length > 4000) {
+    alert("내용은 4000자 이내로 입력해주세요.");
     return true;
   }
 
