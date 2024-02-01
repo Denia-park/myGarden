@@ -1,0 +1,13 @@
+[[post-learn-board]]
+=== POST [등록]
+
+==== HTTP Request
+
+include::{snippets}/learn-board/post-learn-board/http-request.adoc[]
+include::{snippets}/learn-board/post-learn-board/request-headers.adoc[]
+include::{snippets}/learn-board/post-learn-board/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/learn-board/post-learn-board/http-response.adoc[]
+include::{snippets}/learn-board/post-learn-board/response-fields.adoc[]
