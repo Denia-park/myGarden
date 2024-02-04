@@ -89,9 +89,9 @@ const closeHeader = () => {
           <div class="col-sm-4 offset-md-1 py-4">
             <h4 class="text-white">Contact</h4>
             <ul class="list-unstyled">
-              <li><a class="text-white" href="https://github.com/Denia-park">Github</a></li>
-              <li><a class="text-white" href="https://velog.io/@as9587">Blog</a></li>
-              <li><a class="text-white" href="mailto: phg9587@naver.com">Email</a></li>
+              <li><a class="text-white" href="https://github.com/Denia-park" target='_blank'>Github</a></li>
+              <li><a class="text-white" href="https://velog.io/@as9587" target='_blank'>Blog</a></li>
+              <li><a class="text-white" href="mailto: phg9587@naver.com" target='_blank'>Email</a></li>
             </ul>
           </div>
         </div>
