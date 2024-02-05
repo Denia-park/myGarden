@@ -1,12 +1,12 @@
 package org.hyunggi.mygardenbe.boards.learn.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.hyunggi.mygardenbe.boards.common.request.GetRequest;
+import org.hyunggi.mygardenbe.boards.common.category.request.GetRequest;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
 import org.hyunggi.mygardenbe.boards.learn.controller.request.PostRequest;
 import org.hyunggi.mygardenbe.boards.learn.service.LearnBoardService;
 import org.hyunggi.mygardenbe.boards.learn.service.response.LearnBoardResponse;
-import org.hyunggi.mygardenbe.common.auth.LoginUserEntity;
+import org.hyunggi.mygardenbe.common.auth.annotation.WithLoginUserEntity;
 import org.hyunggi.mygardenbe.common.response.ApiResponse;
 import org.hyunggi.mygardenbe.member.entity.MemberEntity;
 import org.springframework.data.domain.PageRequest;
@@ -50,17 +50,17 @@ public class LearnBoardController {
     }
 
     @PostMapping
-    public ApiResponse<Long> postLearnBoard(@RequestBody final PostRequest postRequest, @LoginUserEntity final MemberEntity member) {
+    public ApiResponse<Long> postLearnBoard(@RequestBody final PostRequest postRequest, @WithLoginUserEntity final MemberEntity member) {
         return ApiResponse.ok(learnBoardService.postLearnBoard(postRequest, member));
     }
 
     @PutMapping("/{boardId}")
-    public ApiResponse<Long> putLearnBoard(@PathVariable final Long boardId, @RequestBody final PostRequest postRequest, @LoginUserEntity final MemberEntity member) {
+    public ApiResponse<Long> putLearnBoard(@PathVariable final Long boardId, @RequestBody final PostRequest postRequest, @WithLoginUserEntity final MemberEntity member) {
         return ApiResponse.ok(learnBoardService.putLearnBoard(boardId, postRequest, member));
     }
 
     @DeleteMapping("/{boardId}")
-    public ApiResponse<Long> deleteLearnBoard(@PathVariable final Long boardId, @LoginUserEntity final MemberEntity member) {
+    public ApiResponse<Long> deleteLearnBoard(@PathVariable final Long boardId, @WithLoginUserEntity final MemberEntity member) {
         return ApiResponse.ok(learnBoardService.deleteLearnBoard(boardId, member));
     }
 }

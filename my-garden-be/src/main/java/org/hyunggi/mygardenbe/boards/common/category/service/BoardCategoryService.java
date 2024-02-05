@@ -1,9 +1,9 @@
-package org.hyunggi.mygardenbe.boards.common.service;
+package org.hyunggi.mygardenbe.boards.common.category.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.hyunggi.mygardenbe.boards.common.repository.BoardCategoryRepository;
-import org.hyunggi.mygardenbe.boards.common.response.BoardCategoryResponse;
+import org.hyunggi.mygardenbe.boards.common.category.repository.BoardCategoryRepository;
+import org.hyunggi.mygardenbe.boards.common.category.response.BoardCategoryResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,7 +1,7 @@
-package org.hyunggi.mygardenbe.boards.common.controller;
+package org.hyunggi.mygardenbe.boards.common.category.controller;
 
 import org.hyunggi.mygardenbe.ControllerTestSupport;
-import org.hyunggi.mygardenbe.boards.common.response.BoardCategoryResponse;
+import org.hyunggi.mygardenbe.boards.common.category.response.BoardCategoryResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;

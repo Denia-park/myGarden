@@ -2,8 +2,8 @@ package org.hyunggi.mygardenbe.boards.learn.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.hyunggi.mygardenbe.boards.common.category.service.BoardCategoryService;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
-import org.hyunggi.mygardenbe.boards.common.service.BoardCategoryService;
 import org.hyunggi.mygardenbe.boards.learn.controller.request.PostRequest;
 import org.hyunggi.mygardenbe.boards.learn.entity.LearnBoardEntity;
 import org.hyunggi.mygardenbe.boards.learn.repository.LearnBoardRepository;

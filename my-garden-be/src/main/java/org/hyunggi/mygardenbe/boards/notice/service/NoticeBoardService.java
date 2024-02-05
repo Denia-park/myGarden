@@ -2,8 +2,8 @@ package org.hyunggi.mygardenbe.boards.notice.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.hyunggi.mygardenbe.boards.common.category.service.BoardCategoryService;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
-import org.hyunggi.mygardenbe.boards.common.service.BoardCategoryService;
 import org.hyunggi.mygardenbe.boards.notice.controller.request.PostRequest;
 import org.hyunggi.mygardenbe.boards.notice.entity.NoticeBoardEntity;
 import org.hyunggi.mygardenbe.boards.notice.repository.NoticeBoardRepository;

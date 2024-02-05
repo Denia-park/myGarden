@@ -1,4 +1,4 @@
-package org.hyunggi.mygardenbe.common.auth;
+package org.hyunggi.mygardenbe.common.auth.annotation;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
@@ -8,5 +8,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @AuthenticationPrincipal
-public @interface LoginUserEntity {
+public @interface WithLoginUserEntity {
 }

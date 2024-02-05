@@ -1,10 +1,10 @@
-package org.hyunggi.mygardenbe.boards.common.service;
+package org.hyunggi.mygardenbe.boards.common.category.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.hyunggi.mygardenbe.IntegrationTestSupport;
-import org.hyunggi.mygardenbe.boards.common.entity.BoardCategoryEntity;
-import org.hyunggi.mygardenbe.boards.common.repository.BoardCategoryRepository;
-import org.hyunggi.mygardenbe.boards.common.response.BoardCategoryResponse;
+import org.hyunggi.mygardenbe.boards.common.category.entity.BoardCategoryEntity;
+import org.hyunggi.mygardenbe.boards.common.category.repository.BoardCategoryRepository;
+import org.hyunggi.mygardenbe.boards.common.category.response.BoardCategoryResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

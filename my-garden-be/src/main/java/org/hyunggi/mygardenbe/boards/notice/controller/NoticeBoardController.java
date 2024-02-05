@@ -1,12 +1,12 @@
 package org.hyunggi.mygardenbe.boards.notice.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.hyunggi.mygardenbe.boards.common.request.GetRequest;
+import org.hyunggi.mygardenbe.boards.common.category.request.GetRequest;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
 import org.hyunggi.mygardenbe.boards.notice.controller.request.PostRequest;
 import org.hyunggi.mygardenbe.boards.notice.service.NoticeBoardService;
 import org.hyunggi.mygardenbe.boards.notice.service.response.NoticeBoardResponse;
-import org.hyunggi.mygardenbe.common.auth.LoginUserEntity;
+import org.hyunggi.mygardenbe.common.auth.annotation.WithLoginUserEntity;
 import org.hyunggi.mygardenbe.common.response.ApiResponse;
 import org.hyunggi.mygardenbe.member.entity.MemberEntity;
 import org.springframework.data.domain.PageRequest;
@@ -50,17 +50,17 @@ public class NoticeBoardController {
     }
 
     @PostMapping
-    public ApiResponse<Long> postNoticeBoard(@RequestBody final PostRequest postRequest, @LoginUserEntity final MemberEntity member) {
+    public ApiResponse<Long> postNoticeBoard(@RequestBody final PostRequest postRequest, @WithLoginUserEntity final MemberEntity member) {
         return ApiResponse.ok(noticeBoardService.postNoticeBoard(postRequest, member));
     }
 
     @PutMapping("/{boardId}")
-    public ApiResponse<Long> putNoticeBoard(@PathVariable final Long boardId, @RequestBody final PostRequest postRequest, @LoginUserEntity final MemberEntity member) {
+    public ApiResponse<Long> putNoticeBoard(@PathVariable final Long boardId, @RequestBody final PostRequest postRequest, @WithLoginUserEntity final MemberEntity member) {
         return ApiResponse.ok(noticeBoardService.putNoticeBoard(boardId, postRequest, member));
     }
 
     @DeleteMapping("/{boardId}")
-    public ApiResponse<Long> deleteNoticeBoard(@PathVariable final Long boardId, @LoginUserEntity final MemberEntity member) {
+    public ApiResponse<Long> deleteNoticeBoard(@PathVariable final Long boardId, @WithLoginUserEntity final MemberEntity member) {
         return ApiResponse.ok(noticeBoardService.deleteNoticeBoard(boardId, member));
     }
 }

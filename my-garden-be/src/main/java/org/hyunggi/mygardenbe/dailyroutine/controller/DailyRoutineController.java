@@ -2,7 +2,7 @@ package org.hyunggi.mygardenbe.dailyroutine.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.hyunggi.mygardenbe.common.auth.LoginUserEntity;
+import org.hyunggi.mygardenbe.common.auth.annotation.WithLoginUserEntity;
 import org.hyunggi.mygardenbe.common.response.ApiResponse;
 import org.hyunggi.mygardenbe.dailyroutine.controller.request.GetRequest;
 import org.hyunggi.mygardenbe.dailyroutine.controller.request.PostRequest;
@@ -24,12 +24,12 @@ public class DailyRoutineController {
     private final DailyRoutineService dailyRoutineService;
 
     @GetMapping
-    public ApiResponse<List<DailyRoutineResponse>> getDailyRoutine(@ModelAttribute @Valid final GetRequest getRequest, @LoginUserEntity MemberEntity member) {
+    public ApiResponse<List<DailyRoutineResponse>> getDailyRoutine(@ModelAttribute @Valid final GetRequest getRequest, @WithLoginUserEntity MemberEntity member) {
         return ApiResponse.ok(dailyRoutineService.getDailyRoutine(getRequest.startDateTime(), getRequest.endDateTime(), member));
     }
 
     @PostMapping
-    public ApiResponse<List<Long>> postDailyRoutine(@RequestBody @Valid final PostRequest request, @LoginUserEntity MemberEntity member) {
+    public ApiResponse<List<Long>> postDailyRoutine(@RequestBody @Valid final PostRequest request, @WithLoginUserEntity MemberEntity member) {
         final List<RoutineTime> routineTimes = TimeSplitter.split(
                 RoutineTime.of(
                         LocalDateTime.parse(request.startDateTime()),
@@ -44,7 +44,7 @@ public class DailyRoutineController {
     }
 
     @PutMapping("/{timeBlockId}")
-    public ApiResponse<Long> putDailyRoutine(@PathVariable final Long timeBlockId, @RequestBody @Valid final PostRequest request, @LoginUserEntity MemberEntity member) {
+    public ApiResponse<Long> putDailyRoutine(@PathVariable final Long timeBlockId, @RequestBody @Valid final PostRequest request, @WithLoginUserEntity MemberEntity member) {
         final RoutineTime routineTime = RoutineTime.of(
                 LocalDateTime.parse(request.startDateTime()),
                 LocalDateTime.parse(request.endDateTime())
@@ -57,7 +57,7 @@ public class DailyRoutineController {
     }
 
     @DeleteMapping("/{timeBlockId}")
-    public ApiResponse<Long> deleteDailyRoutine(@PathVariable final Long timeBlockId, @LoginUserEntity MemberEntity member) {
+    public ApiResponse<Long> deleteDailyRoutine(@PathVariable final Long timeBlockId, @WithLoginUserEntity MemberEntity member) {
         final Long deletedId = dailyRoutineService.deleteDailyRoutine(timeBlockId, member);
 
         return ApiResponse.ok(deletedId);
