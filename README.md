@@ -129,9 +129,9 @@
 
 ![공지사항 글 목록 조회](./docs/boards/notice/gif/Notice-List.gif)
 ![공지사항 글 조회](./docs/boards/notice/gif/Notice-View.gif)
-![TIL 글 작성](./docs/boards/til/gif/Til-Post.gif)
-![TIL 글 수정](./docs/boards/til/gif/Til-Put.gif)
-![TIL 글 삭제](./docs/boards/til/gif/Til-Delete.gif)
+![TIL 글 작성](docs/boards/learn/gif/Learn-Post.gif)
+![TIL 글 수정](docs/boards/learn/gif/Learn-Put.gif)
+![TIL 글 삭제](docs/boards/learn/gif/Learn-Delete.gif)
 
 ## 트러블 슈팅
 
