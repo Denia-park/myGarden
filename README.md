@@ -34,7 +34,7 @@
 
 (프로젝트 기간 : 2023년 12월 12일 ~ 계속 진행중)
 
-## [홈페이지 링크](https://my-garden.shop)
+## [홈페이지 링크](https://my-garden.shop/boards/notice)
 
 ## 기술 스택
 
