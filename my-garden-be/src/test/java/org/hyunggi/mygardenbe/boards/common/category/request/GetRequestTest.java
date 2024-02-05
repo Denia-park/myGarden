@@ -1,4 +1,4 @@
-package org.hyunggi.mygardenbe.boards.common.request;
+package org.hyunggi.mygardenbe.boards.common.category.request;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

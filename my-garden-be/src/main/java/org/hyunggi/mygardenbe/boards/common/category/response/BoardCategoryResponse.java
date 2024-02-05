@@ -1,7 +1,7 @@
-package org.hyunggi.mygardenbe.boards.common.response;
+package org.hyunggi.mygardenbe.boards.common.category.response;
 
 import lombok.Builder;
-import org.hyunggi.mygardenbe.boards.common.entity.BoardCategoryEntity;
+import org.hyunggi.mygardenbe.boards.common.category.entity.BoardCategoryEntity;
 
 @Builder
 public record BoardCategoryResponse(String code, String text) {

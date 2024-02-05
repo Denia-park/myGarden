@@ -1,8 +1,8 @@
-package org.hyunggi.mygardenbe.boards.common.controller;
+package org.hyunggi.mygardenbe.boards.common.category.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.hyunggi.mygardenbe.boards.common.response.BoardCategoryResponse;
-import org.hyunggi.mygardenbe.boards.common.service.BoardCategoryService;
+import org.hyunggi.mygardenbe.boards.common.category.response.BoardCategoryResponse;
+import org.hyunggi.mygardenbe.boards.common.category.service.BoardCategoryService;
 import org.hyunggi.mygardenbe.common.response.ApiResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

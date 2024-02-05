@@ -1,6 +1,5 @@
-package org.hyunggi.mygardenbe.boards.notice.entity;
+package org.hyunggi.mygardenbe.boards.common.category.entity;
 
-import org.hyunggi.mygardenbe.boards.common.entity.BoardCategoryEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

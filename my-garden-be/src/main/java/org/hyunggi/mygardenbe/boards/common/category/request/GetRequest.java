@@ -1,4 +1,4 @@
-package org.hyunggi.mygardenbe.boards.common.request;
+package org.hyunggi.mygardenbe.boards.common.category.request;
 
 import lombok.Builder;
 import lombok.Getter;

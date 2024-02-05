@@ -1,6 +1,6 @@
-package org.hyunggi.mygardenbe.boards.common.repository;
+package org.hyunggi.mygardenbe.boards.common.category.repository;
 
-import org.hyunggi.mygardenbe.boards.common.entity.BoardCategoryEntity;
+import org.hyunggi.mygardenbe.boards.common.category.entity.BoardCategoryEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package org.hyunggi.mygardenbe.boards.common.entity;
+package org.hyunggi.mygardenbe.boards.common.category.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

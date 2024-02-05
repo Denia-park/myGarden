@@ -1,7 +1,7 @@
 package org.hyunggi.mygardenbe.boards.learn.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.hyunggi.mygardenbe.boards.common.request.GetRequest;
+import org.hyunggi.mygardenbe.boards.common.category.request.GetRequest;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
 import org.hyunggi.mygardenbe.boards.learn.controller.request.PostRequest;
 import org.hyunggi.mygardenbe.boards.learn.service.LearnBoardService;

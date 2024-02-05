@@ -1,7 +1,7 @@
 package org.hyunggi.mygardenbe.boards.notice.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.hyunggi.mygardenbe.boards.common.request.GetRequest;
+import org.hyunggi.mygardenbe.boards.common.category.request.GetRequest;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
 import org.hyunggi.mygardenbe.boards.notice.controller.request.PostRequest;
 import org.hyunggi.mygardenbe.boards.notice.service.NoticeBoardService;
