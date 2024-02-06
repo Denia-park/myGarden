@@ -1,3 +1,5 @@
+[![Java CI with Gradle & Add Jacoco Report](https://github.com/Denia-park/myGarden/actions/workflows/gradle.yml/badge.svg)](https://github.com/Denia-park/myGarden/actions/workflows/gradle.yml)
+
 <!-- TOC -->
 
 * [myGarden](#mygarden)
