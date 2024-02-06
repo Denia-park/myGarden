@@ -119,6 +119,11 @@ bootJar {
 }
 
 node {
+    download = true
+    version = '20.11.0'
+    distBaseUrl = "https://nodejs.org/dist"
+    npmInstallCommand = "install"
+    workDir = file("${project.projectDir}/.gradle/nodejs")
     nodeProjectDir = file("${project.projectDir}/../my-garden-fe")
 }
 
@@ -126,7 +131,7 @@ task deleteOldVueFiles(type: Delete) {
     delete "src/main/resources/static"
 }
 
-task npmBuild(type: NpmTask, dependsOn: deleteOldVueFiles) {
+task npmBuild(type: NpmTask, dependsOn: ['deleteOldVueFiles', 'npmInstall']) {
     args = ["run", "build"]
 }
 
