@@ -35,7 +35,7 @@ jobs:
         uses: gradle/actions/setup-gradle@ec92e829475ac0c2315ea8f9eced72db85bb337a # v3.0.0
 
       - name: Test with Gradle
-        run: ./gradlew test
+        run: ./gradlew test -x npmBuild
 
       - name: Add coverage to PR
         id: jacoco
