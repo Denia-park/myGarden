@@ -13,7 +13,7 @@ on:
 
 # 환경설정
 env:
-  DOCKER_IMAGE: ghcr.io/${{ github.actor }}/my-garden
+  DOCKER_IMAGE: ghcr.io/denia-park/my-garden
   VERSION: ${{ github.sha }}
   NAME: my-garden
 
