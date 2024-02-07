@@ -3,7 +3,7 @@ name: Java CI with Gradle & Add Jacoco Report
 on:
   pull_request:
     branches:
-      - master
+      - master2 #============================================================== 수정
     paths:
       - my-garden-be/**
 
