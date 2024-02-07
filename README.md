@@ -67,6 +67,8 @@
     - `Spring Rest Docs`
   - **Productivity Tools**
     - `IntelliJ`
+  - **CI/CD**
+    - `Github Actions`
 
 ## 주요 기능
 
@@ -424,8 +426,6 @@
   - 네이버
   - 구글
 - Redis 적용
-- CI/CD
-  - PR시마다 테스트 자동 수행
 - 글 작성 수 혹은 조회수로 랭킹 만들기
 - 주간 및 월간 통계 내기
 - 모니터링 추가하기
