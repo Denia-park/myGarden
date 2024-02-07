@@ -89,5 +89,10 @@ jobs:
       # 3000 -> 80 포트로 수행하도록 지정
       - name: Docker run
         run: |
-          docker stop ${{ env.NAME }} && docker rm ${{ env.NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}:latest
+          # 조건부 실행을 위해 컨테이너가 존재하는지 확인
+          if [ $(docker ps -aq -f name=${{ env.NAME }}) ]; then
+          docker stop ${{ env.NAME }}
+          docker rm ${{ env.NAME }}
+          docker rmi ${{ env.DOCKER_IMAGE }}:latest
+          fi
           docker run -d -p 443:443 -p 80:80 --name ${{ env.NAME }} --restart always ${{ env.DOCKER_IMAGE }}:latest
