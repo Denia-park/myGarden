@@ -1,0 +1,97 @@
+name: Continuous Deployment With Docker
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - my-garden-be/**
+      - my-garden-fe/**
+
+env:
+  # GitHub Container Registry에 푸시할 이미지 정보 (ACTOR: GitHub 사용자명 / DOCKER_IMAGE: 이미지명 / VERSION: GitHub SHA / NAME: 컨테이너명)
+  # DOCKER_IMAGE를 만들때는 대문자가 포함되어서는 안됨, ACTOR에는 대문자가 포함되어도 상관없지만, 통일성을 위해 소문자로 작성 => 본인 계정에 맞게 변경해서 사용할 것
+  ACTOR: denia-park
+  DOCKER_IMAGE: ghcr.io/denia-park/my-garden
+  VERSION: ${{ github.sha }}
+  NAME: my-garden
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./my-garden-be
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@ec92e829475ac0c2315ea8f9eced72db85bb337a # v3.0.0
+
+      - name: Build with Gradle Wrapper
+        run: ./gradlew build
+
+      # docker build 수행
+      - name: Set up docker buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Cache docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ env.VERSION }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      # GitHub Container Registry에 로그인
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ env.ACTOR }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Docker 빌드 & GitHub Container Registry에 푸시
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          builder: ${{ steps.buildx.outputs.name }}
+          push: true
+          tags: ${{ env.DOCKER_IMAGE }}:latest
+
+  deploy:
+    name: Deploy
+    needs: build  # build 후에 실행되도록 정의
+    runs-on: [ self-hosted, gardener ] # AWS ./configure에서 사용할 label명
+    steps:
+      - name: Login to ghcr
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ env.ACTOR }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # 조건부 실행을 위해 컨테이너가 존재하는지 확인 -> 중지, 삭제 (이미지 포함) -> 새로운 이미지로 실행
+      - name: Docker run
+        run: |
+          if [ $(docker ps -aq -f name=${{ env.NAME }}) ]; then
+          docker stop ${{ env.NAME }}
+          docker rm ${{ env.NAME }}
+          docker rmi ${{ env.DOCKER_IMAGE }}:latest
+          fi
+          docker run -d -p 443:443 -p 80:80 --name ${{ env.NAME }} --restart always ${{ env.DOCKER_IMAGE }}:latest
