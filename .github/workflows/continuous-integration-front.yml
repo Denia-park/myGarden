@@ -8,7 +8,7 @@ on:
       - my-garden-fe/**
 
 jobs:
-  test-and-build:
+  front-test-and-build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
