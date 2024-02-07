@@ -1,4 +1,4 @@
-name: Vue build test with Gradle
+name: Vue build test
 
 on:
   pull_request:
@@ -7,38 +7,36 @@ on:
     paths:
       - my-garden-fe/**
 
+env:
+  NODE_VERSION: 20 # build.gradle에 정의된 nodeVersion과 일치시켜야 함
+
 jobs:
-  front-test-and-build:
+  front-build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
+
+    defaults:
+      run:
+        working-directory: ./my-garden-fe
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x my-garden-be/gradlew
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@ec92e829475ac0c2315ea8f9eced72db85bb337a # v3.0.0
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: Cache node modules
         uses: actions/cache@v3
         id: cache
         with:
           path: node_modules
-          key: npm-packages-${{ hashFiles('my-garden-fe/package-lock.json') }}
+          key: npm-packages-${{ hashFiles('**/package-lock.json') }}
 
-      - name: add env(NPM_BUILD_CACHE) if cache hit
-        if: steps.cache.outputs.cache-hit == 'true'
-        run: echo "true" >> $NPM_BUILD_CACHE
-
-      - name: npmBuild with Gradle (with npm install)
+      - name: Install Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: ./gradlew npmBuildWithInstall
-        working-directory: ./my-garden-be
+        run: npm install
 
-      - name: npmBuild with Gradle (without npm install)
-        if: steps.cache.outputs.cache-hit == 'true'
-        run: ./gradlew npmBuildWithoutInstall
-        working-directory: ./my-garden-be
+      - name: Build with npm
+        run: npm run build
+
