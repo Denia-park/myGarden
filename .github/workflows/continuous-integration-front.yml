@@ -34,7 +34,7 @@ jobs:
         run: echo "true" >> $NPM_BUILD_CACHE
 
       - name: npmBuild with Gradle (with npm install)
-        if: steps.cache.outputs.cache-hit == 'false'
+        if: steps.cache.outputs.cache-hit != 'true'
         run: ./my-garden-be/gradlew npmBuildWithInstall
 
       - name: npmBuild with Gradle (without npm install)
