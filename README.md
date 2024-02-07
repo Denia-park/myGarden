@@ -1,4 +1,4 @@
-[![Java CI with Gradle & Add Jacoco Report](https://github.com/Denia-park/myGarden/actions/workflows/gradle.yml/badge.svg)](https://github.com/Denia-park/myGarden/actions/workflows/gradle.yml)
+[![Continuous Deployment With Docker](https://github.com/Denia-park/myGarden/actions/workflows/continuous-depolyment.yml/badge.svg)](https://github.com/Denia-park/myGarden/actions/workflows/continuous-depolyment.yml)
 
 <!-- TOC -->
 
@@ -11,6 +11,7 @@
     * [로그인](#로그인)
     * [하루 일과](#하루-일과)
     * [게시판 (공지사항 게시판, TIL 게시판)](#게시판-공지사항-게시판-til-게시판)
+    * [CI/CD](#cicd)
   * [트러블 슈팅](#트러블-슈팅)
     * [Front (Vue.js)](#front-vuejs)
     * [Back (Spring Boot)](#back-spring-boot)
@@ -67,14 +68,17 @@
     - `Spring Rest Docs`
   - **Productivity Tools**
     - `IntelliJ`
+  - **CI/CD**
+    - `Github Actions`
+    - `Docker`
 
 ## 주요 기능
 
 ### 회원가입
 
 - 회원가입을 할 수 있다.
-  - 이메일은 이메일 형식에 맞춰서 작성해야 한다.
-  - 비밀번호는 8자 이상 20자 이하이며, 영문, 숫자, 특수문자가 각각 1개 이상 포함되어야 한다.
+  - `ID`는 `이메일`을 사용한다.
+  - `비밀번호`는 `8자 이상 20자 이하이며, 영문, 숫자, 특수문자가 각각 1개 이상 포함`되어야 한다.
 
   ![회원가입](./docs/daily-routine/gif/DailyRoutine-Signup.gif)
 
@@ -82,16 +86,15 @@
 
 - 로그인을 할 수 있다.
   - `Remeber Me`를 체크하면, `LocalStorage`에 계정 정보를 저장한다.
-  - 이메일 형식에 맞지 않거나, 비밀번호가 틀리면 로그인에 실패한다.
-  - 로그인에 성공하면, `JWT`를 발급받는다.
-  - `AccessToken`은 30분 동안 유효하고, `RefreshToken`은 7일 동안 동안 유효하다.
+  - `이메일` 형식에 맞지 않거나, 비밀번호가 틀리면 로그인에 실패한다.
+  - 로그인에 성공하면, `JWT`를 발급받는다. (`AccessToken`은 30분 동안 유효하고, `RefreshToken`은 7일 동안 동안 유효)
 
   ![로그인](./docs/daily-routine/gif/DailyRoutine-Login.gif)
 
 ### 하루 일과
 
-- 오늘 있었던 일들을 시간별로 등록하고 확인할 수 있다.
-- 오늘 등록한 내용들을 타입별로 정리하여 확인할 수 있다.
+- `오늘 있었던 일`들을 `시간대별로 등록` 및 `확인`할 수 있다.
+- `오늘 등록한 내용`들을 `타입별로 정리`하여 `확인`할 수 있다.
 
 ![하루 일과 전체 화면](./docs/daily-routine/img/DailyRoutine-ScreenShot.png)
 
@@ -120,20 +123,42 @@
 
 ### 게시판 (공지사항 게시판, TIL 게시판)
 
-- 글 목록 확인 및 글 확인 : 로그인 없이 모두 가능
-  - 검색 필터 : 날짜, 분류, 제목 등으로 검색이 가능
-  - 정렬 조건 변경시 바로 적용
-  - 게시글 수 조건 변경시 바로 적용
-  - 페이지네이션 적용
-- 글 작성 : markdown editor 적용, 공지사항 (관리자만 가능) / TIL (로그인한 유저만 가능)
-- 글 수정 : 공지사항 (관리자만 가능) / TIL (해당 글을 작성한 유저만 가능)
-- 글 삭제 : 공지사항 (관리자만 가능) / TIL (해당 글을 작성한 유저만 가능)
+- 게시판을 제공한다.
+  - `검색` 및 `정렬`이 가능, `페이지네이션` 적용
+  - `Markdown Editor` 적용
+- 권한 체크 기능
+  - 모든 게시글 확인 : `비회원도 가능`
+  - 게시글 작성, 수정, 삭제 : `로그인한 유저만 가능 (본인 글에 대해서만 수정 및 삭제 가능)`
+  - 공지사항 : `관리자`만 작성, 수정, 삭제 가능
 
 ![공지사항 글 목록 조회](./docs/boards/notice/gif/Notice-List.gif)
 ![공지사항 글 조회](./docs/boards/notice/gif/Notice-View.gif)
 ![TIL 글 작성](docs/boards/learn/gif/Learn-Post.gif)
 ![TIL 글 수정](docs/boards/learn/gif/Learn-Put.gif)
 ![TIL 글 삭제](docs/boards/learn/gif/Learn-Delete.gif)
+
+### CI/CD
+
+- `Github Actions`를 이용하여 `CI/CD`를 적용
+- `CI`
+  - `Vue 파일`
+    - `빌드`가 정상적으로 되는지 확인
+  - `Spring 파일`
+    - `테스트` 및 `빌드`가 정상적으로 되는지 확인
+    - `jacoco`를 이용해서, PR 올린 파일에 대한 테스트 비율을 댓글에 첨부
+- `CD`
+  - `Merge`된 소스코드를 빌드 후 `Docker` 이미지로 생성
+  - 생성된 이미지를 `Github Action Container Registry`에 Push
+  - `Github Action Runner`에 연결해둔 `AWS EC2`에서 `Docker` 이미지 실행
+
+- **PR에 대한 테스트 비율 첨부**
+  ![PR에 대한 테스트 비율 첨부](./docs/cicd/Jacoco-PR-Comment.png)
+
+- **PR에 대해서 테스트 및 빌드 진행**
+  ![PR에 대해서 테스트 및 빌드 진행](./docs/cicd/Ci-test-build.png)
+
+- **CD 진행**
+  ![CD 진행](./docs/cicd/Cd-Deploy.png)
 
 ## 트러블 슈팅
 
@@ -408,8 +433,9 @@
 - `Back` : `Spring Boot`
 - `DevOps` : `AWS EC2`, `AWS RDS`, `AWS Parameter Store`
 - `DB` : `MySQL (AWS RDS)`
+- `CI/CD` : `Github Actions`
 
-![Architecture](./docs/architecture/Architecture-240124.png)
+![Architecture](./docs/architecture/Architecture-240208.png)
 
 ## 추가하고 싶은 기능
 
@@ -424,8 +450,6 @@
   - 네이버
   - 구글
 - Redis 적용
-- CI/CD
-  - PR시마다 테스트 자동 수행
 - 글 작성 수 혹은 조회수로 랭킹 만들기
 - 주간 및 월간 통계 내기
 - 모니터링 추가하기
