@@ -131,17 +131,9 @@ task deleteOldVueFiles(type: Delete) {
     delete "src/main/resources/static"
 }
 
-task npmBuildWithoutInstall(type: NpmTask, dependsOn: ['deleteOldVueFiles']) {
+task npmBuild(type: NpmTask, dependsOn: ['deleteOldVueFiles', 'npmInstall']) {
     args = ["run", "build"]
 }
 
-task npmBuildWithInstall(type: NpmTask, dependsOn: ['deleteOldVueFiles', 'npmInstall']) {
-    args = ["run", "build"]
-}
+processResources.dependsOn 'npmBuild'
 
-// 환경 변수 또는 프로젝트 속성을 확인하여 조건부로 태스크 의존성 설정
-if (System.getenv('NPM_BUILD_CACHE') == 'true') {
-    processResources.dependsOn 'npmBuildWithoutInstall'
-} else {
-    processResources.dependsOn 'npmBuildWithInstall'
-}
