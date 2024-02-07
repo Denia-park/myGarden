@@ -36,7 +36,9 @@ jobs:
       - name: npmBuild with Gradle (with npm install)
         if: steps.cache.outputs.cache-hit != 'true'
         run: ./my-garden-be/gradlew npmBuildWithInstall
+        working-directory: ./my-garden-be
 
       - name: npmBuild with Gradle (without npm install)
         if: steps.cache.outputs.cache-hit == 'true'
         run: ./my-garden-be/gradlew npmBuildWithoutInstall
+        working-directory: ./my-garden-be
