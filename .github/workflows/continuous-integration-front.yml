@@ -1,0 +1,36 @@
+name: Vue build test
+
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - my-garden-fe/**
+
+env:
+  NODE_VERSION: 20 # build.gradle에 정의된 nodeVersion과 일치시켜야 함
+
+jobs:
+  front-build:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./my-garden-fe
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: my-garden-fe/package-lock.json
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build with npm
+        run: npm run build
+
