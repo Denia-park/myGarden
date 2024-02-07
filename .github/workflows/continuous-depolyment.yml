@@ -42,7 +42,7 @@ jobs:
         uses: gradle/actions/setup-gradle@ec92e829475ac0c2315ea8f9eced72db85bb337a # v3.0.0
 
       - name: Build with Gradle Wrapper
-        run: ./gradlew build -x test # CI에서 테스트를 실행하므로, 테스트 제외
+        run: ./gradlew build
 
       # docker build 수행
       - name: Set up docker buildx
