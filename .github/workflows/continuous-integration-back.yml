@@ -47,5 +47,5 @@ jobs:
           min-coverage-changed-files: 65
 
       - name: Build with Gradle Wrapper
-        run: ./gradlew build -x test # 위에서 테스트를 실행하므로, 테스트 제외
+        run: ./gradlew build -x test npmBuild # 위에서 테스트를 실행하므로, 테스트 제외
 
