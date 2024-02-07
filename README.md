@@ -1,4 +1,4 @@
-[![Java CI with Gradle & Add Jacoco Report](https://github.com/Denia-park/myGarden/actions/workflows/gradle.yml/badge.svg)](https://github.com/Denia-park/myGarden/actions/workflows/gradle.yml)
+[![Continuous Deployment With Docker](https://github.com/Denia-park/myGarden/actions/workflows/continuous-depolyment.yml/badge.svg)](https://github.com/Denia-park/myGarden/actions/workflows/continuous-depolyment.yml)
 
 <!-- TOC -->
 
