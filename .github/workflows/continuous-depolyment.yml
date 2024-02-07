@@ -14,7 +14,7 @@ on:
 # 환경설정
 env:
   ACTOR: denia-park
-  DOCKER_IMAGE: ghcr.io/${{ env.ACTOR }}/my-garden
+  DOCKER_IMAGE: ghcr.io/denia-park/my-garden
   VERSION: ${{ github.sha }}
   NAME: my-garden
 
