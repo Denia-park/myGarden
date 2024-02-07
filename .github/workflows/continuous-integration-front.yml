@@ -26,5 +26,17 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@ec92e829475ac0c2315ea8f9eced72db85bb337a # v3.0.0
 
-      - name: npmBuild with Gradle
-        run: ./gradlew npmBuild
+      - name: Cache node modules
+        uses: actions/cache@v3
+        id: cache
+        with:
+          path: node_modules
+          key: npm-packages-${{ hashFiles('../my-garden-fe/package-lock.json') }}
+
+      - name: npmBuild with Gradle (with npm install)
+        if: steps.cache.outputs.cache-hit == 'false'
+        run: ./gradlew npmBuildWithInstall
+
+      - name: npmBuild with Gradle (without npm install)
+        if: steps.cache.outputs.cache-hit == 'true'
+        run: ./gradlew npmBuildWithoutInstall
