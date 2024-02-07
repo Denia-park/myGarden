@@ -11,6 +11,7 @@
     * [로그인](#로그인)
     * [하루 일과](#하루-일과)
     * [게시판 (공지사항 게시판, TIL 게시판)](#게시판-공지사항-게시판-til-게시판)
+    * [CI/CD](#cicd)
   * [트러블 슈팅](#트러블-슈팅)
     * [Front (Vue.js)](#front-vuejs)
     * [Back (Spring Boot)](#back-spring-boot)
@@ -134,6 +135,29 @@
 ![TIL 글 작성](docs/boards/learn/gif/Learn-Post.gif)
 ![TIL 글 수정](docs/boards/learn/gif/Learn-Put.gif)
 ![TIL 글 삭제](docs/boards/learn/gif/Learn-Delete.gif)
+
+### CI/CD
+
+- `Github Actions`를 이용하여 `CI/CD`를 적용
+- `CI`
+  - `Vue 파일`
+    - `빌드`가 정상적으로 되는지 확인
+  - `Spring 파일`
+    - `테스트` 및 `빌드`가 정상적으로 되는지 확인
+    - `jacoco`를 이용해서, PR 올린 파일에 대한 테스트 비율을 댓글에 첨부
+- `CD`
+  - `Merge`된 소스코드를 빌드 후 `Docker` 이미지로 생성
+  - 생성된 이미지를 `Github Action Container Registry`에 Push
+  - `Github Action Runner`에 연결해둔 `AWS EC2`에서 `Docker` 이미지 실행
+
+- **PR에 대한 테스트 비율 첨부**
+  ![PR에 대한 테스트 비율 첨부](./docs/cicd/Jacoco-PR-Comment.png)
+
+- **PR에 대해서 테스트 및 빌드 진행**
+  ![PR에 대해서 테스트 및 빌드 진행](./docs/cicd/Ci-test-build.png)
+
+- **CD 진행**
+  ![CD 진행](./docs/cicd/Cd-Deploy.png)
 
 ## 트러블 슈팅
 
@@ -408,8 +432,9 @@
 - `Back` : `Spring Boot`
 - `DevOps` : `AWS EC2`, `AWS RDS`, `AWS Parameter Store`
 - `DB` : `MySQL (AWS RDS)`
+- `CI/CD` : `Github Actions`
 
-![Architecture](./docs/architecture/Architecture-240124.png)
+![Architecture](./docs/architecture/Architecture-240208.png)
 
 ## 추가하고 싶은 기능
 
