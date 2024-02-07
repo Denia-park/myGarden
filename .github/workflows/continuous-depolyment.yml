@@ -72,6 +72,7 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v5
         with:
+          context: .
           builder: ${{ steps.buildx.outputs.name }}
           push: true
           tags: ${{ env.DOCKER_IMAGE }}:latest
