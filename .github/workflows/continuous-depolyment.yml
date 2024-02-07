@@ -13,7 +13,8 @@ on:
 
 # 환경설정
 env:
-  DOCKER_IMAGE: ghcr.io/denia-park/my-garden
+  ACTOR: denia-park
+  DOCKER_IMAGE: ghcr.io/${{ env.ACTOR }}/my-garden
   VERSION: ${{ github.sha }}
   NAME: my-garden
 
@@ -65,7 +66,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}
+          username: ${{ env.ACTOR }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
@@ -87,7 +88,7 @@ jobs:
 #        uses: docker/login-action@v3
 #        with:
 #          registry: ghcr.io
-#          username: ${{ github.actor }}
+#          username: ${{ env.ACTOR }}
 #          password: ${{ secrets.GITHUB_TOKEN }}
 #
 #      # 3000 -> 80 포트로 수행하도록 지정
