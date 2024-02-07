@@ -139,4 +139,9 @@ task npmBuildWithInstall(type: NpmTask, dependsOn: ['deleteOldVueFiles', 'npmIns
     args = ["run", "build"]
 }
 
-processResources.dependsOn 'npmBuild'
+// 환경 변수 또는 프로젝트 속성을 확인하여 조건부로 태스크 의존성 설정
+if (System.getenv('NPM_BUILD_CACHE') == 'true') {
+    processResources.dependsOn 'npmBuildWithoutInstall'
+} else {
+    processResources.dependsOn 'npmBuildWithInstall'
+}
