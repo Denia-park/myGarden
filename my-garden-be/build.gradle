@@ -136,4 +136,3 @@ task npmBuild(type: NpmTask, dependsOn: ['deleteOldVueFiles', 'npmInstall']) {
 }
 
 processResources.dependsOn 'npmBuild'
-
