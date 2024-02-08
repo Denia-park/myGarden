@@ -62,10 +62,6 @@ function save() {
   emit('saveBoard', board);
 }
 
-function handleCopyCodeSuccess() {
-  alert('코드가 복사되었습니다.');
-}
-
 watch(() => props.content, () => {
   content.value = props.content;
 });
