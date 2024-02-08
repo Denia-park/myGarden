@@ -106,7 +106,7 @@ h1 {
 #views {
   font-size: 15px;
   font-weight: bold;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   margin-right: 20px;
 
   text-align: right;
@@ -116,7 +116,8 @@ h1 {
   border: 1px solid black;
   margin-bottom: 20px;
 
-  min-height: 400px;
+  height: 450px;
+  overflow: auto;
 }
 
 .detail_bot_button_box {
