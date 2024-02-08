@@ -104,7 +104,7 @@ onMounted(() => {
 
 h1 {
   text-align: center;
-  margin: 30px 0;
+  margin: 20px 0;
 }
 
 </style>

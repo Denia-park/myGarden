@@ -68,7 +68,7 @@ const emit = defineEmits(["goToList", "goToEdit", "deleteBoard"]);
 
 h1 {
   text-align: center;
-  margin: 30px 0;
+  margin: 20px 0;
 }
 
 .detail_title_box {
