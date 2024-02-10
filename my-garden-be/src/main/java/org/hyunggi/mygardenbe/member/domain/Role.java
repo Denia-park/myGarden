@@ -21,7 +21,8 @@ public enum Role {
                     Permission.ADMIN_DELETE,
                     Permission.ADMIN_CREATE
             )
-    );
+    ),
+    ACTUATOR(Collections.emptySet());
 
     private final Set<Permission> permissions;
 

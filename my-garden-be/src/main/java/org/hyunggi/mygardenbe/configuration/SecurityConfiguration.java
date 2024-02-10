@@ -9,6 +9,8 @@ import org.hyunggi.mygardenbe.auth.jwt.filter.JwtAuthenticationFilter;
 import org.hyunggi.mygardenbe.auth.jwt.filter.JwtExceptionHandlerFilter;
 import org.hyunggi.mygardenbe.common.response.ApiResponse;
 import org.hyunggi.mygardenbe.common.view.filter.HistoryModeFilter;
+import org.hyunggi.mygardenbe.member.domain.Role;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -49,16 +51,21 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final LogoutHandler myLogoutHandler;
 
+    @Value("${actuator.url}")
+    private String actuatorUrl;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
                         req
-                                .requestMatchers(getOnlyAdminAccessNoticeApi()).hasRole("ADMIN")
+                                .requestMatchers(getActuatorAllUrl()).hasRole(Role.ACTUATOR.toString())
+                                .requestMatchers(getOnlyAdminAccessNoticeApi()).hasRole(Role.ADMIN.toString())
                                 .requestMatchers(getReadBoardsApi()).permitAll()
                                 .requestMatchers(WHITE_LIST_URL).permitAll()
-                                .anyRequest().authenticated()
+                                .anyRequest().hasAnyRole(Role.USER.toString(), Role.ADMIN.toString())
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
@@ -75,6 +82,10 @@ public class SecurityConfiguration {
                 );
 
         return http.build();
+    }
+
+    private String getActuatorAllUrl() {
+        return actuatorUrl + "/**";
     }
 
     private RequestMatcher[] getOnlyAdminAccessNoticeApi() {
