@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Profile;
 
 @Profile("!local")
 @Configuration
-public class ConnectorConfiguration {
+public class HttpsConfiguration {
     @Bean
     public ServletWebServerFactory servletContainer() {
 
