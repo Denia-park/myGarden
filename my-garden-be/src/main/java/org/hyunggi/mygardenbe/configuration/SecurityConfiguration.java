@@ -56,7 +56,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req ->
                         req
                                 .requestMatchers(getOnlyAdminAccessNoticeApi()).hasRole("ADMIN")
-                                .requestMatchers(getFreeAccessApi()).permitAll()
+                                .requestMatchers(getReadBoardsApi()).permitAll()
                                 .requestMatchers(WHITE_LIST_URL).permitAll()
                                 .anyRequest().authenticated()
                 )
@@ -85,7 +85,7 @@ public class SecurityConfiguration {
         };
     }
 
-    private RequestMatcher[] getFreeAccessApi() {
+    private RequestMatcher[] getReadBoardsApi() {
         return new RequestMatcher[]{
                 antMatcher(HttpMethod.GET, "/api/boards/notice/**"),
                 antMatcher(HttpMethod.GET, "/api/boards/learn/**"),
