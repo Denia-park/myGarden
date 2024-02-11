@@ -45,11 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(actuatorEmail);
 
-        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
-        if (!userDetails.isEnabled()) {
-            log.error("Actuator user is not enabled");
-            authorities.clear();
-        }
+        final Collection<? extends GrantedAuthority> authorities = validateEnabled(userDetails);
 
         actuatorAuthenticationToken = new UsernamePasswordAuthenticationToken(
                 userDetails,
@@ -62,6 +58,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return actuatorEmail.isBlank();
     }
 
+    private Collection<? extends GrantedAuthority> validateEnabled(final UserDetails userDetails) {
+        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+
+        if (!userDetails.isEnabled()) {
+            log.error("Actuator user is not enabled");
+            authorities.clear();
+        }
+
+        return authorities;
+    }
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
