@@ -41,12 +41,12 @@ public class MemberEntity extends BaseEntity implements UserDetails {
 
     public static MemberEntity of(final Member member, final PasswordEncoder passwordEncoder) {
         validate(member, passwordEncoder);
-        
+
         return MemberEntity.builder()
                 .email(member.getEmail())
                 .password(passwordEncoder.encode(member.getPassword()))
-                .role(Role.USER)
-                .enabled(true)
+                .role(member.getRole())
+                .enabled(member.isEnabled())
                 .build();
     }
 
