@@ -51,7 +51,7 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final LogoutHandler myLogoutHandler;
 
-    @Value("${actuator.url}")
+    @Value("${actuator.url:/default}")
     private String actuatorUrl;
 
     @Bean

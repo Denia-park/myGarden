@@ -33,12 +33,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
-    @Value("${actuator.email}")
+    @Value("${actuator.email:}")
     private String actuatorEmail;
     private UsernamePasswordAuthenticationToken actuatorAuthenticationToken;
 
     @PostConstruct
     public void init() {
+        if (isBlankActuatorEmail()) {
+            return;
+        }
+
         UserDetails userDetails = userDetailsService.loadUserByUsername(actuatorEmail);
 
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
@@ -53,6 +57,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authorities
         );
     }
+
+    private boolean isBlankActuatorEmail() {
+        return actuatorEmail.isBlank();
+    }
+
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
