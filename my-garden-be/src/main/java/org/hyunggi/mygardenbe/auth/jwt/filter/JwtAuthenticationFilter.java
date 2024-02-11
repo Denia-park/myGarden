@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private UsernamePasswordAuthenticationToken actuatorAuthenticationToken;
 
     @PostConstruct
-    public void init() {
+    protected void init() {
         if (isBlankActuatorEmail()) {
             return;
         }
