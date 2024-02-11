@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import org.hyunggi.mygardenbe.IntegrationTestSupport;
 import org.hyunggi.mygardenbe.auth.service.AuthenticationService;
 import org.hyunggi.mygardenbe.auth.service.response.AuthenticationResponse;
+import org.hyunggi.mygardenbe.common.exception.InvalidTokenRequestException;
 import org.hyunggi.mygardenbe.member.entity.MemberEntity;
 import org.hyunggi.mygardenbe.member.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 class JwtServiceTest extends IntegrationTestSupport {
@@ -42,6 +44,17 @@ class JwtServiceTest extends IntegrationTestSupport {
         assertThat(claims).isNotNull();
         assertThat(claims.getSubject()).isEqualTo(email);
         assertThat(claims.get("roles", String.class)).isEqualTo("ROLE_USER");
+    }
+
+    @Test
+    @DisplayName("Token이 올바르지 않으면, InvalidTokenRequestException 예외를 발생시킨다")
+    void extractAllClaimsWithInvalidToken() {
+        //given
+        final String invalidToken = "invalid";
+
+        //when, then
+        assertThatThrownBy(() -> jwtService.extractAllClaims(invalidToken))
+                .isInstanceOf(InvalidTokenRequestException.class);
     }
 
     @Test
