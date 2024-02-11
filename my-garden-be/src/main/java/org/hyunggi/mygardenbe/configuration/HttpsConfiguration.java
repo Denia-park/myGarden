@@ -15,18 +15,7 @@ import org.springframework.context.annotation.Profile;
 public class HttpsConfiguration {
     @Bean
     public ServletWebServerFactory servletContainer() {
-
-        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() {
-            @Override
-            protected void postProcessContext(Context context) {
-                SecurityConstraint securityConstraint = new SecurityConstraint();
-                securityConstraint.setUserConstraint("CONFIDENTIAL");
-                SecurityCollection collection = new SecurityCollection();
-                collection.addPattern("/*");
-                securityConstraint.addCollection(collection);
-                context.addConstraint(securityConstraint);
-            }
-        };
+        TomcatServletWebServerFactory tomcat = new CustomTomcatServletWebServerFactory();
         tomcat.addAdditionalTomcatConnectors(createSslConnector());
         return tomcat;
     }
@@ -38,5 +27,17 @@ public class HttpsConfiguration {
         connector.setPort(80);
         connector.setRedirectPort(443);
         return connector;
+    }
+
+    private static class CustomTomcatServletWebServerFactory extends TomcatServletWebServerFactory {
+        @Override
+        protected void postProcessContext(Context context) {
+            SecurityConstraint securityConstraint = new SecurityConstraint();
+            securityConstraint.setUserConstraint("CONFIDENTIAL");
+            SecurityCollection collection = new SecurityCollection();
+            collection.addPattern("/*");
+            securityConstraint.addCollection(collection);
+            context.addConstraint(securityConstraint);
+        }
     }
 }
