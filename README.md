@@ -7,12 +7,14 @@
   * [홈페이지 링크](#홈페이지-링크)
   * [아키텍처](#아키텍처)
   * [기술 스택](#기술-스택)
+    * [해당 기술 스택 선택 이유](#해당-기술-스택-선택-이유)
   * [주요 기능](#주요-기능)
     * [회원가입](#회원가입)
     * [로그인](#로그인)
     * [하루 일과](#하루-일과)
     * [게시판 (공지사항 게시판, TIL 게시판)](#게시판-공지사항-게시판-til-게시판)
-    * [CI/CD](#cicd)
+    * [CI / CD](#ci--cd)
+    * [Prometheus / Grafana](#prometheus--grafana)
   * [트러블 슈팅](#트러블-슈팅)
     * [Front (Vue.js)](#front-vuejs)
     * [Back (Spring Boot)](#back-spring-boot)
@@ -46,8 +48,9 @@
 - `DevOps` : `AWS EC2`, `AWS RDS`, `AWS Parameter Store`
 - `DB` : `MySQL (AWS RDS)`
 - `CI/CD` : `Github Actions`
+- `Monitoring` : `Prometheus`, `Grafana`
 
-![Architecture](./docs/architecture/Architecture-240208.png)
+![Architecture](./docs/architecture/Architecture-240214.png)
 
 ## 기술 스택
 
@@ -71,25 +74,30 @@
   - **CI/CD**
     - `Github Actions`
     - `Docker`
+  - **Monitoring**
+    - `Prometheus`, `Grafana`
 
 ### 해당 기술 스택 선택 이유
 
 - `Vue.js`
-  - `Vue.js`는 `React`에 비해 러닝커브가 낮아 `초보자`가 쉽게 접근할 수 있고, `간단한 프로젝트`를 만들기에 더 적합하다고 판단했습니다.
+  - `Vue.js`는 `React`에 비해 러닝커브가 낮고 공식 문서가 잘 되어있어서, `초보자`가 `간단한 프로젝트`를 만들기에 더 적합해서 선택했습니다.
 - `JWT`
-  - `JWT`는 `토큰 기반 인증`을 사용하여, `REST API`에 대한 `인증` 및 `권한 부여`를 쉽게 구현할 수 있고 `Session`에 비해서 `서버의 부담`이 적다고 판단했습니다.
-    (`AWS 프리티어`를 사용하고 있어서 서버의 리소스를 고려함)
+  - `JWT`는 `토큰 기반 인증`을 통해 `REST API`에 대한 `인증` 및 `권한 부여`를 쉽게 구현할 수 있고, `Session`에 비해서 `서버의 부담`이 더 적기 때문에 선택했습니다.
+    (`AWS 프리티어`를 사용하고 있어서 서버의 리소스를 주로 고려했습니다.)
 - `MySQL`
   - `MySQL`은 읽기 및 쓰기 작업이 빈번한 제 프로젝트에 `우수한 성능`과 `확장성`을 제공하고 개인적 경험 및 선호도를 고려할 때, 가장 적합한 데이터베이스라서 선택했습니다.
 - `Spring Rest Docs`
   - `Spring Rest Docs`는 `Swagger`에 비해 `비지니스 코드에 비침투적`이며, 반드시 `테스트 코드`를 작성해야 하기 때문에 `테스트 코드`에 좀 더 친숙해지기 위해 선택했습니다.
     그리고 `문서화 과정`이 코드와 밀접하게 연결되어 있어, `실제 코드와 문서 간의 일관성`을 유지하기 쉽습니다.
 - `Github Actions`
-  - `Github Actions`는 간편하게 설정이 가능해서 소규모 개인 프로젝트에 적합하다고 판단했고, 추가적인 인프라 설정 없이 GitHub의 클라우드 인프라에서 실행이 가능하기 때문에 `AWS 프리티어`를
-    사용하고 있는 저에게는 `Jenkins`보다 더 나은 선택이라고 판단했습니다.
+  - `Github Actions`는 간편하게 설정이 가능해서 소규모 개인 프로젝트를 할 때 더 적합하다고 판단했으며, 추가적인 인프라 설정 없이 GitHub의 클라우드 인프라에서 실행이 가능하기 때문에
+    선택했습니다.
 - `Docker`
-  - `Docker`는 컨테이너 기술에 대한 실질적인 경험 쌓기 위해 선택했으며, 이식성이 좋기 때문에 개발, 테스팅, 배포 과정의 일관성을 보장하고, 다양한 환경에서의 호환성 문제를 최소화할 수
-    있어서 `CD`에 있어서 적합하다고 판단했습니다.
+  - `Docker`는 컨테이너 기술에 대한 실질적인 경험 쌓기 위해 선택했으며, 이식성이 좋기 때문에 개발, 테스팅, 배포 과정의 일관성을 보장하고,
+    다양한 환경에서의 호환성 문제를 최소화할 수 있어서 `CD`에 적합하다고 판단해서 선택했습니다.
+- `Prometheus`, `Grafana`
+  - `Prometheus`, `Grafana`는 두 기술 스택 모두 오픈소스라서 비용 문제 없이 접근할 수 있으며, 두 기술 모두 커뮤니티가
+    잘 되어 있기 때문에 관련 자료의 접근성이 좋아서 선택했습니다
 
 ## 주요 기능
 
@@ -156,7 +164,7 @@
 ![TIL 글 수정](docs/boards/learn/gif/Learn-Put.gif)
 ![TIL 글 삭제](docs/boards/learn/gif/Learn-Delete.gif)
 
-### CI/CD
+### CI / CD
 
 - `Github Actions`를 이용하여 `CI/CD`를 적용
 - `CI`
@@ -179,6 +187,17 @@
 - **CD 진행**
   ![CD 진행](./docs/cicd/Cd-Deploy.png)
 
+### Prometheus / Grafana
+
+- `Prometheus`와 `Grafana`를 이용하여 `Monitoring`을 적용
+
+
+- **Spring App Server**
+  ![Spring App Server](docs/monitoring/Spring App Server.png)
+
+- **AWS EC2 Server - Node Exporter**
+  ![AWS EC2 Server - Node Exporter](docs/monitoring/AWS EC2 Server.png)
+
 ## 트러블 슈팅
 
 ### Front (Vue.js)
@@ -194,6 +213,7 @@
 4. [spring MVC에서 Vue history mode 설정하기 (spring security 사용 중)](https://velog.io/@as9587/spring-MVC%EC%97%90%EC%84%9C-Vue-history-mode-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0-spring-security-%EC%82%AC%EC%9A%A9-%EC%A4%91)
 5. [AWS를 이용해서 HTTPS 적용 후 HTTPS가 반영이 안될 때 확인 방법](https://velog.io/@as9587/AWS%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%B4%EC%84%9C-HTTPS-%EC%A0%81%EC%9A%A9-%ED%9B%84-HTTPS%EA%B0%80-%EB%B0%98%EC%98%81%EC%9D%B4-%EC%95%88%EB%90%A0-%EB%95%8C-%ED%99%95%EC%9D%B8-%EB%B0%A9%EB%B2%95)
 6. [[Vue + Spring] Github Actions를 이용한 CI/CD 구축하기 (+ Jacoco PR Comment 기능)](https://velog.io/@as9587/Vue-Spring-Github-Actions%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-CICD-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0-Jacoco-PR-Comment-%EA%B8%B0%EB%8A%A5)
+7. [[Prometheus + Grafana] Monitoring 도입하기 ( + Node Exporter)](https://velog.io/@as9587/Prometheus-Grafana-Monitoring-%EB%8F%84%EC%9E%85%ED%95%98%EA%B8%B0-Node-Exporter)
 
 ## API Docs (Spring Rest Docs)
 
