@@ -193,10 +193,10 @@
 
 
 - **Spring App Server**
-  ![Spring App Server](docs/monitoring/Spring App Server.png)
+  ![Spring App Server](./docs/monitoring/Spring App Server.png)
 
 - **AWS EC2 Server - Node Exporter**
-  ![AWS EC2 Server - Node Exporter](docs/monitoring/AWS EC2 Server.png)
+  ![AWS EC2 Server - Node Exporter](./docs/monitoring/AWS EC2 Server.png)
 
 ## 트러블 슈팅
 
