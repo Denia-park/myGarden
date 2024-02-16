@@ -6,8 +6,10 @@ import {signupApi} from "@/components/auth/signup/api/api.js";
 const form = ref({
   email: '',
   password: '',
+  passwordCheck: '',
   emailValid: false,
   passwordValid: false,
+  passwordCheckValid: false,
 })
 
 function goToLogin() {
@@ -20,6 +22,9 @@ function validateSignup() {
     return false;
   } else if (!form.value.passwordValid) {
     alert('비밀번호를 확인해주세요.');
+    return false;
+  } else if (!form.value.passwordCheckValid) {
+    alert('비밀번호 확인에 제대로 입력하셨는지 확인해주세요.');
     return false;
   }
 
@@ -53,6 +58,10 @@ function validatePassword() {
   form.value.passwordValid = passwordRegex.test(form.value.password);
 }
 
+function validatePasswordCheck() {
+  form.value.passwordCheckValid = form.value.password === form.value.passwordCheck;
+}
+
 </script>
 
 <template>
@@ -84,29 +93,16 @@ function validatePassword() {
               영문자, 숫자, 특수문자($, @, !, %, *, #, ?, &)가 각각 1개 이상 포함된 8~20자의 비밀번호여야 합니다.
             </div>
           </div>
+          <div class="form-floating mb-3">
+            <input v-model="form.passwordCheck" class="form-control rounded-3" placeholder="Password Check"
+                   type="password" @input="validatePasswordCheck">
+            <label>Password Check</label>
+            <div v-if="!form.passwordCheckValid" class="text-danger validationText">
+              위에서 패스워드로 입력하신 값이랑 일치하지 않습니다.
+            </div>
+          </div>
           <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit" @click="signup">Sign up</button>
           <small class="text-body-secondary">By clicking Sign up, you agree to the terms of use.</small>
-          <!--          <hr class="my-4">-->
-          <!--          <h2 class="fs-5 fw-bold mb-3">Or use a third-party</h2>-->
-          <!--          <button class="w-100 py-2 mb-2 btn btn-outline-warning rounded-3" type="submit">-->
-          <!--            <svg class="bi me-1" height="16" width="16">-->
-          <!--              <use xlink:href="#kakao"/>-->
-          <!--              <i class="fa-regular fa-comment"></i>-->
-          <!--            </svg>-->
-          <!--            Sign up with Kakao-->
-          <!--          </button>-->
-          <!--          <button class="w-100 py-2 mb-2 btn btn-outline-success rounded-3" type="submit">-->
-          <!--            <svg class="bi me-1" height="16" width="16">-->
-          <!--              <i class="fa-regular fa-n"></i>-->
-          <!--            </svg>-->
-          <!--            Sign up with Naver-->
-          <!--          </button>-->
-          <!--          <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="submit">-->
-          <!--            <svg class="bi me-1" height="16" width="16">-->
-          <!--              <i class="fa-brands fa-google"></i>-->
-          <!--            </svg>-->
-          <!--            Sign up with Google-->
-          <!--          </button>-->
         </div>
       </div>
     </div>
@@ -114,10 +110,6 @@ function validatePassword() {
 </template>
 
 <style scoped>
-.fa-brands, .fa-regular {
-  margin-right: 6px;
-}
-
 .validationText {
   font-size: 1rem;
 }
