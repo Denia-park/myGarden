@@ -61,7 +61,7 @@
   - `Vue.js 3.0`, `Vuex`, `Vue Router`
   - `Axios`, `Bootstrap`, `Chart.js`, `vue-markdown-editor`
 - **Backend**
-  - `Spring Boot 3.2`, `Spring Data JPA`, `Spring Security`
+  - `Spring Boot 3.2`, `Spring Security`, `Spring Data JPA`, `QueryDSL`
   - `Lombok`, `jsonwebtoken`
   - `MySQL`, `H2 Database`
 - **ETC**
@@ -85,7 +85,9 @@
   - `JWT`는 `토큰 기반 인증`을 통해 `REST API`에 대한 `인증` 및 `권한 부여`를 쉽게 구현할 수 있고, `Session`에 비해서 `서버의 부담`이 더 적기 때문에 선택했습니다.
     (`AWS 프리티어`를 사용하고 있어서 서버의 리소스를 주로 고려했습니다.)
 - `MySQL`
-  - `MySQL`은 읽기 및 쓰기 작업이 빈번한 제 프로젝트에 `우수한 성능`과 `확장성`을 제공하고 개인적 경험 및 선호도를 고려할 때, 가장 적합한 데이터베이스라서 선택했습니다.
+  - `MySQL`은 오랜 기간 동안 유지되어 온 오픈소스 프로젝트이며, 방대한 참고 자료와 함께 수많은 기업에서 사용할만큼 그 안정성이 검증되었기 때문하여 선택했습니다.
+- `QueryDSL`
+  - `QueryDSL`은 `JPA`의 `JPQL`을 `타입 세이프`하게 사용할 수 있게 해주고, `동적 쿼리`를 작성할 때 `가독성`이 좋아서 선택했습니다.
 - `Spring Rest Docs`
   - `Spring Rest Docs`는 `Swagger`에 비해 `비지니스 코드에 비침투적`이며, 반드시 `테스트 코드`를 작성해야 하기 때문에 `테스트 코드`에 좀 더 친숙해지기 위해 선택했습니다.
     그리고 `문서화 과정`이 코드와 밀접하게 연결되어 있어, `실제 코드와 문서 간의 일관성`을 유지하기 쉽습니다.
