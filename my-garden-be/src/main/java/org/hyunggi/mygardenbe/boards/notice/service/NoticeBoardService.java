@@ -4,11 +4,11 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hyunggi.mygardenbe.boards.common.category.service.BoardCategoryService;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
-import org.hyunggi.mygardenbe.boards.notice.controller.request.PostRequest;
 import org.hyunggi.mygardenbe.boards.notice.entity.NoticeBoardEntity;
 import org.hyunggi.mygardenbe.boards.notice.repository.NoticeBoardRepository;
 import org.hyunggi.mygardenbe.boards.notice.service.response.NoticeBoardResponse;
 import org.hyunggi.mygardenbe.member.entity.MemberEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,16 +29,7 @@ public class NoticeBoardService {
         final LocalDateTime startDateTime = startDate.atStartOfDay();
         final LocalDateTime endDateTime = endDate.plusDays(1).atStartOfDay();
 
-        //TODO: QueryDSL로 리팩토링 필요함
-        if (searchText.isBlank() && category.isBlank()) {
-            return findAllInDateRange(pageable, startDateTime, endDateTime);
-        } else if (searchText.isBlank()) {
-            return findAllInDateRangeByCategory(category, pageable, startDateTime, endDateTime);
-        } else if (category.isBlank()) {
-            return findAllInDateRangeWithTextSearch(searchText, pageable, startDateTime, endDateTime);
-        } else {
-            return findAllInDateRangeByCategoryWithTextSearch(category, searchText, pageable, startDateTime, endDateTime);
-        }
+        return searchNoticeBoards(startDateTime, endDateTime, category, searchText, pageable);
     }
 
     private void validateArguments(final LocalDate startDate, final LocalDate endDate, final String category, final String searchText, final Pageable pageable) {
@@ -51,37 +42,16 @@ public class NoticeBoardService {
         Assert.isTrue(pageable != null, "페이징 정보는 null이 될 수 없습니다.");
     }
 
-    private CustomPage<NoticeBoardResponse> findAllInDateRange(final Pageable pageable, final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
-        return CustomPage.of(
-                noticeBoardRepository.findAllInDateRange(startDateTime, endDateTime, pageable)
-                        .map(NoticeBoardResponse::of)
-        );
-    }
+    private CustomPage<NoticeBoardResponse> searchNoticeBoards(final LocalDateTime startDateTime, final LocalDateTime endDateTime, final String category, final String searchText, final Pageable pageable) {
+        final Page<NoticeBoardEntity> noticeBoardEntityPage = noticeBoardRepository.searchNoticeBoards(startDateTime, endDateTime, category, searchText, pageable);
 
-    private CustomPage<NoticeBoardResponse> findAllInDateRangeByCategory(final String category, final Pageable pageable, final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
-        return CustomPage.of(
-                noticeBoardRepository.findAllInDateRangeByCategory(startDateTime, endDateTime, category, pageable)
-                        .map(NoticeBoardResponse::of)
-        );
-    }
-
-    private CustomPage<NoticeBoardResponse> findAllInDateRangeWithTextSearch(final String searchText, final Pageable pageable, final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
-        return CustomPage.of(
-                noticeBoardRepository.findAllInDateRangeWithTextSearch(startDateTime, endDateTime, searchText, pageable)
-                        .map(NoticeBoardResponse::of)
-        );
-    }
-
-    private CustomPage<NoticeBoardResponse> findAllInDateRangeByCategoryWithTextSearch(final String category, final String searchText, final Pageable pageable, final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
-        return CustomPage.of(
-                noticeBoardRepository.findAllInDateRangeByCategoryWithTextSearch(startDateTime, endDateTime, category, searchText, pageable)
-                        .map(NoticeBoardResponse::of)
-        );
+        return CustomPage.of(noticeBoardEntityPage.map(NoticeBoardResponse::of));
     }
 
     @Transactional
     public NoticeBoardResponse getNoticeBoard(final Long boardId) {
         validateBoardId(boardId);
+
         final NoticeBoardEntity noticeBoardEntity = getNoticeBoardEntity(boardId);
         noticeBoardEntity.increaseViewCount();
 
@@ -97,14 +67,14 @@ public class NoticeBoardService {
                 .orElseThrow(() -> new EntityNotFoundException("해당 게시글이 존재하지 않습니다."));
     }
 
-    public Long postNoticeBoard(final PostRequest postRequest, final MemberEntity member) {
-        validatePostRequest(postRequest);
+    public Long postNoticeBoard(final String category, final String title, final String content, final Boolean isImportant, final MemberEntity member) {
+        validatePostRequest(category, title, content, isImportant);
 
         final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
-                postRequest.title(),
-                postRequest.content(),
-                postRequest.category(),
-                postRequest.isImportant(),
+                title,
+                content,
+                category,
+                isImportant,
                 getMemberEmailId(member),
                 LocalDateTime.now(),
                 member.getId()
@@ -113,10 +83,18 @@ public class NoticeBoardService {
         return noticeBoardRepository.save(noticeBoardEntity).getId();
     }
 
-    private void validatePostRequest(final PostRequest postRequest) {
-        Assert.isTrue(postRequest != null, "PostRequest는 null이 될 수 없습니다.");
+    private void validatePostRequest(final String category, final String title, final String content, final Boolean isImportant) {
+        validateContent(category, title, content, isImportant);
+    }
 
-        boardCategoryService.validateCategoryWithBoardType(postRequest.category(), "notice");
+    private void validateContent(final String category, final String title, final String content, final Boolean isImportant) {
+        boardCategoryService.validateCategoryWithBoardType(category, "notice");
+
+        Assert.isTrue(title != null, "제목은 null이 될 수 없습니다.");
+        Assert.isTrue(content != null, "내용은 null이 될 수 없습니다.");
+        Assert.isTrue(title.length() <= 100, "제목은 100자 이하여야 합니다.");
+        Assert.isTrue(content.length() <= 4000, "내용은 4000자 이하여야 합니다.");
+        Assert.isTrue(isImportant != null, "중요 여부는 null이 될 수 없습니다.");
     }
 
     private String getMemberEmailId(final MemberEntity member) {
@@ -124,18 +102,18 @@ public class NoticeBoardService {
     }
 
     @Transactional
-    public Long putNoticeBoard(final Long boardId, final PostRequest postRequest, final MemberEntity member) {
-        validatePutRequest(boardId, postRequest);
+    public Long putNoticeBoard(final Long boardId, final String category, final String title, final String content, final Boolean isImportant, final MemberEntity member) {
+        validatePutRequest(boardId, category, title, content, isImportant);
 
         final NoticeBoardEntity noticeBoardEntity = getNoticeBoardEntity(boardId);
 
         validateBoardWriter(member, noticeBoardEntity);
 
         noticeBoardEntity.update(
-                postRequest.title(),
-                postRequest.content(),
-                postRequest.category(),
-                postRequest.isImportant()
+                title,
+                content,
+                category,
+                isImportant
         );
 
         return boardId;
@@ -147,11 +125,10 @@ public class NoticeBoardService {
         }
     }
 
-    private void validatePutRequest(final Long boardId, final PostRequest postRequest) {
+    private void validatePutRequest(final Long boardId, final String category, final String title, final String content, final Boolean isImportant) {
         validateBoardId(boardId);
-        Assert.isTrue(postRequest != null, "PostRequest는 null이 될 수 없습니다.");
 
-        boardCategoryService.validateCategoryWithBoardType(postRequest.category(), "notice");
+        validateContent(category, title, content, isImportant);
     }
 
     @Transactional

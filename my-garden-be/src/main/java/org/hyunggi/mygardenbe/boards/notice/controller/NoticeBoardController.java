@@ -51,12 +51,12 @@ public class NoticeBoardController {
 
     @PostMapping
     public ApiResponse<Long> postNoticeBoard(@RequestBody final PostRequest postRequest, @WithLoginUserEntity final MemberEntity member) {
-        return ApiResponse.ok(noticeBoardService.postNoticeBoard(postRequest, member));
+        return ApiResponse.ok(noticeBoardService.postNoticeBoard(postRequest.category(), postRequest.title(), postRequest.content(), postRequest.isImportant(), member));
     }
 
     @PutMapping("/{boardId}")
     public ApiResponse<Long> putNoticeBoard(@PathVariable final Long boardId, @RequestBody final PostRequest postRequest, @WithLoginUserEntity final MemberEntity member) {
-        return ApiResponse.ok(noticeBoardService.putNoticeBoard(boardId, postRequest, member));
+        return ApiResponse.ok(noticeBoardService.putNoticeBoard(boardId, postRequest.category(), postRequest.title(), postRequest.content(), postRequest.isImportant(), member));
     }
 
     @DeleteMapping("/{boardId}")

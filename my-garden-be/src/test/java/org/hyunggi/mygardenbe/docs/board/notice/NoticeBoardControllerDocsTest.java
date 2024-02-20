@@ -190,7 +190,7 @@ class NoticeBoardControllerDocsTest extends RestDocsSupport {
                 .isImportant(false)
                 .build();
 
-        BDDMockito.given(noticeBoardService.postNoticeBoard(any(), any()))
+        BDDMockito.given(noticeBoardService.postNoticeBoard(any(), any(), any(), any(), any()))
                 .willReturn(1L);
 
         //when, then
@@ -240,7 +240,7 @@ class NoticeBoardControllerDocsTest extends RestDocsSupport {
                 .isImportant(false)
                 .build();
 
-        BDDMockito.given(noticeBoardService.putNoticeBoard(any(), any(), any()))
+        BDDMockito.given(noticeBoardService.putNoticeBoard(any(), any(), any(), any(), any(), any()))
                 .willReturn(1L);
 
         //when, then
