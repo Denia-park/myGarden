@@ -9,6 +9,7 @@ import org.hyunggi.mygardenbe.boards.learn.entity.LearnBoardEntity;
 import org.hyunggi.mygardenbe.boards.learn.repository.LearnBoardRepository;
 import org.hyunggi.mygardenbe.boards.learn.service.response.LearnBoardResponse;
 import org.hyunggi.mygardenbe.member.entity.MemberEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,16 +30,7 @@ public class LearnBoardService {
         final LocalDateTime startDateTime = startDate.atStartOfDay();
         final LocalDateTime endDateTime = endDate.plusDays(1).atStartOfDay();
 
-        //TODO: QueryDSL로 리팩토링 필요함
-        if (searchText.isBlank() && category.isBlank()) {
-            return findAllInDateRange(pageable, startDateTime, endDateTime);
-        } else if (searchText.isBlank()) {
-            return findAllInDateRangeByCategory(category, pageable, startDateTime, endDateTime);
-        } else if (category.isBlank()) {
-            return findAllInDateRangeWithTextSearch(searchText, pageable, startDateTime, endDateTime);
-        } else {
-            return findAllInDateRangeByCategoryWithTextSearch(category, searchText, pageable, startDateTime, endDateTime);
-        }
+        return searchLearnBoards(startDateTime, endDateTime, category, searchText, pageable);
     }
 
     private void validateArguments(final LocalDate startDate, final LocalDate endDate, final String category, final String searchText, final Pageable pageable) {
@@ -51,37 +43,16 @@ public class LearnBoardService {
         Assert.isTrue(pageable != null, "페이징 정보는 null이 될 수 없습니다.");
     }
 
-    private CustomPage<LearnBoardResponse> findAllInDateRange(final Pageable pageable, final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
-        return CustomPage.of(
-                learnBoardRepository.findAllInDateRange(startDateTime, endDateTime, pageable)
-                        .map(LearnBoardResponse::of)
-        );
-    }
+    private CustomPage<LearnBoardResponse> searchLearnBoards(final LocalDateTime startDateTime, final LocalDateTime endDateTime, final String category, final String searchText, final Pageable pageable) {
+        final Page<LearnBoardEntity> learnBoardEntityPage = learnBoardRepository.searchLearnBoards(startDateTime, endDateTime, category, searchText, pageable);
 
-    private CustomPage<LearnBoardResponse> findAllInDateRangeByCategory(final String category, final Pageable pageable, final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
-        return CustomPage.of(
-                learnBoardRepository.findAllInDateRangeByCategory(startDateTime, endDateTime, category, pageable)
-                        .map(LearnBoardResponse::of)
-        );
-    }
-
-    private CustomPage<LearnBoardResponse> findAllInDateRangeWithTextSearch(final String searchText, final Pageable pageable, final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
-        return CustomPage.of(
-                learnBoardRepository.findAllInDateRangeWithTextSearch(startDateTime, endDateTime, searchText, pageable)
-                        .map(LearnBoardResponse::of)
-        );
-    }
-
-    private CustomPage<LearnBoardResponse> findAllInDateRangeByCategoryWithTextSearch(final String category, final String searchText, final Pageable pageable, final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
-        return CustomPage.of(
-                learnBoardRepository.findAllInDateRangeByCategoryWithTextSearch(startDateTime, endDateTime, category, searchText, pageable)
-                        .map(LearnBoardResponse::of)
-        );
+        return CustomPage.of(learnBoardEntityPage.map(LearnBoardResponse::of));
     }
 
     @Transactional
     public LearnBoardResponse getLearnBoard(final Long boardId) {
         validateBoardId(boardId);
+        
         final LearnBoardEntity learnBoardEntity = getLearnBoardEntity(boardId);
         learnBoardEntity.increaseViewCount();
 
