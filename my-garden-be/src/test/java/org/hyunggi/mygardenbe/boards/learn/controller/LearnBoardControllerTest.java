@@ -148,7 +148,7 @@ class LearnBoardControllerTest extends ControllerTestSupport {
                 .category("CS")
                 .build();
 
-        BDDMockito.given(learnBoardService.postLearnBoard(any(), any()))
+        BDDMockito.given(learnBoardService.postLearnBoard(any(), any(), any(), any()))
                 .willReturn(1L);
 
         //when
@@ -161,7 +161,13 @@ class LearnBoardControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.data").value(1L));
 
         //then
-        BDDMockito.verify(learnBoardService).postLearnBoard(eq(postRequest), any());
+        BDDMockito.verify(learnBoardService)
+                .postLearnBoard(
+                        eq(postRequest.category()),
+                        eq(postRequest.title()),
+                        eq(postRequest.content()),
+                        any()
+                );
     }
 
     @Test
@@ -175,7 +181,7 @@ class LearnBoardControllerTest extends ControllerTestSupport {
                 .category("CS")
                 .build();
 
-        BDDMockito.given(learnBoardService.putLearnBoard(any(), any(), any()))
+        BDDMockito.given(learnBoardService.putLearnBoard(any(), any(), any(), any(), any()))
                 .willReturn(1L);
 
         //when
@@ -188,7 +194,7 @@ class LearnBoardControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.data").value(1L));
 
         //then
-        BDDMockito.verify(learnBoardService).putLearnBoard(eq(1L), eq(postRequest), any());
+        BDDMockito.verify(learnBoardService).putLearnBoard(eq(1L), eq(postRequest.category()), eq(postRequest.title()), eq(postRequest.content()), any());
     }
 
     @Test

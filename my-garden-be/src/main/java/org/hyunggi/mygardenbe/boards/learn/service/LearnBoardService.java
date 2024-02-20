@@ -4,15 +4,16 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hyunggi.mygardenbe.boards.common.category.service.BoardCategoryService;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
-import org.hyunggi.mygardenbe.boards.learn.controller.request.PostRequest;
 import org.hyunggi.mygardenbe.boards.learn.entity.LearnBoardEntity;
 import org.hyunggi.mygardenbe.boards.learn.repository.LearnBoardRepository;
 import org.hyunggi.mygardenbe.boards.learn.service.response.LearnBoardResponse;
 import org.hyunggi.mygardenbe.member.entity.MemberEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,16 +30,7 @@ public class LearnBoardService {
         final LocalDateTime startDateTime = startDate.atStartOfDay();
         final LocalDateTime endDateTime = endDate.plusDays(1).atStartOfDay();
 
-        //TODO: QueryDSL로 리팩토링 필요함
-        if (searchText.isBlank() && category.isBlank()) {
-            return findAllInDateRange(pageable, startDateTime, endDateTime);
-        } else if (searchText.isBlank()) {
-            return findAllInDateRangeByCategory(category, pageable, startDateTime, endDateTime);
-        } else if (category.isBlank()) {
-            return findAllInDateRangeWithTextSearch(searchText, pageable, startDateTime, endDateTime);
-        } else {
-            return findAllInDateRangeByCategoryWithTextSearch(category, searchText, pageable, startDateTime, endDateTime);
-        }
+        return searchLearnBoards(startDateTime, endDateTime, category, searchText, pageable);
     }
 
     private void validateArguments(final LocalDate startDate, final LocalDate endDate, final String category, final String searchText, final Pageable pageable) {
@@ -51,37 +43,16 @@ public class LearnBoardService {
         Assert.isTrue(pageable != null, "페이징 정보는 null이 될 수 없습니다.");
     }
 
-    private CustomPage<LearnBoardResponse> findAllInDateRange(final Pageable pageable, final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
-        return CustomPage.of(
-                learnBoardRepository.findAllInDateRange(startDateTime, endDateTime, pageable)
-                        .map(LearnBoardResponse::of)
-        );
-    }
+    private CustomPage<LearnBoardResponse> searchLearnBoards(final LocalDateTime startDateTime, final LocalDateTime endDateTime, final String category, final String searchText, final Pageable pageable) {
+        final Page<LearnBoardEntity> learnBoardEntityPage = learnBoardRepository.searchLearnBoards(startDateTime, endDateTime, category, searchText, pageable);
 
-    private CustomPage<LearnBoardResponse> findAllInDateRangeByCategory(final String category, final Pageable pageable, final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
-        return CustomPage.of(
-                learnBoardRepository.findAllInDateRangeByCategory(startDateTime, endDateTime, category, pageable)
-                        .map(LearnBoardResponse::of)
-        );
-    }
-
-    private CustomPage<LearnBoardResponse> findAllInDateRangeWithTextSearch(final String searchText, final Pageable pageable, final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
-        return CustomPage.of(
-                learnBoardRepository.findAllInDateRangeWithTextSearch(startDateTime, endDateTime, searchText, pageable)
-                        .map(LearnBoardResponse::of)
-        );
-    }
-
-    private CustomPage<LearnBoardResponse> findAllInDateRangeByCategoryWithTextSearch(final String category, final String searchText, final Pageable pageable, final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
-        return CustomPage.of(
-                learnBoardRepository.findAllInDateRangeByCategoryWithTextSearch(startDateTime, endDateTime, category, searchText, pageable)
-                        .map(LearnBoardResponse::of)
-        );
+        return CustomPage.of(learnBoardEntityPage.map(LearnBoardResponse::of));
     }
 
     @Transactional
     public LearnBoardResponse getLearnBoard(final Long boardId) {
         validateBoardId(boardId);
+
         final LearnBoardEntity learnBoardEntity = getLearnBoardEntity(boardId);
         learnBoardEntity.increaseViewCount();
 
@@ -97,13 +68,13 @@ public class LearnBoardService {
                 .orElseThrow(() -> new EntityNotFoundException("해당 게시글이 존재하지 않습니다."));
     }
 
-    public Long postLearnBoard(final PostRequest postRequest, final MemberEntity member) {
-        validatePostRequest(postRequest);
+    public Long postLearnBoard(final String category, final String title, final String content, final MemberEntity member) {
+        validatePostRequest(category, title, content);
 
         final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
-                postRequest.title(),
-                postRequest.content(),
-                postRequest.category(),
+                title,
+                content,
+                category,
                 getMemberEmailId(member),
                 LocalDateTime.now(),
                 member.getId()
@@ -112,10 +83,17 @@ public class LearnBoardService {
         return learnBoardRepository.save(learnBoardEntity).getId();
     }
 
-    private void validatePostRequest(final PostRequest postRequest) {
-        Assert.isTrue(postRequest != null, "PostRequest는 null이 될 수 없습니다.");
+    private void validatePostRequest(final String category, final String title, final String content) {
+        validateContent(category, title, content);
+    }
 
-        boardCategoryService.validateCategoryWithBoardType(postRequest.category(), "learn");
+    private void validateContent(final String category, final String title, final String content) {
+        boardCategoryService.validateCategoryWithBoardType(category, "learn");
+
+        Assert.isTrue(StringUtils.hasText(title), "제목은 비어있을 수 없습니다.");
+        Assert.isTrue(title.length() <= 100, "제목은 100자를 넘을 수 없습니다.");
+        Assert.isTrue(StringUtils.hasText(content), "내용은 비어있을 수 없습니다.");
+        Assert.isTrue(content.length() <= 4000, "내용은 4000자를 넘을 수 없습니다.");
     }
 
     private String getMemberEmailId(final MemberEntity member) {
@@ -123,17 +101,17 @@ public class LearnBoardService {
     }
 
     @Transactional
-    public Long putLearnBoard(final Long boardId, final PostRequest postRequest, final MemberEntity member) {
-        validatePutRequest(boardId, postRequest);
+    public Long putLearnBoard(final Long boardId, final String category, final String title, final String content, final MemberEntity member) {
+        validatePutRequest(boardId, category, title, content);
 
         final LearnBoardEntity learnBoardEntity = getLearnBoardEntity(boardId);
 
         validateBoardWriter(member, learnBoardEntity);
 
         learnBoardEntity.update(
-                postRequest.title(),
-                postRequest.content(),
-                postRequest.category()
+                title,
+                content,
+                category
         );
 
         return boardId;
@@ -145,11 +123,10 @@ public class LearnBoardService {
         }
     }
 
-    private void validatePutRequest(final Long boardId, final PostRequest postRequest) {
+    private void validatePutRequest(final Long boardId, final String category, final String title, final String content) {
         validateBoardId(boardId);
-        Assert.isTrue(postRequest != null, "PostRequest는 null이 될 수 없습니다.");
 
-        boardCategoryService.validateCategoryWithBoardType(postRequest.category(), "learn");
+        validateContent(category, title, content);
     }
 
     @Transactional

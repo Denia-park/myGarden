@@ -21,7 +21,7 @@ class LearnBoardRepositoryTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("해당 날짜에 해당하는 TIL을 조회할 수 있다.")
-    void findAllByWrittenAtBetween() {
+    void searchLearnBoards_with_writtenAt() {
         //given
         learnBoardRepository.save(buildLearnBoardWith(LocalDateTime.of(2024, 1, 25, 12, 0, 0)));
         learnBoardRepository.save(buildLearnBoardWith(LocalDateTime.of(2024, 1, 27, 0, 0, 0)));
@@ -31,7 +31,7 @@ class LearnBoardRepositoryTest extends IntegrationTestSupport {
         final LocalDateTime writtenAtEnd = LocalDate.of(2024, 1, 28).atStartOfDay();
 
         //when
-        final var learnBoardEntities = learnBoardRepository.findAllInDateRange(writtenAtStart, writtenAtEnd, PageRequest.of(0, 10));
+        final var learnBoardEntities = learnBoardRepository.searchLearnBoards(writtenAtStart, writtenAtEnd, "", "", PageRequest.of(0, 10));
 
         //then
         assertThat(learnBoardEntities).hasSize(2)
@@ -56,7 +56,7 @@ class LearnBoardRepositoryTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("해당 날짜에 해당하면서 카테고리가 같은 TIL을 조회할 수 있다.")
-    void findAllByWrittenAtBetweenAndCategory() {
+    void searchLearnBoards_with_writtenAt_and_category() {
         //given
         learnBoardRepository.save(buildLearnBoardWith("title", "content", "category1"));
         learnBoardRepository.save(buildLearnBoardWith("title", "content", "category2"));
@@ -65,7 +65,7 @@ class LearnBoardRepositoryTest extends IntegrationTestSupport {
         final LocalDateTime writtenAtEnd = LocalDate.of(2024, 1, 28).atStartOfDay();
 
         //when
-        final var learnBoardEntities = learnBoardRepository.findAllInDateRangeByCategory(writtenAtStart, writtenAtEnd, "category1", PageRequest.of(0, 10));
+        final var learnBoardEntities = learnBoardRepository.searchLearnBoards(writtenAtStart, writtenAtEnd, "category1", "", PageRequest.of(0, 10));
 
         //then
         assertThat(learnBoardEntities).hasSize(1)
@@ -86,7 +86,7 @@ class LearnBoardRepositoryTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("해당 날짜에 해당하면서 제목 또는 내용에 검색어가 포함된 TIL을 조회할 수 있다.")
-    void findAllByWrittenAtBetweenAndTitleContainingOrContentContaining() {
+    void searchLearnBoards_with_writtenAt_and_searchText() {
         //given
         learnBoardRepository.save(buildLearnBoardWith("title11", "content", "category"));
         learnBoardRepository.save(buildLearnBoardWith("title22", "content22", "category"));
@@ -95,10 +95,10 @@ class LearnBoardRepositoryTest extends IntegrationTestSupport {
         final LocalDateTime writtenAtStart = LocalDate.of(2024, 1, 26).atStartOfDay();
         final LocalDateTime writtenAtEnd = LocalDate.of(2024, 1, 28).atStartOfDay();
 
-        final String searchTest = "11";
+        final String searchText = "11";
 
         //when
-        final var learnBoardEntities = learnBoardRepository.findAllInDateRangeWithTextSearch(writtenAtStart, writtenAtEnd, searchTest, PageRequest.of(0, 10));
+        final var learnBoardEntities = learnBoardRepository.searchLearnBoards(writtenAtStart, writtenAtEnd, "", searchText, PageRequest.of(0, 10));
 
         //then
         assertThat(learnBoardEntities).hasSize(2)
@@ -111,7 +111,7 @@ class LearnBoardRepositoryTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("해당 날짜에 해당하면서 카테고리가 같고 제목 또는 내용에 검색어가 포함된 TIL을 조회할 수 있다.")
-    void findAllByWrittenAtBetweenAndCategoryAndTitleContainingOrContentContaining() {
+    void searchLearnBoards_with_writtenAt_and_category_and_searchText() {
         //given
         learnBoardRepository.save(buildLearnBoardWith("title11", "content", "category1"));
         learnBoardRepository.save(buildLearnBoardWith("title11", "content11", "category2"));
@@ -120,10 +120,10 @@ class LearnBoardRepositoryTest extends IntegrationTestSupport {
         final LocalDateTime writtenAtStart = LocalDate.of(2024, 1, 26).atStartOfDay();
         final LocalDateTime writtenAtEnd = LocalDate.of(2024, 1, 28).atStartOfDay();
 
-        final String searchTest = "11";
+        final String searchText = "11";
 
         //when
-        final var learnBoardEntities = learnBoardRepository.findAllInDateRangeByCategoryWithTextSearch(writtenAtStart, writtenAtEnd, "category1", searchTest, PageRequest.of(0, 10));
+        final var learnBoardEntities = learnBoardRepository.searchLearnBoards(writtenAtStart, writtenAtEnd, "category1", searchText, PageRequest.of(0, 10));
 
         //then
         assertThat(learnBoardEntities).hasSize(2)

@@ -154,7 +154,7 @@ class NoticeBoardControllerTest extends ControllerTestSupport {
                 .isImportant(true)
                 .build();
 
-        BDDMockito.given(noticeBoardService.postNoticeBoard(any(), any()))
+        BDDMockito.given(noticeBoardService.postNoticeBoard(any(), any(), any(), any(), any()))
                 .willReturn(1L);
 
         //when
@@ -167,7 +167,14 @@ class NoticeBoardControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.data").value(1L));
 
         //then
-        BDDMockito.verify(noticeBoardService).postNoticeBoard(eq(postRequest), any());
+        BDDMockito.verify(noticeBoardService)
+                .postNoticeBoard(
+                        eq(postRequest.category()),
+                        eq(postRequest.title()),
+                        eq(postRequest.content()),
+                        eq(postRequest.isImportant()),
+                        any()
+                );
     }
 
     @Test
@@ -182,7 +189,7 @@ class NoticeBoardControllerTest extends ControllerTestSupport {
                 .isImportant(true)
                 .build();
 
-        BDDMockito.given(noticeBoardService.putNoticeBoard(any(), any(), any()))
+        BDDMockito.given(noticeBoardService.putNoticeBoard(any(), any(), any(), any(), any(), any()))
                 .willReturn(1L);
 
         //when
@@ -195,7 +202,15 @@ class NoticeBoardControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.data").value(1L));
 
         //then
-        BDDMockito.verify(noticeBoardService).putNoticeBoard(eq(1L), eq(postRequest), any());
+        BDDMockito.verify(noticeBoardService)
+                .putNoticeBoard(
+                        eq(1L),
+                        eq(postRequest.category()),
+                        eq(postRequest.title()),
+                        eq(postRequest.content()),
+                        eq(postRequest.isImportant()),
+                        any()
+                );
     }
 
     @Test

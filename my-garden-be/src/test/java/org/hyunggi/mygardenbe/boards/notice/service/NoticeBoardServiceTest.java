@@ -371,7 +371,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        final Long noticeBoardId = noticeBoardService.postNoticeBoard(postRequest, member);
+        final Long noticeBoardId = noticeBoardService.postNoticeBoard(postRequest.category(), postRequest.title(), postRequest.content(), postRequest.isImportant(), member);
 
         // then
         final NoticeBoardEntity noticeBoardEntity = noticeBoardRepository.findById(noticeBoardId).get();
@@ -385,15 +385,71 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     }
 
     @Test
-    @DisplayName("공지사항을 등록할 때, PostRequest가 null이면, IllegalArgumentException이 발생한다.")
-    void postNoticeBoardWithNullPostRequest() {
+    @DisplayName("공지사항을 등록할 때, PostRequest의 title이 null이면, IllegalArgumentException이 발생한다.")
+    void postNoticeBoardWithNullTitle() {
         // given
-        final PostRequest postRequest = null;
+        final PostRequest postRequest = PostRequest.builder()
+                .title(null)
+                .content("content")
+                .category("project")
+                .isImportant(true)
+                .build();
 
         // when,then
-        assertThatThrownBy(() -> noticeBoardService.postNoticeBoard(postRequest, member))
+        assertThatThrownBy(() -> noticeBoardService.postNoticeBoard(postRequest.category(), postRequest.title(), postRequest.content(), postRequest.isImportant(), member))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("PostRequest는 null이 될 수 없습니다.");
+                .hasMessage("제목은 null이 될 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("공지사항을 등록할 때, PostRequest의 title이 100자를 초과하면, IllegalArgumentException이 발생한다.")
+    void postNoticeBoardWithOver100Title() {
+        // given
+        final PostRequest postRequest = PostRequest.builder()
+                .title("a".repeat(101))
+                .content("content")
+                .category("project")
+                .isImportant(true)
+                .build();
+
+        // when,then
+        assertThatThrownBy(() -> noticeBoardService.postNoticeBoard(postRequest.category(), postRequest.title(), postRequest.content(), postRequest.isImportant(), member))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("제목은 100자 이하여야 합니다.");
+    }
+
+    @Test
+    @DisplayName("공지사항을 등록할 때, PostRequest의 content가 null이면, IllegalArgumentException이 발생한다.")
+    void postNoticeBoardWithNullContent() {
+        // given
+        final PostRequest postRequest = PostRequest.builder()
+                .title("title")
+                .content(null)
+                .category("project")
+                .isImportant(true)
+                .build();
+
+        // when,then
+        assertThatThrownBy(() -> noticeBoardService.postNoticeBoard(postRequest.category(), postRequest.title(), postRequest.content(), postRequest.isImportant(), member))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("내용은 null이 될 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("공지사항을 등록할 때, PostRequest의 content가 4000자를 초과하면, IllegalArgumentException이 발생한다.")
+    void postNoticeBoardWithOver4000Content() {
+        // given
+        final PostRequest postRequest = PostRequest.builder()
+                .title("title")
+                .content("a".repeat(4001))
+                .category("project")
+                .isImportant(true)
+                .build();
+
+        // when,then
+        assertThatThrownBy(() -> noticeBoardService.postNoticeBoard(postRequest.category(), postRequest.title(), postRequest.content(), postRequest.isImportant(), member))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("내용은 4000자 이하여야 합니다.");
     }
 
     @Test
@@ -408,7 +464,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when,then
-        assertThatThrownBy(() -> noticeBoardService.postNoticeBoard(postRequest, member))
+        assertThatThrownBy(() -> noticeBoardService.postNoticeBoard(postRequest.category(), postRequest.title(), postRequest.content(), postRequest.isImportant(), member))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("해당 분류가 존재하지 않습니다.");
     }
@@ -436,7 +492,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        final Long noticeBoardId = noticeBoardService.putNoticeBoard(noticeBoardEntity.getId(), postRequest, member);
+        final Long noticeBoardId = noticeBoardService.putNoticeBoard(noticeBoardEntity.getId(), postRequest.category(), postRequest.title(), postRequest.content(), postRequest.isImportant(), member);
 
         // then
         final NoticeBoardEntity updatedNoticeBoardEntity = noticeBoardRepository.findById(noticeBoardId).get();
@@ -460,7 +516,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when,then
-        assertThatThrownBy(() -> noticeBoardService.putNoticeBoard(boardId, postRequest, member))
+        assertThatThrownBy(() -> noticeBoardService.putNoticeBoard(boardId, postRequest.category(), postRequest.title(), postRequest.content(), postRequest.isImportant(), member))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("boardId는 null이 될 수 없고 0보다 커야합니다.");
     }
@@ -478,22 +534,121 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when,then
-        assertThatThrownBy(() -> noticeBoardService.putNoticeBoard(boardId, postRequest, member))
+        assertThatThrownBy(() -> noticeBoardService.putNoticeBoard(boardId, postRequest.category(), postRequest.title(), postRequest.content(), postRequest.isImportant(), member))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("boardId는 null이 될 수 없고 0보다 커야합니다.");
     }
 
     @Test
-    @DisplayName("공지사항을 수정할 때, PostRequest가 null이면, IllegalArgumentException이 발생한다.")
-    void putNoticeBoardWithNullPostRequest() {
+    @DisplayName("공지사항을 수정할 때, PostRequest의 title이 null이면, IllegalArgumentException이 발생한다.")
+    void putNoticeBoardWithNullTitle() {
         // given
-        final Long boardId = 1L;
-        final PostRequest postRequest = null;
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
+                "title",
+                "content",
+                "category",
+                true,
+                "writer",
+                LocalDateTime.of(2024, 1, 27, 12, 0, 0),
+                member.getId()
+        );
+        noticeBoardRepository.save(noticeBoardEntity);
+
+        final PostRequest postRequest = PostRequest.builder()
+                .title(null)
+                .content("content2")
+                .category("project")
+                .isImportant(false)
+                .build();
 
         // when,then
-        assertThatThrownBy(() -> noticeBoardService.putNoticeBoard(boardId, postRequest, member))
+        assertThatThrownBy(() -> noticeBoardService.putNoticeBoard(noticeBoardEntity.getId(), postRequest.category(), postRequest.title(), postRequest.content(), postRequest.isImportant(), member))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("PostRequest는 null이 될 수 없습니다.");
+                .hasMessage("제목은 null이 될 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("공지사항을 수정할 때, PostRequest의 title이 100자를 초과하면, IllegalArgumentException이 발생한다.")
+    void putNoticeBoardWithOver100Title() {
+        // given
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
+                "title",
+                "content",
+                "category",
+                true,
+                "writer",
+                LocalDateTime.of(2024, 1, 27, 12, 0, 0),
+                member.getId()
+        );
+        noticeBoardRepository.save(noticeBoardEntity);
+
+        final PostRequest postRequest = PostRequest.builder()
+                .title("a".repeat(101))
+                .content("content2")
+                .category("project")
+                .isImportant(false)
+                .build();
+
+        // when,then
+        assertThatThrownBy(() -> noticeBoardService.putNoticeBoard(noticeBoardEntity.getId(), postRequest.category(), postRequest.title(), postRequest.content(), postRequest.isImportant(), member))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("제목은 100자 이하여야 합니다.");
+    }
+
+    @Test
+    @DisplayName("공지사항을 수정할 때, PostRequest의 content가 null이면, IllegalArgumentException이 발생한다.")
+    void putNoticeBoardWithNullContent() {
+        // given
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
+                "title",
+                "content",
+                "category",
+                true,
+                "writer",
+                LocalDateTime.of(2024, 1, 27, 12, 0, 0),
+                member.getId()
+        );
+        noticeBoardRepository.save(noticeBoardEntity);
+
+        final PostRequest postRequest = PostRequest.builder()
+                .title("title2")
+                .content(null)
+                .category("project")
+                .isImportant(false)
+                .build();
+
+        // when,then
+        assertThatThrownBy(() -> noticeBoardService.putNoticeBoard(noticeBoardEntity.getId(), postRequest.category(), postRequest.title(), postRequest.content(), postRequest.isImportant(), member))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("내용은 null이 될 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("공지사항을 수정할 때, PostRequest의 content가 4000자를 초과하면, IllegalArgumentException이 발생한다.")
+    void putNoticeBoardWithOver4000Content() {
+        // given
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
+                "title",
+                "content",
+                "category",
+                true,
+                "writer",
+                LocalDateTime.of(2024, 1, 27, 12, 0, 0),
+                member.getId()
+        );
+        noticeBoardRepository.save(noticeBoardEntity);
+
+        final PostRequest postRequest = PostRequest.builder()
+                .title("title2")
+                .content("a".repeat(4001))
+                .category("project")
+                .isImportant(false)
+                .build();
+
+        // when,then
+        assertThatThrownBy(() -> noticeBoardService.putNoticeBoard(noticeBoardEntity.getId(), postRequest.category(), postRequest.title(), postRequest.content(), postRequest.isImportant(), member))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("내용은 4000자 이하여야 합니다.");
     }
 
     @Test
@@ -519,7 +674,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when,then
-        assertThatThrownBy(() -> noticeBoardService.putNoticeBoard(noticeBoardEntity.getId(), postRequest, member))
+        assertThatThrownBy(() -> noticeBoardService.putNoticeBoard(noticeBoardEntity.getId(), postRequest.category(), postRequest.title(), postRequest.content(), postRequest.isImportant(), member))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("해당 분류가 존재하지 않습니다.");
     }
@@ -537,7 +692,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when,then
-        assertThatThrownBy(() -> noticeBoardService.putNoticeBoard(nonExistNoticeBoardId, postRequest, member))
+        assertThatThrownBy(() -> noticeBoardService.putNoticeBoard(nonExistNoticeBoardId, postRequest.category(), postRequest.title(), postRequest.content(), postRequest.isImportant(), member))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("해당 게시글이 존재하지 않습니다.");
     }
@@ -565,7 +720,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when, then
-        assertThatThrownBy(() -> noticeBoardService.putNoticeBoard(noticeBoardEntity.getId(), postRequest, anotherMember))
+        assertThatThrownBy(() -> noticeBoardService.putNoticeBoard(noticeBoardEntity.getId(), postRequest.category(), postRequest.title(), postRequest.content(), postRequest.isImportant(), anotherMember))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("해당 게시글의 작성자가 아닙니다.");
     }

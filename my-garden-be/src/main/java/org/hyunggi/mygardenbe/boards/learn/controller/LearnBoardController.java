@@ -51,12 +51,12 @@ public class LearnBoardController {
 
     @PostMapping
     public ApiResponse<Long> postLearnBoard(@RequestBody final PostRequest postRequest, @WithLoginUserEntity final MemberEntity member) {
-        return ApiResponse.ok(learnBoardService.postLearnBoard(postRequest, member));
+        return ApiResponse.ok(learnBoardService.postLearnBoard(postRequest.category(), postRequest.title(), postRequest.content(), member));
     }
 
     @PutMapping("/{boardId}")
     public ApiResponse<Long> putLearnBoard(@PathVariable final Long boardId, @RequestBody final PostRequest postRequest, @WithLoginUserEntity final MemberEntity member) {
-        return ApiResponse.ok(learnBoardService.putLearnBoard(boardId, postRequest, member));
+        return ApiResponse.ok(learnBoardService.putLearnBoard(boardId, postRequest.category(), postRequest.title(), postRequest.content(), member));
     }
 
     @DeleteMapping("/{boardId}")
