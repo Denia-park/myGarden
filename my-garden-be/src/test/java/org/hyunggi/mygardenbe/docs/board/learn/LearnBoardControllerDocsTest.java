@@ -185,7 +185,7 @@ class LearnBoardControllerDocsTest extends RestDocsSupport {
                 .content("TIL 내용")
                 .build();
 
-        BDDMockito.given(learnBoardService.postLearnBoard(any(), any()))
+        BDDMockito.given(learnBoardService.postLearnBoard(any(), any(), any(), any()))
                 .willReturn(1L);
 
         //when, then
@@ -233,7 +233,7 @@ class LearnBoardControllerDocsTest extends RestDocsSupport {
                 .content("수정된 TIL 내용")
                 .build();
 
-        BDDMockito.given(learnBoardService.putLearnBoard(any(), any(), any()))
+        BDDMockito.given(learnBoardService.putLearnBoard(any(), any(), any(), any(), any()))
                 .willReturn(1L);
 
         //when, then

@@ -366,7 +366,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        final Long learnBoardId = learnBoardService.postLearnBoard(postRequest, member);
+        final Long learnBoardId = learnBoardService.postLearnBoard(postRequest.category(), postRequest.title(), postRequest.content(), member);
 
         // then
         final LearnBoardEntity learnBoardEntity = learnBoardRepository.findById(learnBoardId).get();
@@ -376,18 +376,6 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
         assertThat(learnBoardEntity.getCategory()).isEqualTo("project");
         assertThat(learnBoardEntity.getWriter()).isEqualTo(member.getEmail().split("@")[0]);
         assertThat(learnBoardEntity.getViews()).isZero();
-    }
-
-    @Test
-    @DisplayName("TIL을 등록할 때, PostRequest가 null이면, IllegalArgumentException이 발생한다.")
-    void postLearnBoardWithNullPostRequest() {
-        // given
-        final PostRequest postRequest = null;
-
-        // when,then
-        assertThatThrownBy(() -> learnBoardService.postLearnBoard(postRequest, member))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("PostRequest는 null이 될 수 없습니다.");
     }
 
     @Test
@@ -401,9 +389,73 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when,then
-        assertThatThrownBy(() -> learnBoardService.postLearnBoard(postRequest, member))
+        assertThatThrownBy(() -> learnBoardService.postLearnBoard(postRequest.category(), postRequest.title(), postRequest.content(), member))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("해당 분류가 존재하지 않습니다.");
+    }
+
+    @Test
+    @DisplayName("TIL을 등록할 때, PostRequest의 title이 null이면, IllegalArgumentException이 발생한다.")
+    void postLearnBoardWithNullTitle() {
+        // given
+        final PostRequest postRequest = PostRequest.builder()
+                .title(null)
+                .content("content")
+                .category("project")
+                .build();
+
+        // when,then
+        assertThatThrownBy(() -> learnBoardService.postLearnBoard(postRequest.category(), postRequest.title(), postRequest.content(), member))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("제목은 비어있을 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("TIL을 등록할 때, PostRequest의 title이 100자를 넘으면, IllegalArgumentException이 발생한다.")
+    void postLearnBoardWithOver100Title() {
+        // given
+        final PostRequest postRequest = PostRequest.builder()
+                .title("a".repeat(101))
+                .content("content")
+                .category("project")
+                .build();
+
+        // when,then
+        assertThatThrownBy(() -> learnBoardService.postLearnBoard(postRequest.category(), postRequest.title(), postRequest.content(), member))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("제목은 100자를 넘을 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("TIL을 등록할 때, PostRequest의 content가 null이면, IllegalArgumentException이 발생한다.")
+    void postLearnBoardWithNullContent() {
+        // given
+        final PostRequest postRequest = PostRequest.builder()
+                .title("title")
+                .content(null)
+                .category("project")
+                .build();
+
+        // when,then
+        assertThatThrownBy(() -> learnBoardService.postLearnBoard(postRequest.category(), postRequest.title(), postRequest.content(), member))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("내용은 비어있을 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("TIL을 등록할 때, PostRequest의 content가 4000자를 넘으면, IllegalArgumentException이 발생한다.")
+    void postLearnBoardWithOver4000Content() {
+        // given
+        final PostRequest postRequest = PostRequest.builder()
+                .title("title")
+                .content("a".repeat(4001))
+                .category("project")
+                .build();
+
+        // when,then
+        assertThatThrownBy(() -> learnBoardService.postLearnBoard(postRequest.category(), postRequest.title(), postRequest.content(), member))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("내용은 4000자를 넘을 수 없습니다.");
     }
 
     @Test
@@ -427,7 +479,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        final Long learnBoardId = learnBoardService.putLearnBoard(learnBoardEntity.getId(), postRequest, member);
+        final Long learnBoardId = learnBoardService.putLearnBoard(learnBoardEntity.getId(), postRequest.category(), postRequest.title(), postRequest.content(), member);
 
         // then
         final LearnBoardEntity updatedLearnBoardEntity = learnBoardRepository.findById(learnBoardId).get();
@@ -449,7 +501,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when,then
-        assertThatThrownBy(() -> learnBoardService.putLearnBoard(boardId, postRequest, member))
+        assertThatThrownBy(() -> learnBoardService.putLearnBoard(boardId, postRequest.category(), postRequest.title(), postRequest.content(), member))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("boardId는 null이 될 수 없고 0보다 커야합니다.");
     }
@@ -466,22 +518,113 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when,then
-        assertThatThrownBy(() -> learnBoardService.putLearnBoard(boardId, postRequest, member))
+        assertThatThrownBy(() -> learnBoardService.putLearnBoard(boardId, postRequest.category(), postRequest.title(), postRequest.content(), member))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("boardId는 null이 될 수 없고 0보다 커야합니다.");
     }
 
     @Test
-    @DisplayName("TIL을 수정할 때, PostRequest가 null이면, IllegalArgumentException이 발생한다.")
-    void putLearnBoardWithNullPostRequest() {
+    @DisplayName("TIL을 수정할 때, PostRequest의 title이 null이면, IllegalArgumentException이 발생한다.")
+    void putLearnBoardWithNullTitle() {
         // given
-        final Long boardId = 1L;
-        final PostRequest postRequest = null;
+        final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
+                "title",
+                "content",
+                "category",
+                "writer",
+                LocalDateTime.of(2024, 1, 27, 12, 0, 0),
+                member.getId()
+        );
+        learnBoardRepository.save(learnBoardEntity);
+
+        final PostRequest postRequest = PostRequest.builder()
+                .title(null)
+                .content("content2")
+                .category("project")
+                .build();
 
         // when,then
-        assertThatThrownBy(() -> learnBoardService.putLearnBoard(boardId, postRequest, member))
+        assertThatThrownBy(() -> learnBoardService.putLearnBoard(learnBoardEntity.getId(), postRequest.category(), postRequest.title(), postRequest.content(), member))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("PostRequest는 null이 될 수 없습니다.");
+                .hasMessage("제목은 비어있을 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("TIL을 수정할 때, PostRequest의 title이 100자를 넘으면, IllegalArgumentException이 발생한다.")
+    void putLearnBoardWithOver100Title() {
+        // given
+        final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
+                "title",
+                "content",
+                "category",
+                "writer",
+                LocalDateTime.of(2024, 1, 27, 12, 0, 0),
+                member.getId()
+        );
+        learnBoardRepository.save(learnBoardEntity);
+
+        final PostRequest postRequest = PostRequest.builder()
+                .title("a".repeat(101))
+                .content("content2")
+                .category("project")
+                .build();
+
+        // when,then
+        assertThatThrownBy(() -> learnBoardService.putLearnBoard(learnBoardEntity.getId(), postRequest.category(), postRequest.title(), postRequest.content(), member))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("제목은 100자를 넘을 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("TIL을 수정할 때, PostRequest의 content가 null이면, IllegalArgumentException이 발생한다.")
+    void putLearnBoardWithNullContent() {
+        // given
+        final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
+                "title",
+                "content",
+                "category",
+                "writer",
+                LocalDateTime.of(2024, 1, 27, 12, 0, 0),
+                member.getId()
+        );
+        learnBoardRepository.save(learnBoardEntity);
+
+        final PostRequest postRequest = PostRequest.builder()
+                .title("title2")
+                .content(null)
+                .category("project")
+                .build();
+
+        // when,then
+        assertThatThrownBy(() -> learnBoardService.putLearnBoard(learnBoardEntity.getId(), postRequest.category(), postRequest.title(), postRequest.content(), member))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("내용은 비어있을 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("TIL을 수정할 때, PostRequest의 content가 4000자를 넘으면, IllegalArgumentException이 발생한다.")
+    void putLearnBoardWithOver4000Content() {
+        // given
+        final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
+                "title",
+                "content",
+                "category",
+                "writer",
+                LocalDateTime.of(2024, 1, 27, 12, 0, 0),
+                member.getId()
+        );
+        learnBoardRepository.save(learnBoardEntity);
+
+        final PostRequest postRequest = PostRequest.builder()
+                .title("title2")
+                .content("a".repeat(4001))
+                .category("project")
+                .build();
+
+        // when,then
+        assertThatThrownBy(() -> learnBoardService.putLearnBoard(learnBoardEntity.getId(), postRequest.category(), postRequest.title(), postRequest.content(), member))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("내용은 4000자를 넘을 수 없습니다.");
     }
 
     @Test
@@ -505,7 +648,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when,then
-        assertThatThrownBy(() -> learnBoardService.putLearnBoard(learnBoardEntity.getId(), postRequest, member))
+        assertThatThrownBy(() -> learnBoardService.putLearnBoard(learnBoardEntity.getId(), postRequest.category(), postRequest.title(), postRequest.content(), member))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("해당 분류가 존재하지 않습니다.");
     }
@@ -522,7 +665,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when,then
-        assertThatThrownBy(() -> learnBoardService.putLearnBoard(nonExistLearnBoardId, postRequest, member))
+        assertThatThrownBy(() -> learnBoardService.putLearnBoard(nonExistLearnBoardId, postRequest.category(), postRequest.title(), postRequest.content(), member))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("해당 게시글이 존재하지 않습니다.");
     }
@@ -548,7 +691,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when, then
-        assertThatThrownBy(() -> learnBoardService.putLearnBoard(learnBoardEntity.getId(), postRequest, anotherMember))
+        assertThatThrownBy(() -> learnBoardService.putLearnBoard(learnBoardEntity.getId(), postRequest.category(), postRequest.title(), postRequest.content(), anotherMember))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("해당 게시글의 작성자가 아닙니다.");
     }
