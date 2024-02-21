@@ -1,10 +1,10 @@
 <script setup>
 import {ref} from "vue";
+import {convertDateFormat} from "@/components/dailyRoutine/api/util.js";
 import {store} from "@/scripts/store.js";
-import {getTodayDate} from "@/components/dailyRoutine/api/util.js";
 
 const showModal = ref(false);
-const selectedDate = ref(getTodayDate());
+const inputDate = ref(new Date());
 
 function openModal() {
   showModal.value = true;
@@ -14,10 +14,10 @@ function closeModal() {
   showModal.value = false;
 }
 
-function updateDate(event) {
-  selectedDate.value = event.target.value;
+function updateDate(date) {
+  inputDate.value = date;
   closeModal();
-  store.commit("setViewDate", selectedDate.value);
+  store.commit("setViewDate", convertDateFormat(date));
 }
 
 function handleClickOutside(event) {
@@ -30,7 +30,7 @@ function handleClickOutside(event) {
 <template>
   <div class="date-wrapper">
     <button class="date-button btn btn-success" @click="openModal">조회 날짜 선택</button>
-    <h4 v-if="selectedDate" class="date-text">선택한 날짜 : {{ selectedDate }}</h4>
+    <h4 v-if="inputDate" class="date-text">선택한 날짜 : {{ convertDateFormat(inputDate) }}</h4>
   </div>
 
   <!-- 모달 바깥쪽 클릭 시 closeModal 호출 -->
@@ -38,7 +38,11 @@ function handleClickOutside(event) {
     <!-- stop modifier는 이벤트 버블링을 막습니다 -->
     <div class="modal-content" @click.stop>
       <h4>조회 날짜 선택</h4>
-      <input :value="selectedDate" type="date" @change="updateDate"/>
+      <button class="btn btn-success today-button" @click="updateDate(new Date())">오늘</button>
+      <div>
+        <VDatePicker v-model="inputDate" class="date-picker" mode="date" style="width: 65%"
+                     @update:modelValue="updateDate"/>
+      </div>
       <span class="close" @click="closeModal">close</span>
     </div>
   </div>
@@ -101,19 +105,34 @@ function handleClickOutside(event) {
   background-color: rgba(0, 0, 0, 0.4);
 }
 
+.modal h4 {
+  font-size: 31px;
+  margin-bottom: 20px;
+}
+
 .modal-content {
   background-color: #fefefe;
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
   width: 500px;
+
+  position: relative;
+}
+
+.today-button {
+  top: 20px;
+  right: 20px;
+  position: absolute;
 }
 
 .close {
   color: #aaa;
   float: right;
-  font-size: 28px;
+  font-size: 31px;
   font-weight: bold;
+
+  margin-top: 10px;
 }
 
 .close:hover,
@@ -122,13 +141,4 @@ function handleClickOutside(event) {
   text-decoration: none;
   cursor: pointer;
 }
-
-input {
-  width: 100%;
-  font-size: 30px;
-  height: 40px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
 </style>
