@@ -9,6 +9,10 @@ import '@kangc/v-md-editor/lib/style/base-editor.css';
 import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js';
 import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
 
+/** Vcalendar : 달력 라이브러리 */
+import VCalendar from 'v-calendar';
+import 'v-calendar/style.css';
+
 // Prism
 import Prism from 'prismjs';
 // highlight code
@@ -34,4 +38,4 @@ VMdEditor.use(vuepressTheme, {
 
 routerBeforeEach(router);
 
-createApp(App).use(store).use(router).use(VMdEditor).mount('#app')
+createApp(App).use(store).use(router).use(VMdEditor).use(VCalendar, {}).mount('#app')
