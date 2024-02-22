@@ -2,6 +2,7 @@
 import {ref} from "vue";
 import {convertDateFormat} from "@/components/dailyRoutine/api/util.js";
 import {store} from "@/scripts/store.js";
+import {router} from "@/scripts/router.js";
 
 const showModal = ref(false);
 const inputDate = ref(new Date());
@@ -20,6 +21,10 @@ function updateDate(date) {
   store.commit("setViewDate", convertDateFormat(date));
 }
 
+function goToStatistics() {
+  router.push('/daily-routine/statistics');
+}
+
 function handleClickOutside(event) {
   const modalContent = document.querySelector('.modal-content');
   if (!modalContent.contains(event.target)) {
@@ -29,8 +34,16 @@ function handleClickOutside(event) {
 </script>
 <template>
   <div class="date-wrapper">
-    <button class="date-button btn btn-success" @click="openModal">조회 날짜 선택</button>
-    <h4 v-if="inputDate" class="date-text">선택한 날짜 : {{ convertDateFormat(inputDate) }}</h4>
+    <button class="statistics-button btn btn-info" @click="goToStatistics">
+      일과 통계
+      <br/>
+      모아 보기
+    </button>
+    <button class="date-button btn btn-success" @click="openModal">
+      조회 날짜
+      <br/>
+      {{ convertDateFormat(inputDate) }}
+    </button>
   </div>
 
   <!-- 모달 바깥쪽 클릭 시 closeModal 호출 -->
@@ -59,20 +72,21 @@ function handleClickOutside(event) {
   width: 150px;
 }
 
-.date-text {
+.statistics-button {
   position: absolute;
   top: 0;
   right: 0;
-  margin-top: 42px;
-  margin-right: 10px;
+  margin-top: 3px;
+  margin-right: 170px;
 
-  font-size: 1.3rem;
+  width: 150px;
 }
 
 @media (max-width: 750px) {
   .date-wrapper {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: center;
     align-items: center;
   }
 
@@ -82,13 +96,16 @@ function handleClickOutside(event) {
     width: 150px;
     margin-top: 3px;
     margin-right: 10px;
+    margin-bottom: 10px;
   }
 
-  .date-text {
+  .statistics-button {
     position: relative;
 
-    margin-top: 10px;
+    width: 150px;
+    margin-top: 3px;
     margin-right: 10px;
+    margin-bottom: 10px;
   }
 }
 
