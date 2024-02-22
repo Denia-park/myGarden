@@ -6,6 +6,7 @@ import {store} from "@/scripts/store.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 const colorMap = store.getters.getColors;
+let viewDate = store.getters.getViewDate;
 let allTotalMinutesSum = 0;
 
 const options = {
@@ -14,7 +15,7 @@ const options = {
   plugins: {
     title: {
       display: true,
-      text: '일과 통계',
+      text: `일과 통계 [${viewDate}]`,
       font: {
         size: 25
       }
@@ -111,6 +112,9 @@ function updateDataSetFrom(statisticData) {
         myChart.data.datasets[0].data.push(timeBlock.routineTime);
         myChart.data.datasets[0].backgroundColor.push(timeBlock.routineColor);
       });
+
+  // Chart의 Title을 업데이트
+  myChart.options.plugins.title.text = `일과 통계 [${viewDate}]`;
 }
 
 function calculateStatisticDataFromTimeBlockArray(timeBlockArray, statisticData) {
@@ -139,6 +143,10 @@ watch(() => store.getters.getTimeBlockArray, (timeBlockArray) => {
   updateDataSetFrom(statisticData);
 
   myChart.update();
+});
+
+watch(() => store.getters.getViewDate, (date) => {
+  viewDate = date;
 });
 
 </script>
