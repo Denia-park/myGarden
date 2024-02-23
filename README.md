@@ -122,8 +122,9 @@
 
 ### 하루 일과
 
-- `오늘 있었던 일`들을 `시간대별로 등록` 및 `확인`할 수 있다.
-- `오늘 등록한 내용`들을 `타입별로 정리`하여 `확인`할 수 있다.
+- `오늘 있었던 일`들을 `시간대별로 등록` 및 확인할 수 있다.
+- `오늘 등록한 내용`들을 `타입별로 정리`하여 확인할 수 있다.
+- `하루 일과 통계`에서 지금까지 등록한 내용들을 `타입별로 통계`를 내어 확인할 수 있다.
 
 ![하루 일과 전체 화면](./docs/daily-routine/img/DailyRoutine-ScreenShot.png)
 
@@ -142,13 +143,17 @@
 
   ![일과 삭제](./docs/daily-routine/gif/DailyRoutine-Delete.gif)
 
-- **일과 통계**
+- **일과 당일 통계**
 
-  ![일과 통계](./docs/daily-routine/gif/DailyRoutine-Statistic.gif)
+  ![일과 당일 통계](./docs/daily-routine/gif/DailyRoutine-Statistic-Today.gif)
 
 - **다른 날짜 일과 조회**
 
   ![다른 날짜 일과 조회](./docs/daily-routine/gif/DailyRoutine-GetOtherDate.gif)
+
+- **일과 범위 통계**
+
+  ![일과 범위 통계](./docs/daily-routine/img/DailyRoutine-Statistic-Range.png)
 
 ### 게시판 (공지사항 게시판, TIL 게시판)
 
