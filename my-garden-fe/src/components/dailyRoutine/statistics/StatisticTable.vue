@@ -49,8 +49,11 @@ function aggregateActivities(activities) {
     });
   });
 
+  aggregated.content.totalHours = aggregated.content.totalHours.toFixed(2);
   Object.keys(aggregated.content.types).forEach(type => {
-    const percentage = (aggregated.content.types[type].hours / aggregated.content.totalHours) * 100;
+    aggregated.content.types[type].hours = aggregated.content.types[type].hours.toFixed(2);
+
+    const percentage = Math.min((aggregated.content.types[type].hours / aggregated.content.totalHours) * 100, 100);
     aggregated.content.types[type].percentage = percentage.toFixed(2) + '%';
   });
 
