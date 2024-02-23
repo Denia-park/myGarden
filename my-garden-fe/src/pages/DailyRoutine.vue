@@ -1,6 +1,6 @@
 <script setup>
 import PageTitle from "@/components/default/PageTitle.vue";
-import SelectDate from "@/components/dailyRoutine/popup/SelectDate.vue";
+import SelectDate from "@/components/dailyRoutine/popup/SelectDatePopUp.vue";
 import LeftSide from "@/components/dailyRoutine/side/LeftSide.vue";
 import RightSide from "@/components/dailyRoutine/side/RightSide.vue";
 </script>
