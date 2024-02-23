@@ -1,4 +1,4 @@
-import DailyRoutine from "@/pages/DailyRoutine.vue";
+import DailyRoutine from "@/pages/dailyRoutine/DailyRoutine.vue";
 import Login from "@/pages/Login.vue";
 import {createRouter, createWebHistory} from "vue-router";
 import NotFound from "@/pages/NotFound.vue";
@@ -10,12 +10,14 @@ import NoticeBoardWrite from "@/pages/boards/notice/NoticeBoardWrite.vue";
 import LearnBoardList from "@/pages/boards/learn/LearnBoardList.vue";
 import LearnBoardView from "@/pages/boards/learn/LearnBoardView.vue";
 import LearnBoardWrite from "@/pages/boards/learn/LearnBoardWrite.vue";
+import Statistics from "@/pages/dailyRoutine/DailyRoutineStatistics.vue";
 
 const routes = [
     {path: '/login', component: Login},
     {path: '/signup', component: SignUp},
     {path: '/notFound', component: NotFound},
     {path: '/daily-routine', component: DailyRoutine, meta: {permitRoles: ['ROLE_USER', 'ROLE_ADMIN']}},
+    {path: '/daily-routine/statistics', component: Statistics, meta: {permitRoles: ['ROLE_USER', 'ROLE_ADMIN']}},
     {path: '/boards/notice', component: NoticeBoardList, name: 'NoticeBoardList'},
     {path: '/boards/notice/:boardId', component: NoticeBoardView, name: 'NoticeBoardView'},
     {
