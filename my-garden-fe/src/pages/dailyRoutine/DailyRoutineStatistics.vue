@@ -91,7 +91,10 @@ watch(() => inputDate.value, () => {
 
 <template>
   <div class="wrapper">
-    <h1>하루 일과 통계</h1>
+    <div class="header">
+      <h1>하루 일과 통계</h1>
+      <button class="btn btn-info" @click="() => $router.push('/daily-routine')">일과 등록<br> 돌아가기</button>
+    </div>
     <div class="content">
       <div class="upper-content">
         <div class="upper-content-left">
@@ -127,6 +130,16 @@ watch(() => inputDate.value, () => {
   padding: 0 2rem;
 }
 
+.header {
+  position: relative;
+}
+
+.header button {
+  position: absolute;
+  top: 20px;
+  right: 10px;
+}
+
 h1 {
   text-align: center;
   margin: 20px 0;
@@ -138,7 +151,7 @@ h1 {
   justify-content: center;
   align-items: center;
   padding: 10px;
-  height: 660px;
+  height: 760px;
 }
 
 .upper-content {
@@ -147,7 +160,7 @@ h1 {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 330px;
+  height: 360px;
 
   margin-bottom: 10px;
 }
@@ -175,8 +188,8 @@ h1 {
   display: flex;
   flex-direction: row;
 
-  height: 330px;
-  overflow: scroll;
+  height: 400px;
+  overflow: auto;
 }
 
 .lower-content div {
