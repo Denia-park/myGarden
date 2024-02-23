@@ -1,6 +1,6 @@
 <script setup>
-import StatisticTable from "@/pages/dailyRoutine/StatisticTable.vue";
-import SelectDateWithCalendar from "@/pages/dailyRoutine/SelectDateWithCalendar.vue";
+import StatisticTable from "@/components/dailyRoutine/statistics/StatisticTable.vue";
+import SelectDateWithCalendar from "@/components/dailyRoutine/statistics/SelectDateWithCalendar.vue";
 
 import {ref, watch} from "vue";
 import {getTargetDateTimeRange, getTodayDate} from "@/components/dailyRoutine/api/util.js";

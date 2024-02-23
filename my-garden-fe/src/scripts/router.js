@@ -1,4 +1,4 @@
-import DailyRoutine from "@/pages/DailyRoutine.vue";
+import DailyRoutine from "@/pages/dailyRoutine/DailyRoutine.vue";
 import Login from "@/pages/Login.vue";
 import {createRouter, createWebHistory} from "vue-router";
 import NotFound from "@/pages/NotFound.vue";
@@ -10,7 +10,7 @@ import NoticeBoardWrite from "@/pages/boards/notice/NoticeBoardWrite.vue";
 import LearnBoardList from "@/pages/boards/learn/LearnBoardList.vue";
 import LearnBoardView from "@/pages/boards/learn/LearnBoardView.vue";
 import LearnBoardWrite from "@/pages/boards/learn/LearnBoardWrite.vue";
-import Statistics from "@/pages/dailyRoutine/Statistics.vue";
+import Statistics from "@/pages/dailyRoutine/DailyRoutineStatistics.vue";
 
 const routes = [
     {path: '/login', component: Login},
