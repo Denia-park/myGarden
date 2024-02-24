@@ -59,7 +59,7 @@
   - `Java 17`
 - **Frontend**
   - `Vue.js 3.0`, `Vuex`, `Vue Router`
-  - `Axios`, `Bootstrap`, `Chart.js`, `vue-markdown-editor`
+  - `Axios`, `Bootstrap`, `Chart.js`, `vue-markdown-editor`, `VCalendar`
 - **Backend**
   - `Spring Boot 3.2`, `Spring Security`, `Spring Data JPA`, `QueryDSL`
   - `Lombok`, `jsonwebtoken`
@@ -296,9 +296,12 @@
    │  │  │  │  └─ TypeInput.vue
    │  │  │  ├─ popup
    │  │  │  │  └─ SelectDate.vue
-   │  │  │  └─ side
-   │  │  │     ├─ LeftSide.vue
-   │  │  │     └─ RightSide.vue
+   │  │  │  ├─ side
+   │  │  │  │  ├─ LeftSide.vue
+   │  │  │  │  └─ RightSide.vue
+   │  │  │  └─ statistics
+   │  │  │     ├─ SelectDateWithCalendar.vue
+   │  │  │     └─ StactisticsTable.vue
    │  │  └─ default
    │  │     ├─ ContentTitle.vue
    │  │     ├─ DefaultFooter.vue
@@ -306,10 +309,12 @@
    │  │     └─ PageTitle.vue
    │  ├─ main.js
    │  ├─ pages
-   │  │  ├─ DailyRoutine.vue
    │  │  ├─ Login.vue
    │  │  ├─ NotFound.vue
    │  │  ├─ SignUp.vue
+   │  │  ├─ dailyRoutine
+   │  │  │  ├─ DailyRoutine.vue
+   │  │  │  └─ DailyRoutineStatistics.vue
    │  │  └─ boards
    │  │     ├─ learn
    │  │     │  ├─ LearnBoardList.vue
