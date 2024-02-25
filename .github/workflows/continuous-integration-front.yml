@@ -29,14 +29,15 @@ jobs:
           cache: 'npm'
           cache-dependency-path: my-garden-fe/package-lock.json
 
-      #      - name: Cache vue.js npm packages
-      #        id: npm-cache
-      #        uses: actions/cache@v4
-      #        with:
-      #          path: /tmp/.buildx-cache
-      #          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      - name: Check if node_modules is cached
+        id: cache-check
+        run: |
+          if [ -d node_modules ]; then
+            echo "::set-output name=exists::true"
+          fi
 
       - name: Install Dependencies
+        if: steps.cache-check.outputs.exists != 'true'
         run: npm ci
 
       - name: Build with npm
