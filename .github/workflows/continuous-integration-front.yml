@@ -25,12 +25,12 @@ jobs:
           cache: 'npm'
           cache-dependency-path: my-garden-fe/package-lock.json
 
-      - name: Check if node_modules is cached
+      - name: Check if npm cache exists
         id: cache-check
         run: |
-          pwd
-          ls -al
-          if [ -d node_modules ]; then
+          ls -al /home/runner
+          ls -al /home/runner/.npm
+          if [ -d /home/runner/.npm ]; then
             echo "::set-output name=exists::true"
           fi
 
