@@ -28,6 +28,8 @@ jobs:
       - name: Check if node_modules is cached
         id: cache-check
         run: |
+          pwd
+          ls -al
           if [ -d node_modules ]; then
             echo "::set-output name=exists::true"
           fi
