@@ -15,6 +15,10 @@ jobs:
   front-build:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: ./my-garden-fe
+
     steps:
       - uses: actions/checkout@v4
 
@@ -25,21 +29,18 @@ jobs:
           cache: 'npm'
           cache-dependency-path: my-garden-fe/package-lock.json
 
-      - name: Check if npm cache exists
-        id: cache-check
-        run: |
-          ls -al /home/runner
-          ls -al /home/runner/.npm
-          if [ -d /home/runner/.npm ]; then
-            echo "::set-output name=exists::true"
-          fi
+      - name: Cache node modules
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install Dependencies
-        if: steps.cache-check.outputs.exists != 'true'
+        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
-        working-directory: my-garden-fe
 
       - name: Build with npm
         run: npm run build
-        working-directory: my-garden-fe
-
