@@ -79,7 +79,7 @@ jobs:
           context: .
           push: false
           tags: ${{ env.DOCKER_IMAGE }}:latest
-          cache-from: type=gha # 여기서 gha 는 Guthub Actions 용 캐시를 의미합니다.
+          cache-from: type=gha
           cache-to: type=gha,mode=max
 
 #  deploy:
