@@ -78,8 +78,8 @@ jobs:
           context: .
           push: false
           tags: ${{ env.DOCKER_IMAGE }}:latest
-          cache-from: 'type=gha'
-          cache-to: 'type=gha,mode=max'
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
 #  deploy:
 #    name: Deploy
