@@ -1,4 +1,4 @@
-[![Continuous Deployment With Docker](https://github.com/Denia-park/myGarden/actions/workflows/continuous-depolyment.yml/badge.svg)](https://github.com/Denia-park/myGarden/actions/workflows/continuous-depolyment.yml)
+[![Continuous Deployment With Docker](https://github.com/Denia-park/myGarden/actions/workflows/continuous-depolyment.yml/badge.svg)](https://github.com/Denia-park/myGarden/actions/workflows/continuous-deployment.yml)
 
 <!-- TOC -->
 
