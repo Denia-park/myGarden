@@ -49,7 +49,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Build with Gradle Wrapper
+      - name: Build with Gradle Wrapper (skip npm install)
+        if: steps.cache.outputs.cache-hit == 'true'
+        run: ./gradlew build -x npmInstall
+        working-directory: ./my-garden-be
+
+      - name: Build with Gradle Wrapper (npm install)
+        if: steps.cache.outputs.cache-hit != 'true'
         run: ./gradlew build
         working-directory: ./my-garden-be
 
