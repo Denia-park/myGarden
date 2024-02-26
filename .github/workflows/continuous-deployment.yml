@@ -40,7 +40,8 @@ jobs:
         uses: gradle/actions/setup-gradle@ec92e829475ac0c2315ea8f9eced72db85bb337a # v3.0.0
 
       - name: Build with Gradle Wrapper
-        run: my-garden-be/gradlew build
+        run: ./gradlew build
+        working-directory: ./my-garden-be
 
       # docker build 수행
       - name: Set up docker buildx
