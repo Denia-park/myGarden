@@ -81,7 +81,6 @@ jobs:
 
       # Docker 빌드 & GitHub Container Registry에 푸시
       - name: Build and push
-        id: docker_build
         uses: docker/build-push-action@v5
         with:
           context: .
