@@ -38,25 +38,25 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@ec92e829475ac0c2315ea8f9eced72db85bb337a # v3.0.0
 
-      #      # 캐시 테스트
-      #      - name: Check node modules cache
-      #        id: cache
-      #        uses: actions/cache@v4
-      #        with:
-      #          path: '**/node_modules'
-      #          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-      #          restore-keys: |
-      #            ${{ runner.os }}-node-
-      #
-      #      - name: Build with Gradle Wrapper (skip npm install)
-      #        if: steps.cache.outputs.cache-hit == 'true'
-      #        run: ./gradlew build -x npmInstall
-      #        working-directory: ./my-garden-be
-      #
-      #      - name: Build with Gradle Wrapper (npm install)
-      #        if: steps.cache.outputs.cache-hit != 'true'
-      #        run: ./gradlew build
-      #        working-directory: ./my-garden-be
+      # 캐시 테스트
+      - name: Check node modules cache
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Build with Gradle Wrapper (skip npm install)
+        if: steps.cache.outputs.cache-hit == 'true'
+        run: ./gradlew build -x npmInstall
+        working-directory: ./my-garden-be
+
+      - name: Build with Gradle Wrapper (npm install)
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: ./gradlew build
+        working-directory: ./my-garden-be
 
       # docker buildx 설치
       - name: Set up docker buildx
