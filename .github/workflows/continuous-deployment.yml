@@ -71,6 +71,7 @@ jobs:
       #          password: ${{ secrets.GITHUB_TOKEN }}
 
       # Docker 빌드 & GitHub Container Registry에 푸시
+      # 캐시 테스트
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
