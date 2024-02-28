@@ -221,6 +221,8 @@
 5. [AWS를 이용해서 HTTPS 적용 후 HTTPS가 반영이 안될 때 확인 방법](https://velog.io/@as9587/AWS%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%B4%EC%84%9C-HTTPS-%EC%A0%81%EC%9A%A9-%ED%9B%84-HTTPS%EA%B0%80-%EB%B0%98%EC%98%81%EC%9D%B4-%EC%95%88%EB%90%A0-%EB%95%8C-%ED%99%95%EC%9D%B8-%EB%B0%A9%EB%B2%95)
 6. [[Vue + Spring] Github Actions를 이용한 CI/CD 구축하기 (+ Jacoco PR Comment 기능)](https://velog.io/@as9587/Vue-Spring-Github-Actions%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-CICD-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0-Jacoco-PR-Comment-%EA%B8%B0%EB%8A%A5)
 7. [[Prometheus + Grafana] Monitoring 도입하기 ( + Node Exporter)](https://velog.io/@as9587/Prometheus-Grafana-Monitoring-%EB%8F%84%EC%9E%85%ED%95%98%EA%B8%B0-Node-Exporter)
+8. [GitHub Actions 기반의 CI 속도 개선 [Vue.js Build]](https://velog.io/@as9587/GitHub-Actions-%EA%B8%B0%EB%B0%98%EC%9D%98-CI-%EC%86%8D%EB%8F%84-%EA%B0%9C%EC%84%A0-Vue.js-Build)
+9. [GitHub Actions 기반의 CD 속도 개선](https://velog.io/@as9587/GitHub-Actions-%EA%B8%B0%EB%B0%98%EC%9D%98-CD-%EC%86%8D%EB%8F%84-%EA%B0%9C%EC%84%A0)
 
 ## API Docs (Spring Rest Docs)
 
@@ -493,7 +495,6 @@
   - 구글
 - Redis 적용
 - 글 작성 수 혹은 조회수로 랭킹 만들기
-- 주간 및 월간 통계 내기
 - 부하 테스트 진행하기
 - 로깅 설정 추가하기
 - 습관 만들기
