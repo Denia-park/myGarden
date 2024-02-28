@@ -85,6 +85,9 @@ dependencies {
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+    //Slack Webhook 의존성 추가
+    implementation "net.gpedro.integrations.slack:slack-webhook:1.4.0"
 }
 
 ext { // 전역 변수
