@@ -9,21 +9,16 @@ on:
       - my-garden-fe/**
 
 env:
-  # GitHub Container Registry에 푸시할 이미지 정보 (ACTOR: GitHub 사용자명 / DOCKER_IMAGE: 이미지명 / VERSION: GitHub SHA / NAME: 컨테이너명)
+  # GitHub Container Registry에 푸시할 이미지 정보 (ACTOR: GitHub 사용자명 / DOCKER_IMAGE: 이미지명 / NAME: 컨테이너명)
   # DOCKER_IMAGE를 만들때는 대문자가 포함되어서는 안됨, ACTOR에는 대문자가 포함되어도 상관없지만, 통일성을 위해 소문자로 작성 => 본인 계정에 맞게 변경해서 사용할 것
   ACTOR: denia-park
   DOCKER_IMAGE: ghcr.io/denia-park/my-garden
-  VERSION: ${{ github.sha }}
   NAME: my-garden
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: ./my-garden-be
 
     steps:
       - uses: actions/checkout@v4
@@ -35,26 +30,34 @@ jobs:
           distribution: 'temurin'
 
       - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+        run: chmod +x my-garden-be/gradlew
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@ec92e829475ac0c2315ea8f9eced72db85bb337a # v3.0.0
 
-      - name: Build with Gradle Wrapper
-        run: ./gradlew build
-
-      # docker build 수행
-      - name: Set up docker buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Cache docker layers
+      # node_modules 캐시 체크
+      - name: Check node modules cache
+        id: cache
         uses: actions/cache@v4
         with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ env.VERSION }}
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-buildx-
+            ${{ runner.os }}-node-
+
+      - name: Build with Gradle Wrapper (skip npm install)
+        if: steps.cache.outputs.cache-hit == 'true'
+        run: ./gradlew build -x npmInstall
+        working-directory: ./my-garden-be
+
+      - name: Build with Gradle Wrapper (npm install)
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: ./gradlew build
+        working-directory: ./my-garden-be
+
+      # docker buildx 설치
+      - name: Set up docker buildx
+        uses: docker/setup-buildx-action@v3
 
       # GitHub Container Registry에 로그인
       - name: Login to GitHub Container Registry
@@ -64,17 +67,13 @@ jobs:
           username: ${{ env.ACTOR }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Docker 빌드 & GitHub Container Registry에 푸시
+      # Docker Image 빌드 & GitHub Container Registry에 푸시
       - name: Build and push
-        id: docker_build
         uses: docker/build-push-action@v5
         with:
           context: .
-          builder: ${{ steps.buildx.outputs.name }}
           push: true
           tags: ${{ env.DOCKER_IMAGE }}:latest
-          cache-from: type=gha # 여기서 gha 는 Guthub Actions 용 캐시를 의미합니다.
-          cache-to: type=gha,mode=max
 
   deploy:
     name: Deploy
