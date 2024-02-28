@@ -99,3 +99,7 @@ management:
       base-path: ${actuator.url}
   server:
     port: ${actuator.port}
+
+my-garden:
+  slack:
+    incoming-webhook-token: ${slack-incoming-webhook.url}
