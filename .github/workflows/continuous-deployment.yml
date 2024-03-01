@@ -80,7 +80,6 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: build  # build 후에 실행되도록 정의
     runs-on: [ self-hosted, gardener ] # AWS ./configure에서 사용할 label명
     steps:
       - name: Login to ghcr
