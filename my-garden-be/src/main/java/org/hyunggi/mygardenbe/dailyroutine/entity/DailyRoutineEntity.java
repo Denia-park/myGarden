@@ -66,4 +66,8 @@ public class DailyRoutineEntity extends BaseEntity {
         this.routineType = dailyRoutine.getRoutineType();
         this.routineDescription = dailyRoutine.getRoutineDescription();
     }
+
+    public boolean isNotOwner(final Long memberId) {
+        return !this.memberId.equals(memberId);
+    }
 }

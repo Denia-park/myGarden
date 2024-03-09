@@ -144,4 +144,23 @@ class DailyRoutineEntityTest {
         assertThat(dailyRoutineEntity.getRoutineDescription()).isEqualTo(newDailyRoutine.getRoutineDescription());
         assertThat(dailyRoutineEntity.getMemberId()).isEqualTo(memberId);
     }
+
+    @Test
+    @DisplayName("dailyRoutineEntity의 멤버 아이디와 비교하여 본인의 DailyRoutine인지 확인할 수 있다.")
+    void isNotOwner() {
+        //given
+        final Long memberId = 1L;
+        final DailyRoutine dailyRoutine = getDailyRoutine(
+                getRoutineTime(9, 10),
+                "SLEEP",
+                "낮잠"
+        );
+        final DailyRoutineEntity dailyRoutineEntity = DailyRoutineEntity.of(dailyRoutine, memberId);
+
+        //when
+        final boolean isNotOwner = dailyRoutineEntity.isNotOwner(2L);
+
+        //then
+        assertThat(isNotOwner).isTrue();
+    }
 }

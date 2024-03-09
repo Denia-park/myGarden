@@ -78,13 +78,13 @@ public class DailyRoutineService {
         final DailyRoutineEntity dailyRoutineEntity = dailyRoutineRepository.findById(timeBlockId)
                 .orElseThrow(() -> new EntityNotFoundException("해당하는 ID의 DailyRoutine이 존재하지 않습니다."));
 
-        if (!dailyRoutineEntity.getMemberId().equals(member.getId())) {
+        if (dailyRoutineEntity.isNotOwner(member.getId())) {
             throw new BusinessException("본인의 DailyRoutine만 수정 및 삭제할 수 있습니다.");
         }
 
         return dailyRoutineEntity;
     }
-
+    
     @Transactional
     public Long deleteDailyRoutine(final Long timeBlockId, final MemberEntity member) {
         final DailyRoutineEntity dailyRoutineEntity = getDailyRoutineEntity(timeBlockId, member);
