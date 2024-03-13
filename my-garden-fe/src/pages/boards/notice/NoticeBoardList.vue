@@ -3,7 +3,11 @@ import PaginationForm from "@/components/boards/common/PaginationForm.vue";
 import TableContents from "@/components/boards/common/TableContents.vue";
 
 import {onMounted, ref, watch} from "vue";
-import {getNoticeBoardCategoryApi, getNoticeBoardListApi} from "@/components/boards/notice/api/api.js";
+import {
+  getNoticeBoardCategoryApi,
+  getNoticeBoardListApi,
+  getNoticeImportantBoardListApi
+} from "@/components/boards/notice/api/api.js";
 import {getOneMonthAgoDate, getTodayDate} from "@/components/dailyRoutine/api/util.js";
 import SearchForm from "@/components/boards/common/SearchForm.vue";
 import {router} from "@/scripts/router.js";
@@ -13,6 +17,7 @@ import WriteButton from "@/components/boards/common/WriteButton.vue";
 import {isAdminAccount} from "@/components/boards/common/util/util.js";
 
 const noticePage = ref({});
+const noticeImportantPage = ref([]);
 const noticeTotalCount = ref(0);
 const categories = ref([]);
 const queryParameter = ref({
@@ -29,6 +34,13 @@ const queryParameter = ref({
 function pageChange(currentPage) {
   queryParameter.value.currentPage = currentPage;
   getNoticeBoardList(queryParameter.value);
+}
+
+function getNoticeImportantBoardList() {
+  getNoticeImportantBoardListApi()
+      .then(response => {
+        noticeImportantPage.value = response;
+      });
 }
 
 function getNoticeBoardList(parameter) {
@@ -67,6 +79,7 @@ onMounted(() => {
   }
 
   getNoticeBoardCategory();
+  getNoticeImportantBoardList();
   getNoticeBoardList(queryParameter.value);
 });
 </script>
@@ -80,7 +93,8 @@ onMounted(() => {
 
     <TotalElementCounter :total-element="noticeTotalCount"/>
 
-    <TableContents :categories="categories" :table-content-page="noticePage" @go-to-board-view="goToBoardView"/>
+    <TableContents :categories="categories" :table-content-page="noticePage"
+                   :table-important-content-page="noticeImportantPage" @go-to-board-view="goToBoardView"/>
 
     <PaginationForm :page-info="noticePage" @page-change="pageChange"/>
 

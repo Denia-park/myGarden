@@ -4,6 +4,10 @@ import {ref, watch} from "vue";
 import {convertCategoryCodeToText} from "./util/util.js";
 
 const props = defineProps({
+  tableImportantContentPage: {
+    type: Array,
+    required: false,
+  },
   tableContentPage: {
     type: Object,
     required: true,
@@ -44,9 +48,20 @@ watch(() => props.tableContentPage.currentPage, () => {
     </tr>
     </thead>
     <tbody class="table-group-divider">
+    <tr v-for="(importantNotice) in tableImportantContentPage" id="important-notice" :key="importantNotice.id">
+      <th scope="row"></th>
+      <td>{{ convertCategoryCodeToText(props.categories, importantNotice.category) }}</td>
+      <td class="table-title">
+        <a class="title_link important" href="#" @click="() => emit('goToBoardView', importantNotice.id)">
+          {{ importantNotice.title }}
+        </a>
+      </td>
+      <td>{{ importantNotice.views }}</td>
+      <td>{{ importantNotice.writtenAt.split(' ')[0] }}</td>
+      <td>{{ importantNotice.writer }}</td>
+    </tr>
     <tr v-for="(notice,index) in tableContentPage.content" :key="notice.id">
-      <th scope="row">{{ props.tableContentPage.totalElements - (index + pageNumberOffset) }}
-      </th>
+      <th scope="row">{{ props.tableContentPage.totalElements - (index + pageNumberOffset) }}</th>
       <td>{{ convertCategoryCodeToText(props.categories, notice.category) }}</td>
       <td class="table-title">
         <a class="title_link" href="#" @click="() => emit('goToBoardView', notice.id)">
@@ -84,5 +99,9 @@ watch(() => props.tableContentPage.currentPage, () => {
 .title_link {
   color: black;
   text-decoration: none;
+}
+
+#important-notice {
+  --bs-table-bg: #c4deca;
 }
 </style>

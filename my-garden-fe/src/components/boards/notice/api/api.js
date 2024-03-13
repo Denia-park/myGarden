@@ -1,5 +1,15 @@
 import axios from "axios";
 
+export function getNoticeImportantBoardListApi() {
+    return axios.get('/api/boards/notice/important')
+        .then(({data}) => {
+            return data.data;
+        })
+        .catch(error => {
+            alert('중요 공지사항 목록을 불러오는데 실패했습니다.')
+        });
+}
+
 export function getNoticeBoardListApi(parameters) {
     let queryParameter = '';
     if (parameters) {
