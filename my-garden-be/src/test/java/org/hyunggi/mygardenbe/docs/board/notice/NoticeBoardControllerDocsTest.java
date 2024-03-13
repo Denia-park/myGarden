@@ -40,6 +40,54 @@ class NoticeBoardControllerDocsTest extends RestDocsSupport {
     }
 
     @Test
+    @DisplayName("중요 공지사항 목록을 조회한다.")
+    void getNoticeImportantBoards() throws Exception {
+        //given
+        BDDMockito.given(noticeBoardService.getNoticeImportantBoards())
+                .willReturn(buildNoticeImportantBoards());
+
+        //when, then
+        mockMvc.perform(
+                        get("/api/boards/notice/important")
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").exists())
+                .andDo(document("notice-board/get-notice-important-boards"
+                        , preprocessRequest(prettyPrint())
+                        , preprocessResponse(prettyPrint())
+                        , responseFields(
+                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("HTTP 상태 코드"),
+                                fieldWithPath("status").type(JsonFieldType.STRING).description("HTTP 상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
+                                fieldWithPath("data").type(JsonFieldType.ARRAY).description("데이터 (중요 공지사항 게시글 목록 - 없으면 emptyList 반환)"),
+                                fieldWithPath("data[].id").type(JsonFieldType.NUMBER).description("공지사항 게시글 ID"),
+                                fieldWithPath("data[].title").type(JsonFieldType.STRING).description("공지사항 게시글 제목"),
+                                fieldWithPath("data[].content").type(JsonFieldType.STRING).description("공지사항 게시글 내용"),
+                                fieldWithPath("data[].category").type(JsonFieldType.STRING).description("공지사항 게시글 카테고리"),
+                                fieldWithPath("data[].isImportant").type(JsonFieldType.BOOLEAN).description("공지사항 게시글 중요 여부"),
+                                fieldWithPath("data[].views").type(JsonFieldType.NUMBER).description("공지사항 게시글 조회수"),
+                                fieldWithPath("data[].writer").type(JsonFieldType.STRING).description("공지사항 게시글 작성자"),
+                                fieldWithPath("data[].writtenAt").type(JsonFieldType.STRING).description("공지사항 게시글 작성일시")
+                        )
+                ));
+    }
+
+    private List<NoticeBoardResponse> buildNoticeImportantBoards() {
+        return List.of(
+                NoticeBoardResponse.builder()
+                        .id(1L)
+                        .title("공지사항 제목")
+                        .content("공지사항 내용")
+                        .category("공지사항 카테고리")
+                        .isImportant(true)
+                        .views(0)
+                        .writer("작성자")
+                        .writtenAt("2024-02-01 03:00:00")
+                        .build()
+        );
+    }
+
+    @Test
     @DisplayName("공지사항 목록을 조회한다.")
     void getNoticeBoards() throws Exception {
         //given
