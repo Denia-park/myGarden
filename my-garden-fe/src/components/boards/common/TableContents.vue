@@ -51,10 +51,13 @@ watch(() => props.tableContentPage.currentPage, () => {
     <tr v-for="(importantNotice) in tableImportantContentPage" id="important-notice" :key="importantNotice.id">
       <th scope="row"></th>
       <td>{{ convertCategoryCodeToText(props.categories, importantNotice.category) }}</td>
-      <td class="table-title">
-        <a class="title_link important" href="#" @click="() => emit('goToBoardView', importantNotice.id)">
-          {{ importantNotice.title }}
-        </a>
+      <td>
+        <div class="table-title">
+          <a class="title_link important" href="#" @click="() => emit('goToBoardView', importantNotice.id)">
+            {{ importantNotice.title }}
+          </a>
+          <span v-if="isWrittenIn7days(importantNotice.writtenAt)" class="new-board">NEW</span>
+        </div>
       </td>
       <td>{{ importantNotice.views }}</td>
       <td>{{ importantNotice.writtenAt.split(' ')[0] }}</td>
@@ -63,11 +66,13 @@ watch(() => props.tableContentPage.currentPage, () => {
     <tr v-for="(notice,index) in tableContentPage.content" :key="notice.id">
       <th scope="row">{{ props.tableContentPage.totalElements - (index + pageNumberOffset) }}</th>
       <td>{{ convertCategoryCodeToText(props.categories, notice.category) }}</td>
-      <td class="table-title">
-        <a class="title_link" href="#" @click="() => emit('goToBoardView', notice.id)">
-          {{ notice.title }}
-        </a>
-        <span v-if="isWrittenIn7days(notice.writtenAt)" class="new-board">NEW</span>
+      <td>
+        <div class="table-title">
+          <a class="title_link" href="#" @click="() => emit('goToBoardView', notice.id)">
+            {{ notice.title }}
+          </a>
+          <span v-if="isWrittenIn7days(notice.writtenAt)" class="new-board">NEW</span>
+        </div>
       </td>
       <td>{{ notice.views }}</td>
       <td>{{ notice.writtenAt.split(' ')[0] }}</td>
