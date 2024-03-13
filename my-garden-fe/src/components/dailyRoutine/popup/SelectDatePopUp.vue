@@ -17,6 +17,20 @@ const showModal = ref(false);
 const inputDate = ref(new Date());
 const studyHours = ref([]);
 
+function getStudyHoursApi() {
+  const studyHours = store.getters.getStudyHours;
+  if (studyHours === null) {
+    //TODO: getStudyHours API 호출 추가
+
+    //getStudyHours API 호출
+
+    store.commit("setStudyHours", studyHours);
+    return studyHours;
+  }
+
+  return studyHours;
+}
+
 /**
  * 모달 열기
  */

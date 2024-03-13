@@ -22,7 +22,8 @@ export const store = createStore({
                 '게임': '#e76c0c',
                 '기타': '#cd4dff',
             },
-            timeBlockArray: []
+            timeBlockArray: [],
+            studyHours: [],
         }
     },
     mutations: {
@@ -48,6 +49,9 @@ export const store = createStore({
         },
         setTimeBlockArray(state, payload) {
             state.timeBlockArray = payload;
+        },
+        setStudyHours(state, payload) {
+            state.studyHours = payload;
         }
     },
     actions: {
@@ -101,5 +105,8 @@ export const store = createStore({
         getTimeBlockArray(state) {
             return state.timeBlockArray;
         },
+        getStudyHours(state) {
+            return state.studyHours;
+        }
     }
 });
