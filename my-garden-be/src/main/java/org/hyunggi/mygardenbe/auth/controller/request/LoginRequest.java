@@ -4,6 +4,12 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
 
+/**
+ * 로그인 요청시에 사용하는 Request DTO
+ *
+ * @param email    이메일
+ * @param password 비밀번호
+ */
 @Builder
 public record LoginRequest(
         @NotEmpty(message = "이메일은 null이 될 수 없습니다.")
