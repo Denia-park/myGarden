@@ -13,6 +13,9 @@ import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
 import VCalendar from 'v-calendar';
 import 'v-calendar/style.css';
 
+// VueCalendarHeatmap (GitHub 잔디)
+import VueCalendarHeatmap from 'vue3-calendar-heatmap'
+
 // Prism
 import Prism from 'prismjs';
 // highlight code
@@ -40,4 +43,4 @@ VMdEditor.use(vuepressTheme, {
 // Router 이동 전에 실행되는 함수
 routerBeforeEach(router);
 
-createApp(App).use(store).use(router).use(VMdEditor).use(VCalendar, {}).mount('#app')
+createApp(App).use(store).use(router).use(VMdEditor).use(VueCalendarHeatmap).use(VCalendar, {}).mount('#app')
