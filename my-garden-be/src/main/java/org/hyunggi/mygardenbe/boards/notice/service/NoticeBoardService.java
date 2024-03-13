@@ -16,6 +16,7 @@ import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -142,5 +143,13 @@ public class NoticeBoardService {
         noticeBoardRepository.delete(noticeBoardEntity);
 
         return boardId;
+    }
+
+    public List<NoticeBoardResponse> getNoticeImportantBoards() {
+        final List<NoticeBoardEntity> noticeAlarmBoards = noticeBoardRepository.findAllByIsImportant(true);
+
+        return noticeAlarmBoards.stream()
+                .map(NoticeBoardResponse::of)
+                .toList();
     }
 }

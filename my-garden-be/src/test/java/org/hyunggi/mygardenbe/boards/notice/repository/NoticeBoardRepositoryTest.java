@@ -20,6 +20,34 @@ class NoticeBoardRepositoryTest extends IntegrationTestSupport {
     NoticeBoardRepository noticeBoardRepository;
 
     @Test
+    @DisplayName("중요 공지사항을 조회할 수 있다.")
+    void findAllByIsImportant() {
+        //given
+        noticeBoardRepository.save(buildNoticeImportantBoardWith("title1", "content1", false));
+        noticeBoardRepository.save(buildNoticeImportantBoardWith("title2", "content2", true));
+
+        //when
+        final var noticeBoardEntities = noticeBoardRepository.findAllByIsImportant(true);
+
+        //then
+        assertThat(noticeBoardEntities).hasSize(1)
+                .extracting("title", "content", "isImportant")
+                .containsExactly(tuple("title2", "content2", true));
+    }
+
+    private NoticeBoardEntity buildNoticeImportantBoardWith(final String title, final String content, final boolean isImportant) {
+        return NoticeBoardEntity.of(
+                title,
+                content,
+                "category",
+                isImportant,
+                "writer",
+                LocalDateTime.of(2024, 3, 13, 12, 0, 0),
+                1L
+        );
+    }
+
+    @Test
     @DisplayName("해당 날짜에 해당하는 공지사항을 조회할 수 있다.")
     void searchNoticeBoards_with_writtenAt() {
         //given
@@ -48,7 +76,7 @@ class NoticeBoardRepositoryTest extends IntegrationTestSupport {
                 "title",
                 "content",
                 "category",
-                true,
+                false,
                 "writer",
                 writtenAt,
                 1L
@@ -79,7 +107,7 @@ class NoticeBoardRepositoryTest extends IntegrationTestSupport {
                 title,
                 content,
                 category,
-                true,
+                false,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
                 1L
