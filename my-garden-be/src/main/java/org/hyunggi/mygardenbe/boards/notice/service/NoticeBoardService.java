@@ -146,7 +146,7 @@ public class NoticeBoardService {
     }
 
     public List<NoticeBoardResponse> getNoticeImportantBoards() {
-        final List<NoticeBoardEntity> noticeAlarmBoards = noticeBoardRepository.findAllByIsImportant(true);
+        final List<NoticeBoardEntity> noticeAlarmBoards = noticeBoardRepository.findAllByIsImportantOrderByWrittenAtDesc(true);
 
         return noticeAlarmBoards.stream()
                 .map(NoticeBoardResponse::of)
