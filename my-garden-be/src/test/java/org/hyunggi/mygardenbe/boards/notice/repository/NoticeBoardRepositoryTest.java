@@ -23,26 +23,30 @@ class NoticeBoardRepositoryTest extends IntegrationTestSupport {
     @DisplayName("중요 공지사항을 조회할 수 있다.")
     void findAllByIsImportant() {
         //given
-        noticeBoardRepository.save(buildNoticeImportantBoardWith("title1", "content1", false));
-        noticeBoardRepository.save(buildNoticeImportantBoardWith("title2", "content2", true));
+        noticeBoardRepository.save(buildNoticeImportantBoardWith("title1", "content1", 10, false));
+        noticeBoardRepository.save(buildNoticeImportantBoardWith("title2", "content2", 11, true));
+        noticeBoardRepository.save(buildNoticeImportantBoardWith("title3", "content3", 12, true));
 
         //when
-        final var noticeBoardEntities = noticeBoardRepository.findAllByIsImportant(true);
+        final var noticeBoardEntities = noticeBoardRepository.findAllByIsImportantOrderByWrittenAtDesc(true);
 
         //then
-        assertThat(noticeBoardEntities).hasSize(1)
+        assertThat(noticeBoardEntities).hasSize(2)
                 .extracting("title", "content", "isImportant")
-                .containsExactly(tuple("title2", "content2", true));
+                .containsExactly(
+                        tuple("title3", "content3", true),
+                        tuple("title2", "content2", true)
+                );
     }
 
-    private NoticeBoardEntity buildNoticeImportantBoardWith(final String title, final String content, final boolean isImportant) {
+    private NoticeBoardEntity buildNoticeImportantBoardWith(final String title, final String content, final int day, final boolean isImportant) {
         return NoticeBoardEntity.of(
                 title,
                 content,
                 "category",
                 isImportant,
                 "writer",
-                LocalDateTime.of(2024, 3, 13, 12, 0, 0),
+                LocalDateTime.of(2024, 3, day, 12, 0, 0),
                 1L
         );
     }
