@@ -34,7 +34,8 @@ public class NoticeBoardRepositoryCustomImpl extends Querydsl4RepositorySupport 
                 .where(
                         writtenAtBetween(startDateTime, endDateTime),
                         categoryEquals(category),
-                        searchTextContains(searchText)
+                        searchTextContains(searchText),
+                        isNotImportant()
                 );
     }
 
@@ -45,7 +46,8 @@ public class NoticeBoardRepositoryCustomImpl extends Querydsl4RepositorySupport 
                 .where(
                         writtenAtBetween(startDateTime, endDateTime),
                         categoryEquals(category),
-                        searchTextContains(searchText)
+                        searchTextContains(searchText),
+                        isNotImportant()
                 );
     }
 
@@ -67,5 +69,9 @@ public class NoticeBoardRepositoryCustomImpl extends Querydsl4RepositorySupport 
         }
 
         return noticeBoardEntity.title.contains(searchText).or(noticeBoardEntity.content.contains(searchText));
+    }
+
+    private BooleanExpression isNotImportant() {
+        return noticeBoardEntity.isImportant.eq(false);
     }
 }

@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -59,6 +60,26 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     }
 
     @Test
+    @DisplayName("중요 공지사항을 조회한다.")
+    void getNoticeAlarmBoards() {
+        // given
+        noticeBoardRepository.save(buildNoticeBoardWith("title1", "content1", "category1", true));
+        noticeBoardRepository.save(buildNoticeBoardWith("title2", "content2", "category2", false));
+        noticeBoardRepository.save(buildNoticeBoardWith("title3", "content3", "category3", true));
+
+        // when
+        final List<NoticeBoardResponse> noticeAlarmBoards = noticeBoardService.getNoticeImportantBoards();
+
+        // then
+        assertThat(noticeAlarmBoards).hasSize(2)
+                .extracting("title", "content", "category")
+                .containsExactlyInAnyOrder(
+                        tuple("title1", "content1", "category1"),
+                        tuple("title3", "content3", "category3")
+                );
+    }
+
+    @Test
     @DisplayName("category 및 searchText 없이 조회를 하면, 기간 내의 모든 공지사항을 조회할 수 있다.")
     void getNoticeBoardsWithoutCategoryAndSearchText() {
         // given
@@ -68,33 +89,32 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
         final String searchText = "";
         final Pageable pageable = PageRequest.of(0, 10);
 
-        noticeBoardRepository.save(buildNoticeBoardWith("title1", "content1", "category1"));
-        noticeBoardRepository.save(buildNoticeBoardWith("title2", "content2", "category2"));
-        noticeBoardRepository.save(buildNoticeBoardWith("title3", "content3", "category3"));
+        noticeBoardRepository.save(buildNoticeBoardWith("title1", "content1", "category1", false));
+        noticeBoardRepository.save(buildNoticeBoardWith("title2", "content2", "category2", true));
+        noticeBoardRepository.save(buildNoticeBoardWith("title3", "content3", "category3", false));
 
         // when
         final CustomPage<NoticeBoardResponse> noticeBoards = noticeBoardService.getNoticeBoards(startDate, endDate, category, searchText, pageable);
 
         // then
-        assertThat(noticeBoards.getTotalElements()).isEqualTo(3);
+        assertThat(noticeBoards.getTotalElements()).isEqualTo(2);
         assertThat(noticeBoards.getCurrentPage()).isEqualTo(1);
         assertThat(noticeBoards.getTotalPages()).isEqualTo(1);
         assertThat(noticeBoards.getPageSize()).isEqualTo(10);
-        assertThat(noticeBoards.getContent()).hasSize(3)
+        assertThat(noticeBoards.getContent()).hasSize(2)
                 .extracting("title", "content", "category")
                 .containsExactlyInAnyOrder(
                         tuple("title1", "content1", "category1"),
-                        tuple("title2", "content2", "category2"),
                         tuple("title3", "content3", "category3")
                 );
     }
 
-    private NoticeBoardEntity buildNoticeBoardWith(final String title, final String content, final String category) {
+    private NoticeBoardEntity buildNoticeBoardWith(final String title, final String content, final String category, final boolean isImportant) {
         return NoticeBoardEntity.of(
                 title,
                 content,
                 category,
-                true,
+                isImportant,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
                 1L
@@ -111,9 +131,9 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
         final String searchText = "";
         final Pageable pageable = PageRequest.of(0, 10);
 
-        noticeBoardRepository.save(buildNoticeBoardWith("title1", "content1", "category1"));
-        noticeBoardRepository.save(buildNoticeBoardWith("title2", "content2", "category2"));
-        noticeBoardRepository.save(buildNoticeBoardWith("title3", "content3", "category3"));
+        noticeBoardRepository.save(buildNoticeBoardWith("title1", "content1", "category1", false));
+        noticeBoardRepository.save(buildNoticeBoardWith("title2", "content2", "category2", false));
+        noticeBoardRepository.save(buildNoticeBoardWith("title3", "content3", "category3", false));
 
         // when
         final CustomPage<NoticeBoardResponse> noticeBoards = noticeBoardService.getNoticeBoards(startDate, endDate, category, searchText, pageable);
@@ -140,9 +160,9 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
         final String searchText = "11";
         final Pageable pageable = PageRequest.of(0, 10);
 
-        noticeBoardRepository.save(buildNoticeBoardWith("title11", "content", "category1"));
-        noticeBoardRepository.save(buildNoticeBoardWith("title2", "content2", "category2"));
-        noticeBoardRepository.save(buildNoticeBoardWith("title3", "content11", "category3"));
+        noticeBoardRepository.save(buildNoticeBoardWith("title11", "content", "category1", false));
+        noticeBoardRepository.save(buildNoticeBoardWith("title2", "content2", "category2", false));
+        noticeBoardRepository.save(buildNoticeBoardWith("title3", "content11", "category3", false));
 
         // when
         final CustomPage<NoticeBoardResponse> noticeBoards = noticeBoardService.getNoticeBoards(startDate, endDate, category, searchText, pageable);
@@ -170,9 +190,9 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
         final String searchText = "11";
         final Pageable pageable = PageRequest.of(0, 10);
 
-        noticeBoardRepository.save(buildNoticeBoardWith("title11", "content", "category1"));
-        noticeBoardRepository.save(buildNoticeBoardWith("title2", "content2", "category2"));
-        noticeBoardRepository.save(buildNoticeBoardWith("title3", "content11", "category3"));
+        noticeBoardRepository.save(buildNoticeBoardWith("title11", "content", "category1", false));
+        noticeBoardRepository.save(buildNoticeBoardWith("title2", "content2", "category2", false));
+        noticeBoardRepository.save(buildNoticeBoardWith("title3", "content11", "category3", false));
 
         // when
         final CustomPage<NoticeBoardResponse> noticeBoards = noticeBoardService.getNoticeBoards(startDate, endDate, category, searchText, pageable);
@@ -293,7 +313,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
                 "title",
                 "content",
                 "category",
-                true,
+                false,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
                 1L

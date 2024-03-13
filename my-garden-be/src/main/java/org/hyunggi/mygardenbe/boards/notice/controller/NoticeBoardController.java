@@ -13,11 +13,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/boards/notice")
 @RequiredArgsConstructor
 public class NoticeBoardController {
     private final NoticeBoardService noticeBoardService;
+
+    @GetMapping("/important")
+    public ApiResponse<List<NoticeBoardResponse>> getNoticeImportantBoards() {
+        return ApiResponse.ok(noticeBoardService.getNoticeImportantBoards());
+    }
 
     @GetMapping("/list")
     public ApiResponse<CustomPage<NoticeBoardResponse>> getDailyRoutine(@ModelAttribute final GetRequest getRequest) {

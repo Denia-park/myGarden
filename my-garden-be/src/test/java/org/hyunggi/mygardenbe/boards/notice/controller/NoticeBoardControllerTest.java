@@ -27,8 +27,45 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class NoticeBoardControllerTest extends ControllerTestSupport {
     @Test
+    @DisplayName("공지사항 알림글 목록을 조회한다.")
+    void getNoticeImportantBoards() throws Exception {
+        final List<NoticeBoardResponse> noticeAlarmBoardResponses = List.of(
+                NoticeBoardResponse.builder()
+                        .id(1L)
+                        .title("공지사항 제목1")
+                        .content("공지사항 내용1")
+                        .category("공지")
+                        .isImportant(true)
+                        .views(0)
+                        .writer("작성자1")
+                        .writtenAt("2021-01-01 00:00:00")
+                        .build()
+        );
+
+        BDDMockito.given(noticeBoardService.getNoticeImportantBoards())
+                .willReturn(noticeAlarmBoardResponses);
+
+        //when
+        mockMvc.perform(
+                        get("/api/boards/notice/important")
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0].id").value(1L))
+                .andExpect(jsonPath("$.data[0].title").value("공지사항 제목1"))
+                .andExpect(jsonPath("$.data[0].content").value("공지사항 내용1"))
+                .andExpect(jsonPath("$.data[0].category").value("공지"))
+                .andExpect(jsonPath("$.data[0].isImportant").value(true))
+                .andExpect(jsonPath("$.data[0].views").value(0))
+                .andExpect(jsonPath("$.data[0].writer").value("작성자1"))
+                .andExpect(jsonPath("$.data[0].writtenAt").value("2021-01-01 00:00:00"));
+
+        //then
+        BDDMockito.verify(noticeBoardService).getNoticeImportantBoards();
+    }
+
+    @Test
     @DisplayName("공지사항 목록을 조회한다.")
-    void getDailyRoutine_withoutPagination() throws Exception {
+    void getNoticeBoards() throws Exception {
         //given
         final Pageable pageable = PageRequest.of(0, 10, Sort.by("writtenAt", "id").descending());
 
@@ -38,7 +75,7 @@ class NoticeBoardControllerTest extends ControllerTestSupport {
                         .title("공지사항 제목1")
                         .content("공지사항 내용1")
                         .category("공지")
-                        .isImportant(true)
+                        .isImportant(false)
                         .views(0)
                         .writer("작성자1")
                         .writtenAt("2021-01-01 00:00:00")
@@ -58,7 +95,7 @@ class NoticeBoardControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.data.content[0].title").value("공지사항 제목1"))
                 .andExpect(jsonPath("$.data.content[0].content").value("공지사항 내용1"))
                 .andExpect(jsonPath("$.data.content[0].category").value("공지"))
-                .andExpect(jsonPath("$.data.content[0].isImportant").value(true))
+                .andExpect(jsonPath("$.data.content[0].isImportant").value(false))
                 .andExpect(jsonPath("$.data.content[0].views").value(0))
                 .andExpect(jsonPath("$.data.content[0].writer").value("작성자1"))
                 .andExpect(jsonPath("$.data.content[0].writtenAt").value("2021-01-01 00:00:00"))
@@ -106,7 +143,7 @@ class NoticeBoardControllerTest extends ControllerTestSupport {
     }
 
     @Test
-    @DisplayName("공지사항을 조회한다.")
+    @DisplayName("공지사항을 게시글 단건을 조회한다.")
     void getNoticeBoard() throws Exception {
         //given
         final NoticeBoardResponse noticeBoardResponse = NoticeBoardResponse.builder()
