@@ -1,0 +1,11 @@
+[[get-notice-important-boards]]
+=== GET Important List [중요 공지 목록 조회]
+
+==== HTTP Request
+
+include::{snippets}/notice-board/get-notice-important-boards/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/notice-board/get-notice-important-boards/http-response.adoc[]
+include::{snippets}/notice-board/get-notice-important-boards/response-fields.adoc[]
