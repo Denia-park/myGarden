@@ -33,6 +33,7 @@ include::board/category/getList.adoc[]
 [[notice-board]]
 == Notice Board [공지사항]
 
+include::board/notice/getImportantList.adoc[]
 include::board/notice/getList.adoc[]
 include::board/notice/getView.adoc[]
 include::board/notice/post.adoc[]
