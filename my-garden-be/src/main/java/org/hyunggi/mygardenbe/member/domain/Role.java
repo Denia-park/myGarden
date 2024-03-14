@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * 유저 권한
+ */
 @Getter
 @RequiredArgsConstructor
 public enum Role {
@@ -24,8 +27,18 @@ public enum Role {
     ),
     ACTUATOR(Collections.emptySet());
 
+    /**
+     * 권한이 가지고 있는 구체적인 허용 권한 목록
+     */
     private final Set<Permission> permissions;
 
+    /**
+     * 권한 목록을 SimpleGrantedAuthority 목록으로 변환
+     * <br><br>
+     * - 권한 목록에는 권한 이름과 권한이 가지고 있는 구체적인 허용 권한 목록이 포함됨
+     *
+     * @return SimpleGrantedAuthority 목록
+     */
     public List<SimpleGrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = extractAuthorityFromPermissions();
 
@@ -34,6 +47,11 @@ public enum Role {
         return authorities;
     }
 
+    /**
+     * 권한이 가지고 있는 구체적인 허용 권한 목록을 SimpleGrantedAuthority 목록으로 변환
+     *
+     * @return SimpleGrantedAuthority 목록
+     */
     private List<SimpleGrantedAuthority> extractAuthorityFromPermissions() {
         return getPermissions()
                 .stream()

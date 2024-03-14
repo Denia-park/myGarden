@@ -4,15 +4,27 @@ import {convertDateFormat, getTodayDate} from "@/components/dailyRoutine/api/uti
 
 const emit = defineEmits(['updateSelectDate']);
 
+/**
+ * 조회 날짜
+ */
 const inputDate = ref({
   start: getTodayDate(),
   end: getTodayDate()
 });
+
+/**
+ * 캘린더 날짜
+ */
 const inputCalendarDate = ref({
   start: new Date(inputDate.value.start),
   end: new Date(inputDate.value.end)
 });
 
+/**
+ * 조회 날짜 변경
+ *
+ * @param date 변경할 날짜
+ */
 function updateDate(date) {
   inputDate.value.start = convertDateFormat(date.start);
   inputDate.value.end = convertDateFormat(date.end);

@@ -4,27 +4,53 @@ import {convertDateFormat} from "@/components/dailyRoutine/api/util.js";
 import {store} from "@/scripts/store.js";
 import {router} from "@/scripts/router.js";
 
+/**
+ * 모달을 보여줄지 여부
+ */
 const showModal = ref(false);
+
+/**
+ * 조회 날짜
+ */
 const inputDate = ref(new Date());
 
+/**
+ * 모달 열기
+ */
 function openModal() {
   showModal.value = true;
 }
 
+/**
+ * 모달 닫기
+ */
 function closeModal() {
   showModal.value = false;
 }
 
+/**
+ * 조회 날짜 변경
+ *
+ * @param date 변경할 날짜
+ */
 function updateDate(date) {
   inputDate.value = date;
   closeModal();
   store.commit("setViewDate", convertDateFormat(date));
 }
 
+/**
+ * 일과 통계 페이지로 이동
+ */
 function goToStatistics() {
   router.push('/daily-routine/statistics');
 }
 
+/**
+ * 모달 바깥쪽 클릭 시 모달 닫기
+ *
+ * @param event 클릭 이벤트
+ */
 function handleClickOutside(event) {
   const modalContent = document.querySelector('.modal-content');
   if (!modalContent.contains(event.target)) {

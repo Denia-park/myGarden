@@ -39,6 +39,9 @@ public abstract class Querydsl4RepositorySupport {
         this.domainClass = domainClass;
     }
 
+    /**
+     * Setter injection이 제대로 되었는지 검증
+     */
     @PostConstruct
     public void validate() {
         Assert.notNull(entityManager, "EntityManager must not be null!");
@@ -46,18 +49,36 @@ public abstract class Querydsl4RepositorySupport {
         Assert.notNull(queryFactory, "QueryFactory must not be null!");
     }
 
+    /**
+     * JPAQueryFactory를 반환
+     *
+     * @return JPAQueryFactory
+     */
     protected JPAQueryFactory getQueryFactory() {
         return queryFactory;
     }
 
+    /**
+     * Querydsl을 반환
+     *
+     * @return Querydsl
+     */
     protected Querydsl getQuerydsl() {
         return querydsl;
     }
 
+    /**
+     * EntityManager를 반환
+     *
+     * @return EntityManager
+     */
     protected EntityManager getEntityManager() {
         return entityManager;
     }
 
+    /**
+     * EntityManager를 주입하고, Querydsl과 JPAQueryFactory를 초기화
+     */
     @Autowired
     public void setEntityManager(EntityManager entityManager) {
         Assert.notNull(entityManager, "EntityManager must not be null!");
@@ -71,14 +92,37 @@ public abstract class Querydsl4RepositorySupport {
         this.queryFactory = new JPAQueryFactory(entityManager);
     }
 
+    /**
+     * JPAQueryFactory를 이용하여 JPAQuery의 select 쿼리를 생성
+     *
+     * @param expr select할 Expression
+     * @param <T>  반환 타입
+     * @return JPAQuery
+     */
     protected <T> JPAQuery<T> select(Expression<T> expr) {
         return getQueryFactory().select(expr);
     }
 
+    /**
+     * JPAQueryFactory를 이용하여 JPAQuery의 selectFrom 쿼리를 생성
+     *
+     * @param from select할 EntityPath
+     * @param <T>  반환 타입
+     * @return JPAQuery
+     */
     protected <T> JPAQuery<T> selectFrom(EntityPath<T> from) {
         return getQueryFactory().selectFrom(from);
     }
 
+    /**
+     * Querydsl을 이용하여 페이징 처리
+     *
+     * @param pageable     페이징 정보
+     * @param contentQuery 콘텐츠 조회 쿼리
+     * @param countQuery   콘텐츠 개수 조회 쿼리
+     * @param <T>          반환 타입
+     * @return 페이징 처리된 결과
+     */
     protected <T> Page<T> applyPagination(Pageable pageable,
                                           Function<JPAQueryFactory, JPAQuery> contentQuery,
                                           Function<JPAQueryFactory, JPAQuery<Long>> countQuery) {

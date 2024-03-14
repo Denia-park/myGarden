@@ -8,16 +8,18 @@ import {deleteDailyRoutineApi, postDailyRoutineApi, updateDailyRoutineApi} from 
 import {store} from "@/scripts/store.js";
 import {getTodayDate} from "@/components/dailyRoutine/api/util.js";
 
+/**
+ * 하루 일과 입력에 필요한 내용
+ */
 const startDate = ref('');
 const endDate = ref('');
 const content = ref('');
 const routineType = ref('STUDY');
 const isUpdateMode = ref(false);
 
-onMounted(() => {
-  getLastStartDateTime();
-});
-
+/**
+ * 오늘 마지막 시작 시간을 가져온다.
+ */
 function getLastStartDateTime() {
   let todayLastStartDateTime = localStorage.getItem("todayLastStartDateTime");
   const todayDate = getTodayDate();
@@ -30,6 +32,10 @@ function getLastStartDateTime() {
   startDate.value = todayLastStartDateTime;
 }
 
+/**
+ * 버튼을 누르거나, Ctrl + Enter를 눌렀을 때 실행되는 함수<br>
+ * 일과 등록 유효성 검사 후, 일과 등록 또는 수정을 실행한다.
+ */
 function submit() {
   if (!validate()) {
     return;
@@ -41,6 +47,9 @@ function submit() {
     postRoutine();
 }
 
+/**
+ * 일과 등록 유효성 검사
+ */
 function validate() {
   //시작 날짜가 끝 날짜보다 늦을 수 없다.
   function validateStartDateIsBeforeEndDate() {
@@ -56,7 +65,10 @@ function validate() {
     return false;
   }
 
-  //두 날짜는 1일이상 차이가 날 수 없다.
+  /**
+   * 두 날짜의 차이가 1일 이상 나는지 검증한다.
+   * @returns {boolean}
+   */
   function validateDateDifferenceIsSmaller1() {
     // Calculate the time difference in milliseconds
     const timeDifference = new Date(endDate.value) - new Date(startDate.value);
@@ -77,7 +89,9 @@ function validate() {
     return false;
   }
 
-  //content는 255자를 넘을 수 없다.
+  /**
+   * content의 길이가 255자를 넘지 않는지 검증한다.
+   */
   function validateContentLength() {
     if (content.value.length > 255) {
       alert("content는 255자를 넘을 수 없습니다.")
@@ -90,6 +104,9 @@ function validate() {
   return validateContentLength();
 }
 
+/**
+ * 일과 등록
+ */
 function postRoutine() {
   if (!validate()) {
     return;
@@ -100,6 +117,9 @@ function postRoutine() {
   localStorage.setItem("todayLastStartDateTime", endDate.value);
 }
 
+/**
+ * 일과 수정
+ */
 function updateRoutine() {
   if (!updateValidate()) {
     return;
@@ -108,21 +128,27 @@ function updateRoutine() {
   updateDailyRoutineApi(store.getters.getEditBlock.id, startDate.value, endDate.value, routineType.value, content.value);
 }
 
+/**
+ * 일과 수정 유효성 검사
+ */
 function updateValidate() {
   if (!validate()) {
     return false;
   }
 
-  function isNotDateToday() {
-    //오늘내의 날짜로만 수정이 가능하다.
-    const todayDate = getTodayDate(); // Assuming getTodayDate() returns a String
+  /**
+   * 수정 하려는 날짜가 오늘 날짜인지 검증한다.
+   * @returns {boolean} 오늘 내의 날짜가 아니면 false, 아니면 true
+   */
+  function isNotTodayDate() {
+    const todayDate = getTodayDate();
     const tempStartDate = startDate.value.split("T")[0];
     const tempEndDate = endDate.value.split("T")[0];
 
     return tempStartDate !== todayDate || tempEndDate !== todayDate;
   }
 
-  if (isNotDateToday()) {
+  if (isNotTodayDate()) {
     alert("오늘 내의 날짜만 수정이 가능합니다.");
     return false;
   }
@@ -130,6 +156,9 @@ function updateValidate() {
   return true;
 }
 
+/**
+ * 수정 취소
+ */
 function cancelUpdate() {
   isUpdateMode.value = false;
   getLastStartDateTime();
@@ -138,10 +167,20 @@ function cancelUpdate() {
   content.value = '';
 }
 
+/**
+ * 일과 삭제
+ */
 function deleteRoutine() {
   deleteDailyRoutineApi(store.getters.getEditBlock.id);
 }
 
+onMounted(() => {
+  getLastStartDateTime();
+});
+
+/**
+ * 수정 모드로 변경
+ */
 watch(() => store.getters.getEditBlock, (newVal) => {
       const updateStartDateTime = newVal.startDate + 'T' + newVal.displayStartTime;
 

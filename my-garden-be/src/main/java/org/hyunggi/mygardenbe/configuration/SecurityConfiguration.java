@@ -32,12 +32,20 @@ import java.io.IOException;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
+/**
+ * Security Configuration
+ * <br><br>
+ * - Security 설정
+ */
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 @Slf4j
 public class SecurityConfiguration {
+    /**
+     * 해당 하는 URL은 JWT 인증을 거치지 않음
+     */
     private static final String[] WHITE_LIST_URL = {
             AuthenticationController.AUTH_BASE_API_PATH + "/**",
             "/docs/index.html",
@@ -48,12 +56,37 @@ public class SecurityConfiguration {
             "/api/boards/categories"
     };
 
+    /**
+     * JWT 인증 필터
+     */
     private final JwtAuthenticationFilter jwtAuthFilter;
+
+    /**
+     * 로그아웃 핸들러
+     */
     private final LogoutHandler myLogoutHandler;
 
+    /**
+     * Actuator URL
+     */
     @Value("${actuator.url:/default}")
     private String actuatorUrl;
 
+    /**
+     * Security Filter Chain
+     * <br><br>
+     * - Security Filter Chain 설정
+     * - csrf, cors 비활성화
+     * - 요청에 따른 권한 설정
+     * - session 비활성화
+     * - JWT 인증 필터, JWT 예외 처리 필터 추가
+     * - HistoryModeFilter 추가
+     * - 로그아웃 핸들러 추가
+     *
+     * @param http HttpSecurity
+     * @return SecurityFilterChain
+     * @throws Exception Exception
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -84,10 +117,20 @@ public class SecurityConfiguration {
         return http.build();
     }
 
+    /**
+     * Actuator URL
+     *
+     * @return Actuator URL (모든 URL)
+     */
     private String getActuatorAllUrl() {
         return actuatorUrl + "/**";
     }
 
+    /**
+     * Admin만 접근이 가능한 공지사항 API
+     *
+     * @return 공지사항 API
+     */
     private RequestMatcher[] getOnlyAdminAccessNoticeApi() {
         return new RequestMatcher[]{
                 antMatcher(HttpMethod.POST, "/api/boards/notice"),
@@ -96,6 +139,11 @@ public class SecurityConfiguration {
         };
     }
 
+    /**
+     * 공지사항, TIL 게시판 조회 API
+     *
+     * @return 공지사항, TIL 게시판 조회 API
+     */
     private RequestMatcher[] getReadBoardsApi() {
         return new RequestMatcher[]{
                 antMatcher(HttpMethod.GET, "/api/boards/notice/**"),
@@ -103,6 +151,11 @@ public class SecurityConfiguration {
         };
     }
 
+    /**
+     * Logout 성공시 처리될 응답 초기화
+     *
+     * @param res Http 응답
+     */
     private void initializeResponse(final HttpServletResponse res) {
         res.setStatus(HttpServletResponse.SC_OK);
         res.setContentType(MediaType.APPLICATION_JSON_VALUE);

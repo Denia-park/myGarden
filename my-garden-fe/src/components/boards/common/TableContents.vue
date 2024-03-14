@@ -20,8 +20,17 @@ const props = defineProps({
 
 const emit = defineEmits(['goToBoardView',]);
 
+/**
+ * 페이지 번호 오프셋
+ */
 const pageNumberOffset = ref(0);
 
+/**
+ * 7일 이내 작성된 글인지 확인
+ *
+ * @param writtenAt 작성일시
+ * @returns {boolean} 7일 이내 작성된 글이면 true, 아니면 false
+ */
 function isWrittenIn7days(writtenAt) {
   const diffTime = Math.abs(new Date() - new Date(writtenAt));
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));

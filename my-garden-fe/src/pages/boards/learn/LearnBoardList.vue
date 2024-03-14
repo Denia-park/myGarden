@@ -12,6 +12,9 @@ import TotalElementCounter from "@/components/boards/common/TotalElementCounter.
 import WriteButton from "@/components/boards/common/WriteButton.vue";
 import {isUserAccount} from "@/components/boards/common/util/util.js";
 
+/**
+ * TIL 게시판 구성에 필요한 변수
+ */
 const learnPage = ref({});
 const learnTotalCount = ref(0);
 const categories = ref([]);
@@ -26,11 +29,21 @@ const queryParameter = ref({
   order: "desc"
 });
 
+/**
+ * 페이지 변경
+ *
+ * @param currentPage 변경할 페이지
+ */
 function pageChange(currentPage) {
   queryParameter.value.currentPage = currentPage;
   getLearnBoardList(queryParameter.value);
 }
 
+/**
+ * TIL 게시판 목록 조회
+ *
+ * @param parameter 조회 조건
+ */
 function getLearnBoardList(parameter) {
   if (parameter) {
     queryParameter.value = parameter;
@@ -42,6 +55,9 @@ function getLearnBoardList(parameter) {
       });
 }
 
+/**
+ * TIL 게시판 카테고리 조회
+ */
 function getLearnBoardCategory() {
   getLearnBoardCategoryApi('learn')
       .then(response => {
@@ -49,6 +65,11 @@ function getLearnBoardCategory() {
       });
 }
 
+/**
+ * 게시판 상세보기 페이지로 이동
+ *
+ * @param boardId 게시글 번호
+ */
 function goToBoardView(boardId) {
   router.push({
     name: "LearnBoardView",

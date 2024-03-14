@@ -63,7 +63,7 @@ class NoticeBoardControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data[].id").type(JsonFieldType.NUMBER).description("공지사항 게시글 ID"),
                                 fieldWithPath("data[].title").type(JsonFieldType.STRING).description("공지사항 게시글 제목"),
                                 fieldWithPath("data[].content").type(JsonFieldType.STRING).description("공지사항 게시글 내용"),
-                                fieldWithPath("data[].category").type(JsonFieldType.STRING).description("공지사항 게시글 카테고리"),
+                                fieldWithPath("data[].category").type(JsonFieldType.STRING).description("공지사항 게시글 분류"),
                                 fieldWithPath("data[].isImportant").type(JsonFieldType.BOOLEAN).description("공지사항 게시글 중요 여부"),
                                 fieldWithPath("data[].views").type(JsonFieldType.NUMBER).description("공지사항 게시글 조회수"),
                                 fieldWithPath("data[].writer").type(JsonFieldType.STRING).description("공지사항 게시글 작성자"),
@@ -78,7 +78,7 @@ class NoticeBoardControllerDocsTest extends RestDocsSupport {
                         .id(1L)
                         .title("공지사항 제목")
                         .content("공지사항 내용")
-                        .category("공지사항 카테고리")
+                        .category("공지사항 분류")
                         .isImportant(true)
                         .views(0)
                         .writer("작성자")
@@ -122,8 +122,8 @@ class NoticeBoardControllerDocsTest extends RestDocsSupport {
                                 parameterWithName("endDate").description("조회 종료일")
                                         .attributes(field("constraints", "yyyy-MM-dd"))
                                         .optional(),
-                                parameterWithName("category").description("카테고리")
-                                        .attributes(field("constraints", "공지사항 카테고리"))
+                                parameterWithName("category").description("분류")
+                                        .attributes(field("constraints", "공지사항 분류"))
                                         .optional(),
                                 parameterWithName("searchText").description("검색어")
                                         .optional(),
@@ -154,7 +154,7 @@ class NoticeBoardControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.content[].id").type(JsonFieldType.NUMBER).description("공지사항 게시글 ID"),
                                 fieldWithPath("data.content[].title").type(JsonFieldType.STRING).description("공지사항 게시글 제목"),
                                 fieldWithPath("data.content[].content").type(JsonFieldType.STRING).description("공지사항 게시글 내용"),
-                                fieldWithPath("data.content[].category").type(JsonFieldType.STRING).description("공지사항 게시글 카테고리"),
+                                fieldWithPath("data.content[].category").type(JsonFieldType.STRING).description("공지사항 게시글 분류"),
                                 fieldWithPath("data.content[].isImportant").type(JsonFieldType.BOOLEAN).description("공지사항 게시글 중요 여부"),
                                 fieldWithPath("data.content[].views").type(JsonFieldType.NUMBER).description("공지사항 게시글 조회수"),
                                 fieldWithPath("data.content[].writer").type(JsonFieldType.STRING).description("공지사항 게시글 작성자"),
@@ -169,7 +169,7 @@ class NoticeBoardControllerDocsTest extends RestDocsSupport {
                         .id(1L)
                         .title("공지사항 제목")
                         .content("공지사항 내용")
-                        .category("공지사항 카테고리")
+                        .category("공지사항 분류")
                         .isImportant(false)
                         .views(0)
                         .writer("작성자")
@@ -188,7 +188,7 @@ class NoticeBoardControllerDocsTest extends RestDocsSupport {
                                 .id(1L)
                                 .title("공지사항 제목")
                                 .content("공지사항 내용")
-                                .category("공지사항 카테고리")
+                                .category("공지사항 분류")
                                 .isImportant(false)
                                 .views(0)
                                 .writer("작성자")
@@ -216,7 +216,7 @@ class NoticeBoardControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("공지사항 게시글 ID"),
                                 fieldWithPath("data.title").type(JsonFieldType.STRING).description("공지사항 게시글 제목"),
                                 fieldWithPath("data.content").type(JsonFieldType.STRING).description("공지사항 게시글 내용"),
-                                fieldWithPath("data.category").type(JsonFieldType.STRING).description("공지사항 게시글 카테고리"),
+                                fieldWithPath("data.category").type(JsonFieldType.STRING).description("공지사항 게시글 분류"),
                                 fieldWithPath("data.isImportant").type(JsonFieldType.BOOLEAN).description("공지사항 게시글 중요 여부"),
                                 fieldWithPath("data.views").type(JsonFieldType.NUMBER).description("공지사항 게시글 조회수"),
                                 fieldWithPath("data.writer").type(JsonFieldType.STRING).description("공지사항 게시글 작성자"),
@@ -233,7 +233,7 @@ class NoticeBoardControllerDocsTest extends RestDocsSupport {
 
         final PostRequest request = PostRequest.builder()
                 .title("공지사항 제목")
-                .category("공지사항 카테고리")
+                .category("공지사항 분류")
                 .content("공지사항 내용")
                 .isImportant(false)
                 .build();
@@ -260,8 +260,8 @@ class NoticeBoardControllerDocsTest extends RestDocsSupport {
                         , requestFields(
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("공지사항 제목")
                                         .attributes(field("constraints", "100자 이내")),
-                                fieldWithPath("category").type(JsonFieldType.STRING).description("공지사항 카테고리")
-                                        .attributes(field("constraints", "20자 이내, 공지사항 카테고리")),
+                                fieldWithPath("category").type(JsonFieldType.STRING).description("공지사항 분류")
+                                        .attributes(field("constraints", "20자 이내, 공지사항 분류")),
                                 fieldWithPath("content").type(JsonFieldType.STRING).description("공지사항 내용")
                                         .attributes(field("constraints", "4000자 이내")),
                                 fieldWithPath("isImportant").type(JsonFieldType.BOOLEAN).description("공지사항 중요 여부 (상단에 배치)")
@@ -283,7 +283,7 @@ class NoticeBoardControllerDocsTest extends RestDocsSupport {
 
         final PostRequest request = PostRequest.builder()
                 .title("수정된 공지사항 제목")
-                .category("수정된 공지사항 카테고리")
+                .category("수정된 공지사항 분류")
                 .content("수정된 공지사항 내용")
                 .isImportant(false)
                 .build();
@@ -313,8 +313,8 @@ class NoticeBoardControllerDocsTest extends RestDocsSupport {
                         , requestFields(
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("수정할 공지사항 제목")
                                         .attributes(field("constraints", "100자 이내")),
-                                fieldWithPath("category").type(JsonFieldType.STRING).description("수정할 공지사항 카테고리")
-                                        .attributes(field("constraints", "20자 이내, 공지사항 카테고리")),
+                                fieldWithPath("category").type(JsonFieldType.STRING).description("수정할 공지사항 분류")
+                                        .attributes(field("constraints", "20자 이내, 공지사항 분류")),
                                 fieldWithPath("content").type(JsonFieldType.STRING).description("수정할 공지사항 내용")
                                         .attributes(field("constraints", "4000자 이내")),
                                 fieldWithPath("isImportant").type(JsonFieldType.BOOLEAN).description("수정할 공지사항 중요 여부 (상단에 배치)")

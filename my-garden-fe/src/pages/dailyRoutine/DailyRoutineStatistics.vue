@@ -6,22 +6,48 @@ import {ref, watch} from "vue";
 import {getTargetDateTimeRange, getTodayDate} from "@/components/dailyRoutine/api/util.js";
 import {getDailyRoutineApi} from "@/components/dailyRoutine/api/api.js";
 
+/**
+ * 통계를 보여줄 기준 시작 날짜와 끝 날짜
+ */
 const inputDate = ref({
   start: getTodayDate(),
   end: getTodayDate()
 });
+
+/**
+ * 통계 데이터
+ */
 const statisticData = ref({});
-const MILLS_TO_HOURS = 3600000;
+
+/**
+ * 통계 데이터 로딩 여부
+ */
 const isLoaded = ref(false);
 
+/**
+ * 밀리세컨드를 시간으로 변환하기 위한 상수
+ */
+const MILLS_TO_HOURS = 3600000;
+
+/**
+ * 조회 날짜 변경
+ *
+ * @param date 변경할 날짜
+ */
 function updateSelectDate(date) {
   inputDate.value.start = date.start;
   inputDate.value.end = date.end;
 }
 
+/**
+ * 활동 데이터를 통계 데이터로 변환
+ *
+ * @param activities 활동 데이터
+ * @returns {[]} 통계 데이터
+ */
 function calculateActivities(activities) {
   const results = activities.reduce((acc, curr) => {
-    return calculateHourPerType(curr, acc);
+    return calculateHourPerType(acc, curr);
   }, {});
 
   // Calculate percentage of each type for each day and format hours
@@ -30,7 +56,14 @@ function calculateActivities(activities) {
   return convertObjectToArray(results);
 }
 
-function calculateHourPerType(curr, acc) {
+/**
+ * 활동 타입별 시간 계산
+ *
+ * @param acc 누적된 결과
+ * @param curr 현재 활동
+ * @returns {*} 계산된 결과
+ */
+function calculateHourPerType(acc, curr) {
   const date = curr.startDateTime.split('T')[0];
   const startTime = new Date(curr.startDateTime).getTime();
   const endTime = new Date(curr.endDateTime).getTime();
@@ -50,6 +83,11 @@ function calculateHourPerType(curr, acc) {
   return acc;
 }
 
+/**
+ * 활동 타입별 비율 계산
+ *
+ * @param results 통계 데이터
+ */
 function calculatePercentagePerType(results) {
   for (const date in results) {
     results[date].totalHours = parseFloat(results[date].totalHours.toFixed(2)); // Format totalHours to one decimal place
@@ -62,6 +100,12 @@ function calculatePercentagePerType(results) {
   }
 }
 
+/**
+ * 객체를 배열로 변환
+ *
+ * @param object 객체
+ * @returns {[]} 배열
+ */
 function convertObjectToArray(object) {
   const arrayOfObjects = [];
 
@@ -77,6 +121,9 @@ function convertObjectToArray(object) {
   return arrayOfObjects;
 }
 
+/**
+ * 날짜가 변경될 때마다 통계 데이터를 새로 가져온다.
+ */
 watch(() => inputDate.value, () => {
   const {targetStartDateTime} = getTargetDateTimeRange(inputDate.value.start);
   const {targetEndDateTime} = getTargetDateTimeRange(inputDate.value.end);

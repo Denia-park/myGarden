@@ -4,6 +4,11 @@ import {router} from "@/scripts/router.js";
 import {computed} from "vue";
 import {logoutApi} from "@/components/auth/logout/api/api.js";
 
+/**
+ * 페이지 이동
+ *
+ * @param route 이동할 페이지
+ */
 function useRoute(route) {
   closeHeader();
 
@@ -29,6 +34,9 @@ function useRoute(route) {
   }
 }
 
+/**
+ * 로그아웃
+ */
 function logout() {
   logoutApi()
       .then((msg) => {
@@ -42,15 +50,24 @@ function logout() {
       });
 }
 
+/**
+ * 홈으로 이동
+ */
 function goToHome() {
   closeHeader();
   router.push(homeUrl.value);
 }
 
+/**
+ * 홈 URL
+ */
 const homeUrl = computed(() => {
   return store.getters.getAccessToken ? '/daily-routine' : '/login';
 });
 
+/**
+ * 헤더 닫기
+ */
 const closeHeader = () => {
   const navbarHeader = document.getElementById('navbarHeader');
 

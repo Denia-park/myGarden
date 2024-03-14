@@ -10,6 +10,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+/**
+ * Https Configuration
+ * <br><br>
+ * - Https 설정
+ * - Profile이 local이 아닐 때만 동작
+ */
 @Profile("!local")
 @Configuration
 public class HttpsConfiguration {

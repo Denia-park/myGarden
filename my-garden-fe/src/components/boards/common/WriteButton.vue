@@ -16,6 +16,11 @@ const props = defineProps({
   }
 });
 
+/**
+ * 페이지 이동
+ *
+ * @param pageName 페이지 이름
+ */
 function goToPage(pageName) {
   router.push({
     name: pageName,

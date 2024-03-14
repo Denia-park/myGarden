@@ -67,7 +67,7 @@ class GetRequestTest {
     }
 
     @Test
-    @DisplayName("카테고리가 null일 때, 카테고리는 빈 문자열이다.")
+    @DisplayName("분류가 null일 때, 분류는 빈 문자열이다.")
     void searchConditionConstructor() {
         //given
         final String category = null;

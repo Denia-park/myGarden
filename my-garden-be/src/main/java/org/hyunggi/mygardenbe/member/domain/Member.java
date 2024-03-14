@@ -3,11 +3,29 @@ package org.hyunggi.mygardenbe.member.domain;
 import lombok.Getter;
 import org.hyunggi.mygardenbe.common.exception.BusinessException;
 
+/**
+ * 유저 Domain
+ */
 @Getter
 public class Member {
+    /**
+     * 유저 이메일
+     */
     private final String email;
+
+    /**
+     * 유저 비밀번호
+     */
     private final String password;
+
+    /**
+     * 유저 권한
+     */
     private final Role role;
+
+    /**
+     * 유저 활성화 여부
+     */
     private final boolean enabled;
 
     public Member(final String email, final String password) {
@@ -23,12 +41,24 @@ public class Member {
         this.enabled = enabled;
     }
 
+    /**
+     * 유저 생성 인자 유효성 검증
+     *
+     * @param email    이메일
+     * @param password 비밀번호
+     * @param role     권한
+     */
     private void validateConstructor(final String email, final String password, final Role role) {
         validateEmail(email);
         validatePassword(password);
         validateRole(role);
     }
 
+    /**
+     * 이메일 유효성 검증
+     *
+     * @param email 이메일
+     */
     private void validateEmail(final String email) {
         if (email == null || email.isEmpty()) {
             throw new BusinessException("이메일은 null이거나 비어있을 수 없습니다.");
@@ -44,6 +74,11 @@ public class Member {
         }
     }
 
+    /**
+     * 비밀번호 유효성 검증
+     *
+     * @param password 비밀번호
+     */
     private void validatePassword(final String password) {
         if (password == null || password.isEmpty()) {
             throw new BusinessException("비밀번호는 null이거나 비어있을 수 없습니다.");
@@ -62,6 +97,11 @@ public class Member {
         }
     }
 
+    /**
+     * 권한 유효성 검증
+     *
+     * @param role 권한
+     */
     private void validateRole(final Role role) {
         if (role == null) {
             throw new BusinessException("Role은 null이 될 수 없습니다.");

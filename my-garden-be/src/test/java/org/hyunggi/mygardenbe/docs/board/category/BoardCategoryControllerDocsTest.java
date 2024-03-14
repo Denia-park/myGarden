@@ -33,7 +33,7 @@ class BoardCategoryControllerDocsTest extends RestDocsSupport {
     }
 
     @Test
-    @DisplayName("카테고리 목록을 조회한다.")
+    @DisplayName("분류 목록을 조회한다.")
     void getCategories() throws Exception {
         //given
         BDDMockito.given(boardCategoryService.getCategories(any()))
@@ -68,9 +68,9 @@ class BoardCategoryControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("code").type(JsonFieldType.NUMBER).description("HTTP 상태 코드"),
                                 fieldWithPath("status").type(JsonFieldType.STRING).description("HTTP 상태"),
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
-                                fieldWithPath("data").type(JsonFieldType.ARRAY).description("데이터 (카테고리 목록)"),
-                                fieldWithPath("data[].code").type(JsonFieldType.STRING).description("카테고리 코드 (value)"),
-                                fieldWithPath("data[].text").type(JsonFieldType.STRING).description("카테고리 텍스트 (label)")
+                                fieldWithPath("data").type(JsonFieldType.ARRAY).description("데이터 (분류 목록)"),
+                                fieldWithPath("data[].code").type(JsonFieldType.STRING).description("분류 코드 (value)"),
+                                fieldWithPath("data[].text").type(JsonFieldType.STRING).description("분류 텍스트 (label)")
                         )
                 ));
     }

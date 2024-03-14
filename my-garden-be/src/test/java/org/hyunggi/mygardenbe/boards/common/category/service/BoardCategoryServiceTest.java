@@ -26,7 +26,7 @@ class BoardCategoryServiceTest extends IntegrationTestSupport {
     private BoardCategoryRepository boardCategoryRepository;
 
     @Test
-    @DisplayName("공지사항 카테고리 목록을 조회한다.")
+    @DisplayName("공지사항 분류 목록을 조회한다.")
     void getCategories() {
         //given
         BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("project", "프로젝트", "notice");
@@ -69,7 +69,7 @@ class BoardCategoryServiceTest extends IntegrationTestSupport {
 
     @ParameterizedTest
     @NullAndEmptySource
-    @DisplayName("해당 하는 카테고리가 Null이거나 빈 문자열이면 예외를 발생시킨다.")
+    @DisplayName("해당 하는 분류가 Null이거나 빈 문자열이면 예외를 발생시킨다.")
     void validateCategory(final String category) {
         //given
         BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("project", "프로젝트", "notice");
@@ -83,7 +83,7 @@ class BoardCategoryServiceTest extends IntegrationTestSupport {
     }
 
     @Test
-    @DisplayName("해당 하는 카테고리가 존재하지 않으면 예외를 발생시킨다.")
+    @DisplayName("해당 하는 분류가 존재하지 않으면 예외를 발생시킨다.")
     void validateCategoryWithBoardType() {
         //given
         BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("project", "프로젝트", "notice");

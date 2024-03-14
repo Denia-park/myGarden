@@ -3,6 +3,9 @@ import {router} from "@/scripts/router.js";
 import {ref} from "vue";
 import {signupApi} from "@/components/auth/signup/api/api.js";
 
+/**
+ * 회원가입 폼
+ */
 const form = ref({
   email: '',
   password: '',
@@ -12,10 +15,16 @@ const form = ref({
   passwordCheckValid: false,
 })
 
+/**
+ * 로그인 페이지로 이동
+ */
 function goToLogin() {
   router.push('/login');
 }
 
+/**
+ * 회원가입 유효성 검사
+ */
 function validateSignup() {
   if (!form.value.emailValid) {
     alert('이메일를 확인해주세요.');
@@ -31,6 +40,9 @@ function validateSignup() {
   return true;
 }
 
+/**
+ * 회원가입
+ */
 function signup() {
   const {email, password} = form.value;
 
@@ -48,16 +60,25 @@ function signup() {
       })
 }
 
+/**
+ * 이메일 유효성 검사
+ */
 function validateEmail() {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
   form.value.emailValid = emailRegex.test(form.value.email);
 }
 
+/**
+ * 비밀번호 유효성 검사
+ */
 function validatePassword() {
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@!%*#?&])[A-Za-z\d$@!%*#?&]{8,20}$/;
   form.value.passwordValid = passwordRegex.test(form.value.password);
 }
 
+/**
+ * 비밀번호 확인 유효성 검사
+ */
 function validatePasswordCheck() {
   form.value.passwordCheckValid = form.value.password === form.value.passwordCheck;
 }

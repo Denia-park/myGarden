@@ -7,6 +7,9 @@ const props = defineProps({
   content: String
 });
 
+/**
+ * 일과 내용
+ */
 const content = ref(props.content);
 
 const emit = defineEmits(['changeContent', 'submit'])

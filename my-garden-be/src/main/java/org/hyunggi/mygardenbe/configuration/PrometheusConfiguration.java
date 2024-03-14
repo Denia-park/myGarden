@@ -6,6 +6,12 @@ import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCusto
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Prometheus Configuration
+ * <br><br>
+ * - Prometheus 설정
+ * - spring.security, spring.data.repository로 시작하는 metric은 제외
+ */
 @Configuration
 public class PrometheusConfiguration {
     @Bean

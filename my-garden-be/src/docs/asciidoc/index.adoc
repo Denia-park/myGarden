@@ -26,7 +26,7 @@ include::dailyroutine/put.adoc[]
 include::dailyroutine/delete.adoc[]
 
 [[board-category]]
-== Board Category [게시판 카테고리]
+== Board Category [게시판 분류]
 
 include::board/category/getList.adoc[]
 

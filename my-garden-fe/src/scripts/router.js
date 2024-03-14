@@ -12,6 +12,9 @@ import LearnBoardView from "@/pages/boards/learn/LearnBoardView.vue";
 import LearnBoardWrite from "@/pages/boards/learn/LearnBoardWrite.vue";
 import Statistics from "@/pages/dailyRoutine/DailyRoutineStatistics.vue";
 
+/**
+ * 라우터 설정
+ */
 const routes = [
     {path: '/login', component: Login},
     {path: '/signup', component: SignUp},
@@ -56,10 +59,24 @@ export const router = createRouter({
     routes
 })
 
+/**
+ * 인증을 위한 권한 체크 함수
+ *
+ * @param permitRoles 허용된 권한 목록
+ * @param authenticationState 인증 상태
+ * @returns {boolean} 권한이 없는지 여부
+ */
 function isNotAuthorized(permitRoles, authenticationState) {
     return !isAuthorized(permitRoles, authenticationState);
 }
 
+/**
+ * 인증을 위한 권한 체크 함수
+ *
+ * @param permitRoles 허용된 권한 목록
+ * @param authenticationState 인증 상태
+ * @returns {boolean} 권한이 있는지 여부
+ */
 function isAuthorized(permitRoles, authenticationState) {
     for (const permitRole of permitRoles) {
         if (authenticationState?.roles?.includes(permitRole)) {
@@ -70,6 +87,12 @@ function isAuthorized(permitRoles, authenticationState) {
     return false;
 }
 
+/**
+ * 라우터 이동 전에 실행되는 함수 <br>
+ * - 로그인 및 권한에 맞춰서 페이지 이동을 제어한다.
+ *
+ * @param router 라우터
+ */
 const routerBeforeEach = (router) => {
     router.beforeEach((to, from, next) => {
         // Token 값을 기반으로 account의 roles를 초기화
