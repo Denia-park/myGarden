@@ -1,5 +1,11 @@
 import axios from "axios";
 
+/**
+ * TIL 목록 조회 API
+ *
+ * @param parameters 조회 파라미터
+ * @returns {Promise<axios.AxiosResponse<any> | void>} 성공 시 TIL 목록, 실패 시 alert
+ */
 export function getLearnBoardListApi(parameters) {
     let queryParameter = '';
     if (parameters) {
@@ -17,6 +23,12 @@ export function getLearnBoardListApi(parameters) {
         });
 }
 
+/**
+ * TIL 분류 목록 조회 API
+ *
+ * @param boardType 게시판 타입
+ * @returns {Promise<axios.AxiosResponse<any> | void>} 성공 시 TIL 분류 목록, 실패 시 alert
+ */
 export function getLearnBoardCategoryApi(boardType) {
     return axios.get(`/api/boards/categories?boardType=${boardType}`)
         .then(({data}) => {
@@ -27,6 +39,12 @@ export function getLearnBoardCategoryApi(boardType) {
         });
 }
 
+/**
+ * TIL 상세 조회 API
+ *
+ * @param boardId 게시글 ID
+ * @returns {Promise<axios.AxiosResponse<any> | void>} 성공 시 TIL 상세 내용, 실패 시 alert
+ */
 export function getLearnBoardViewApi(boardId) {
     return axios.get(`/api/boards/learn/${boardId}`)
         .then(({data}) => {
@@ -37,6 +55,12 @@ export function getLearnBoardViewApi(boardId) {
         });
 }
 
+/**
+ * TIL 삭제 API
+ *
+ * @param boardId 게시글 ID
+ * @returns {Promise<axios.AxiosResponse<any> | void>} 성공 시 '삭제한 게시글 ID', 실패 시 alert
+ */
 export function deleteLearnBoardApi(boardId) {
     return axios.delete(`/api/boards/learn/${boardId}`)
         .then(({data}) => {

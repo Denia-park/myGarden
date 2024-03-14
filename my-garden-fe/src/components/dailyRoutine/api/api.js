@@ -5,6 +5,13 @@ import {
     updateLastStartDateTime
 } from "@/components/dailyRoutine/api/util.js";
 
+/**
+ * 데일리 루틴 목록 조회 API
+ *
+ * @param startDateTime 조회 시작 일자
+ * @param endDateTime 조회 종료 일자
+ * @returns {Promise<{allDateTimeDataArray: *} | void>} 성공 시 데일리 루틴 목록, 실패 시 alert
+ */
 export function getDailyRoutineApi(startDateTime, endDateTime) {
     return axios.get(`/api/daily-routine?startDateTime=${startDateTime}&endDateTime=${endDateTime}`)
         .then(({data}) => {
@@ -24,7 +31,14 @@ export function getDailyRoutineApi(startDateTime, endDateTime) {
         });
 }
 
-
+/**
+ * 데일리 루틴 등록 API
+ *
+ * @param startDate 시작 일자
+ * @param endDate 종료 일자
+ * @param routineType 루틴 타입
+ * @param content 루틴 내용
+ */
 export function postDailyRoutineApi(startDate, endDate, routineType, content) {
     axios.post('/api/daily-routine', {
         startDateTime: startDate,
@@ -42,6 +56,15 @@ export function postDailyRoutineApi(startDate, endDate, routineType, content) {
         });
 }
 
+/**
+ * 데일리 루틴 수정 API
+ *
+ * @param id 수정할 데일리 루틴 ID
+ * @param startDate 시작 일자
+ * @param endDate 종료 일자
+ * @param routineType 루틴 타입
+ * @param content 루틴 내용
+ */
 export function updateDailyRoutineApi(id, startDate, endDate, routineType, content) {
     axios.put(`/api/daily-routine/${id}`, {
         startDateTime: startDate,
@@ -62,6 +85,11 @@ export function updateDailyRoutineApi(id, startDate, endDate, routineType, conte
         });
 }
 
+/**
+ * 데일리 루틴 삭제 API
+ *
+ * @param id 삭제할 데일리 루틴 ID
+ */
 export function deleteDailyRoutineApi(id) {
     axios.delete(`/api/daily-routine/${id}`)
         .then(() => {
@@ -70,6 +98,5 @@ export function deleteDailyRoutineApi(id) {
         })
         .catch(error => {
             alert("삭제에 실패했습니다.");
-
         });
 }

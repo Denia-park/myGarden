@@ -5,12 +5,27 @@ import {store} from "@/scripts/store.js";
 import ScheduleSection from "@/components/dailyRoutine/draw/ScheduleSection.vue";
 import {extractTime, getTargetDateTimeRange, timeToMinutes} from "@/components/dailyRoutine/api/util.js";
 
+/**
+ * 정오 문자열
+ */
 const NOON_STRING = '12:00';
+/**
+ * 정오 시간을 분으로 변환
+ */
 const noonMin = timeToMinutes(NOON_STRING);
 
+/**
+ * 오전/오후 스케줄
+ */
 const morningSchedule = ref([]);
 const afternoonSchedule = ref([]);
 
+/**
+ * 루틴 데이터를 시간 블록 배열로 변환
+ *
+ * @param schedule 루틴 데이터
+ * @returns {[]} 시간 블록 배열
+ */
 function convertRoutineToTimeBlockArray(schedule) {
   const tempTimeBlockArray = [];
 
@@ -40,6 +55,15 @@ function convertRoutineToTimeBlockArray(schedule) {
   return tempTimeBlockArray;
 }
 
+/**
+ * 시간 블록 생성
+ *
+ * @param block 루틴 데이터
+ * @param startTime 시작 시간
+ * @param endTime 종료 시간
+ * @param partOfDay 오전/오후
+ * @returns {{id: number, routineType: string, color: string, routineDescription: string, startDate: string, endDate: string, displayStartTime: string, displayEndTime: string, totalMinutes: number}} 시간 블록
+ */
 function createTimeBlock(block, startTime, endTime, partOfDay) {
   let startTimeMin = timeToMinutes(startTime);
   let endTimeMin = timeToMinutes(endTime);

@@ -15,6 +15,9 @@ const props = defineProps({
 
 const emits = defineEmits(["search"]);
 
+/**
+ * 검색에 필요한 데이터
+ */
 const startDate = ref(props.queryParameter.startDate);
 const endDate = ref(props.queryParameter.endDate);
 const category = ref(props.queryParameter.category);

@@ -35,12 +35,21 @@ const props = defineProps({
 
 const emit = defineEmits(["saveBoard", "goToBackPage"]);
 
+/**
+ * 게시글 내용
+ */
 const content = ref('');
 
+/**
+ * 이전 페이지로 이동
+ */
 function goToBackPage() {
   emit('goToBackPage', props.boardRouteName, props.boardId)
 }
 
+/**
+ * 게시글 저장
+ */
 function save() {
   const category = document.getElementById("category").value;
   const title = document.getElementById("board_writer").value;

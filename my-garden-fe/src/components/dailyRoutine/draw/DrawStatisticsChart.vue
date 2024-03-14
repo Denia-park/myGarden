@@ -5,10 +5,24 @@ import {Chart} from "chart.js/auto";
 import {store} from "@/scripts/store.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
+/**
+ * 하루 일과에서 사용하는 색상 맵
+ */
 const colorMap = store.getters.getColors;
+
+/**
+ * 현재 보고 있는 날짜
+ */
 let viewDate = store.getters.getViewDate;
+
+/**
+ * 모든 루틴의 총 시간 합
+ */
 let allTotalMinutesSum = 0;
 
+/**
+ * Chart.js의 옵션
+ */
 const options = {
   responsive: true,
   maintainAspectRatio: false,
@@ -66,6 +80,9 @@ const options = {
   }
 };
 
+/**
+ * Chart.js의 데이터
+ */
 const data = {
   labels: [],
   datasets: [{
@@ -74,6 +91,9 @@ const data = {
   }]
 };
 
+/**
+ * Chart.js의 설정
+ */
 const config = {
   type: 'pie',
   plugins: [ChartDataLabels],
@@ -81,15 +101,14 @@ const config = {
   options: options
 };
 
+/**
+ * Chart.js 객체
+ */
 let myChart;
 
-onMounted(() => {
-  myChart = new Chart(
-      document.getElementById('chartCanvas'),
-      config
-  );
-});
-
+/**
+ * Chart.js의 DataSet을 업데이트
+ */
 function updateDataSetFrom(statisticData) {
   // 기존에 존재하는 데이터를 모두 삭제
   myChart.data.labels.length = 0;
@@ -117,6 +136,13 @@ function updateDataSetFrom(statisticData) {
   myChart.options.plugins.title.text = `일과 통계 [${viewDate}]`;
 }
 
+/**
+ * 시간 블록 배열에서 통계 데이터를 계산
+ *
+ * @param timeBlockArray 시간 블록 배열
+ * @param statisticData 통계 데이터
+ * @returns {number} 총 시간 합
+ */
 function calculateStatisticDataFromTimeBlockArray(timeBlockArray, statisticData) {
   let tempSumTotalMinutes = 0;
 
@@ -132,6 +158,13 @@ function calculateStatisticDataFromTimeBlockArray(timeBlockArray, statisticData)
 
   return tempSumTotalMinutes;
 }
+
+onMounted(() => {
+  myChart = new Chart(
+      document.getElementById('chartCanvas'),
+      config
+  );
+});
 
 watch(() => store.getters.getTimeBlockArray, (timeBlockArray) => {
   const statisticData = {};

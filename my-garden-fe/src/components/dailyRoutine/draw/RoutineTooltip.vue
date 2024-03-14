@@ -28,10 +28,16 @@ const props = defineProps({
   },
 });
 
+/**
+ * tooltip의 ref
+ */
 const tooltipRef = ref(null);
 const tooltipTextRef = ref(null);
 const tooltipHeightOffset = ref(0);
 
+/**
+ * tooltip의 class를 업데이트한다.
+ */
 function updateTooltipClass() {
   return {
     'tooltip-text': true,
@@ -40,16 +46,25 @@ function updateTooltipClass() {
   };
 }
 
+/**
+ * tooltip의 visibility를 업데이트한다.
+ */
 function updateVisible() {
   return {
     visibility: isTooltipVisible() ? 'visible' : 'hidden',
   };
 }
 
+/**
+ * tooltip이 보여지는지 여부를 반환한다.
+ */
 function isTooltipVisible() {
   return props.timeBlockId === props.hoverTimeBlockId;
 }
 
+/**
+ * tooltip의 위치를 계산한다.
+ */
 function calculateTooltipOffset() {
   if (!tooltipRef.value) return;
 
