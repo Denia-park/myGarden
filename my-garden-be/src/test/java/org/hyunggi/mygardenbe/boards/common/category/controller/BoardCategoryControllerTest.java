@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class BoardCategoryControllerTest extends ControllerTestSupport {
     @Test
-    @DisplayName("공지사항 카테고리 목록을 조회한다.")
+    @DisplayName("공지사항 분류 목록을 조회한다.")
     void getCategories() throws Exception {
         //given
         final List<BoardCategoryResponse> categories = List.of(

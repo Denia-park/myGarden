@@ -74,8 +74,8 @@ class LearnBoardControllerDocsTest extends RestDocsSupport {
                                 parameterWithName("endDate").description("조회 종료일")
                                         .attributes(field("constraints", "yyyy-MM-dd"))
                                         .optional(),
-                                parameterWithName("category").description("카테고리")
-                                        .attributes(field("constraints", "TIL 카테고리"))
+                                parameterWithName("category").description("분류")
+                                        .attributes(field("constraints", "TIL 분류"))
                                         .optional(),
                                 parameterWithName("searchText").description("검색어")
                                         .optional(),
@@ -106,7 +106,7 @@ class LearnBoardControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.content[].id").type(JsonFieldType.NUMBER).description("TIL 게시글 ID"),
                                 fieldWithPath("data.content[].title").type(JsonFieldType.STRING).description("TIL 게시글 제목"),
                                 fieldWithPath("data.content[].content").type(JsonFieldType.STRING).description("TIL 게시글 내용"),
-                                fieldWithPath("data.content[].category").type(JsonFieldType.STRING).description("TIL 게시글 카테고리"),
+                                fieldWithPath("data.content[].category").type(JsonFieldType.STRING).description("TIL 게시글 분류"),
                                 fieldWithPath("data.content[].views").type(JsonFieldType.NUMBER).description("TIL 게시글 조회수"),
                                 fieldWithPath("data.content[].writer").type(JsonFieldType.STRING).description("TIL 게시글 작성자"),
                                 fieldWithPath("data.content[].writtenAt").type(JsonFieldType.STRING).description("TIL 게시글 작성일시")
@@ -120,7 +120,7 @@ class LearnBoardControllerDocsTest extends RestDocsSupport {
                         .id(1L)
                         .title("TIL 제목")
                         .content("TIL 내용")
-                        .category("TIL 카테고리")
+                        .category("TIL 분류")
                         .views(0)
                         .writer("작성자")
                         .writtenAt("2024-02-01 03:00:00")
@@ -138,7 +138,7 @@ class LearnBoardControllerDocsTest extends RestDocsSupport {
                                 .id(1L)
                                 .title("TIL 제목")
                                 .content("TIL 내용")
-                                .category("TIL 카테고리")
+                                .category("TIL 분류")
                                 .views(0)
                                 .writer("작성자")
                                 .writtenAt("2024-02-01 03:00:00")
@@ -165,7 +165,7 @@ class LearnBoardControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("TIL 게시글 ID"),
                                 fieldWithPath("data.title").type(JsonFieldType.STRING).description("TIL 게시글 제목"),
                                 fieldWithPath("data.content").type(JsonFieldType.STRING).description("TIL 게시글 내용"),
-                                fieldWithPath("data.category").type(JsonFieldType.STRING).description("TIL 게시글 카테고리"),
+                                fieldWithPath("data.category").type(JsonFieldType.STRING).description("TIL 게시글 분류"),
                                 fieldWithPath("data.views").type(JsonFieldType.NUMBER).description("TIL 게시글 조회수"),
                                 fieldWithPath("data.writer").type(JsonFieldType.STRING).description("TIL 게시글 작성자"),
                                 fieldWithPath("data.writtenAt").type(JsonFieldType.STRING).description("TIL 게시글 작성일시")
@@ -181,7 +181,7 @@ class LearnBoardControllerDocsTest extends RestDocsSupport {
 
         final PostRequest request = PostRequest.builder()
                 .title("TIL 제목")
-                .category("TIL 카테고리")
+                .category("TIL 분류")
                 .content("TIL 내용")
                 .build();
 
@@ -207,8 +207,8 @@ class LearnBoardControllerDocsTest extends RestDocsSupport {
                         , requestFields(
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("TIL 제목")
                                         .attributes(field("constraints", "100자 이내")),
-                                fieldWithPath("category").type(JsonFieldType.STRING).description("TIL 카테고리")
-                                        .attributes(field("constraints", "20자 이내, TIL 카테고리")),
+                                fieldWithPath("category").type(JsonFieldType.STRING).description("TIL 분류")
+                                        .attributes(field("constraints", "20자 이내, TIL 분류")),
                                 fieldWithPath("content").type(JsonFieldType.STRING).description("TIL 내용")
                                         .attributes(field("constraints", "4000자 이내"))
                         )
@@ -229,7 +229,7 @@ class LearnBoardControllerDocsTest extends RestDocsSupport {
 
         final PostRequest request = PostRequest.builder()
                 .title("수정된 TIL 제목")
-                .category("수정된 TIL 카테고리")
+                .category("수정된 TIL 분류")
                 .content("수정된 TIL 내용")
                 .build();
 
@@ -258,8 +258,8 @@ class LearnBoardControllerDocsTest extends RestDocsSupport {
                         , requestFields(
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("수정할 TIL 제목")
                                         .attributes(field("constraints", "100자 이내")),
-                                fieldWithPath("category").type(JsonFieldType.STRING).description("수정할 TIL 카테고리")
-                                        .attributes(field("constraints", "20자 이내, TIL 카테고리")),
+                                fieldWithPath("category").type(JsonFieldType.STRING).description("수정할 TIL 분류")
+                                        .attributes(field("constraints", "20자 이내, TIL 분류")),
                                 fieldWithPath("content").type(JsonFieldType.STRING).description("수정할 TIL 내용")
                                         .attributes(field("constraints", "4000자 이내"))
                         )

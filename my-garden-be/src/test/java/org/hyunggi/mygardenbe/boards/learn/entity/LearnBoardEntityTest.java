@@ -83,7 +83,7 @@ class LearnBoardEntityTest {
         // when, then
         assertThatThrownBy(() -> LearnBoardEntity.of(title, content, category, writer, writtenAt, memberId))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("카테고리는 null이 될 수 없고 빈 문자열이 될 수 없습니다.");
+                .hasMessageContaining("분류는 null이 될 수 없고 빈 문자열이 될 수 없습니다.");
     }
 
     @ParameterizedTest

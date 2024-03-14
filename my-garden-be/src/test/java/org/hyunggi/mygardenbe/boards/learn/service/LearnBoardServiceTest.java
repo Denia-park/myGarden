@@ -101,7 +101,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
     }
 
     @Test
-    @DisplayName("category가 있고, searchText가 없으면, 기간 내의 해당 카테고리의 TIL을 조회할 수 있다.")
+    @DisplayName("category가 있고, searchText가 없으면, 기간 내의 해당 분류의 TIL을 조회할 수 있다.")
     void getLearnBoardsWithCategory() {
         // given
         final LocalDate startDate = LocalDate.of(2024, 1, 26);
@@ -160,7 +160,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
     }
 
     @Test
-    @DisplayName("category가 있고, searchText가 있으면, 기간 내의 해당 카테고리의 검색어가 포함된 TIL을 조회할 수 있다.")
+    @DisplayName("category가 있고, searchText가 있으면, 기간 내의 해당 분류의 검색어가 포함된 TIL을 조회할 수 있다.")
     void getLearnBoardsWithCategoryAndSearchText() {
         // given
         final LocalDate startDate = LocalDate.of(2024, 1, 26);
@@ -249,7 +249,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
         // when,then
         assertThatThrownBy(() -> learnBoardService.getLearnBoards(startDate, endDate, category, searchText, pageable))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("카테고리는 null이 될 수 없습니다.");
+                .hasMessage("분류는 null이 될 수 없습니다.");
     }
 
     @Test

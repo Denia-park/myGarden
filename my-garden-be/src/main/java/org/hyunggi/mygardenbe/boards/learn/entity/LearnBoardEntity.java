@@ -82,7 +82,7 @@ public class LearnBoardEntity extends BaseEntity {
 
     private static void validateCategory(final String category) {
         if (category == null || category.isBlank()) {
-            throw new IllegalArgumentException("카테고리는 null이 될 수 없고 빈 문자열이 될 수 없습니다.");
+            throw new IllegalArgumentException("분류는 null이 될 수 없고 빈 문자열이 될 수 없습니다.");
         }
     }
 

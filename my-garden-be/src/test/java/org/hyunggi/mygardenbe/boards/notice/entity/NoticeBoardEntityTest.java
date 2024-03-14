@@ -89,7 +89,7 @@ class NoticeBoardEntityTest {
         // when, then
         assertThatThrownBy(() -> NoticeBoardEntity.of(title, content, category, isImportant, writer, writtenAt, memberId))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("카테고리는 null이 될 수 없고 빈 문자열이 될 수 없습니다.");
+                .hasMessageContaining("분류는 null이 될 수 없고 빈 문자열이 될 수 없습니다.");
     }
 
     @Test
@@ -235,7 +235,7 @@ class NoticeBoardEntityTest {
     void isWriter() {
         // given
         final Long memberId = 1L;
-        
+
         final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of("title", "content", "category", false, "writer", LocalDateTime.now(), memberId);
 
         // when, then

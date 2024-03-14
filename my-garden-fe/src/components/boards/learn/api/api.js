@@ -23,7 +23,7 @@ export function getLearnBoardCategoryApi(boardType) {
             return data.data;
         })
         .catch(error => {
-            alert('TIL 카테고리를 불러오는데 실패했습니다.')
+            alert('TIL 분류를 불러오는데 실패했습니다.')
         });
 }
 

@@ -33,7 +33,7 @@ export function getNoticeBoardCategoryApi(boardType) {
             return data.data;
         })
         .catch(error => {
-            alert('공지사항 카테고리를 불러오는데 실패했습니다.')
+            alert('공지사항 분류를 불러오는데 실패했습니다.')
         });
 }
 

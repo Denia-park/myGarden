@@ -122,7 +122,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     }
 
     @Test
-    @DisplayName("category가 있고, searchText가 없으면, 기간 내의 해당 카테고리의 공지사항을 조회할 수 있다.")
+    @DisplayName("category가 있고, searchText가 없으면, 기간 내의 해당 분류의 공지사항을 조회할 수 있다.")
     void getNoticeBoardsWithCategory() {
         // given
         final LocalDate startDate = LocalDate.of(2024, 1, 26);
@@ -181,7 +181,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     }
 
     @Test
-    @DisplayName("category가 있고, searchText가 있으면, 기간 내의 해당 카테고리의 검색어가 포함된 공지사항을 조회할 수 있다.")
+    @DisplayName("category가 있고, searchText가 있으면, 기간 내의 해당 분류의 검색어가 포함된 공지사항을 조회할 수 있다.")
     void getNoticeBoardsWithCategoryAndSearchText() {
         // given
         final LocalDate startDate = LocalDate.of(2024, 1, 26);
@@ -270,7 +270,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
         // when,then
         assertThatThrownBy(() -> noticeBoardService.getNoticeBoards(startDate, endDate, category, searchText, pageable))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("카테고리는 null이 될 수 없습니다.");
+                .hasMessage("분류는 null이 될 수 없습니다.");
     }
 
     @Test

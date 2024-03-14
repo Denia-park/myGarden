@@ -88,7 +88,7 @@ class NoticeBoardRepositoryTest extends IntegrationTestSupport {
     }
 
     @Test
-    @DisplayName("해당 날짜에 해당하면서 카테고리가 같은 공지사항을 조회할 수 있다.")
+    @DisplayName("해당 날짜에 해당하면서 분류가 같은 공지사항을 조회할 수 있다.")
     void searchNoticeBoards_with_writtenAt_and_category() {
         //given
         noticeBoardRepository.save(buildNoticeBoardWith("title", "content", "category1"));
@@ -144,7 +144,7 @@ class NoticeBoardRepositoryTest extends IntegrationTestSupport {
     }
 
     @Test
-    @DisplayName("해당 날짜에 해당하면서 카테고리가 같고 제목 또는 내용에 검색어가 포함된 공지사항을 조회할 수 있다.")
+    @DisplayName("해당 날짜에 해당하면서 분류가 같고 제목 또는 내용에 검색어가 포함된 공지사항을 조회할 수 있다.")
     void searchNoticeBoards_with_writtenAt_and_category_and_searchText() {
         //given
         noticeBoardRepository.save(buildNoticeBoardWith("title11", "content", "category1"));

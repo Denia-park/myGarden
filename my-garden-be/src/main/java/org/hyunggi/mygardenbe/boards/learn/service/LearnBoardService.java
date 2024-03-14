@@ -38,7 +38,7 @@ public class LearnBoardService {
         Assert.isTrue(endDate != null, "종료일은 null이 될 수 없습니다.");
         Assert.isTrue(startDate.isEqual(endDate) || startDate.isBefore(endDate), "시작일은 종료일보다 느릴 수 없습니다.");
 
-        Assert.isTrue(category != null, "카테고리는 null이 될 수 없습니다.");
+        Assert.isTrue(category != null, "분류는 null이 될 수 없습니다.");
         Assert.isTrue(searchText != null, "검색어는 null이 될 수 없습니다.");
         Assert.isTrue(pageable != null, "페이징 정보는 null이 될 수 없습니다.");
     }
