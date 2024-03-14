@@ -4,6 +4,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
+/**
+ * TIL 게시글 작성시에 사용되는 Request
+ */
 @Builder
 public record PostRequest(
         @NotBlank(message = "제목은 비어있을 수 없습니다.")
