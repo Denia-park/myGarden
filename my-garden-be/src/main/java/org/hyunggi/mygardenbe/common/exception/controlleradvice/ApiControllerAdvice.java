@@ -10,10 +10,20 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * API Controller Advice
+ * <br><br>
+ * - API Controller에서 발생하는 예외를 처리하는 Advice
+ */
 @RestControllerAdvice
 @Slf4j
 public class ApiControllerAdvice {
-
+    /**
+     * BindException 예외 처리
+     *
+     * @param e BindException
+     * @return ApiResponse
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
     public ApiResponse<Object> bindException(final BindException e) {
@@ -27,6 +37,12 @@ public class ApiControllerAdvice {
         );
     }
 
+    /**
+     * EntityNotFoundException 예외 처리
+     *
+     * @param e EntityNotFoundException
+     * @return ApiResponse
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(EntityNotFoundException.class)
     public ApiResponse<Object> entityNotFoundException(final EntityNotFoundException e) {
@@ -40,6 +56,12 @@ public class ApiControllerAdvice {
         );
     }
 
+    /**
+     * IllegalArgumentException 예외 처리
+     *
+     * @param e IllegalArgumentException
+     * @return ApiResponse
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException.class)
     public ApiResponse<Object> illegalArgumentException(final IllegalArgumentException e) {
@@ -53,6 +75,12 @@ public class ApiControllerAdvice {
         );
     }
 
+    /**
+     * BusinessException 예외 처리
+     *
+     * @param e BusinessException
+     * @return ApiResponse
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BusinessException.class)
     public ApiResponse<Object> businessException(final BusinessException e) {

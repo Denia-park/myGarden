@@ -16,13 +16,29 @@ import java.io.StringWriter;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Server Error Detect Controller Advice
+ * <br><br>
+ * - 서버 에러 발생 시 Slack으로 알림을 보내는 Controller Advice
+ * - Profile이 prod일 때만 동작
+ */
 @Profile("prod")
 @RequiredArgsConstructor
 @RestControllerAdvice
 @Slf4j
 public class ServerErrorDetectControllerAdvice {
+    /**
+     * Slack API Bean
+     */
     private final SlackApi slackApi;
 
+    /**
+     * Exception 발생 시 Slack으로 알림을 보냄
+     *
+     * @param req HttpServletRequest
+     * @param e   Exception
+     * @throws Exception Exception
+     */
     @ExceptionHandler(Exception.class)
     public void handleException(final HttpServletRequest req, final Exception e) throws Exception {
         log.error("Server Error : {}", e.getMessage(), e);
@@ -31,6 +47,12 @@ public class ServerErrorDetectControllerAdvice {
         throw e;
     }
 
+    /**
+     * Slack Message 생성
+     *
+     * @param slackAttachment Slack Attachment
+     * @return Slack Message
+     */
     private SlackMessage buildSlackMessage(final SlackAttachment slackAttachment) {
         final SlackMessage slackMessage = new SlackMessage();
 
@@ -42,6 +64,13 @@ public class ServerErrorDetectControllerAdvice {
         return slackMessage;
     }
 
+    /**
+     * Slack Attachment 생성
+     *
+     * @param req HttpServletRequest
+     * @param e   Exception
+     * @return Slack Attachment
+     */
     private SlackAttachment buildSlackAttachment(final HttpServletRequest req, final Exception e) {
         final SlackAttachment slackAttachment = new SlackAttachment();
 
@@ -56,6 +85,12 @@ public class ServerErrorDetectControllerAdvice {
         return slackAttachment;
     }
 
+    /**
+     * Exception Stack Trace를 String으로 변환
+     *
+     * @param e Exception
+     * @return Stack Trace
+     */
     private String getStackTrace(final Exception e) {
         StringWriter sw = new StringWriter();
         e.printStackTrace(new PrintWriter(sw));
@@ -63,6 +98,12 @@ public class ServerErrorDetectControllerAdvice {
         return sw.toString();
     }
 
+    /**
+     * Slack Attachment Field 추가
+     *
+     * @param req HttpServletRequest
+     * @return Slack Attachment Field
+     */
     private List<SlackField> addField(final HttpServletRequest req) {
         return List.of(
                 new SlackField().setTitle("Request URL").setValue(req.getRequestURL().toString()),
