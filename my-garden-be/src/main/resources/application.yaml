@@ -1,8 +1,10 @@
+# default profile을 local로 설정
 spring:
   profiles:
     default: local
 
 ---
+# local profile 설정
 
 spring:
   config:
@@ -50,6 +52,8 @@ management:
     port: 9089 # Actuator 엔드포인트가 서비스될 서버의 포트
 
 ---
+# prod profile 설정
+
 application:
   security:
     jwt:
@@ -58,6 +62,7 @@ application:
       refresh-token:
         expiration: ${jwt.refresh-expiration}
 
+# AWS Parameter Store 설정
 config:
   type: aws-parameterstore:/config/myGarden/
 
@@ -76,6 +81,7 @@ spring:
     username: ${jdbc.username}
     password: ${jdbc.password}
 
+# SSL 설정
 server:
   port: 443
   ssl:
@@ -86,11 +92,13 @@ server:
     mbeanregistry:
       enabled: true
 
+# Actuator 설정
 actuator:
   url: ${actuator-param.url}
   port: ${actuator-param.port}
   email: ${actuator-param.email}
 
+# Actuator 엔드포인트를 외부에 노출
 management:
   endpoints:
     web:
@@ -100,6 +108,7 @@ management:
   server:
     port: ${actuator.port}
 
+# Slack 설정
 my-garden:
   slack:
     incoming-webhook-token: ${slack-incoming-webhook.url}
