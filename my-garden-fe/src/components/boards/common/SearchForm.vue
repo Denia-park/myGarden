@@ -27,6 +27,9 @@ const pageSize = ref(props.queryParameter.pageSize);
 const sort = ref(props.queryParameter.sort);
 const order = ref(props.queryParameter.order);
 
+/**
+ * 검색
+ */
 function search() {
   emits("search", {
     startDate: startDate.value,
@@ -40,6 +43,9 @@ function search() {
   });
 }
 
+/**
+ * 검색 조건 변경 감지
+ */
 watch(() => props.queryParameter, () => {
   if (Object.keys(props.queryParameter).length === 0) {
     return;

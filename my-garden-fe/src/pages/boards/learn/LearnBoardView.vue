@@ -14,6 +14,9 @@ const route = useRoute()
 const board = ref({});
 const categories = ref([]);
 
+/**
+ * 목록으로 이동
+ */
 function goToList() {
   router.push({
     name: "LearnBoardList",
@@ -21,6 +24,9 @@ function goToList() {
   });
 }
 
+/**
+ * 수정 페이지로 이동
+ */
 function goToEdit() {
   router.push({
     name: "LearnBoardEdit",
@@ -29,6 +35,9 @@ function goToEdit() {
   });
 }
 
+/**
+ * 게시글 삭제
+ */
 function deleteBoard() {
   if (!confirm("정말 삭제하시겠습니까?")) {
     return;

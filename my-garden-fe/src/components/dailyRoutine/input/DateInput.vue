@@ -8,8 +8,15 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['changeDate'])
+
+/**
+ * 일과 시간
+ */
 const dateTime = ref('');
 
+/**
+ * 일과 시간 변경 감지
+ */
 watch(() => [props.startDateTime, props.endDateTime], (newValue) => {
   if (props.inputName === '시작 시간') {
     dateTime.value = newValue[0];

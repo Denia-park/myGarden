@@ -24,6 +24,7 @@ import '@kangc/v-md-editor/lib/plugins/todo-list/todo-list.css';
 import createLineNumbertPlugin from "@kangc/v-md-editor/lib/plugins/line-number/index.js";
 import koKr from "@kangc/v-md-editor/es/lang/ko-KR.js";
 
+// Markdown Editor
 VMdEditor.use(vuepressTheme, {
     Prism,
     config: {
@@ -36,6 +37,7 @@ VMdEditor.use(vuepressTheme, {
     .use(createLineNumbertPlugin())
     .lang.use('ko-KR', koKr)
 
+// Router 이동 전에 실행되는 함수
 routerBeforeEach(router);
 
 createApp(App).use(store).use(router).use(VMdEditor).use(VCalendar, {}).mount('#app')

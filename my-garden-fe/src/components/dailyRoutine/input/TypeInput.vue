@@ -7,16 +7,18 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['changeType'])
+
+/**
+ * 일과 타입
+ */
 const selectValue = ref('');
 
-watch(() => props.routineType, (newValue) => {
-      const type = convertRoutineTypeToSelectValue(newValue);
-
-      selectValue.value = type;
-      emit('changeType', type)
-    }, {immediate: true}
-);
-
+/**
+ * 루틴 타입을 select value로 변경
+ *
+ * @param inputString 루틴 타입
+ * @returns {*|string} select value
+ */
 function convertRoutineTypeToSelectValue(inputString) {
   switch (inputString) {
     case '공부':
@@ -37,6 +39,17 @@ function convertRoutineTypeToSelectValue(inputString) {
       return inputString;
   }
 }
+
+/**
+ * 일과 타입 변경 감지
+ */
+watch(() => props.routineType, (newValue) => {
+      const type = convertRoutineTypeToSelectValue(newValue);
+
+      selectValue.value = type;
+      emit('changeType', type)
+    }, {immediate: true}
+);
 
 </script>
 

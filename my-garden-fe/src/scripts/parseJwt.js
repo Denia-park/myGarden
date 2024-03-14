@@ -1,3 +1,8 @@
+/**
+ * 저장된 JWT의 payload를 파싱하여 반환
+ * @param token JWT token
+ * @returns {any} JWT payload
+ */
 const parseJwt = (token) => {
     let base64Url = token.split('.')[1];
     let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');

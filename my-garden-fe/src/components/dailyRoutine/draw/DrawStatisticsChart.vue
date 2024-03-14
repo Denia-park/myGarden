@@ -166,6 +166,9 @@ onMounted(() => {
   );
 });
 
+/**
+ * 시간 블록 배열이 업데이트되면, 통계 데이터를 계산하고, Chart.js의 DataSet을 업데이트한다.
+ */
 watch(() => store.getters.getTimeBlockArray, (timeBlockArray) => {
   const statisticData = {};
 

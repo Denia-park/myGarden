@@ -16,6 +16,9 @@ import TotalElementCounter from "@/components/boards/common/TotalElementCounter.
 import WriteButton from "@/components/boards/common/WriteButton.vue";
 import {isAdminAccount} from "@/components/boards/common/util/util.js";
 
+/**
+ * 공지사항 게시판 구성에 필요한 변수
+ */
 const noticePage = ref({});
 const noticeImportantPage = ref([]);
 const noticeTotalCount = ref(0);
@@ -31,11 +34,19 @@ const queryParameter = ref({
   order: "desc"
 });
 
+/**
+ * 페이지 변경
+ *
+ * @param currentPage 변경할 페이지
+ */
 function pageChange(currentPage) {
   queryParameter.value.currentPage = currentPage;
   getNoticeBoardList(queryParameter.value);
 }
 
+/**
+ * 공지사항 중요 게시글 목록 조회
+ */
 function getNoticeImportantBoardList() {
   getNoticeImportantBoardListApi()
       .then(response => {
@@ -43,6 +54,11 @@ function getNoticeImportantBoardList() {
       });
 }
 
+/**
+ * 공지사항 목록 조회
+ *
+ * @param parameter 조회 조건
+ */
 function getNoticeBoardList(parameter) {
   if (parameter) {
     queryParameter.value = parameter;
@@ -54,6 +70,9 @@ function getNoticeBoardList(parameter) {
       });
 }
 
+/**
+ * 공지사항 카테고리 조회
+ */
 function getNoticeBoardCategory() {
   getNoticeBoardCategoryApi('notice')
       .then(response => {
@@ -61,6 +80,11 @@ function getNoticeBoardCategory() {
       });
 }
 
+/**
+ * 게시판 상세보기 페이지로 이동
+ *
+ * @param boardId 게시글 번호
+ */
 function goToBoardView(boardId) {
   router.push({
     name: "NoticeBoardView",

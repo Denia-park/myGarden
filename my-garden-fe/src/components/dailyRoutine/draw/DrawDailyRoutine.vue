@@ -90,6 +90,9 @@ function createTimeBlock(block, startTime, endTime, partOfDay) {
   return scheduleDefaultData;
 }
 
+/**
+ * 조회 날짜가 변경되면, 해당 날짜의 루틴을 조회한다.
+ */
 watch(() => store.getters.getViewDate, (newDate) => {
       const {targetStartDateTime, targetEndDateTime} = getTargetDateTimeRange(newDate);
 

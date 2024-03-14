@@ -2,12 +2,25 @@ import axios from "axios";
 import {store} from "@/scripts/store.js";
 import {router} from "@/scripts/router.js";
 
+/**
+ * Access Token이 만료되었을 때, Refresh Token을 사용하여 새로운 Access Token을 발급받는 중인지 여부
+ */
 let isRefreshing = 0;
 
+/**
+ * Axios Interceptor Request 설정 <br>
+ * - Request Interceptor: 토큰이 필요한 API에 접근시 Header에 적절한 토큰을 추가
+ */
 const setup = () => {
     axios.interceptors.request.use(
         (config) => {
+            /**
+             * 토큰이 필요 없는 URL 목록
+             */
             const WHITE_LIST = ["/api/auth/signup", "/api/auth/login"];
+            /**
+             * Refresh Token을 사용하는 URL 목록
+             */
             const USING_REFRESH_TOKEN_URL_LIST = ["/api/auth/logout"];
 
             if (WHITE_LIST.includes(config.url)) {
@@ -30,6 +43,11 @@ const setup = () => {
         }
     );
 
+    /**
+     * Axios Interceptor Response 설정 <br>
+     * - Response Interceptor: 토큰이 만료되었을 때, Refresh Token을 사용하여 새로운 Access Token을 발급받는 중인지 여부를 확인하고,
+     * 새로운 Access Token을 발급받은 후, 다시 API 요청을 보내는 로직
+     */
     axios.interceptors.response.use(
         (res) => {
             isRefreshing = 0;
@@ -43,6 +61,7 @@ const setup = () => {
                 isRefreshing++;
 
                 try {
+                    // Refresh Token을 사용하여 새로운 Access Token을 발급받는 요청
                     const result = await refreshTokenApi();
 
                     if (!result) {
@@ -76,6 +95,7 @@ const setup = () => {
                 return Promise.reject(err.response.data);
             }
 
+            // 응답 코드가 403인 경우 (권한 없음) -> 403 페이지로 이동
             if (err.response.status === 403) {
                 isRefreshing = false;
 
@@ -88,6 +108,9 @@ const setup = () => {
     );
 };
 
+/**
+ * Refresh Token을 사용하여 새로운 Access Token을 발급받는 요청
+ */
 const refreshTokenApi = async () => {
     return axios.post("/api/auth/refresh", {
         refreshToken: store.getters.getRefreshToken,

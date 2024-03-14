@@ -12,10 +12,21 @@ const categories = ref([]);
 const boardId = route.params?.boardId;
 const content = ref("");
 
+/**
+ * 현재 페이지가 수정 페이지인지 확인
+ *
+ * @returns {boolean} 수정 페이지 여부
+ */
 function isEditPage() {
   return boardId !== undefined;
 }
 
+/**
+ * 이전 페이지로 이동
+ *
+ * @param pageName 이동할 페이지 이름
+ * @param boardId 게시글 ID
+ */
 function goToBackPage(pageName, boardId) {
   if (isEditPage()) {
     router.push({
@@ -31,6 +42,9 @@ function goToBackPage(pageName, boardId) {
   }
 }
 
+/**
+ * 공지사항 게시판 카테고리 조회
+ */
 function getNoticeBoardCategory() {
   getNoticeBoardCategoryApi('notice')
       .then(response => {
@@ -38,6 +52,11 @@ function getNoticeBoardCategory() {
       });
 }
 
+/**
+ * 게시글 저장 전에 유효성 검사
+ *
+ * @param board 저장할 게시글
+ */
 function validate(board) {
   if (board.category === "") {
     alert("분류를 선택해주세요.");
@@ -67,6 +86,11 @@ function validate(board) {
   return false;
 }
 
+/**
+ * 게시글 저장
+ *
+ * @param board 저장할 게시글
+ */
 function saveBoard(board) {
   if (validate(board)) {
     return;
@@ -75,6 +99,11 @@ function saveBoard(board) {
   postBoardApi('notice', board, boardId);
 }
 
+/**
+ * 응답 데이터로 입력 폼 채우기
+ *
+ * @param response 응답 데이터
+ */
 function fillInputFromResponse(response) {
   document.getElementById("category").value = response.category;
   document.getElementById("board_writer").value = response.title;

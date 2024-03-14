@@ -5,14 +5,25 @@ import {loginApi} from "@/components/auth/login/api/api.js";
 import {router} from "@/scripts/router.js";
 import {store} from "@/scripts/store.js";
 
-
+/**
+ * 로그인 폼
+ */
 const form = ref({
   email: '',
   password: '',
 })
 
+/**
+ * 아이디 및 패스워드 저장 여부
+ */
 const rememberMe = ref(false);
 
+/**
+ * 아이디 및 패스워드 저장 여부 설정
+ *
+ * @param email 이메일
+ * @param password 패스워드
+ */
 function setRememberMe(email, password) {
   if (!rememberMe.value) {
     localStorage.removeItem("rememberMe");
@@ -29,6 +40,9 @@ function setRememberMe(email, password) {
   localStorage.setItem("userAccount", JSON.stringify(userAccount));
 }
 
+/**
+ * 로그인
+ */
 function submit() {
   const {email, password} = form.value;
 
@@ -48,10 +62,16 @@ function submit() {
       })
 }
 
+/**
+ * 회원가입 페이지로 이동
+ */
 function goToSignup() {
   router.push('/signup');
 }
 
+/**
+ * 폼 초기화
+ */
 function initializeForm() {
   const savedRememberMe = localStorage.getItem("rememberMe");
   const userAccount = localStorage.getItem("userAccount");
