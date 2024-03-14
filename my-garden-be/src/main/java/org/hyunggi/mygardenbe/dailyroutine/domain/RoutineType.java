@@ -2,6 +2,9 @@ package org.hyunggi.mygardenbe.dailyroutine.domain;
 
 import lombok.Getter;
 
+/**
+ * 루틴 타입
+ */
 @Getter
 public enum RoutineType {
     STUDY("공부"),
@@ -12,6 +15,9 @@ public enum RoutineType {
     MEAL("식사"),
     GAME("게임");
 
+    /**
+     * 루틴 타입 설명
+     */
     private String description;
 
     RoutineType(final String description) {

@@ -19,12 +19,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * 데일리 루틴 Service
+ */
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class DailyRoutineService {
+    /**
+     * 데일리 루틴 Entity Repository
+     */
     private final DailyRoutineRepository dailyRoutineRepository;
 
+    /**
+     * 데일리 루틴 등록
+     *
+     * @param routineTimes       루틴 시간 목록
+     * @param routineType        루틴 타입
+     * @param routineDescription 루틴 설명
+     * @param member             유저 Entity
+     * @return 등록한 데일리 루틴 ID 목록
+     */
     @Transactional
     public List<Long> postDailyRoutine(final List<RoutineTime> routineTimes, final RoutineType routineType, final String routineDescription, final MemberEntity member) {
         final List<DailyRoutine> dailyRoutines = convertDailyRoutines(routineTimes, routineType, routineDescription);
@@ -32,18 +47,40 @@ public class DailyRoutineService {
         return extractIds(dailyRoutineRepository.saveAll(DailyRoutineEntity.of(dailyRoutines, member.getId())));
     }
 
+    /**
+     * 루틴 시간 목록을 DailyRoutine 목록으로 변환
+     *
+     * @param routineTimes       루틴 시간 목록
+     * @param routineType        루틴 타입
+     * @param routineDescription 루틴 설명
+     * @return DailyRoutine 목록
+     */
     private List<DailyRoutine> convertDailyRoutines(final List<RoutineTime> routineTimes, final RoutineType routineType, final String routineDescription) {
         return routineTimes.stream()
                 .map(routineTime -> DailyRoutine.of(routineTime, routineType, routineDescription))
                 .toList();
     }
 
+    /**
+     * DailyRoutine 목록에서 ID 목록 추출
+     *
+     * @param savedDailyRoutines 저장된 DailyRoutine 목록
+     * @return DailyRoutine ID 목록
+     */
     private List<Long> extractIds(final List<DailyRoutineEntity> savedDailyRoutines) {
         return savedDailyRoutines.stream()
                 .map(DailyRoutineEntity::getId)
                 .toList();
     }
 
+    /**
+     * 데일리 루틴 조회
+     *
+     * @param startDateTime 조회 시작 시간
+     * @param endDateTime   조회 종료 시간
+     * @param member        유저 Entity
+     * @return 데일리 루틴 목록
+     */
     public List<DailyRoutineResponse> getDailyRoutine(final LocalDateTime startDateTime, final LocalDateTime endDateTime, final MemberEntity member) {
         final List<DailyRoutineEntity> dailyRoutineEntities = dailyRoutineRepository.findAllByDateTimeBetween(startDateTime, endDateTime, member.getId());
         final Map<Long, DailyRoutine> dailyRoutines = convertMapWithKeyAndDailyRoutine(dailyRoutineEntities);
@@ -51,11 +88,23 @@ public class DailyRoutineService {
         return convertDailyRoutineResponses(dailyRoutines);
     }
 
+    /**
+     * DailyRoutineEntity 목록을 Key와 DailyRoutine의 Map으로 변환
+     *
+     * @param dailyRoutineEntities DailyRoutineEntity 목록
+     * @return Key와 DailyRoutine의 Map
+     */
     private Map<Long, DailyRoutine> convertMapWithKeyAndDailyRoutine(final List<DailyRoutineEntity> dailyRoutineEntities) {
         return dailyRoutineEntities.stream()
                 .collect(Collectors.toMap(DailyRoutineEntity::getId, DailyRoutineEntity::toDomain));
     }
 
+    /**
+     * Key와 DailyRoutine의 Map을 DailyRoutineResponse 목록으로 변환
+     *
+     * @param dailyRoutines Key와 DailyRoutine의 Map
+     * @return DailyRoutineResponse 목록
+     */
     private List<DailyRoutineResponse> convertDailyRoutineResponses(final Map<Long, DailyRoutine> dailyRoutines) {
         return dailyRoutines.entrySet().stream()
                 .map(entry -> DailyRoutineResponse.of(entry.getKey(), entry.getValue()))
@@ -63,6 +112,16 @@ public class DailyRoutineService {
                 .toList();
     }
 
+    /**
+     * 데일리 루틴 수정
+     *
+     * @param timeBlockId 수정할 데일리 루틴 ID
+     * @param routineTime 루틴 시간
+     * @param routineType 루틴 타입
+     * @param description 루틴 설명
+     * @param member      유저 Entity
+     * @return 수정한 데일리 루틴 ID
+     */
     @Transactional
     public Long putDailyRoutine(final Long timeBlockId, final RoutineTime routineTime, final RoutineType routineType, final String description, final MemberEntity member) {
         final DailyRoutineEntity dailyRoutineEntity = getDailyRoutineEntity(timeBlockId, member);
@@ -74,6 +133,13 @@ public class DailyRoutineService {
         return timeBlockId;
     }
 
+    /**
+     * timeBlockId를 사용하여 DailyRoutineEntity 조회하고, 본인의 DailyRoutine인지 확인
+     *
+     * @param timeBlockId 수정할 데일리 루틴 ID
+     * @param member      유저 Entity
+     * @return DailyRoutineEntity
+     */
     private DailyRoutineEntity getDailyRoutineEntity(final Long timeBlockId, final MemberEntity member) {
         final DailyRoutineEntity dailyRoutineEntity = dailyRoutineRepository.findById(timeBlockId)
                 .orElseThrow(() -> new EntityNotFoundException("해당하는 ID의 DailyRoutine이 존재하지 않습니다."));
@@ -84,7 +150,14 @@ public class DailyRoutineService {
 
         return dailyRoutineEntity;
     }
-    
+
+    /**
+     * 데일리 루틴 삭제
+     *
+     * @param timeBlockId 삭제할 데일리 루틴 ID
+     * @param member      유저 Entity
+     * @return 삭제한 데일리 루틴 ID
+     */
     @Transactional
     public Long deleteDailyRoutine(final Long timeBlockId, final MemberEntity member) {
         final DailyRoutineEntity dailyRoutineEntity = getDailyRoutineEntity(timeBlockId, member);
