@@ -5,9 +5,9 @@ import org.hyunggi.mygardenbe.boards.common.category.entity.BoardCategoryEntity;
 
 /**
  * 게시판 분류 응답
- * <br><br>
- * - code: 분류 코드 <br>
- * - text: 분류 명
+ *
+ * @param code 분류 코드
+ * @param text 분류 명
  */
 @Builder
 public record BoardCategoryResponse(String code, String text) {
