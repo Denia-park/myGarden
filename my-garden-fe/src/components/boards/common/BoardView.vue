@@ -22,6 +22,12 @@ const props = defineProps({
 
 const emit = defineEmits(["goToList", "goToEdit", "deleteBoard"]);
 
+function isAbleToReply() {
+  let canReplyBoardType = ['TIL'];
+
+  return canReplyBoardType.includes(props.title);
+}
+
 </script>
 
 <template>
@@ -41,6 +47,34 @@ const emit = defineEmits(["goToList", "goToEdit", "deleteBoard"]);
 
     <div class="detail_content_box">
       <v-md-editor :model-value="board.content" mode="preview"></v-md-editor>
+    </div>
+
+    <!-- 첨부파일 -->
+    <!--    <div class="detail_file_box">-->
+    <!--      <div class="file">-->
+    <!--        <a href="http://">첨부파일1.hwp</a>-->
+    <!--      </div>-->
+    <!--      <div class="file">-->
+    <!--        <a href="http://">첨부파일1.hwp</a>-->
+    <!--      </div>-->
+    <!--    </div>-->
+
+    <div v-if="isAbleToReply()" class="detail_comment_box">
+      <div class="comment_submit_box">
+        <input class="input_box" placeholder="댓글을 입력해주세요" type="text">
+        <button class="submit_btn">등록</button>
+      </div>
+      <div class="comment">
+        <hr id="comment_bot_line">
+        <div class="reply_info">
+          <span class="comment_writer">hyunggi</span>
+          <span class="comment_regDate">2020.03.09 16:32</span>
+        </div>
+        <div class="comment_content">
+          댓글이 출력됩니다.댓글이 출력됩니다.댓글이 출력됩니다.댓글이 출력됩니다.댓글이 출력됩니다.댓글이 출력됩니다.댓글이 출력됩니다.댓글이 출력됩니다.댓글이
+          출력됩니다.댓글이 출력됩니다.댓글이 출력됩니다.댓글이 출력됩니다.댓글이 출력됩니다.댓글이 출력됩니다.댓글이 출력됩니다.
+        </div>
+      </div>
     </div>
 
     <hr id="reply_box_bot_line"/>
@@ -151,4 +185,47 @@ h1 {
   margin-left: 20px;
 }
 
+.detail_comment_box {
+  background-color: lightgray;
+  padding: 15px;
+
+  margin-bottom: 10px;
+}
+
+.comment_submit_box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.comment_submit_box .input_box {
+  width: 90%;
+  height: 60px;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 0 10px;
+}
+
+.comment_submit_box .submit_btn {
+  width: 8%;
+  height: 60px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.reply .reply_info .reply_writer {
+  font-size: 15px;
+  font-weight: bold;
+  margin-right: 15px;
+}
+
+.reply .reply_info .reply_regDate {
+  font-size: 13px;
+}
+
+.reply .reply_content {
+  font-size: 15px;
+  margin-top: 10px;
+}
 </style>
