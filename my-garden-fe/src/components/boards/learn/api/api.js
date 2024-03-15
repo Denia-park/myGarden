@@ -72,7 +72,7 @@ export function deleteLearnBoardApi(boardId) {
 }
 
 /**
- *
+ * 댓글 조회 API
  */
 export function getLearnBoardCommentsApi(boardType, boardId) {
     return axios.get(`/api/boards/comments/${boardType}/${boardId}`)
@@ -81,5 +81,18 @@ export function getLearnBoardCommentsApi(boardType, boardId) {
         })
         .catch(error => {
             alert('댓글을 불러오는데 실패했습니다.')
+        });
+}
+
+/**
+ * 댓글 등록 API
+ */
+export function postLearnBoardCommentApi(boardType, boardId, comment) {
+    return axios.post(`/api/boards/comments/${boardType}/${boardId}`, {comment})
+        .then(({data}) => {
+            return data.data;
+        })
+        .catch(error => {
+            alert('댓글을 등록하는데 실패했습니다.')
         });
 }

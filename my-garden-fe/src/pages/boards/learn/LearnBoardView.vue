@@ -5,7 +5,8 @@ import {
   deleteLearnBoardApi,
   getLearnBoardCategoryApi,
   getLearnBoardCommentsApi,
-  getLearnBoardViewApi
+  getLearnBoardViewApi,
+  postLearnBoardCommentApi
 } from "@/components/boards/learn/api/api.js";
 import {router} from "@/scripts/router.js";
 import BoardView from "@/components/boards/common/BoardView.vue";
@@ -53,6 +54,22 @@ function deleteBoard() {
       });
 }
 
+/**
+ * 댓글 등록
+ * @param comment
+ */
+function submitComment(comment) {
+  postLearnBoardCommentApi(BOARD_TYPE, route.params.boardId, comment)
+      .then(
+          () => {
+            getLearnBoardCommentsApi(BOARD_TYPE, route.params.boardId)
+                .then(response => {
+                  comments.value = response;
+                });
+          }
+      );
+}
+
 onMounted(() => {
   getLearnBoardCategoryApi(BOARD_TYPE)
       .then(response => {
@@ -72,7 +89,7 @@ onMounted(() => {
 <template>
   <BoardView :board="board" :categories="categories" :comments="comments"
              :isAccessAccount="isUserAccount()" :title="'TIL'"
-             @deleteBoard="deleteBoard" @goToEdit="goToEdit" @goToList="goToList"
+             @deleteBoard="deleteBoard" @goToEdit="goToEdit" @goToList="goToList" @submitComment="submitComment"/>
   />
 </template>
 

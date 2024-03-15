@@ -1,6 +1,7 @@
 <script setup>
 import {convertCategoryCodeToText} from "@/components/boards/common/util/util.js";
 import {isLogin} from "@/components/auth/login/api/api.js";
+import {ref} from "vue";
 
 const props = defineProps({
   title: {
@@ -25,7 +26,8 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(["goToList", "goToEdit", "deleteBoard"]);
+const emit = defineEmits(["goToList", "goToEdit", "deleteBoard", "submitComment"]);
+const comment = ref('');
 
 function isAbleToReply() {
   let canReplyBoardType = ['TIL'];
@@ -33,6 +35,10 @@ function isAbleToReply() {
   return canReplyBoardType.includes(props.title);
 }
 
+function submitComment() {
+  emit('submitComment', comment.value);
+  comment.value = '';
+}
 </script>
 
 <template>
@@ -67,8 +73,8 @@ function isAbleToReply() {
     <div v-if="isAbleToReply()" class="detail_comment_box">
       <div v-if="isLogin()">
         <div class="comment_submit_box">
-          <input class="input_box" placeholder="댓글을 입력해주세요" type="text">
-          <button class="submit_btn">등록</button>
+          <input v-model="comment" class="input_box" placeholder="댓글을 입력해주세요" type="text">
+          <button class="submit_btn" @click="submitComment">등록</button>
         </div>
         <hr id="comment_bot_line">
       </div>
