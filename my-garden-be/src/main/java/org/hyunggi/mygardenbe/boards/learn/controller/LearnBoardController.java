@@ -1,5 +1,6 @@
 package org.hyunggi.mygardenbe.boards.learn.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.hyunggi.mygardenbe.boards.common.category.request.GetRequest;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
@@ -89,7 +90,7 @@ public class LearnBoardController {
      * @return 등록된 게시판 ID
      */
     @PostMapping
-    public ApiResponse<Long> postLearnBoard(@RequestBody final PostRequest postRequest, @WithLoginUserEntity final MemberEntity member) {
+    public ApiResponse<Long> postLearnBoard(@RequestBody final @Valid PostRequest postRequest, @WithLoginUserEntity final MemberEntity member) {
         return ApiResponse.ok(learnBoardService.postLearnBoard(postRequest.category(), postRequest.title(), postRequest.content(), member));
     }
 
@@ -102,7 +103,7 @@ public class LearnBoardController {
      * @return 수정된 게시판 ID
      */
     @PutMapping("/{boardId}")
-    public ApiResponse<Long> putLearnBoard(@PathVariable final Long boardId, @RequestBody final PostRequest postRequest, @WithLoginUserEntity final MemberEntity member) {
+    public ApiResponse<Long> putLearnBoard(@PathVariable final Long boardId, @RequestBody @Valid final PostRequest postRequest, @WithLoginUserEntity final MemberEntity member) {
         return ApiResponse.ok(learnBoardService.putLearnBoard(boardId, postRequest.category(), postRequest.title(), postRequest.content(), member));
     }
 

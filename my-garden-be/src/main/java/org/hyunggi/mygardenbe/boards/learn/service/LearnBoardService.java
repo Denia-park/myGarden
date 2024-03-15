@@ -171,8 +171,8 @@ public class LearnBoardService {
 
         Assert.isTrue(StringUtils.hasText(title), "제목은 비어있을 수 없습니다.");
         Assert.isTrue(title.length() <= 100, "제목은 100자를 넘을 수 없습니다.");
-        Assert.isTrue(StringUtils.hasText(content), "내용은 비어있을 수 없습니다.");
-        Assert.isTrue(content.length() <= 4000, "내용은 4000자를 넘을 수 없습니다.");
+        Assert.isTrue(StringUtils.hasText(content), "게시글 내용은 비어있을 수 없습니다.");
+        Assert.isTrue(content.length() <= 4000, "게시글 내용은 4000자를 넘을 수 없습니다.");
     }
 
     /**

@@ -25,3 +25,7 @@ export function loginApi(email, password) {
             return null;
         });
 }
+
+export function isLogin() {
+    return store.getters.getAccessToken !== null && store.getters.getAccessToken !== '';
+}

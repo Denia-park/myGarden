@@ -140,7 +140,7 @@ public class SecurityConfiguration {
     }
 
     /**
-     * 공지사항, TIL 게시판 조회 API
+     * 공지사항, TIL 게시판 조회 API (댓글 포함)
      *
      * @return 공지사항, TIL 게시판 조회 API
      */
@@ -148,6 +148,7 @@ public class SecurityConfiguration {
         return new RequestMatcher[]{
                 antMatcher(HttpMethod.GET, "/api/boards/notice/**"),
                 antMatcher(HttpMethod.GET, "/api/boards/learn/**"),
+                antMatcher(HttpMethod.GET, "/api/boards/comments/**"),
         };
     }
 

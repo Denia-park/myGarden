@@ -439,7 +439,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
         // when,then
         assertThatThrownBy(() -> learnBoardService.postLearnBoard(postRequest.category(), postRequest.title(), postRequest.content(), member))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("내용은 비어있을 수 없습니다.");
+                .hasMessage("게시글 내용은 비어있을 수 없습니다.");
     }
 
     @Test
@@ -455,7 +455,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
         // when,then
         assertThatThrownBy(() -> learnBoardService.postLearnBoard(postRequest.category(), postRequest.title(), postRequest.content(), member))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("내용은 4000자를 넘을 수 없습니다.");
+                .hasMessage("게시글 내용은 4000자를 넘을 수 없습니다.");
     }
 
     @Test
@@ -598,7 +598,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
         // when,then
         assertThatThrownBy(() -> learnBoardService.putLearnBoard(learnBoardEntity.getId(), postRequest.category(), postRequest.title(), postRequest.content(), member))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("내용은 비어있을 수 없습니다.");
+                .hasMessage("게시글 내용은 비어있을 수 없습니다.");
     }
 
     @Test
@@ -624,7 +624,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
         // when,then
         assertThatThrownBy(() -> learnBoardService.putLearnBoard(learnBoardEntity.getId(), postRequest.category(), postRequest.title(), postRequest.content(), member))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("내용은 4000자를 넘을 수 없습니다.");
+                .hasMessage("게시글 내용은 4000자를 넘을 수 없습니다.");
     }
 
     @Test

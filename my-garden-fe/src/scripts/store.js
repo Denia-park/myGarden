@@ -8,7 +8,8 @@ export const store = createStore({
             account: {
                 accessToken: '',
                 refreshToken: '',
-                roles: []
+                roles: [],
+                emailId: ''
             },
             editBlock: {},
             viewDate: getTodayDate(),
@@ -35,6 +36,9 @@ export const store = createStore({
         },
         setRoles(state, payload) {
             state.account.roles = Array.isArray(payload) ? payload : [];
+        },
+        setEmailId(state, payload) {
+            state.account.emailId = payload;
         },
         setEditBlock(state, payload) {
             state.editBlock = payload;
@@ -66,8 +70,10 @@ export const store = createStore({
 
             const payload = parseJwt(accessToken);
             const roles = payload.roles.split(',');
+            const emailId = payload.sub.split('@')[0];
 
             commit('setRoles', roles);
+            commit('setEmailId', emailId);
         }
     },
     getters: {
@@ -79,6 +85,9 @@ export const store = createStore({
         },
         getRoles(state) {
             return state.account.roles;
+        },
+        getEmailId(state) {
+            return state.account.emailId;
         },
         getColors(state) {
             return state.colorMap;
