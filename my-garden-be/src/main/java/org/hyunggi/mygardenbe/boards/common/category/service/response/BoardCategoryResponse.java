@@ -1,4 +1,4 @@
-package org.hyunggi.mygardenbe.boards.common.category.response;
+package org.hyunggi.mygardenbe.boards.common.category.service.response;
 
 import lombok.Builder;
 import org.hyunggi.mygardenbe.boards.common.category.entity.BoardCategoryEntity;

@@ -1,8 +1,8 @@
 package org.hyunggi.mygardenbe.docs.board.category;
 
 import org.hyunggi.mygardenbe.boards.common.category.controller.BoardCategoryController;
-import org.hyunggi.mygardenbe.boards.common.category.response.BoardCategoryResponse;
 import org.hyunggi.mygardenbe.boards.common.category.service.BoardCategoryService;
+import org.hyunggi.mygardenbe.boards.common.category.service.response.BoardCategoryResponse;
 import org.hyunggi.mygardenbe.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

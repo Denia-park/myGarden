@@ -4,7 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.hyunggi.mygardenbe.IntegrationTestSupport;
 import org.hyunggi.mygardenbe.boards.common.category.entity.BoardCategoryEntity;
 import org.hyunggi.mygardenbe.boards.common.category.repository.BoardCategoryRepository;
-import org.hyunggi.mygardenbe.boards.common.category.response.BoardCategoryResponse;
+import org.hyunggi.mygardenbe.boards.common.category.service.response.BoardCategoryResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
