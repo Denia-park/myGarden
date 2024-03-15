@@ -43,7 +43,7 @@ public class CommentService {
      * 게시판의 댓글을 등록한다.
      */
     public Long postComment(final String boardType, final Long boardId, final String content, final MemberEntity member) {
-        validateBoardType(boardType);
+        validatePostRequest(boardType, boardId, content);
 
         CommentEntity comment = CommentEntity.of(
                 content,
@@ -55,6 +55,45 @@ public class CommentService {
         );
 
         return commentRepository.save(comment).getId();
+    }
+
+    /**
+     * 댓글 등록 요청을 검증한다.
+     *
+     * @param boardType 게시판 종류
+     * @param boardId   게시판 ID
+     * @param content   댓글 내용
+     */
+    private void validatePostRequest(final String boardType, final Long boardId, final String content) {
+        validateBoardType(boardType);
+        validateBoardId(boardId);
+        validateContent(content);
+    }
+
+    /**
+     * 게시판 ID를 검증한다.
+     *
+     * @param boardId 게시판 ID
+     */
+    private void validateBoardId(final Long boardId) {
+        if (boardId == null || boardId <= 0) {
+            throw new IllegalArgumentException("게시판 ID는 0보다 커야 합니다.");
+        }
+    }
+
+    /**
+     * 댓글 내용을 검증한다.
+     *
+     * @param content 댓글 내용
+     */
+    private void validateContent(final String content) {
+        if (content == null || content.isBlank()) {
+            throw new IllegalArgumentException("댓글 내용은 비어있을 수 없습니다.");
+        }
+
+        if (content.length() > 300) {
+            throw new IllegalArgumentException("댓글 내용은 300자를 넘을 수 없습니다.");
+        }
     }
 
     /**

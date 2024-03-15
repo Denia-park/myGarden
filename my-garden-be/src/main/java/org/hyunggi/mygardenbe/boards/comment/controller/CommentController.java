@@ -45,7 +45,7 @@ public class CommentController {
                                          @PathVariable final Long boardId,
                                          @RequestBody @Valid final CommentRequest request,
                                          @WithLoginUserEntity final MemberEntity member) {
-        validatePostComment(boardType, boardId, request);
+        validatePostRequest(boardType, boardId, request);
         return ApiResponse.ok(commentService.postComment(boardType, boardId, request.content(), member));
     }
 
@@ -56,7 +56,7 @@ public class CommentController {
      * @param boardId   게시판 ID
      * @param request   댓글 요청
      */
-    private void validatePostComment(final String boardType, final Long boardId, final CommentRequest request) {
+    private void validatePostRequest(final String boardType, final Long boardId, final CommentRequest request) {
         Assert.hasText(boardType, "게시판 종류는 비어있을 수 없습니다.");
         Assert.isTrue(boardId != null && boardId > 0, "게시판 ID는 0보다 커야 합니다.");
         Assert.notNull(request, "댓글 요청은 비어있을 수 없습니다.");
