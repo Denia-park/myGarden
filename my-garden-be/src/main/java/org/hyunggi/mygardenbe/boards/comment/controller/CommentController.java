@@ -46,7 +46,7 @@ public class CommentController {
                                          @RequestBody @Valid final CommentRequest request,
                                          @WithLoginUserEntity final MemberEntity member) {
         validatePostRequest(boardType, boardId, request);
-        return ApiResponse.ok(commentService.postComment(boardType, boardId, request.content(), member));
+        return ApiResponse.ok(commentService.postComment(boardType, boardId, request.comment(), member));
     }
 
     /**

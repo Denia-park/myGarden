@@ -61,8 +61,8 @@ class CommentEntityControllerTest extends ControllerTestSupport {
         //given
         String boardType = "learn";
         Long boardId = 1L;
-        String content = "내용 1";
-        CommentRequest request = new CommentRequest(content);
+        String comment = "내용 1";
+        CommentRequest request = new CommentRequest(comment);
 
         BDDMockito.given(commentService.postComment(any(), any(), any(), any())).willReturn(1L);
 
@@ -76,6 +76,6 @@ class CommentEntityControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.data").value(1));
 
         //then
-        BDDMockito.verify(commentService).postComment(eq(boardType), eq(boardId), eq(content), any());
+        BDDMockito.verify(commentService).postComment(eq(boardType), eq(boardId), eq(comment), any());
     }
 }

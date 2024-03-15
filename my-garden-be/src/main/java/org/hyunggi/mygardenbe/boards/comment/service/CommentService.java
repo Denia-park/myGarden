@@ -42,11 +42,11 @@ public class CommentService {
     /**
      * 게시판의 댓글을 등록한다.
      */
-    public Long postComment(final String boardType, final Long boardId, final String content, final MemberEntity member) {
-        validatePostRequest(boardType, boardId, content);
+    public Long postComment(final String boardType, final Long boardId, final String comment, final MemberEntity member) {
+        validatePostRequest(boardType, boardId, comment);
 
-        CommentEntity comment = CommentEntity.of(
-                content,
+        CommentEntity commentEntity = CommentEntity.of(
+                comment,
                 boardType,
                 boardId,
                 extractEmailId(member.getEmail()),
@@ -54,7 +54,7 @@ public class CommentService {
                 member.getId()
         );
 
-        return commentRepository.save(comment).getId();
+        return commentRepository.save(commentEntity).getId();
     }
 
     /**
@@ -62,12 +62,12 @@ public class CommentService {
      *
      * @param boardType 게시판 종류
      * @param boardId   게시판 ID
-     * @param content   댓글 내용
+     * @param comment   댓글 내용
      */
-    private void validatePostRequest(final String boardType, final Long boardId, final String content) {
+    private void validatePostRequest(final String boardType, final Long boardId, final String comment) {
         validateBoardType(boardType);
         validateBoardId(boardId);
-        validateContent(content);
+        validateContent(comment);
     }
 
     /**
