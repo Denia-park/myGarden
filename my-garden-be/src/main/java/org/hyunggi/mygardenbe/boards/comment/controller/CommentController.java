@@ -15,7 +15,7 @@ import java.util.List;
  * 댓글 Controller
  */
 @RestController
-@RequestMapping("/api/boards/comment")
+@RequestMapping("/api/boards/comments")
 @RequiredArgsConstructor
 public class CommentController {
     /**

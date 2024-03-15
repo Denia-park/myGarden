@@ -1,6 +1,6 @@
 package org.hyunggi.mygardenbe.boards.comment.controller;
 
-import org.hyunggi.mygardenbe.ControllerTestSupportWithMockUser;
+import org.hyunggi.mygardenbe.ControllerTestSupport;
 import org.hyunggi.mygardenbe.boards.comment.service.response.CommentResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ import java.util.List;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class CommentEntityControllerTest extends ControllerTestSupportWithMockUser {
+class CommentEntityControllerTest extends ControllerTestSupport {
     @Test
     @DisplayName("게시판의 댓글을 조회한다.")
     void getComments() throws Exception {
@@ -34,7 +34,7 @@ class CommentEntityControllerTest extends ControllerTestSupportWithMockUser {
 
         //when
         mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/boards/comment/learn/1")
+                        MockMvcRequestBuilders.get("/api/boards/comments/learn/1")
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data").isArray())
