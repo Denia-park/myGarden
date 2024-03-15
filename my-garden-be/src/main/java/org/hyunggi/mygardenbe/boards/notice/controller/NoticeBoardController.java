@@ -1,5 +1,6 @@
 package org.hyunggi.mygardenbe.boards.notice.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.hyunggi.mygardenbe.boards.common.category.request.GetRequest;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
@@ -101,7 +102,7 @@ public class NoticeBoardController {
      * @return 등록한 게시글 ID
      */
     @PostMapping
-    public ApiResponse<Long> postNoticeBoard(@RequestBody final PostRequest postRequest, @WithLoginUserEntity final MemberEntity member) {
+    public ApiResponse<Long> postNoticeBoard(@RequestBody @Valid final PostRequest postRequest, @WithLoginUserEntity final MemberEntity member) {
         return ApiResponse.ok(noticeBoardService.postNoticeBoard(postRequest.category(), postRequest.title(), postRequest.content(), postRequest.isImportant(), member));
     }
 
@@ -114,7 +115,7 @@ public class NoticeBoardController {
      * @return 수정한 게시글 ID
      */
     @PutMapping("/{boardId}")
-    public ApiResponse<Long> putNoticeBoard(@PathVariable final Long boardId, @RequestBody final PostRequest postRequest, @WithLoginUserEntity final MemberEntity member) {
+    public ApiResponse<Long> putNoticeBoard(@PathVariable final Long boardId, @RequestBody @Valid final PostRequest postRequest, @WithLoginUserEntity final MemberEntity member) {
         return ApiResponse.ok(noticeBoardService.putNoticeBoard(boardId, postRequest.category(), postRequest.title(), postRequest.content(), postRequest.isImportant(), member));
     }
 
