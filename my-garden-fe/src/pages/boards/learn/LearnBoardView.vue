@@ -3,6 +3,7 @@ import {useRoute} from "vue-router";
 import {onMounted, ref} from "vue";
 import {
   deleteLearnBoardApi,
+  deleteLearnBoardCommentApi,
   getLearnBoardCategoryApi,
   getLearnBoardCommentsApi,
   getLearnBoardViewApi,
@@ -70,6 +71,24 @@ function submitComment(comment) {
       );
 }
 
+/**
+ * 댓글 삭제
+ * @param commentId
+ */
+function deleteComment(commentId) {
+  if (!confirm("정말 삭제하시겠습니까?")) {
+    return;
+  }
+
+  deleteLearnBoardCommentApi(BOARD_TYPE, route.params.boardId, commentId)
+      .then(() => {
+        getLearnBoardCommentsApi(BOARD_TYPE, route.params.boardId)
+            .then(response => {
+              comments.value = response;
+            });
+      });
+}
+
 onMounted(() => {
   getLearnBoardCategoryApi(BOARD_TYPE)
       .then(response => {
@@ -89,7 +108,8 @@ onMounted(() => {
 <template>
   <BoardView :board="board" :categories="categories" :comments="comments"
              :isAccessAccount="isUserAccount()" :title="'TIL'"
-             @deleteBoard="deleteBoard" @goToEdit="goToEdit" @goToList="goToList" @submitComment="submitComment"/>
+             @deleteBoard="deleteBoard" @deleteComment="deleteComment" @goToEdit="goToEdit" @goToList="goToList"
+             @submitComment="submitComment"
   />
 </template>
 

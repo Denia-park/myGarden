@@ -96,3 +96,16 @@ export function postLearnBoardCommentApi(boardType, boardId, comment) {
             alert('댓글을 등록하는데 실패했습니다.')
         });
 }
+
+/**
+ * 댓글 삭제 API
+ */
+export function deleteLearnBoardCommentApi(boardType, boardId, commentId) {
+    return axios.delete(`/api/boards/comments/${boardType}/${boardId}/${commentId}`)
+        .then(({data}) => {
+            return data.data;
+        })
+        .catch(error => {
+            alert('댓글을 삭제하는데 실패했습니다.')
+        });
+}

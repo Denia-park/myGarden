@@ -3,6 +3,7 @@ import {convertCategoryCodeToText} from "@/components/boards/common/util/util.js
 import {isLogin} from "@/components/auth/login/api/api.js";
 import {ref} from "vue";
 import {convertCommentDateTimeFormat} from "@/components/dailyRoutine/api/util.js";
+import {store} from "@/scripts/store.js";
 
 const props = defineProps({
   title: {
@@ -27,7 +28,8 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(["goToList", "goToEdit", "deleteBoard", "submitComment"]);
+const emit = defineEmits(["goToList", "goToEdit", "deleteBoard", "submitComment", "deleteComment"]);
+const myEmailId = store.getters.getEmailId;
 /**
  * 댓글
  */
@@ -93,8 +95,11 @@ function submitComment() {
       <div v-for="(comment, idx) in comments" :key="comment.id" class="comment">
         <hr v-if="idx !== 0" id="comment_bot_line">
         <div class="comment_info">
-          <span class="comment_writer">{{ comment.writer }}</span>
-          <span class="comment_regDate">{{ convertCommentDateTimeFormat(comment.writtenAt) }}</span>
+          <div>
+            <span class="comment_writer">{{ comment.writer }}</span>
+            <span class="comment_regDate">{{ convertCommentDateTimeFormat(comment.writtenAt) }}</span>
+          </div>
+          <a v-if="myEmailId === comment.writer" href="#" @click="() => emit('deleteComment', comment.id)">삭제</a>
         </div>
         <div class="comment_content">{{ comment.content }}</div>
       </div>
@@ -235,6 +240,14 @@ h1 {
   height: 60px;
   border: 1px solid black;
   border-radius: 5px;
+}
+
+.comment .comment_info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+
 }
 
 .comment .comment_info .comment_writer {
