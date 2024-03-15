@@ -4,6 +4,7 @@ import {onMounted, ref} from "vue";
 import {
   deleteLearnBoardApi,
   getLearnBoardCategoryApi,
+  getLearnBoardCommentsApi,
   getLearnBoardViewApi
 } from "@/components/boards/learn/api/api.js";
 import {router} from "@/scripts/router.js";
@@ -13,6 +14,8 @@ import {isUserAccount} from "@/components/boards/common/util/util.js";
 const route = useRoute()
 const board = ref({});
 const categories = ref([]);
+const comments = ref([]);
+const BOARD_TYPE = 'learn';
 
 /**
  * 목록으로 이동
@@ -51,7 +54,7 @@ function deleteBoard() {
 }
 
 onMounted(() => {
-  getLearnBoardCategoryApi('learn')
+  getLearnBoardCategoryApi(BOARD_TYPE)
       .then(response => {
         categories.value = response;
       });
@@ -59,12 +62,16 @@ onMounted(() => {
       .then(response => {
         board.value = response;
       });
+  getLearnBoardCommentsApi(BOARD_TYPE, route.params.boardId)
+      .then(response => {
+        comments.value = response;
+      });
 });
 </script>
 
 <template>
-  <BoardView :board="board" :categories="categories" :isAccessAccount="isUserAccount()"
-             :title="'TIL'"
+  <BoardView :board="board" :categories="categories" :comments="comments"
+             :isAccessAccount="isUserAccount()" :title="'TIL'"
              @deleteBoard="deleteBoard" @goToEdit="goToEdit" @goToList="goToList"
   />
 </template>

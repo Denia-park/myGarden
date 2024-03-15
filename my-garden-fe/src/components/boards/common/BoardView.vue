@@ -17,6 +17,10 @@ const props = defineProps({
   isAccessAccount: {
     type: Boolean,
     required: true
+  },
+  comments: {
+    type: Array,
+    required: false
   }
 });
 
@@ -64,20 +68,17 @@ function isAbleToReply() {
         <input class="input_box" placeholder="댓글을 입력해주세요" type="text">
         <button class="submit_btn">등록</button>
       </div>
-      <div class="comment">
+      <div v-for="comment in comments" :key="comment.id" class="comment">
         <hr id="comment_bot_line">
-        <div class="reply_info">
-          <span class="comment_writer">hyunggi</span>
-          <span class="comment_regDate">2020.03.09 16:32</span>
+        <div class="comment_info">
+          <span class="comment_writer">{{ comment.writer }}</span>
+          <span class="comment_regDate">{{ comment.writtenAt }}</span>
         </div>
-        <div class="comment_content">
-          댓글이 출력됩니다.댓글이 출력됩니다.댓글이 출력됩니다.댓글이 출력됩니다.댓글이 출력됩니다.댓글이 출력됩니다.댓글이 출력됩니다.댓글이 출력됩니다.댓글이
-          출력됩니다.댓글이 출력됩니다.댓글이 출력됩니다.댓글이 출력됩니다.댓글이 출력됩니다.댓글이 출력됩니다.댓글이 출력됩니다.
-        </div>
+        <div class="comment_content">{{ comment.content }}</div>
       </div>
     </div>
 
-    <hr id="reply_box_bot_line"/>
+    <hr id="comment_box_bot_line"/>
 
     <div class="detail_bot_button_box">
       <button id="list_btn" @click="() => emit('goToList')">목록</button>
@@ -214,17 +215,17 @@ h1 {
   border-radius: 5px;
 }
 
-.reply .reply_info .reply_writer {
+.comment .comment_info .comment_writer {
   font-size: 15px;
   font-weight: bold;
   margin-right: 15px;
 }
 
-.reply .reply_info .reply_regDate {
+.comment .comment_info .comment_regDate {
   font-size: 13px;
 }
 
-.reply .reply_content {
+.comment .comment_content {
   font-size: 15px;
   margin-top: 10px;
 }

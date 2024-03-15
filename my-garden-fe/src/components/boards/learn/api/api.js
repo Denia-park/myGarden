@@ -70,3 +70,16 @@ export function deleteLearnBoardApi(boardId) {
             alert('TIL을 삭제하는데 실패했습니다.')
         });
 }
+
+/**
+ *
+ */
+export function getLearnBoardCommentsApi(boardType, boardId) {
+    return axios.get(`/api/boards/comments/${boardType}/${boardId}`)
+        .then(({data}) => {
+            return data.data;
+        })
+        .catch(error => {
+            alert('댓글을 불러오는데 실패했습니다.')
+        });
+}
