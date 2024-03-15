@@ -1,13 +1,15 @@
 package org.hyunggi.mygardenbe.boards.comment.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.hyunggi.mygardenbe.boards.comment.controller.request.CommentRequest;
 import org.hyunggi.mygardenbe.boards.comment.service.CommentService;
 import org.hyunggi.mygardenbe.boards.comment.service.response.CommentResponse;
+import org.hyunggi.mygardenbe.common.auth.annotation.WithLoginUserEntity;
 import org.hyunggi.mygardenbe.common.response.ApiResponse;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.hyunggi.mygardenbe.member.entity.MemberEntity;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,5 +35,30 @@ public class CommentController {
     @GetMapping("/{boardType}/{boardId}")
     public ApiResponse<List<CommentResponse>> getComments(@PathVariable final String boardType, @PathVariable final Long boardId) {
         return ApiResponse.ok(commentService.getComments(boardType, boardId));
+    }
+
+    /**
+     * 게시판의 댓글을 등록한다.
+     */
+    @PostMapping("/{boardType}/{boardId}")
+    public ApiResponse<Long> postComment(@PathVariable final String boardType,
+                                         @PathVariable final Long boardId,
+                                         @RequestBody @Valid final CommentRequest request,
+                                         @WithLoginUserEntity final MemberEntity member) {
+        validatePostComment(boardType, boardId, request);
+        return ApiResponse.ok(commentService.postComment(boardType, boardId, request.content(), member));
+    }
+
+    /**
+     * 댓글 등록 요청을 검증한다.
+     *
+     * @param boardType 게시판 종류
+     * @param boardId   게시판 ID
+     * @param request   댓글 요청
+     */
+    private void validatePostComment(final String boardType, final Long boardId, final CommentRequest request) {
+        Assert.hasText(boardType, "게시판 종류는 비어있을 수 없습니다.");
+        Assert.isTrue(boardId != null && boardId > 0, "게시판 ID는 0보다 커야 합니다.");
+        Assert.notNull(request, "댓글 요청은 비어있을 수 없습니다.");
     }
 }
