@@ -31,8 +31,7 @@ class CommentServiceTest extends IntegrationTestSupport {
     private MemberRepository memberRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-
+    
     private MemberEntity member;
 
     @BeforeEach
@@ -87,7 +86,7 @@ class CommentServiceTest extends IntegrationTestSupport {
                 1L,
                 "tester",
                 LocalDateTime.of(2024, 3, 15, 12, 0),
-                1L
+                member.getId()
         );
 
         final CommentEntity savedComment = commentRepository.save(commentEntity);
