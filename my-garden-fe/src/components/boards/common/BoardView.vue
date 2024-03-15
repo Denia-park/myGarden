@@ -2,6 +2,7 @@
 import {convertCategoryCodeToText} from "@/components/boards/common/util/util.js";
 import {isLogin} from "@/components/auth/login/api/api.js";
 import {ref} from "vue";
+import {convertCommentDateTimeFormat} from "@/components/dailyRoutine/api/util.js";
 
 const props = defineProps({
   title: {
@@ -27,14 +28,25 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["goToList", "goToEdit", "deleteBoard", "submitComment"]);
+/**
+ * 댓글
+ */
 const comment = ref('');
 
+/**
+ * 댓글 작성 가능한 게시판인지 확인
+ *
+ * @returns {boolean} 댓글 작성 가능 여부
+ */
 function isAbleToReply() {
   let canReplyBoardType = ['TIL'];
 
   return canReplyBoardType.includes(props.title);
 }
 
+/**
+ * 댓글 등록
+ */
 function submitComment() {
   emit('submitComment', comment.value);
   comment.value = '';
@@ -82,7 +94,7 @@ function submitComment() {
         <hr v-if="idx !== 0" id="comment_bot_line">
         <div class="comment_info">
           <span class="comment_writer">{{ comment.writer }}</span>
-          <span class="comment_regDate">{{ comment.writtenAt }}</span>
+          <span class="comment_regDate">{{ convertCommentDateTimeFormat(comment.writtenAt) }}</span>
         </div>
         <div class="comment_content">{{ comment.content }}</div>
       </div>

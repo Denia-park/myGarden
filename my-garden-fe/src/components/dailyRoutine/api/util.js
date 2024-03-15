@@ -62,6 +62,24 @@ export function getOneMonthAgoDate() {
 }
 
 /**
+ * 시간 문자열을 받으면 댓글 작성 시간 포맷으로 변환한다.
+ *
+ * @param dateTimeStr 변환할 시간 문자열
+ * @returns {string} 댓글 작성 시간 포맷으로 변환된 시간 문자열
+ */
+export function convertCommentDateTimeFormat(dateTimeStr) {
+    const date = new Date(dateTimeStr);
+
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
+
+/**
  * 해당 시간을 분으로 변환한다.
  *
  * @param time 변환할 시간
