@@ -11,7 +11,7 @@ import lombok.Builder;
  */
 @Builder
 public record CommentRequest(
-        @NotBlank(message = "내용은 비어있을 수 없습니다.")
+        @NotBlank(message = "댓글 내용은 비어있을 수 없습니다.")
         @Size(max = 300, message = "내용은 300자를 넘을 수 없습니다.")
         String content
 ) {
