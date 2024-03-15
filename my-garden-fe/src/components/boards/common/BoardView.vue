@@ -1,5 +1,6 @@
 <script setup>
 import {convertCategoryCodeToText} from "@/components/boards/common/util/util.js";
+import {isLogin} from "@/components/auth/login/api/api.js";
 
 const props = defineProps({
   title: {
@@ -64,12 +65,15 @@ function isAbleToReply() {
     <!--    </div>-->
 
     <div v-if="isAbleToReply()" class="detail_comment_box">
-      <div class="comment_submit_box">
-        <input class="input_box" placeholder="댓글을 입력해주세요" type="text">
-        <button class="submit_btn">등록</button>
-      </div>
-      <div v-for="comment in comments" :key="comment.id" class="comment">
+      <div v-if="isLogin()">
+        <div class="comment_submit_box">
+          <input class="input_box" placeholder="댓글을 입력해주세요" type="text">
+          <button class="submit_btn">등록</button>
+        </div>
         <hr id="comment_bot_line">
+      </div>
+      <div v-for="(comment, idx) in comments" :key="comment.id" class="comment">
+        <hr v-if="idx !== 0" id="comment_bot_line">
         <div class="comment_info">
           <span class="comment_writer">{{ comment.writer }}</span>
           <span class="comment_regDate">{{ comment.writtenAt }}</span>
