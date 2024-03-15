@@ -116,4 +116,59 @@ public class CommentService {
     private String extractEmailId(final String email) {
         return email.split("@")[0];
     }
+
+    /**
+     * 게시판의 댓글을 삭제한다.
+     *
+     * @param boardType 게시판 종류
+     * @param boardId   게시판 ID
+     * @param commentId 댓글 ID
+     */
+    public Long deleteComment(final String boardType, final Long boardId, final Long commentId, final MemberEntity member) {
+        validateDeleteRequest(boardType, boardId, commentId);
+        validateCommentOwner(commentId, member.getId());
+
+        commentRepository.deleteById(commentId);
+
+        return commentId;
+    }
+
+    /**
+     * 댓글 삭제 요청을 검증한다.
+     *
+     * @param boardType 게시판 종류
+     * @param boardId   게시판 ID
+     * @param commentId 댓글 ID
+     */
+    private void validateDeleteRequest(final String boardType, final Long boardId, final Long commentId) {
+        validateBoardType(boardType);
+        validateBoardId(boardId);
+        validateCommentId(commentId);
+    }
+
+    /**
+     * 댓글 ID를 검증한다.
+     *
+     * @param commentId 댓글 ID
+     */
+    private void validateCommentId(final Long commentId) {
+        if (commentId == null || commentId <= 0) {
+            throw new IllegalArgumentException("댓글 ID는 0보다 커야 합니다.");
+        }
+    }
+
+    /**
+     * 댓글 작성자를 검증한다.
+     *
+     * @param commentId 댓글 ID
+     * @param id        회원 ID
+     */
+    private void validateCommentOwner(final Long commentId, final Long id) {
+        CommentEntity commentEntity = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글입니다."));
+
+        if (!commentEntity.getMemberId().equals(id)) {
+            throw new IllegalArgumentException("댓글 작성자만 삭제할 수 있습니다.");
+        }
+    }
 }

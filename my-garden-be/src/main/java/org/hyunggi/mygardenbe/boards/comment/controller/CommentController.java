@@ -61,4 +61,33 @@ public class CommentController {
         Assert.isTrue(boardId != null && boardId > 0, "게시판 ID는 0보다 커야 합니다.");
         Assert.notNull(request, "댓글 요청은 비어있을 수 없습니다.");
     }
+
+    /**
+     * 게시판의 댓글을 삭제한다.
+     *
+     * @param boardType 게시판 종류
+     * @param boardId   게시판 ID
+     * @param commentId 댓글 ID
+     */
+    @DeleteMapping("/{boardType}/{boardId}/{commentId}")
+    public ApiResponse<Long> deleteComment(@PathVariable final String boardType,
+                                           @PathVariable final Long boardId,
+                                           @PathVariable final Long commentId,
+                                           @WithLoginUserEntity final MemberEntity member) {
+        validateDeleteRequest(boardType, boardId, commentId);
+        return ApiResponse.ok(commentService.deleteComment(boardType, boardId, commentId, member));
+    }
+
+    /**
+     * 댓글 삭제 요청을 검증한다.
+     *
+     * @param boardType 게시판 종류
+     * @param boardId   게시판 ID
+     * @param commentId 댓글 ID
+     */
+    private void validateDeleteRequest(final String boardType, final Long boardId, final Long commentId) {
+        Assert.hasText(boardType, "게시판 종류는 비어있을 수 없습니다.");
+        Assert.isTrue(boardId != null && boardId > 0, "게시판 ID는 0보다 커야 합니다.");
+        Assert.isTrue(commentId != null && commentId > 0, "댓글 ID는 0보다 커야 합니다.");
+    }
 }

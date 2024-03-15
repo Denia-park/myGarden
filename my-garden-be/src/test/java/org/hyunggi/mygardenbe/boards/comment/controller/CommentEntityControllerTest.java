@@ -78,4 +78,26 @@ class CommentEntityControllerTest extends ControllerTestSupport {
         //then
         BDDMockito.verify(commentService).postComment(eq(boardType), eq(boardId), eq(comment), any());
     }
+
+    @Test
+    @DisplayName("게시판의 댓글을 삭제한다.")
+    @WithMyCustomUser
+    void deleteComment() throws Exception {
+        //given
+        String boardType = "learn";
+        Long boardId = 1L;
+        Long commentId = 1L;
+
+        BDDMockito.given(commentService.deleteComment(any(), any(), any(), any())).willReturn(1L);
+
+        //when
+        mockMvc.perform(
+                        MockMvcRequestBuilders.delete("/api/boards/comments/%s/%d/%d".formatted(boardType, boardId, commentId))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").value(1));
+
+        //then
+        BDDMockito.verify(commentService).deleteComment(eq(boardType), eq(boardId), eq(commentId), any());
+    }
 }
