@@ -4,20 +4,19 @@
 
 * [myGarden](#mygarden)
   * [개요](#개요)
-  * [홈페이지 링크](#홈페이지-링크)
+    * [myGarden 서비스 바로가기](#mygarden-서비스-바로가기)
   * [아키텍처](#아키텍처)
-  * [기술 스택](#기술-스택)
     * [해당 기술 스택 선택 이유](#해당-기술-스택-선택-이유)
-  * [주요 기능](#주요-기능)
-    * [하루 일과](#하루-일과)
-    * [게시판 (공지사항 게시판, TIL 게시판)](#게시판-공지사항-게시판-til-게시판)
-    * [CI / CD](#ci--cd)
-    * [Prometheus / Grafana](#prometheus--grafana)
   * [API Docs (Spring Rest Docs)](#api-docs-spring-rest-docs)
   * [TestCoverage](#testcoverage)
   * [트러블 슈팅](#트러블-슈팅)
     * [Front (Vue.js)](#front-vuejs)
     * [Back (Spring Boot)](#back-spring-boot)
+  * [주요 기능](#주요-기능)
+    * [하루 일과](#하루-일과)
+    * [게시판 (공지사항 게시판, TIL 게시판)](#게시판-공지사항-게시판-til-게시판)
+    * [CI / CD](#ci--cd)
+    * [Prometheus / Grafana](#prometheus--grafana)
 
 <!-- TOC -->
 
@@ -29,55 +28,32 @@
 >
 > Il faut vivre comme on pense, sinon tôt ou tard on finit par penser comme on a vécu.
 
-`myGarden` 프로젝트는 내 삶에 있어서 조금 더 주도성을 가지기 위해, 내 행동들을 기록하고 확인하며 관리하기 위해 제작된 `개인 사이드 프로젝트`입니다.
+`myGarden` 프로젝트는 내 삶에 있어서 조금 더 주도성을 가지기 위해, 내 행동들을 기록하고 관리하기 위해 제작된 `개인 사이드 프로젝트`입니다.
 
 (프로젝트 기간 : 2023년 12월 12일 ~ 계속 진행중)
 
-## [홈페이지 링크](https://my-garden.shop/boards/notice)
+### [myGarden 서비스 바로가기](https://my-garden.shop/boards/notice)
 
 ## 아키텍처
 
-- `Front` : `Vue.js`
-- `Back` : `Spring Boot`
-- `DevOps` : `AWS EC2`, `AWS RDS`, `AWS Parameter Store`
-- `DB` : `MySQL (AWS RDS)`
-- `CI/CD` : `Github Actions`
-- `Monitoring` : `Prometheus`, `Grafana`
+| `분야`         | `기술 스택`                                       |
+|:-------------|:----------------------------------------------|
+| `Front`      | `Vue.js`                                      |
+| `Back`       | `Spring Boot`                                 |
+| `DevOps`     | `AWS EC2` / `AWS RDS` / `AWS Parameter Store` |
+| `DB`         | `MySQL (AWS RDS)`                             |
+| `CI/CD`      | `Github Actions`                              |
+| `Monitoring` | `Prometheus` / `Grafana`                      |
 
 ![Architecture](./docs/architecture/Architecture-240214.png)
 
-## 기술 스택
+### 해당 기술 스택 선택 이유
 
 <details>
 <summary>접기/펼치기</summary>
 
-- **Programming Language**
-  - `Javascript`
-  - `Java 17`
-- **Frontend**
-  - `Vue.js 3.0`, `Vuex`, `Vue Router`
-  - `Axios`, `Bootstrap`, `Chart.js`, `vue-markdown-editor`, `VCalendar`
-- **Backend**
-  - `Spring Boot 3.2`, `Spring Security`, `Spring Data JPA`, `QueryDSL`
-  - `Lombok`, `jsonwebtoken`
-  - `MySQL`, `H2 Database`
-- **ETC**
-  - **AWS**
-    - `EC2`, `RDS`, `Parameter Store`
-  - **Docs**
-    - `Spring Rest Docs`
-  - **Productivity Tools**
-    - `IntelliJ`
-  - **CI/CD**
-    - `Github Actions`
-    - `Docker`
-  - **Monitoring**
-    - `Prometheus`, `Grafana`
-
-### 해당 기술 스택 선택 이유
-
 - `Vue.js`
-  - `Vue.js`는 `React`에 비해 러닝커브가 낮고 공식 문서가 잘 되어있어서, `초보자`가 `간단한 프로젝트`를 만들기에 더 적합해서 선택했습니다.
+  - `Vue.js`는 `React`에 비해 러닝커브가 낮고 공식 문서가 잘 되어 있어, `간단한 프로젝트`를 만들기에 효율적인 프레임워크이기 때문에 선택했습니다.
 - `JWT`
   - `JWT`는 `토큰 기반 인증`을 통해 `REST API`에 대한 `인증` 및 `권한 부여`를 쉽게 구현할 수 있고, `Session`에 비해서 `서버의 부담`이 더 적기 때문에 선택했습니다.
     (`AWS 프리티어`를 사용하고 있어서 서버의 리소스를 주로 고려했습니다.)
@@ -100,81 +76,12 @@
 
 </details>
 
-## 주요 기능
-
-### 하루 일과
-
-- `오늘 있었던 일`들을 `시간대별로 등록` 및 확인할 수 있다.
-- `오늘 등록한 내용`들을 `타입별로 정리`하여 확인할 수 있다.
-- `하루 일과 통계`에서 지금까지 등록한 내용들을 `타입별로 통계`를 내어 확인할 수 있다.
-
-![하루 일과 전체 화면](./docs/daily-routine/img/DailyRoutine-ScreenShot.png)
-
-- **일과 등록**
-
-  ![일과 등록](./docs/daily-routine/gif/DailyRoutine-Post.gif)
-
-- **일과 확인**
-
-  ![일과 확인](./docs/daily-routine/gif/DailyRoutine-Get.gif)
-
-- **일과 당일 통계**
-
-  ![일과 당일 통계](./docs/daily-routine/gif/DailyRoutine-Statistic-Today.gif)
-
-- **일과 범위 통계**
-
-  ![일과 범위 통계](./docs/daily-routine/img/DailyRoutine-Statistic-Range.png)
-
-### 게시판 (공지사항 게시판, TIL 게시판)
-
-- `게시판` 기능을 제공
-  - `게시글` 확인 및 작성 (게시글 작성시 `Markdown Editor` 사용 가능)
-  - 게시글에 대해서 `검색` 및 `정렬`이 가능하고 `페이지네이션` 적용
-  - `TIL 게시판` : 댓글 작성 가능
-- 게시판별로 `접근 권한`을 분리
-  - `공지사항`은 `관리자`만 작성 가능
-
-![공지사항 글 목록 조회](./docs/boards/notice/gif/Notice-List.gif)
-![공지사항 글 조회](./docs/boards/notice/gif/Notice-View.gif)
-![TIL 글 작성](docs/boards/learn/gif/Learn-Post.gif)
-
-### CI / CD
-
-- `Github Actions`를 이용하여 `CI/CD`를 적용
-- `CI`
-  - PR에 대한 `테스트` 및 `빌드` 진행
-- `CD`
-  - `Merge`된 소스코드를 `Docker` 이미지를 통해 배포
-
-- **PR에 대한 테스트 비율 첨부**
-
-  ![PR에 대한 테스트 비율 첨부](./docs/cicd/Jacoco-PR-Comment.png)
-
-- **PR에 대해서 테스트 및 빌드 진행**
-
-  ![PR에 대해서 테스트 및 빌드 진행](./docs/cicd/Ci-test-build.png)
-
-- **CD 진행**
-
-  ![CD 진행](./docs/cicd/Cd-Deploy.png)
-
-### Prometheus / Grafana
-
-- `Prometheus`와 `Grafana`를 이용하여 `Monitoring`을 적용
-
-- **Spring App Server**
-  ![Spring App Server](./docs/monitoring/Spring-App-Server.png)
-
-- **AWS EC2 Server - Node Exporter**
-  ![AWS EC2 Server - Node Exporter](./docs/monitoring/AWS-EC2-Server.png)
-
 ## API Docs (Spring Rest Docs)
 
 - 홈페이지의 API Docs를 참고해주세요.
-  - [API Docs](https://my-garden.shop/docs/index.html)
+  - [API Docs 바로가기](https://my-garden.shop/docs/index.html)
 
-![ApiDocs-Body](./docs/api/ApiDocs-Body.png)
+![ApiDocs-Body](./docs/api/ApiDocs-Body2.png)
 
 ## TestCoverage
 
@@ -200,3 +107,58 @@
 7. [[Prometheus + Grafana] Monitoring 도입하기 ( + Node Exporter)](https://velog.io/@as9587/Prometheus-Grafana-Monitoring-%EB%8F%84%EC%9E%85%ED%95%98%EA%B8%B0-Node-Exporter)
 8. [GitHub Actions 기반의 CI 속도 개선 [Vue.js Build]](https://velog.io/@as9587/GitHub-Actions-%EA%B8%B0%EB%B0%98%EC%9D%98-CI-%EC%86%8D%EB%8F%84-%EA%B0%9C%EC%84%A0-Vue.js-Build)
 9. [GitHub Actions 기반의 CD 속도 개선](https://velog.io/@as9587/GitHub-Actions-%EA%B8%B0%EB%B0%98%EC%9D%98-CD-%EC%86%8D%EB%8F%84-%EA%B0%9C%EC%84%A0)
+
+## 주요 기능
+
+### 하루 일과
+
+- `오늘 있었던 일`들을 `시간대별로 등록` 및 확인할 수 있다.
+- `오늘 등록한 내용`들을 `타입별로 정리`하여 확인할 수 있다.
+- `하루 일과 통계`에서 지금까지 등록한 내용들을 `타입별로 통계`를 내어 확인할 수 있다.
+
+![하루 일과 전체 화면](./docs/daily-routine/img/DailyRoutine-ScreenShot.png)
+
+- **일과 확인**
+
+  ![일과 확인](./docs/daily-routine/gif/DailyRoutine-Get.gif)
+
+- **일과 범위 통계**
+
+  ![일과 범위 통계](./docs/daily-routine/img/DailyRoutine-Statistic-Range.png)
+
+### 게시판 (공지사항 게시판, TIL 게시판)
+
+- `게시판` 기능을 제공
+  - `게시글` 확인 및 작성 (게시글 작성시 `Markdown Editor` 사용 가능)
+  - 게시글에 대해서 `검색` 및 `정렬`이 가능하고 `페이지네이션` 적용
+  - `TIL 게시판` : 댓글 작성 가능
+- 게시판별로 `접근 권한`을 분리
+  - `공지사항`은 `관리자`만 작성 가능
+
+![공지사항 글 목록 조회](./docs/boards/notice/gif/Notice-List.gif)
+![공지사항 글 조회](./docs/boards/notice/gif/Notice-View.gif)
+![TIL 글 작성](docs/boards/learn/gif/Learn-Post.gif)
+
+### CI / CD
+
+- `Github Actions`를 이용하여 `CI/CD`를 적용
+  - PR이 작성되면, 자동으로 `테스트` 및 `빌드`가 진행
+  - PR이 `Merge`되면, 자동으로 `Docker` 이미지를 빌드하여 `배포` 진행
+
+- **PR에 대해서 테스트 및 빌드 진행**
+
+  ![PR에 대해서 테스트 및 빌드 진행](./docs/cicd/Ci-test-build.png)
+
+- **CD 진행**
+
+  ![CD 진행](./docs/cicd/Cd-Deploy.png)
+
+### Prometheus / Grafana
+
+- `Prometheus`와 `Grafana`를 이용하여 `Monitoring`을 적용
+
+- **Spring App Server**
+  ![Spring App Server](./docs/monitoring/Spring-App-Server.png)
+
+- **AWS EC2 Server - Node Exporter**
+  ![AWS EC2 Server - Node Exporter](./docs/monitoring/AWS-EC2-Server.png)
