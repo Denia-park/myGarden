@@ -4,9 +4,8 @@
 
 * [myGarden](#mygarden)
   * [개요](#개요)
-  * [홈페이지 링크](#홈페이지-링크)
+    * [myGarden 서비스 접속하기](#mygarden-서비스-접속하기)
   * [아키텍처](#아키텍처)
-  * [기술 스택](#기술-스택)
     * [해당 기술 스택 선택 이유](#해당-기술-스택-선택-이유)
   * [주요 기능](#주요-기능)
     * [하루 일과](#하루-일과)
@@ -29,55 +28,32 @@
 >
 > Il faut vivre comme on pense, sinon tôt ou tard on finit par penser comme on a vécu.
 
-`myGarden` 프로젝트는 내 삶에 있어서 조금 더 주도성을 가지기 위해, 내 행동들을 기록하고 확인하며 관리하기 위해 제작된 `개인 사이드 프로젝트`입니다.
+`myGarden` 프로젝트는 내 삶에 있어서 조금 더 주도성을 가지기 위해, 내 행동들을 기록하고 관리하기 위해 제작된 `개인 사이드 프로젝트`입니다.
 
 (프로젝트 기간 : 2023년 12월 12일 ~ 계속 진행중)
 
-## [홈페이지 링크](https://my-garden.shop/boards/notice)
+### [myGarden 서비스 접속하기](https://my-garden.shop/boards/notice)
 
 ## 아키텍처
 
-- `Front` : `Vue.js`
-- `Back` : `Spring Boot`
-- `DevOps` : `AWS EC2`, `AWS RDS`, `AWS Parameter Store`
-- `DB` : `MySQL (AWS RDS)`
-- `CI/CD` : `Github Actions`
-- `Monitoring` : `Prometheus`, `Grafana`
+| `분야`         | `기술 스택`                                       |
+|:-------------|:----------------------------------------------|
+| `Front`      | `Vue.js`                                      |
+| `Back`       | `Spring Boot`                                 |
+| `DevOps`     | `AWS EC2` / `AWS RDS` / `AWS Parameter Store` |
+| `DB`         | `MySQL (AWS RDS)`                             |
+| `CI/CD`      | `Github Actions`                              |
+| `Monitoring` | `Prometheus` / `Grafana`                      |
 
 ![Architecture](./docs/architecture/Architecture-240214.png)
 
-## 기술 스택
+### 해당 기술 스택 선택 이유
 
 <details>
 <summary>접기/펼치기</summary>
 
-- **Programming Language**
-  - `Javascript`
-  - `Java 17`
-- **Frontend**
-  - `Vue.js 3.0`, `Vuex`, `Vue Router`
-  - `Axios`, `Bootstrap`, `Chart.js`, `vue-markdown-editor`, `VCalendar`
-- **Backend**
-  - `Spring Boot 3.2`, `Spring Security`, `Spring Data JPA`, `QueryDSL`
-  - `Lombok`, `jsonwebtoken`
-  - `MySQL`, `H2 Database`
-- **ETC**
-  - **AWS**
-    - `EC2`, `RDS`, `Parameter Store`
-  - **Docs**
-    - `Spring Rest Docs`
-  - **Productivity Tools**
-    - `IntelliJ`
-  - **CI/CD**
-    - `Github Actions`
-    - `Docker`
-  - **Monitoring**
-    - `Prometheus`, `Grafana`
-
-### 해당 기술 스택 선택 이유
-
 - `Vue.js`
-  - `Vue.js`는 `React`에 비해 러닝커브가 낮고 공식 문서가 잘 되어있어서, `초보자`가 `간단한 프로젝트`를 만들기에 더 적합해서 선택했습니다.
+  - `Vue.js`는 `React`에 비해 러닝커브가 낮고 공식 문서가 잘 되어 있어, `간단한 프로젝트`를 만들기에 효율적인 프레임워크이기 때문에 선택했습니다.
 - `JWT`
   - `JWT`는 `토큰 기반 인증`을 통해 `REST API`에 대한 `인증` 및 `권한 부여`를 쉽게 구현할 수 있고, `Session`에 비해서 `서버의 부담`이 더 적기 때문에 선택했습니다.
     (`AWS 프리티어`를 사용하고 있어서 서버의 리소스를 주로 고려했습니다.)
@@ -100,6 +76,32 @@
 
 </details>
 
+## API Docs (Spring Rest Docs)
+
+- 홈페이지의 API Docs를 참고해주세요.
+  - [API Docs](https://my-garden.shop/docs/index.html)
+
+![ApiDocs-Body](./docs/api/ApiDocs-Body2.png)
+
+## 트러블 슈팅
+
+### Front (Vue.js)
+
+1. [vue 3버전 CORS 에러 해결하기](https://velog.io/@as9587/vue-3%EB%B2%84%EC%A0%84-CORS-%EC%97%90%EB%9F%AC-%ED%95%B4%EA%B2%B0%ED%95%98%EA%B8%B0)
+2. [vue 사용 중 Component의 속성 값이 변경되지 않는 이슈](https://velog.io/@as9587/vue-%EC%82%AC%EC%9A%A9-%EC%A4%91-Component%EC%9D%98-%EC%86%8D%EC%84%B1-%EA%B0%92%EC%9D%B4-%EB%B3%80%EA%B2%BD%EB%90%98%EC%A7%80-%EC%95%8A%EB%8A%94-%EC%9D%B4%EC%8A%88)
+
+### Back (Spring Boot)
+
+1. [[SpringDataJPA] JPA 사용 중 enum 관련하여 Table에 Insert 할 때 Check constraint violation: "CONSTRAINT_D: "; 가 발생하는 이슈](https://velog.io/@as9587/SpringDataJPA-JPA-%EC%82%AC%EC%9A%A9-%EC%A4%91-enum-%EA%B4%80%EB%A0%A8%ED%95%98%EC%97%AC-Table%EC%97%90-Insert-%ED%95%A0-%EB%95%8C-Check-constraint-violation-CONSTRAINTD-%EA%B0%80-%EB%B0%9C%EC%83%9D%ED%95%98%EB%8A%94-%EC%9D%B4%EC%8A%88)
+2. [spring boot 3.2에서 aws parameter store 적용하기](https://velog.io/@as9587/spring-boot-3.2%EC%97%90%EC%84%9C-aws-parameter-store-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0)
+3. [[AWS EC2 - Amazon Linux 2023 OS] 포트 리다이렉트(port redirect )하며 발생한 이슈 정리](https://velog.io/@as9587/AWS-EC2-Amazon-Linux-2023-OS-%ED%8F%AC%ED%8A%B8-%EB%A6%AC%EB%8B%A4%EC%9D%B4%EB%A0%89%ED%8A%B8port-redirect-%ED%95%98%EB%A9%B0-%EB%B0%9C%EC%83%9D%ED%95%9C-%EC%9D%B4%EC%8A%88-%EC%A0%95%EB%A6%AC)
+4. [spring MVC에서 Vue history mode 설정하기 (spring security 사용 중)](https://velog.io/@as9587/spring-MVC%EC%97%90%EC%84%9C-Vue-history-mode-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0-spring-security-%EC%82%AC%EC%9A%A9-%EC%A4%91)
+5. [AWS를 이용해서 HTTPS 적용 후 HTTPS가 반영이 안될 때 확인 방법](https://velog.io/@as9587/AWS%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%B4%EC%84%9C-HTTPS-%EC%A0%81%EC%9A%A9-%ED%9B%84-HTTPS%EA%B0%80-%EB%B0%98%EC%98%81%EC%9D%B4-%EC%95%88%EB%90%A0-%EB%95%8C-%ED%99%95%EC%9D%B8-%EB%B0%A9%EB%B2%95)
+6. [[Vue + Spring] Github Actions를 이용한 CI/CD 구축하기 (+ Jacoco PR Comment 기능)](https://velog.io/@as9587/Vue-Spring-Github-Actions%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-CICD-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0-Jacoco-PR-Comment-%EA%B8%B0%EB%8A%A5)
+7. [[Prometheus + Grafana] Monitoring 도입하기 ( + Node Exporter)](https://velog.io/@as9587/Prometheus-Grafana-Monitoring-%EB%8F%84%EC%9E%85%ED%95%98%EA%B8%B0-Node-Exporter)
+8. [GitHub Actions 기반의 CI 속도 개선 [Vue.js Build]](https://velog.io/@as9587/GitHub-Actions-%EA%B8%B0%EB%B0%98%EC%9D%98-CI-%EC%86%8D%EB%8F%84-%EA%B0%9C%EC%84%A0-Vue.js-Build)
+9. [GitHub Actions 기반의 CD 속도 개선](https://velog.io/@as9587/GitHub-Actions-%EA%B8%B0%EB%B0%98%EC%9D%98-CD-%EC%86%8D%EB%8F%84-%EA%B0%9C%EC%84%A0)
+
 ## 주요 기능
 
 ### 하루 일과
@@ -110,17 +112,9 @@
 
 ![하루 일과 전체 화면](./docs/daily-routine/img/DailyRoutine-ScreenShot.png)
 
-- **일과 등록**
-
-  ![일과 등록](./docs/daily-routine/gif/DailyRoutine-Post.gif)
-
 - **일과 확인**
 
   ![일과 확인](./docs/daily-routine/gif/DailyRoutine-Get.gif)
-
-- **일과 당일 통계**
-
-  ![일과 당일 통계](./docs/daily-routine/gif/DailyRoutine-Statistic-Today.gif)
 
 - **일과 범위 통계**
 
@@ -142,14 +136,8 @@
 ### CI / CD
 
 - `Github Actions`를 이용하여 `CI/CD`를 적용
-- `CI`
-  - PR에 대한 `테스트` 및 `빌드` 진행
-- `CD`
-  - `Merge`된 소스코드를 `Docker` 이미지를 통해 배포
-
-- **PR에 대한 테스트 비율 첨부**
-
-  ![PR에 대한 테스트 비율 첨부](./docs/cicd/Jacoco-PR-Comment.png)
+  - PR이 작성되면, 자동으로 `테스트` 및 `빌드`가 진행
+  - PR이 `Merge`되면, 자동으로 `Docker` 이미지를 빌드하여 `배포` 진행
 
 - **PR에 대해서 테스트 및 빌드 진행**
 
@@ -169,34 +157,8 @@
 - **AWS EC2 Server - Node Exporter**
   ![AWS EC2 Server - Node Exporter](./docs/monitoring/AWS-EC2-Server.png)
 
-## API Docs (Spring Rest Docs)
-
-- 홈페이지의 API Docs를 참고해주세요.
-  - [API Docs](https://my-garden.shop/docs/index.html)
-
-![ApiDocs-Body](./docs/api/ApiDocs-Body.png)
-
 ## TestCoverage
 
 - 현재 백엔드 단의 `TestCoverage`입니다.
 
 ![Spring TestCoverage](./docs/test/Spring-TestCoverage2.png)
-
-## 트러블 슈팅
-
-### Front (Vue.js)
-
-1. [vue 3버전 CORS 에러 해결하기](https://velog.io/@as9587/vue-3%EB%B2%84%EC%A0%84-CORS-%EC%97%90%EB%9F%AC-%ED%95%B4%EA%B2%B0%ED%95%98%EA%B8%B0)
-2. [vue 사용 중 Component의 속성 값이 변경되지 않는 이슈](https://velog.io/@as9587/vue-%EC%82%AC%EC%9A%A9-%EC%A4%91-Component%EC%9D%98-%EC%86%8D%EC%84%B1-%EA%B0%92%EC%9D%B4-%EB%B3%80%EA%B2%BD%EB%90%98%EC%A7%80-%EC%95%8A%EB%8A%94-%EC%9D%B4%EC%8A%88)
-
-### Back (Spring Boot)
-
-1. [[SpringDataJPA] JPA 사용 중 enum 관련하여 Table에 Insert 할 때 Check constraint violation: "CONSTRAINT_D: "; 가 발생하는 이슈](https://velog.io/@as9587/SpringDataJPA-JPA-%EC%82%AC%EC%9A%A9-%EC%A4%91-enum-%EA%B4%80%EB%A0%A8%ED%95%98%EC%97%AC-Table%EC%97%90-Insert-%ED%95%A0-%EB%95%8C-Check-constraint-violation-CONSTRAINTD-%EA%B0%80-%EB%B0%9C%EC%83%9D%ED%95%98%EB%8A%94-%EC%9D%B4%EC%8A%88)
-2. [spring boot 3.2에서 aws parameter store 적용하기](https://velog.io/@as9587/spring-boot-3.2%EC%97%90%EC%84%9C-aws-parameter-store-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0)
-3. [[AWS EC2 - Amazon Linux 2023 OS] 포트 리다이렉트(port redirect )하며 발생한 이슈 정리](https://velog.io/@as9587/AWS-EC2-Amazon-Linux-2023-OS-%ED%8F%AC%ED%8A%B8-%EB%A6%AC%EB%8B%A4%EC%9D%B4%EB%A0%89%ED%8A%B8port-redirect-%ED%95%98%EB%A9%B0-%EB%B0%9C%EC%83%9D%ED%95%9C-%EC%9D%B4%EC%8A%88-%EC%A0%95%EB%A6%AC)
-4. [spring MVC에서 Vue history mode 설정하기 (spring security 사용 중)](https://velog.io/@as9587/spring-MVC%EC%97%90%EC%84%9C-Vue-history-mode-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0-spring-security-%EC%82%AC%EC%9A%A9-%EC%A4%91)
-5. [AWS를 이용해서 HTTPS 적용 후 HTTPS가 반영이 안될 때 확인 방법](https://velog.io/@as9587/AWS%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%B4%EC%84%9C-HTTPS-%EC%A0%81%EC%9A%A9-%ED%9B%84-HTTPS%EA%B0%80-%EB%B0%98%EC%98%81%EC%9D%B4-%EC%95%88%EB%90%A0-%EB%95%8C-%ED%99%95%EC%9D%B8-%EB%B0%A9%EB%B2%95)
-6. [[Vue + Spring] Github Actions를 이용한 CI/CD 구축하기 (+ Jacoco PR Comment 기능)](https://velog.io/@as9587/Vue-Spring-Github-Actions%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-CICD-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0-Jacoco-PR-Comment-%EA%B8%B0%EB%8A%A5)
-7. [[Prometheus + Grafana] Monitoring 도입하기 ( + Node Exporter)](https://velog.io/@as9587/Prometheus-Grafana-Monitoring-%EB%8F%84%EC%9E%85%ED%95%98%EA%B8%B0-Node-Exporter)
-8. [GitHub Actions 기반의 CI 속도 개선 [Vue.js Build]](https://velog.io/@as9587/GitHub-Actions-%EA%B8%B0%EB%B0%98%EC%9D%98-CI-%EC%86%8D%EB%8F%84-%EA%B0%9C%EC%84%A0-Vue.js-Build)
-9. [GitHub Actions 기반의 CD 속도 개선](https://velog.io/@as9587/GitHub-Actions-%EA%B8%B0%EB%B0%98%EC%9D%98-CD-%EC%86%8D%EB%8F%84-%EA%B0%9C%EC%84%A0)
