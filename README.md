@@ -4,19 +4,19 @@
 
 * [myGarden](#mygarden)
   * [개요](#개요)
-    * [myGarden 서비스 접속하기](#mygarden-서비스-접속하기)
+    * [myGarden 서비스 바로가기](#mygarden-서비스-바로가기)
   * [아키텍처](#아키텍처)
     * [해당 기술 스택 선택 이유](#해당-기술-스택-선택-이유)
-  * [주요 기능](#주요-기능)
-    * [하루 일과](#하루-일과)
-    * [게시판 (공지사항 게시판, TIL 게시판)](#게시판-공지사항-게시판-til-게시판)
-    * [CI / CD](#ci--cd)
-    * [Prometheus / Grafana](#prometheus--grafana)
   * [API Docs (Spring Rest Docs)](#api-docs-spring-rest-docs)
   * [TestCoverage](#testcoverage)
   * [트러블 슈팅](#트러블-슈팅)
     * [Front (Vue.js)](#front-vuejs)
     * [Back (Spring Boot)](#back-spring-boot)
+  * [주요 기능](#주요-기능)
+    * [하루 일과](#하루-일과)
+    * [게시판 (공지사항 게시판, TIL 게시판)](#게시판-공지사항-게시판-til-게시판)
+    * [CI / CD](#ci--cd)
+    * [Prometheus / Grafana](#prometheus--grafana)
 
 <!-- TOC -->
 
@@ -32,7 +32,7 @@
 
 (프로젝트 기간 : 2023년 12월 12일 ~ 계속 진행중)
 
-### [myGarden 서비스 접속하기](https://my-garden.shop/boards/notice)
+### [myGarden 서비스 바로가기](https://my-garden.shop/boards/notice)
 
 ## 아키텍처
 
@@ -79,9 +79,15 @@
 ## API Docs (Spring Rest Docs)
 
 - 홈페이지의 API Docs를 참고해주세요.
-  - [API Docs](https://my-garden.shop/docs/index.html)
+  - [API Docs 바로가기](https://my-garden.shop/docs/index.html)
 
 ![ApiDocs-Body](./docs/api/ApiDocs-Body2.png)
+
+## TestCoverage
+
+- 현재 백엔드 단의 `TestCoverage`입니다.
+
+![Spring TestCoverage](./docs/test/Spring-TestCoverage2.png)
 
 ## 트러블 슈팅
 
@@ -156,9 +162,3 @@
 
 - **AWS EC2 Server - Node Exporter**
   ![AWS EC2 Server - Node Exporter](./docs/monitoring/AWS-EC2-Server.png)
-
-## TestCoverage
-
-- 현재 백엔드 단의 `TestCoverage`입니다.
-
-![Spring TestCoverage](./docs/test/Spring-TestCoverage2.png)
