@@ -114,24 +114,13 @@
 
   ![일과 등록](./docs/daily-routine/gif/DailyRoutine-Post.gif)
 
-
 - **일과 확인**
 
   ![일과 확인](./docs/daily-routine/gif/DailyRoutine-Get.gif)
 
-- **일과 수정 및 삭제**
-
-  ![일과 수정](./docs/daily-routine/gif/DailyRoutine-Put.gif)
-
-  ![일과 삭제](./docs/daily-routine/gif/DailyRoutine-Delete.gif)
-
 - **일과 당일 통계**
 
   ![일과 당일 통계](./docs/daily-routine/gif/DailyRoutine-Statistic-Today.gif)
-
-- **다른 날짜 일과 조회**
-
-  ![다른 날짜 일과 조회](./docs/daily-routine/gif/DailyRoutine-GetOtherDate.gif)
 
 - **일과 범위 통계**
 
@@ -149,14 +138,12 @@
 ![공지사항 글 목록 조회](./docs/boards/notice/gif/Notice-List.gif)
 ![공지사항 글 조회](./docs/boards/notice/gif/Notice-View.gif)
 ![TIL 글 작성](docs/boards/learn/gif/Learn-Post.gif)
-![TIL 글 수정](docs/boards/learn/gif/Learn-Put.gif)
-![TIL 글 삭제](docs/boards/learn/gif/Learn-Delete.gif)
 
 ### CI / CD
 
 - `Github Actions`를 이용하여 `CI/CD`를 적용
 - `CI`
-  - PR에 대한 테스트 및 빌드 진행
+  - PR에 대한 `테스트` 및 `빌드` 진행
 - `CD`
   - `Merge`된 소스코드를 `Docker` 이미지를 통해 배포
 
