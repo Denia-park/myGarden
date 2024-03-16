@@ -9,21 +9,15 @@
   * [기술 스택](#기술-스택)
     * [해당 기술 스택 선택 이유](#해당-기술-스택-선택-이유)
   * [주요 기능](#주요-기능)
-    * [회원가입](#회원가입)
-    * [로그인](#로그인)
     * [하루 일과](#하루-일과)
     * [게시판 (공지사항 게시판, TIL 게시판)](#게시판-공지사항-게시판-til-게시판)
     * [CI / CD](#ci--cd)
     * [Prometheus / Grafana](#prometheus--grafana)
+  * [API Docs (Spring Rest Docs)](#api-docs-spring-rest-docs)
+  * [TestCoverage](#testcoverage)
   * [트러블 슈팅](#트러블-슈팅)
     * [Front (Vue.js)](#front-vuejs)
     * [Back (Spring Boot)](#back-spring-boot)
-  * [API Docs (Spring Rest Docs)](#api-docs-spring-rest-docs)
-  * [TestCoverage](#testcoverage)
-  * [프로젝트 폴더 구조](#프로젝트-폴더-구조)
-    * [Front (Vue.js)](#front-vuejs-1)
-    * [Back (Spring Boot)](#back-spring-boot-1)
-  * [추가하고 싶은 기능](#추가하고-싶은-기능)
 
 <!-- TOC -->
 
@@ -53,6 +47,9 @@
 ![Architecture](./docs/architecture/Architecture-240214.png)
 
 ## 기술 스택
+
+<details>
+<summary>접기/펼치기</summary>
 
 - **Programming Language**
   - `Javascript`
@@ -101,24 +98,9 @@
   - `Prometheus`, `Grafana`는 두 기술 스택 모두 오픈소스라서 비용 문제 없이 접근할 수 있으며, 두 기술 모두 커뮤니티가
     잘 되어 있기 때문에 관련 자료의 접근성이 좋아서 선택했습니다
 
+</details>
+
 ## 주요 기능
-
-### 회원가입
-
-- 회원가입을 할 수 있다.
-  - `ID`는 `이메일`을 사용한다.
-  - `비밀번호`는 `8자 이상 20자 이하이며, 영문, 숫자, 특수문자가 각각 1개 이상 포함`되어야 한다.
-
-  ![회원가입](./docs/daily-routine/gif/DailyRoutine-Signup.gif)
-
-### 로그인
-
-- 로그인을 할 수 있다.
-  - `Remeber Me`를 체크하면, `LocalStorage`에 계정 정보를 저장한다.
-  - `이메일` 형식에 맞지 않거나, 비밀번호가 틀리면 로그인에 실패한다.
-  - 로그인에 성공하면, `JWT`를 발급받는다. (`AccessToken`은 30분 동안 유효하고, `RefreshToken`은 7일 동안 동안 유효)
-
-  ![로그인](./docs/daily-routine/gif/DailyRoutine-Login.gif)
 
 ### 하루 일과
 
@@ -157,13 +139,12 @@
 
 ### 게시판 (공지사항 게시판, TIL 게시판)
 
-- 게시판을 제공한다.
-  - `검색` 및 `정렬`이 가능, `페이지네이션` 적용
-  - `Markdown Editor` 적용
-- 권한 체크 기능
-  - 모든 게시글 확인 : `비회원도 가능`
-  - 게시글 작성, 수정, 삭제 : `로그인한 유저만 가능 (본인 글에 대해서만 수정 및 삭제 가능)`
-  - 공지사항 : `관리자`만 작성, 수정, 삭제 가능
+- `게시판` 기능을 제공
+  - `게시글` 확인 및 작성 (게시글 작성시 `Markdown Editor` 사용 가능)
+  - 게시글에 대해서 `검색` 및 `정렬`이 가능하고 `페이지네이션` 적용
+  - `TIL 게시판` : 댓글 작성 가능
+- 게시판별로 `접근 권한`을 분리
+  - `공지사항`은 `관리자`만 작성 가능
 
 ![공지사항 글 목록 조회](./docs/boards/notice/gif/Notice-List.gif)
 ![공지사항 글 조회](./docs/boards/notice/gif/Notice-View.gif)
@@ -175,35 +156,44 @@
 
 - `Github Actions`를 이용하여 `CI/CD`를 적용
 - `CI`
-  - `Vue 파일`
-    - `빌드`가 정상적으로 되는지 확인
-  - `Spring 파일`
-    - `테스트` 및 `빌드`가 정상적으로 되는지 확인
-    - `jacoco`를 이용해서, PR 올린 파일에 대한 테스트 비율을 댓글에 첨부
+  - PR에 대한 테스트 및 빌드 진행
 - `CD`
-  - `Merge`된 소스코드를 빌드 후 `Docker` 이미지로 생성
-  - 생성된 이미지를 `Github Action Container Registry`에 Push
-  - `Github Action Runner`에 연결해둔 `AWS EC2`에서 `Docker` 이미지 실행
+  - `Merge`된 소스코드를 `Docker` 이미지를 통해 배포
 
 - **PR에 대한 테스트 비율 첨부**
+
   ![PR에 대한 테스트 비율 첨부](./docs/cicd/Jacoco-PR-Comment.png)
 
 - **PR에 대해서 테스트 및 빌드 진행**
+
   ![PR에 대해서 테스트 및 빌드 진행](./docs/cicd/Ci-test-build.png)
 
 - **CD 진행**
+
   ![CD 진행](./docs/cicd/Cd-Deploy.png)
 
 ### Prometheus / Grafana
 
 - `Prometheus`와 `Grafana`를 이용하여 `Monitoring`을 적용
 
-
 - **Spring App Server**
   ![Spring App Server](./docs/monitoring/Spring-App-Server.png)
 
 - **AWS EC2 Server - Node Exporter**
   ![AWS EC2 Server - Node Exporter](./docs/monitoring/AWS-EC2-Server.png)
+
+## API Docs (Spring Rest Docs)
+
+- 홈페이지의 API Docs를 참고해주세요.
+  - [API Docs](https://my-garden.shop/docs/index.html)
+
+![ApiDocs-Body](./docs/api/ApiDocs-Body.png)
+
+## TestCoverage
+
+- 현재 백엔드 단의 `TestCoverage`입니다.
+
+![Spring TestCoverage](./docs/test/Spring-TestCoverage2.png)
 
 ## 트러블 슈팅
 
@@ -223,282 +213,3 @@
 7. [[Prometheus + Grafana] Monitoring 도입하기 ( + Node Exporter)](https://velog.io/@as9587/Prometheus-Grafana-Monitoring-%EB%8F%84%EC%9E%85%ED%95%98%EA%B8%B0-Node-Exporter)
 8. [GitHub Actions 기반의 CI 속도 개선 [Vue.js Build]](https://velog.io/@as9587/GitHub-Actions-%EA%B8%B0%EB%B0%98%EC%9D%98-CI-%EC%86%8D%EB%8F%84-%EA%B0%9C%EC%84%A0-Vue.js-Build)
 9. [GitHub Actions 기반의 CD 속도 개선](https://velog.io/@as9587/GitHub-Actions-%EA%B8%B0%EB%B0%98%EC%9D%98-CD-%EC%86%8D%EB%8F%84-%EA%B0%9C%EC%84%A0)
-
-## API Docs (Spring Rest Docs)
-
-- 홈페이지의 API Docs를 참고해주세요.
-  - [API Docs](https://my-garden.shop/docs/index.html)
-
-![ApiDocs-TOC](./docs/api/ApiDocs-TOC.png)
-
-## TestCoverage
-
-- 현재 백엔드 단의 `TestCoverage`입니다.
-
-![Spring TestCoverage](./docs/test/Spring-TestCoverage.png)
-
-## 프로젝트 폴더 구조
-
-### Front (Vue.js)
-
-<details>
-<summary>접기/펼치기</summary>
-
-```
-📦 myGarden
-└─ my-garden-fe
-   ├─ src
-   │  ├─ App.vue
-   │  ├─ assets
-   │  │  ├─ base.css
-   │  │  └─ main.css
-   │  ├─ components
-   │  │  ├─ auth
-   │  │  │  ├─ login
-   │  │  │  │  └─ api
-   │  │  │  │     └─ api.js
-   │  │  │  ├─ logout
-   │  │  │  │  └─ api
-   │  │  │  │     └─ api.js
-   │  │  │  └─ signup
-   │  │  │     └─ api
-   │  │  │        └─ api.js
-   │  │  ├─ boards
-   │  │  │  ├─ common
-   │  │  │  │  ├─ BoardView.vue
-   │  │  │  │  ├─ BoardWrite.vue
-   │  │  │  │  ├─ PaginationForm.vue
-   │  │  │  │  ├─ SearchForm.vue
-   │  │  │  │  ├─ TableContents.vue
-   │  │  │  │  ├─ TotalElementCounter.vue
-   │  │  │  │  ├─ WriteButton.vue
-   │  │  │  │  ├─ api
-   │  │  │  │  │  └─ api.js
-   │  │  │  │  └─ util
-   │  │  │  │     └─ util.js
-   │  │  │  ├─ learn
-   │  │  │  │  └─ api
-   │  │  │  │     └─ api.js
-   │  │  │  └─ notice
-   │  │  │     └─ api
-   │  │  │        └─ api.js
-   │  │  ├─ dailyRoutine
-   │  │  │  ├─ api
-   │  │  │  │  ├─ api.js
-   │  │  │  │  └─ util.js
-   │  │  │  ├─ draw
-   │  │  │  │  ├─ DrawDailyRoutine.vue
-   │  │  │  │  ├─ DrawStatisticsChart.vue
-   │  │  │  │  ├─ RoutineTooltip.vue
-   │  │  │  │  └─ ScheduleSection.vue
-   │  │  │  ├─ input
-   │  │  │  │  ├─ ContentInput.vue
-   │  │  │  │  ├─ DateInput.vue
-   │  │  │  │  ├─ InputDailyRoutine.vue
-   │  │  │  │  └─ TypeInput.vue
-   │  │  │  ├─ popup
-   │  │  │  │  └─ SelectDate.vue
-   │  │  │  ├─ side
-   │  │  │  │  ├─ LeftSide.vue
-   │  │  │  │  └─ RightSide.vue
-   │  │  │  └─ statistics
-   │  │  │     ├─ SelectDateWithCalendar.vue
-   │  │  │     └─ StactisticsTable.vue
-   │  │  └─ default
-   │  │     ├─ ContentTitle.vue
-   │  │     ├─ DefaultFooter.vue
-   │  │     ├─ DefaultHeader.vue
-   │  │     └─ PageTitle.vue
-   │  ├─ main.js
-   │  ├─ pages
-   │  │  ├─ Login.vue
-   │  │  ├─ NotFound.vue
-   │  │  ├─ SignUp.vue
-   │  │  ├─ dailyRoutine
-   │  │  │  ├─ DailyRoutine.vue
-   │  │  │  └─ DailyRoutineStatistics.vue
-   │  │  └─ boards
-   │  │     ├─ learn
-   │  │     │  ├─ LearnBoardList.vue
-   │  │     │  ├─ LearnBoardView.vue
-   │  │     │  └─ LearnBoardWrite.vue
-   │  │     └─ notice
-   │  │        ├─ NoticeBoardList.vue
-   │  │        ├─ NoticeBoardView.vue
-   │  │        └─ NoticeBoardWrite.vue
-   │  └─ scripts
-   │     ├─ axios-interceptors.js
-   │     ├─ parseJwt.js
-   │     ├─ router.js
-   │     └─ store.js
-   └─ vite.config.js
-   
-```
-
-©generated by [Project Tree Generator](https://woochanleee.github.io/project-tree-generator)
-
-</details>
-
-### Back (Spring Boot)
-
-<details>
-<summary>접기/펼치기</summary>
-
-```
-📦 myGarden
-└─ my-garden-be
-   └─ src
-      └─ main
-         ├─ java
-         │  └─ org
-         │     └─ hyunggi
-         │        └─ mygardenbe
-         │           ├─ MyGardenBeApplication.java
-         │           ├─ auth
-         │           │  ├─ controller
-         │           │  │  ├─ AuthenticationController.java
-         │           │  │  └─ request
-         │           │  │     ├─ LoginRequest.java
-         │           │  │     ├─ RefreshRequest.java
-         │           │  │     └─ SignupRequest.java
-         │           │  ├─ jwt
-         │           │  │  ├─ domain
-         │           │  │  │  ├─ Token.java
-         │           │  │  │  └─ TokenType.java
-         │           │  │  ├─ entity
-         │           │  │  │  └─ TokenEntity.java
-         │           │  │  ├─ filter
-         │           │  │  │  ├─ JwtAuthenticationFilter.java
-         │           │  │  │  └─ JwtExceptionHandlerFilter.java
-         │           │  │  ├─ repository
-         │           │  │  │  └─ TokenRepository.java
-         │           │  │  ├─ service
-         │           │  │  │  ├─ JwtService.java
-         │           │  │  │  └─ MyLogoutHandler.java
-         │           │  │  └─ util
-         │           │  │     └─ JwtAuthUtil.java
-         │           │  └─ service
-         │           │     ├─ AuthenticationService.java
-         │           │     └─ response
-         │           │        └─ AuthenticationResponse.java
-         │           ├─ boards
-         │           │  ├─ common
-         │           │  │  ├─ controller
-         │           │  │  │  └─ BoardCategoryController.java
-         │           │  │  ├─ entity
-         │           │  │  │  └─ BoardCategoryEntity.java
-         │           │  │  ├─ repository
-         │           │  │  │  └─ BoardCategoryRepository.java
-         │           │  │  ├─ request
-         │           │  │  │  └─ GetRequest.java
-         │           │  │  ├─ response
-         │           │  │  │  ├─ BoardCategoryResponse.java
-         │           │  │  │  └─ CustomPage.java
-         │           │  │  └─ service
-         │           │  │     └─ BoardCategoryService.java
-         │           │  ├─ learn
-         │           │  │  ├─ controller
-         │           │  │  │  ├─ LearnBoardController.java
-         │           │  │  │  └─ request
-         │           │  │  │     └─ PostRequest.java
-         │           │  │  ├─ entity
-         │           │  │  │  └─ LearnBoardEntity.java
-         │           │  │  ├─ repository
-         │           │  │  │  └─ LearnBoardRepository.java
-         │           │  │  └─ service
-         │           │  │     ├─ LearnBoardService.java
-         │           │  │     └─ response
-         │           │  │        └─ LearnBoardResponse.java
-         │           │  └─ notice
-         │           │     ├─ controller
-         │           │     │  ├─ NoticeBoardController.java
-         │           │     │  └─ request
-         │           │     │     └─ PostRequest.java
-         │           │     ├─ entity
-         │           │     │  └─ NoticeBoardEntity.java
-         │           │     ├─ repository
-         │           │     │  └─ NoticeBoardRepository.java
-         │           │     └─ service
-         │           │        ├─ NoticeBoardService.java
-         │           │        └─ response
-         │           │           └─ NoticeBoardResponse.java
-         │           ├─ common
-         │           │  ├─ auth
-         │           │  │  └─ LoginUserEntity.java
-         │           │  ├─ entity
-         │           │  │  └─ BaseEntity.java
-         │           │  ├─ exception
-         │           │  │  ├─ BusinessException.java
-         │           │  │  ├─ InvalidTokenRequestException.java
-         │           │  │  └─ controlleradvice
-         │           │  │     └─ ApiControllerAdvice.java
-         │           │  ├─ response
-         │           │  │  └─ ApiResponse.java
-         │           │  └─ view
-         │           │     └─ filter
-         │           │        └─ HistoryModeFilter.java
-         │           ├─ configuration
-         │           │  ├─ ConnectorConfig.java
-         │           │  ├─ JpaAuditingConfiguration.java
-         │           │  ├─ JwtBeanConfiguration.java
-         │           │  └─ SecurityConfiguration.java
-         │           ├─ dailyroutine
-         │           │  ├─ controller
-         │           │  │  ├─ DailyRoutineController.java
-         │           │  │  └─ request
-         │           │  │     ├─ GetRequest.java
-         │           │  │     └─ PostRequest.java
-         │           │  ├─ domain
-         │           │  │  ├─ DailyRoutine.java
-         │           │  │  ├─ RoutineTime.java
-         │           │  │  ├─ RoutineType.java
-         │           │  │  └─ TimeSplitter.java
-         │           │  ├─ entity
-         │           │  │  └─ DailyRoutineEntity.java
-         │           │  ├─ repository
-         │           │  │  └─ DailyRoutineRepository.java
-         │           │  └─ service
-         │           │     ├─ DailyRoutineService.java
-         │           │     └─ response
-         │           │        └─ DailyRoutineResponse.java
-         │           └─ member
-         │              ├─ domain
-         │              │  ├─ Member.java
-         │              │  ├─ Permission.java
-         │              │  └─ Role.java
-         │              ├─ entity
-         │              │  └─ MemberEntity.java
-         │              └─ repository
-         │                 └─ MemberRepository.java
-         └─ resources
-            ├─ application.yaml
-            └─ ssl
-               └─ keystore.p12
-
-```
-
-©generated by [Project Tree Generator](https://woochanleee.github.io/project-tree-generator)
-
-</details>
-
-## 추가하고 싶은 기능
-
-<details>
-<summary>접기/펼치기</summary>
-
-- 이메일 인증
-- 하루 일과 완료 후 통계 내용 메일로 혹은 슬랙으로 발송하기
-- 며칠 이상 TIL 작성하지 않을 시, Reminder 메일 보내기
-- 소셜 로그인
-  - 카카오톡
-  - 네이버
-  - 구글
-- Redis 적용
-- 글 작성 수 혹은 조회수로 랭킹 만들기
-- 부하 테스트 진행하기
-- 로깅 설정 추가하기
-- 습관 만들기
-  - 습관을 만들고자 하는 행동 추가
-  - 얼마나 지속하고 있는지 시각화 (Github 잔디)
-
-</details>
