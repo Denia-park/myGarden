@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Profile;
 /**
  * Slack 관련 Bean 생성 Configuration
  */
-@Profile("prod2")
+@Profile("prod")
 @Configuration
 public class SlackLogAppenderConfiguration {
     /**
