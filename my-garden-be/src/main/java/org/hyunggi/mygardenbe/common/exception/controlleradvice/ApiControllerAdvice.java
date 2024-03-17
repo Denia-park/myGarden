@@ -18,6 +18,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @Slf4j
 public class ApiControllerAdvice {
+    public ApiControllerAdvice() {
+        log.info("ApiControllerAdvice Bean Created");
+    }
+
     /**
      * BindException 예외 처리
      *
