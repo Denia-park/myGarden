@@ -91,7 +91,7 @@ function validatePasswordCheck() {
     <div class="modal-dialog" role="document">
       <div class="modal-content rounded-4 shadow">
         <div class="modal-header p-5 pb-4 border-bottom-0">
-          <h1 class="fw-bold mb-0 fs-2">Sign up for free</h1>
+          <h1 class="fw-bold mb-0 fs-2">회원가입</h1>
           <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"
                   @click="goToLogin"></button>
         </div>
@@ -100,7 +100,7 @@ function validatePasswordCheck() {
           <div class="form-floating mb-3">
             <input v-model="form.email" class="form-control rounded-3" placeholder="name@example.com"
                    type="email" @input="validateEmail">
-            <label>Email address</label>
+            <label>이메일 주소</label>
             <div v-if="!form.emailValid" class="text-danger validationText">
               유효한 이메일 형식을 입력해주세요.
             </div>
@@ -109,7 +109,7 @@ function validatePasswordCheck() {
           <div class="form-floating mb-3">
             <input v-model="form.password" class="form-control rounded-3" placeholder="Password"
                    type="password" @input="validatePassword">
-            <label>Password</label>
+            <label>비밀번호</label>
             <div v-if="!form.passwordValid" class="text-danger validationText">
               영문자, 숫자, 특수문자($, @, !, %, *, #, ?, &)가 각각 1개 이상 포함된 8~20자의 비밀번호여야 합니다.
             </div>
@@ -117,13 +117,12 @@ function validatePasswordCheck() {
           <div class="form-floating mb-3">
             <input v-model="form.passwordCheck" class="form-control rounded-3" placeholder="Password Check"
                    type="password" @input="validatePasswordCheck">
-            <label>Password Check</label>
+            <label>비밀번호 확인</label>
             <div v-if="!form.passwordCheckValid" class="text-danger validationText">
               위에서 패스워드로 입력하신 값이랑 일치하지 않습니다.
             </div>
           </div>
-          <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit" @click="signup">Sign up</button>
-          <small class="text-body-secondary">By clicking Sign up, you agree to the terms of use.</small>
+          <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit" @click="signup">회원가입</button>
         </div>
       </div>
     </div>
@@ -131,6 +130,11 @@ function validatePasswordCheck() {
 </template>
 
 <style scoped>
+.modal-header h1 {
+  width: 100%;
+  text-align: center;
+}
+
 .validationText {
   font-size: 1rem;
 }
