@@ -97,30 +97,29 @@ onMounted(() => {
     <div class="modal-dialog" role="document">
       <div class="modal-content rounded-4 shadow">
         <div class="modal-header p-5 pb-4 border-bottom-0">
-          <h1 class="fw-bold mb-0 fs-2">Please login</h1>
+          <h1 class="fw-bold mb-0 fs-2">로그인</h1>
         </div>
 
         <div class="modal-body p-5 pt-0">
           <div class="form-floating">
             <input id="floatingInput" v-model="form.email" class="form-control" placeholder="name@example.com"
                    type="email">
-            <label for="floatingInput">Email address</label>
+            <label for="floatingInput">이메일 주소</label>
           </div>
           <div class="form-floating">
             <input id="floatingPassword" v-model="form.password" class="form-control" placeholder="Password"
                    type="password">
-            <label for="floatingPassword">Password</label>
+            <label for="floatingPassword">비밀번호</label>
           </div>
 
           <div class="form-check text-start my-3">
             <input id="flexCheckDefault" v-model="rememberMe" class="form-check-input" type="checkbox">
             <label class="form-check-label" for="flexCheckDefault">
-              Remember me
-              <span style="font-size: 13px">(※ Only use this option on private computer)</span>
+              로그인 정보 저장
             </label>
           </div>
-          <button class="btn btn-primary w-100 py-2" @click="submit">Login</button>
-          <button class="btn btn-success w-100 py-2" @click="goToSignup">Sign up</button>
+          <button class="btn btn-primary w-100 py-2" @click="submit">로그인</button>
+          <button class="btn btn-success w-100 py-2" @click="goToSignup">회원가입</button>
         </div>
       </div>
     </div>
@@ -129,6 +128,11 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.modal-header h1 {
+  width: 100%;
+  text-align: center;
+}
+
 .form-sign-in input[type="email"] {
   margin-bottom: -1px;
   border-bottom-right-radius: 0;

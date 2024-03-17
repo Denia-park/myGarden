@@ -119,7 +119,6 @@ watch(() => props.queryParameter, () => {
 <style scoped>
 .filter-wrapper {
   height: 110px;
-  margin: 0 10px;
 
   display: flex;
   flex-direction: column;
@@ -136,7 +135,7 @@ watch(() => props.queryParameter, () => {
 }
 
 .filter-bot-wrapper {
-  padding: 10px 10px;
+  padding: 10px 0;
 
   display: flex;
   flex-direction: row;
