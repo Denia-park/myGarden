@@ -8,6 +8,8 @@ import net.gpedro.integrations.slack.SlackAttachment;
 import net.gpedro.integrations.slack.SlackField;
 import net.gpedro.integrations.slack.SlackMessage;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -22,6 +24,7 @@ import java.util.List;
  * - 서버 에러 발생 시 Slack으로 알림을 보내는 Controller Advice
  * - Profile이 prod일 때만 동작
  */
+@Order(Ordered.LOWEST_PRECEDENCE)
 @Profile("prod")
 @RequiredArgsConstructor
 @RestControllerAdvice

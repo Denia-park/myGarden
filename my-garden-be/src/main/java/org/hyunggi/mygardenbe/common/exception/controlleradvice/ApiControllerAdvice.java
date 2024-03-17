@@ -17,14 +17,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * <br><br>
  * - API Controller에서 발생하는 예외를 처리하는 Advice
  */
-@RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
+@RestControllerAdvice
 @Slf4j
 public class ApiControllerAdvice {
-    public ApiControllerAdvice() {
-        log.info("ApiControllerAdvice Bean Created");
-    }
-
     /**
      * BindException 예외 처리
      *
