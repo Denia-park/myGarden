@@ -24,7 +24,7 @@ import java.util.List;
  * - 서버 에러 발생 시 Slack으로 알림을 보내는 Controller Advice
  * - Profile이 prod일 때만 동작
  */
-@Profile("prod")
+@Profile("prod2")
 @RequiredArgsConstructor
 @RestControllerAdvice
 @Order(Ordered.LOWEST_PRECEDENCE)
