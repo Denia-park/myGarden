@@ -8,6 +8,8 @@ import net.gpedro.integrations.slack.SlackAttachment;
 import net.gpedro.integrations.slack.SlackField;
 import net.gpedro.integrations.slack.SlackMessage;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -25,6 +27,7 @@ import java.util.List;
 @Profile("prod")
 @RequiredArgsConstructor
 @RestControllerAdvice
+@Order(Ordered.LOWEST_PRECEDENCE)
 @Slf4j
 public class ServerErrorDetectControllerAdvice {
     /**
