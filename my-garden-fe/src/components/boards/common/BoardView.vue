@@ -53,6 +53,10 @@ function submitComment() {
   emit('submitComment', comment.value);
   comment.value = '';
 }
+
+function isCommentBoxActive() {
+  return props.comments.length > 0 || isLogin();
+}
 </script>
 
 <template>
@@ -84,7 +88,7 @@ function submitComment() {
     <!--      </div>-->
     <!--    </div>-->
 
-    <div v-if="isAbleToReply()" class="detail_comment_box">
+    <div v-if="isAbleToReply()" :class="isCommentBoxActive() ? 'detail_comment_box' : ''">
       <div v-if="isLogin()">
         <div class="comment_submit_box">
           <input v-model="comment" class="input_box" placeholder="댓글을 입력해주세요" type="text">
