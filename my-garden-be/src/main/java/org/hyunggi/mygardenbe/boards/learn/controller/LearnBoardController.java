@@ -67,7 +67,7 @@ public class LearnBoardController {
         return PageRequest.of(
                 searchPaging.currentPage(),
                 searchPaging.pageSize(),
-                Sort.by(searchPaging.convertOrderToSortDirection(), searchPaging.sort(), "id")
+                Sort.by(searchPaging.getOrder(), Sort.Order.asc("id"))
         );
     }
 
