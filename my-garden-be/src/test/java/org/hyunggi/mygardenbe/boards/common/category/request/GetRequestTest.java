@@ -2,9 +2,7 @@ package org.hyunggi.mygardenbe.boards.common.category.request;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
@@ -265,25 +263,6 @@ class GetRequestTest {
         assertThat(requestSearchPaging.order()).isEqualTo("desc");
     }
 
-    @ParameterizedTest
-    @MethodSource("provideGetRequestOrder")
-    @DisplayName("convertOrderToSortDirection() 메서드를 통해, order를 Sort.Direction로 변환한다.")
-    void convertOrderToSortDirection(final String order, final Sort.Direction expected) {
-        //given
-        final GetRequest.SearchPaging searchPaging = GetRequest.SearchPaging.builder()
-                .currentPage(null)
-                .pageSize(null)
-                .sort(null)
-                .order(order)
-                .build();
-
-        //when
-        final Sort.Direction sortDirection = searchPaging.convertOrderToSortDirection();
-
-        //then
-        assertThat(sortDirection).isEqualTo(expected);
-    }
-
     public static Stream<Arguments> provideGetRequestOrder() {
         return Stream.of(
                 Arguments.of("desc", Sort.Direction.DESC),
@@ -310,5 +289,26 @@ class GetRequestTest {
 
         //then
         assertThat(searchPaging.currentPage()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("getOrder()를 통해 정렬 순서를 반환한다.")
+    void getOrder() {
+        //given
+        final Integer currentPage = 0;
+        final Integer pageSize = 10;
+        final String sort = "writtenAt";
+        final String order = "desc";
+
+        //when
+        final GetRequest.SearchPaging searchPaging = GetRequest.SearchPaging.builder()
+                .currentPage(currentPage)
+                .pageSize(pageSize)
+                .sort(sort)
+                .order(order)
+                .build();
+
+        //then
+        assertThat(searchPaging.getOrder()).isEqualTo(Sort.Order.desc("writtenAt"));
     }
 }
