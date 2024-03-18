@@ -281,19 +281,24 @@ public final class GetRequest {
         }
 
         /**
+         * 정렬 기준을 Sort.Order로 변환
+         *
+         * @return Sort.Order
+         */
+        public Sort.Order getOrder() {
+            return Sort.Order.by(sort).with(convertOrderToSortDirection());
+        }
+
+        /**
          * 정렬 순서를 Sort.Direction으로 변환
          *
          * @return Sort.Direction
          */
-        public Sort.Direction convertOrderToSortDirection() {
+        private Sort.Direction convertOrderToSortDirection() {
             if (order.equals("desc"))
                 return Sort.Direction.DESC;
             else
                 return Sort.Direction.ASC;
-        }
-
-        public Sort.Order getOrder() {
-            return Sort.Order.by(sort).with(convertOrderToSortDirection());
         }
     }
 }
