@@ -8,6 +8,7 @@
   * [아키텍처](#아키텍처)
     * [해당 기술 스택 선택 이유](#해당-기술-스택-선택-이유)
   * [API Docs (Spring Rest Docs)](#api-docs-spring-rest-docs)
+  * [ERD](#erd)
   * [TestCoverage](#testcoverage)
   * [트러블 슈팅](#트러블-슈팅)
     * [Front (Vue.js)](#front-vuejs)
@@ -82,6 +83,10 @@
   - [API Docs 바로가기](https://my-garden.shop/docs/index.html)
 
 ![ApiDocs-Body](./docs/api/ApiDocs-Body2.png)
+
+## ERD
+
+![ERD](./docs/erd/erd_240318.png)
 
 ## TestCoverage
 
