@@ -74,7 +74,7 @@ public class NoticeBoardResponse {
                 .id(noticeBoardEntity.getId())
                 .title(noticeBoardEntity.getTitle())
                 .content(noticeBoardEntity.getContent())
-                .category(noticeBoardEntity.getCategory())
+                .category(noticeBoardEntity.getCategoryCode())
                 .isImportant(noticeBoardEntity.getIsImportant())
                 .views(noticeBoardEntity.getViews())
                 .writer(noticeBoardEntity.getWriter())

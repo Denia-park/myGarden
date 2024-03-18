@@ -62,7 +62,7 @@ class BoardCategoryServiceTest extends IntegrationTestSupport {
         boardCategoryRepository.save(boardCategoryEntity);
 
         //when, then
-        assertThatThrownBy(() -> boardCategoryService.validateCategoryWithBoardType("study", boardType))
+        assertThatThrownBy(() -> boardCategoryService.getCategoryWithBoardType("study", boardType))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("게시판 타입은 비어있을 수 없습니다.");
     }
@@ -77,7 +77,7 @@ class BoardCategoryServiceTest extends IntegrationTestSupport {
         boardCategoryRepository.save(boardCategoryEntity);
 
         //when, then
-        assertThatThrownBy(() -> boardCategoryService.validateCategoryWithBoardType(category, "notice"))
+        assertThatThrownBy(() -> boardCategoryService.getCategoryWithBoardType(category, "notice"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("분류는 비어있을 수 없습니다.");
     }
@@ -91,7 +91,7 @@ class BoardCategoryServiceTest extends IntegrationTestSupport {
         boardCategoryRepository.save(boardCategoryEntity);
 
         //when, then
-        assertThatThrownBy(() -> boardCategoryService.validateCategoryWithBoardType("study", "notice"))
+        assertThatThrownBy(() -> boardCategoryService.getCategoryWithBoardType("study", "notice"))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("해당 분류가 존재하지 않습니다.");
     }

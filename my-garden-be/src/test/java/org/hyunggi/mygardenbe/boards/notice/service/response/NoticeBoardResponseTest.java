@@ -1,5 +1,6 @@
 package org.hyunggi.mygardenbe.boards.notice.service.response;
 
+import org.hyunggi.mygardenbe.boards.common.category.entity.BoardCategoryEntity;
 import org.hyunggi.mygardenbe.boards.notice.entity.NoticeBoardEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,9 @@ class NoticeBoardResponseTest {
     @DisplayName("of 메서드를 통해서, NoticeBoardResponse 객체를 생성할 수 있다.")
     void of() {
         // given
-        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of("title", "content", "category", "writer", 1L);
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of("title", "content", boardCategoryEntity, "writer", 1L);
 
         // when
         final NoticeBoardResponse noticeBoardResponse = NoticeBoardResponse.of(noticeBoardEntity);
@@ -22,7 +25,7 @@ class NoticeBoardResponseTest {
         assertThat(noticeBoardResponse).isNotNull();
         assertThat(noticeBoardResponse.getTitle()).isEqualTo(noticeBoardEntity.getTitle());
         assertThat(noticeBoardResponse.getContent()).isEqualTo(noticeBoardEntity.getContent());
-        assertThat(noticeBoardResponse.getCategory()).isEqualTo(noticeBoardEntity.getCategory());
+        assertThat(noticeBoardResponse.getCategory()).isEqualTo(noticeBoardEntity.getCategoryCode());
         assertThat(noticeBoardResponse.getIsImportant()).isEqualTo(noticeBoardEntity.getIsImportant());
         assertThat(noticeBoardResponse.getViews()).isEqualTo(noticeBoardEntity.getViews());
         assertThat(noticeBoardResponse.getWriter()).isEqualTo(noticeBoardEntity.getWriter());

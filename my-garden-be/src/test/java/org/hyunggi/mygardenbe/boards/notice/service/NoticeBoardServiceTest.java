@@ -110,10 +110,12 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     }
 
     private NoticeBoardEntity buildNoticeBoardWith(final String title, final String content, final String category, final boolean isImportant) {
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity(category, "카테고리", "notice");
+
         return NoticeBoardEntity.of(
                 title,
                 content,
-                category,
+                boardCategoryEntity,
                 isImportant,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
@@ -309,10 +311,12 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("공지사항을 조회한다.")
     void getNoticeBoard() {
         // given
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+
         final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
                 "title",
                 "content",
-                "category",
+                boardCategoryEntity,
                 false,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
@@ -338,10 +342,12 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("공지사항을 조회하면, 조회 수가 1 증가한다.")
     void getNoticeBoardWithIncreaseViewCount() {
         // given
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+
         final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
                 "title",
                 "content",
-                "category",
+                boardCategoryEntity,
                 true,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
@@ -493,10 +499,12 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("공지사항을 수정한다.")
     void putNoticeBoard() {
         // given
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+
         final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
                 "title",
                 "content",
-                "category",
+                boardCategoryEntity,
                 true,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
@@ -563,10 +571,12 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("공지사항을 수정할 때, PostRequest의 title이 null이면, IllegalArgumentException이 발생한다.")
     void putNoticeBoardWithNullTitle() {
         // given
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+
         final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
                 "title",
                 "content",
-                "category",
+                boardCategoryEntity,
                 true,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
@@ -591,10 +601,12 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("공지사항을 수정할 때, PostRequest의 title이 100자를 초과하면, IllegalArgumentException이 발생한다.")
     void putNoticeBoardWithOver100Title() {
         // given
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+
         final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
                 "title",
                 "content",
-                "category",
+                boardCategoryEntity,
                 true,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
@@ -619,10 +631,12 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("공지사항을 수정할 때, PostRequest의 content가 null이면, IllegalArgumentException이 발생한다.")
     void putNoticeBoardWithNullContent() {
         // given
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+
         final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
                 "title",
                 "content",
-                "category",
+                boardCategoryEntity,
                 true,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
@@ -647,10 +661,12 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("공지사항을 수정할 때, PostRequest의 content가 4000자를 초과하면, IllegalArgumentException이 발생한다.")
     void putNoticeBoardWithOver4000Content() {
         // given
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+
         final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
                 "title",
                 "content",
-                "category",
+                boardCategoryEntity,
                 true,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
@@ -675,10 +691,12 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("공지사항을 수정할 때, PostRequest의 category가 존재하지 않으면, EntityNotFoundException이 발생한다.")
     void putNoticeBoardWithNonExistCategory() {
         // given
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+
         final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
                 "title",
                 "content",
-                "category",
+                boardCategoryEntity,
                 true,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
@@ -721,10 +739,12 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("공지사항을 수정할 때, 작성자가 아니면, IllegalArgumentException이 발생한다.")
     void putNoticeBoardWithNotWriter() {
         // given
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+
         final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
                 "title",
                 "content",
-                "category",
+                boardCategoryEntity,
                 true,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
@@ -749,10 +769,12 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("공지사항을 삭제한다.")
     void deleteNoticeBoard() {
         // given
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+
         final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
                 "title",
                 "content",
-                "category",
+                boardCategoryEntity,
                 true,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),

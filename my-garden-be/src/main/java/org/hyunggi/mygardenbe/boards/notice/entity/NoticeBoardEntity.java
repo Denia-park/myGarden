@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hyunggi.mygardenbe.boards.common.category.entity.BoardCategoryEntity;
 import org.hyunggi.mygardenbe.common.entity.BaseEntity;
 
 import java.time.LocalDateTime;
@@ -37,8 +38,9 @@ public class NoticeBoardEntity extends BaseEntity {
     /**
      * 분류
      */
-    @Column(nullable = false, length = 20)
-    private String category;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false, name = "category_id")
+    private BoardCategoryEntity category;
 
     /**
      * 중요 여부
@@ -71,7 +73,7 @@ public class NoticeBoardEntity extends BaseEntity {
     private Long memberId;
 
     @Builder(access = lombok.AccessLevel.PRIVATE)
-    private NoticeBoardEntity(final String title, final String content, final String category, final Boolean isImportant, final String writer, final LocalDateTime writtenAt, final Long memberId) {
+    private NoticeBoardEntity(final String title, final String content, final BoardCategoryEntity category, final Boolean isImportant, final String writer, final LocalDateTime writtenAt, final Long memberId) {
         this.title = title;
         this.content = content;
         this.category = category;
@@ -93,7 +95,7 @@ public class NoticeBoardEntity extends BaseEntity {
      * @param memberId 작성자 ID
      * @return 게시글 Entity
      */
-    public static NoticeBoardEntity of(final String title, final String content, final String category, final String writer, final Long memberId) {
+    public static NoticeBoardEntity of(final String title, final String content, final BoardCategoryEntity category, final String writer, final Long memberId) {
         return of(title, content, category, false, writer, LocalDateTime.now(), memberId);
     }
 
@@ -109,7 +111,7 @@ public class NoticeBoardEntity extends BaseEntity {
      * @param memberId    작성자 ID
      * @return 게시글 Entity
      */
-    public static NoticeBoardEntity of(final String title, final String content, final String category, final Boolean isImportant, final String writer, final LocalDateTime writtenAt, final Long memberId) {
+    public static NoticeBoardEntity of(final String title, final String content, final BoardCategoryEntity category, final Boolean isImportant, final String writer, final LocalDateTime writtenAt, final Long memberId) {
         validateConstructor(title, content, category, isImportant, writer, writtenAt, memberId);
 
         return NoticeBoardEntity.builder()
@@ -134,7 +136,7 @@ public class NoticeBoardEntity extends BaseEntity {
      * @param writtenAt   작성일
      * @param memberId    작성자 ID
      */
-    private static void validateConstructor(final String title, final String content, final String category, final Boolean isImportant, final String writer, final LocalDateTime writtenAt, final Long memberId) {
+    private static void validateConstructor(final String title, final String content, final BoardCategoryEntity category, final Boolean isImportant, final String writer, final LocalDateTime writtenAt, final Long memberId) {
         validateTitle(title);
         validateContent(content);
         validateCategory(category);
@@ -171,9 +173,9 @@ public class NoticeBoardEntity extends BaseEntity {
      *
      * @param category 분류
      */
-    private static void validateCategory(final String category) {
-        if (category == null || category.isBlank()) {
-            throw new IllegalArgumentException("분류는 null이 될 수 없고 빈 문자열이 될 수 없습니다.");
+    private static void validateCategory(final BoardCategoryEntity category) {
+        if (category == null) {
+            throw new IllegalArgumentException("분류는 null이 될 수 없습니다.");
         }
     }
 
@@ -243,7 +245,7 @@ public class NoticeBoardEntity extends BaseEntity {
      * @param category  분류
      * @param important 중요 여부
      */
-    public void update(final String title, final String content, final String category, final Boolean important) {
+    public void update(final String title, final String content, final BoardCategoryEntity category, final Boolean important) {
         validateUpdate(title, content, category, important);
 
         this.title = title;
@@ -260,7 +262,7 @@ public class NoticeBoardEntity extends BaseEntity {
      * @param category  분류
      * @param important 중요 여부
      */
-    private void validateUpdate(final String title, final String content, final String category, final Boolean important) {
+    private void validateUpdate(final String title, final String content, final BoardCategoryEntity category, final Boolean important) {
         validateTitle(title);
         validateContent(content);
         validateCategory(category);
@@ -275,5 +277,14 @@ public class NoticeBoardEntity extends BaseEntity {
      */
     public boolean isWriter(final Long memberId) {
         return this.memberId.equals(memberId);
+    }
+
+    /**
+     * 분류 코드 반환
+     *
+     * @return 분류 코드
+     */
+    public String getCategoryCode() {
+        return category.getCode();
     }
 }

@@ -1,6 +1,7 @@
 package org.hyunggi.mygardenbe.boards.learn.repository;
 
 import org.hyunggi.mygardenbe.IntegrationTestSupport;
+import org.hyunggi.mygardenbe.boards.common.category.entity.BoardCategoryEntity;
 import org.hyunggi.mygardenbe.boards.learn.entity.LearnBoardEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,10 +45,12 @@ class LearnBoardRepositoryTest extends IntegrationTestSupport {
     }
 
     private LearnBoardEntity buildLearnBoardWith(final LocalDateTime writtenAt) {
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "learn");
+
         return LearnBoardEntity.of(
                 "title",
                 "content",
-                "category",
+                boardCategoryEntity,
                 "writer",
                 writtenAt,
                 1L
@@ -74,10 +77,12 @@ class LearnBoardRepositoryTest extends IntegrationTestSupport {
     }
 
     private LearnBoardEntity buildLearnBoardWith(final String title, final String content, final String category) {
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity(category, "카테고리", "learn");
+
         return LearnBoardEntity.of(
                 title,
                 content,
-                category,
+                boardCategoryEntity,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
                 1L

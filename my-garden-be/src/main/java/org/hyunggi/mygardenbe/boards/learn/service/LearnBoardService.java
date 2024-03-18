@@ -2,6 +2,7 @@ package org.hyunggi.mygardenbe.boards.learn.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.hyunggi.mygardenbe.boards.common.category.entity.BoardCategoryEntity;
 import org.hyunggi.mygardenbe.boards.common.category.service.BoardCategoryService;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
 import org.hyunggi.mygardenbe.boards.learn.entity.LearnBoardEntity;
@@ -134,12 +135,13 @@ public class LearnBoardService {
      * @return 작성한 게시글 ID
      */
     public Long postLearnBoard(final String category, final String title, final String content, final MemberEntity member) {
-        validatePostRequest(category, title, content);
+        validatePostRequest(title, content);
+        final BoardCategoryEntity categoryEntity = boardCategoryService.getCategoryWithBoardType(category, "learn");
 
         final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
                 title,
                 content,
-                category,
+                categoryEntity,
                 getMemberEmailId(member),
                 LocalDateTime.now(),
                 member.getId()
@@ -151,24 +153,20 @@ public class LearnBoardService {
     /**
      * 게시글 작성의 인자 검증
      *
-     * @param category 분류
-     * @param title    제목
-     * @param content  내용
+     * @param title   제목
+     * @param content 내용
      */
-    private void validatePostRequest(final String category, final String title, final String content) {
-        validateContent(category, title, content);
+    private void validatePostRequest(final String title, final String content) {
+        validateContent(title, content);
     }
 
     /**
      * 게시글 내용 유효성 검사
      *
-     * @param category 분류
-     * @param title    제목
-     * @param content  내용
+     * @param title   제목
+     * @param content 내용
      */
-    private void validateContent(final String category, final String title, final String content) {
-        boardCategoryService.validateCategoryWithBoardType(category, "learn");
-
+    private void validateContent(final String title, final String content) {
         Assert.isTrue(StringUtils.hasText(title), "제목은 비어있을 수 없습니다.");
         Assert.isTrue(title.length() <= 100, "제목은 100자를 넘을 수 없습니다.");
         Assert.isTrue(StringUtils.hasText(content), "게시글 내용은 비어있을 수 없습니다.");
@@ -197,7 +195,8 @@ public class LearnBoardService {
      */
     @Transactional
     public Long putLearnBoard(final Long boardId, final String category, final String title, final String content, final MemberEntity member) {
-        validatePutRequest(boardId, category, title, content);
+        validatePutRequest(boardId, title, content);
+        final BoardCategoryEntity categoryEntity = boardCategoryService.getCategoryWithBoardType(category, "notice");
 
         final LearnBoardEntity learnBoardEntity = getLearnBoardEntity(boardId);
 
@@ -206,7 +205,7 @@ public class LearnBoardService {
         learnBoardEntity.update(
                 title,
                 content,
-                category
+                categoryEntity
         );
 
         return boardId;
@@ -227,15 +226,14 @@ public class LearnBoardService {
     /**
      * 게시글 수정의 인자 검증
      *
-     * @param boardId  게시글 ID
-     * @param category 분류
-     * @param title    제목
-     * @param content  내용
+     * @param boardId 게시글 ID
+     * @param title   제목
+     * @param content 내용
      */
-    private void validatePutRequest(final Long boardId, final String category, final String title, final String content) {
+    private void validatePutRequest(final Long boardId, final String title, final String content) {
         validateBoardId(boardId);
 
-        validateContent(category, title, content);
+        validateContent(title, content);
     }
 
     /**

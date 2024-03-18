@@ -1,6 +1,7 @@
 package org.hyunggi.mygardenbe.boards.notice.repository;
 
 import org.hyunggi.mygardenbe.IntegrationTestSupport;
+import org.hyunggi.mygardenbe.boards.common.category.entity.BoardCategoryEntity;
 import org.hyunggi.mygardenbe.boards.notice.entity.NoticeBoardEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,10 +41,12 @@ class NoticeBoardRepositoryTest extends IntegrationTestSupport {
     }
 
     private NoticeBoardEntity buildNoticeImportantBoardWith(final String title, final String content, final int day, final boolean isImportant) {
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+
         return NoticeBoardEntity.of(
                 title,
                 content,
-                "category",
+                boardCategoryEntity,
                 isImportant,
                 "writer",
                 LocalDateTime.of(2024, 3, day, 12, 0, 0),
@@ -76,10 +79,12 @@ class NoticeBoardRepositoryTest extends IntegrationTestSupport {
     }
 
     private NoticeBoardEntity buildNoticeBoardWith(final LocalDateTime writtenAt) {
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+
         return NoticeBoardEntity.of(
                 "title",
                 "content",
-                "category",
+                boardCategoryEntity,
                 false,
                 "writer",
                 writtenAt,
@@ -107,10 +112,12 @@ class NoticeBoardRepositoryTest extends IntegrationTestSupport {
     }
 
     private NoticeBoardEntity buildNoticeBoardWith(final String title, final String content, final String category) {
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity(category, "카테고리", "notice");
+
         return NoticeBoardEntity.of(
                 title,
                 content,
-                category,
+                boardCategoryEntity,
                 false,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),

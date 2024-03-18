@@ -2,6 +2,7 @@ package org.hyunggi.mygardenbe.boards.common.category.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.hyunggi.mygardenbe.boards.common.category.entity.BoardCategoryEntity;
 import org.hyunggi.mygardenbe.boards.common.category.repository.BoardCategoryRepository;
 import org.hyunggi.mygardenbe.boards.common.category.service.response.BoardCategoryResponse;
 import org.springframework.stereotype.Service;
@@ -47,12 +48,13 @@ public class BoardCategoryService {
      *
      * @param category  분류
      * @param boardType 게시판 타입
+     * @return 분류와 게시판 타입에 해당하는 분류 Entity
      */
-    public void validateCategoryWithBoardType(final String category, final String boardType) {
+    public BoardCategoryEntity getCategoryWithBoardType(final String category, final String boardType) {
         validateCategory(category);
         validateBoardType(boardType);
 
-        boardCategoryRepository.findByCodeAndBoardType(category, boardType)
+        return boardCategoryRepository.findByCodeAndBoardType(category, boardType)
                 .orElseThrow(() -> new EntityNotFoundException("해당 분류가 존재하지 않습니다."));
     }
 
