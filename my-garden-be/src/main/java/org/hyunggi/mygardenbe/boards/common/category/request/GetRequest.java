@@ -223,6 +223,11 @@ public final class GetRequest {
             if (sort == null || sort.isBlank()) {
                 return "writtenAt";
             }
+
+            if (sort.equals("category")) {
+                return "category.text";
+            }
+
             return validateSort(sort);
         }
 
