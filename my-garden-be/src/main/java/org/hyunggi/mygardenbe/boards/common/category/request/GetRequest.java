@@ -291,5 +291,9 @@ public final class GetRequest {
             else
                 return Sort.Direction.ASC;
         }
+
+        public Sort.Order getOrder() {
+            return Sort.Order.by(sort).with(convertOrderToSortDirection());
+        }
     }
 }
