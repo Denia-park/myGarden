@@ -68,7 +68,7 @@ public class LearnBoardResponse {
                 .id(learnBoardEntity.getId())
                 .title(learnBoardEntity.getTitle())
                 .content(learnBoardEntity.getContent())
-                .category(learnBoardEntity.getCategory())
+                .category(learnBoardEntity.getCategoryCode())
                 .views(learnBoardEntity.getViews())
                 .writer(learnBoardEntity.getWriter())
                 .writtenAt(learnBoardEntity.getWrittenAt().format(ofPattern("yyyy-MM-dd HH:mm:ss")))

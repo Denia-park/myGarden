@@ -1,6 +1,8 @@
 package org.hyunggi.mygardenbe.boards.learn.repository;
 
 import org.hyunggi.mygardenbe.IntegrationTestSupport;
+import org.hyunggi.mygardenbe.boards.common.category.entity.BoardCategoryEntity;
+import org.hyunggi.mygardenbe.boards.common.category.repository.BoardCategoryRepository;
 import org.hyunggi.mygardenbe.boards.learn.entity.LearnBoardEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,8 @@ import static org.assertj.core.api.Assertions.tuple;
 class LearnBoardRepositoryTest extends IntegrationTestSupport {
     @Autowired
     LearnBoardRepository learnBoardRepository;
+    @Autowired
+    BoardCategoryRepository boardCategoryRepository;
 
     @Test
     @DisplayName("해당 날짜에 해당하는 TIL을 조회할 수 있다.")
@@ -44,10 +48,13 @@ class LearnBoardRepositoryTest extends IntegrationTestSupport {
     }
 
     private LearnBoardEntity buildLearnBoardWith(final LocalDateTime writtenAt) {
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "learn");
+        boardCategoryRepository.save(boardCategoryEntity);
+
         return LearnBoardEntity.of(
                 "title",
                 "content",
-                "category",
+                boardCategoryEntity,
                 "writer",
                 writtenAt,
                 1L
@@ -69,15 +76,18 @@ class LearnBoardRepositoryTest extends IntegrationTestSupport {
 
         //then
         assertThat(learnBoardEntities).hasSize(1)
-                .extracting("category")
+                .extracting("category.code")
                 .containsExactly("category1");
     }
 
     private LearnBoardEntity buildLearnBoardWith(final String title, final String content, final String category) {
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity(category, "카테고리", "learn");
+        boardCategoryRepository.save(boardCategoryEntity);
+
         return LearnBoardEntity.of(
                 title,
                 content,
-                category,
+                boardCategoryEntity,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
                 1L

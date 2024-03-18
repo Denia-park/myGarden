@@ -2,6 +2,7 @@ package org.hyunggi.mygardenbe.boards.notice.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.hyunggi.mygardenbe.boards.common.category.entity.BoardCategoryEntity;
 import org.hyunggi.mygardenbe.boards.common.category.service.BoardCategoryService;
 import org.hyunggi.mygardenbe.boards.common.response.CustomPage;
 import org.hyunggi.mygardenbe.boards.notice.entity.NoticeBoardEntity;
@@ -137,12 +138,13 @@ public class NoticeBoardService {
      * @return 게시글 ID
      */
     public Long postNoticeBoard(final String category, final String title, final String content, final Boolean isImportant, final MemberEntity member) {
-        validatePostRequest(category, title, content, isImportant);
+        validatePostRequest(title, content, isImportant);
+        final BoardCategoryEntity categoryEntity = boardCategoryService.getCategoryWithBoardType(category, "notice");
 
         final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
                 title,
                 content,
-                category,
+                categoryEntity,
                 isImportant,
                 getMemberEmailId(member),
                 LocalDateTime.now(),
@@ -155,26 +157,22 @@ public class NoticeBoardService {
     /**
      * 게시글 작성의 인자 검증
      *
-     * @param category    분류
      * @param title       제목
      * @param content     내용
      * @param isImportant 중요 여부
      */
-    private void validatePostRequest(final String category, final String title, final String content, final Boolean isImportant) {
-        validateContent(category, title, content, isImportant);
+    private void validatePostRequest(final String title, final String content, final Boolean isImportant) {
+        validateContent(title, content, isImportant);
     }
 
     /**
      * 게시글 작성의 내용 검증
      *
-     * @param category    분류
      * @param title       제목
      * @param content     내용
      * @param isImportant 중요 여부
      */
-    private void validateContent(final String category, final String title, final String content, final Boolean isImportant) {
-        boardCategoryService.validateCategoryWithBoardType(category, "notice");
-
+    private void validateContent(final String title, final String content, final Boolean isImportant) {
         Assert.isTrue(title != null, "제목은 null이 될 수 없습니다.");
         Assert.isTrue(content != null, "내용은 null이 될 수 없습니다.");
         Assert.isTrue(title.length() <= 100, "제목은 100자 이하여야 합니다.");
@@ -205,7 +203,8 @@ public class NoticeBoardService {
      */
     @Transactional
     public Long putNoticeBoard(final Long boardId, final String category, final String title, final String content, final Boolean isImportant, final MemberEntity member) {
-        validatePutRequest(boardId, category, title, content, isImportant);
+        validatePutRequest(boardId, title, content, isImportant);
+        final BoardCategoryEntity categoryEntity = boardCategoryService.getCategoryWithBoardType(category, "notice");
 
         final NoticeBoardEntity noticeBoardEntity = getNoticeBoardEntity(boardId);
 
@@ -214,7 +213,7 @@ public class NoticeBoardService {
         noticeBoardEntity.update(
                 title,
                 content,
-                category,
+                categoryEntity,
                 isImportant
         );
 
@@ -237,15 +236,14 @@ public class NoticeBoardService {
      * 게시글 수정의 인자 검증
      *
      * @param boardId     게시글 ID
-     * @param category    분류
      * @param title       제목
      * @param content     내용
      * @param isImportant 중요 여부
      */
-    private void validatePutRequest(final Long boardId, final String category, final String title, final String content, final Boolean isImportant) {
+    private void validatePutRequest(final Long boardId, final String title, final String content, final Boolean isImportant) {
         validateBoardId(boardId);
 
-        validateContent(category, title, content, isImportant);
+        validateContent(title, content, isImportant);
     }
 
     /**

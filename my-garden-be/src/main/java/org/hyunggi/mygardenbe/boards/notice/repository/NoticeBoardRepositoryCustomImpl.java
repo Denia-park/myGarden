@@ -53,6 +53,7 @@ public class NoticeBoardRepositoryCustomImpl extends Querydsl4RepositorySupport 
     private Function<JPAQueryFactory, JPAQuery> getContentQuery(final LocalDateTime startDateTime, final LocalDateTime endDateTime, final String category, final String searchText) {
         return queryFactory -> queryFactory
                 .selectFrom(noticeBoardEntity)
+                .join(noticeBoardEntity.category).fetchJoin()
                 .where(
                         writtenAtBetween(startDateTime, endDateTime),
                         categoryEquals(category),
@@ -104,7 +105,7 @@ public class NoticeBoardRepositoryCustomImpl extends Querydsl4RepositorySupport 
             return null;
         }
 
-        return noticeBoardEntity.category.eq(category);
+        return noticeBoardEntity.category.code.eq(category);
     }
 
     /**

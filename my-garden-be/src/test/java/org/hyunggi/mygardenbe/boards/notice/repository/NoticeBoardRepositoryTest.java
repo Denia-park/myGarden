@@ -1,6 +1,8 @@
 package org.hyunggi.mygardenbe.boards.notice.repository;
 
 import org.hyunggi.mygardenbe.IntegrationTestSupport;
+import org.hyunggi.mygardenbe.boards.common.category.entity.BoardCategoryEntity;
+import org.hyunggi.mygardenbe.boards.common.category.repository.BoardCategoryRepository;
 import org.hyunggi.mygardenbe.boards.notice.entity.NoticeBoardEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,8 @@ import static org.assertj.core.api.Assertions.tuple;
 class NoticeBoardRepositoryTest extends IntegrationTestSupport {
     @Autowired
     NoticeBoardRepository noticeBoardRepository;
+    @Autowired
+    BoardCategoryRepository boardCategoryRepository;
 
     @Test
     @DisplayName("중요 공지사항을 조회할 수 있다.")
@@ -40,10 +44,13 @@ class NoticeBoardRepositoryTest extends IntegrationTestSupport {
     }
 
     private NoticeBoardEntity buildNoticeImportantBoardWith(final String title, final String content, final int day, final boolean isImportant) {
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+        boardCategoryRepository.save(boardCategoryEntity);
+
         return NoticeBoardEntity.of(
                 title,
                 content,
-                "category",
+                boardCategoryEntity,
                 isImportant,
                 "writer",
                 LocalDateTime.of(2024, 3, day, 12, 0, 0),
@@ -76,10 +83,13 @@ class NoticeBoardRepositoryTest extends IntegrationTestSupport {
     }
 
     private NoticeBoardEntity buildNoticeBoardWith(final LocalDateTime writtenAt) {
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+        boardCategoryRepository.save(boardCategoryEntity);
+
         return NoticeBoardEntity.of(
                 "title",
                 "content",
-                "category",
+                boardCategoryEntity,
                 false,
                 "writer",
                 writtenAt,
@@ -102,15 +112,18 @@ class NoticeBoardRepositoryTest extends IntegrationTestSupport {
 
         //then
         assertThat(noticeBoardEntities).hasSize(1)
-                .extracting("category")
+                .extracting("category.code")
                 .containsExactly("category1");
     }
 
     private NoticeBoardEntity buildNoticeBoardWith(final String title, final String content, final String category) {
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity(category, "카테고리", "notice");
+        boardCategoryRepository.save(boardCategoryEntity);
+
         return NoticeBoardEntity.of(
                 title,
                 content,
-                category,
+                boardCategoryEntity,
                 false,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),

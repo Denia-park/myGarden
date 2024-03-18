@@ -1,5 +1,6 @@
 package org.hyunggi.mygardenbe.boards.notice.entity;
 
+import org.hyunggi.mygardenbe.boards.common.category.entity.BoardCategoryEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,19 +20,19 @@ class NoticeBoardEntityTest {
         // given
         final String title = "title";
         final String content = "content";
-        final String category = "category";
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
         final Boolean isImportant = false;
         final String writer = "writer";
         final LocalDateTime writtenAt = LocalDateTime.now();
         final Long memberId = 1L;
 
         // when
-        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(title, content, category, isImportant, writer, writtenAt, memberId);
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(title, content, boardCategoryEntity, isImportant, writer, writtenAt, memberId);
 
         // then
         assertThat(noticeBoardEntity.getTitle()).isEqualTo(title);
         assertThat(noticeBoardEntity.getContent()).isEqualTo(content);
-        assertThat(noticeBoardEntity.getCategory()).isEqualTo(category);
+        assertThat(noticeBoardEntity.getCategory()).isEqualTo(boardCategoryEntity);
         assertThat(noticeBoardEntity.getIsImportant()).isEqualTo(isImportant);
         assertThat(noticeBoardEntity.getWriter()).isEqualTo(writer);
         assertThat(noticeBoardEntity.getWrittenAt()).isEqualTo(writtenAt);
@@ -44,14 +45,14 @@ class NoticeBoardEntityTest {
     void titleIsNull(final String title) {
         // given
         final String content = "content";
-        final String category = "category";
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
         final Boolean isImportant = false;
         final String writer = "writer";
         final LocalDateTime writtenAt = LocalDateTime.now();
         final Long memberId = 1L;
 
         // when, then
-        assertThatThrownBy(() -> NoticeBoardEntity.of(title, content, category, isImportant, writer, writtenAt, memberId))
+        assertThatThrownBy(() -> NoticeBoardEntity.of(title, content, boardCategoryEntity, isImportant, writer, writtenAt, memberId))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("제목은 null이 될 수 없고 빈 문자열이 될 수 없습니다.");
     }
@@ -62,34 +63,16 @@ class NoticeBoardEntityTest {
     void contentIsNull(final String content) {
         // given
         final String title = "title";
-        final String category = "category";
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
         final Boolean isImportant = false;
         final String writer = "writer";
         final LocalDateTime writtenAt = LocalDateTime.now();
         final Long memberId = 1L;
 
         // when, then
-        assertThatThrownBy(() -> NoticeBoardEntity.of(title, content, category, isImportant, writer, writtenAt, memberId))
+        assertThatThrownBy(() -> NoticeBoardEntity.of(title, content, boardCategoryEntity, isImportant, writer, writtenAt, memberId))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("내용은 null이 될 수 없고 빈 문자열이 될 수 없습니다.");
-    }
-
-    @ParameterizedTest
-    @NullAndEmptySource
-    @DisplayName("category가 null 혹은 빈 문자열이면 IllegalArgumentException이 발생한다.")
-    void categoryIsNull(final String category) {
-        // given
-        final String title = "title";
-        final String content = "content";
-        final Boolean isImportant = false;
-        final String writer = "writer";
-        final LocalDateTime writtenAt = LocalDateTime.now();
-        final Long memberId = 1L;
-
-        // when, then
-        assertThatThrownBy(() -> NoticeBoardEntity.of(title, content, category, isImportant, writer, writtenAt, memberId))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("분류는 null이 될 수 없고 빈 문자열이 될 수 없습니다.");
     }
 
     @Test
@@ -98,13 +81,13 @@ class NoticeBoardEntityTest {
         // given
         final String title = "title";
         final String content = "content";
-        final String category = "category";
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
         final String writer = "writer";
         final LocalDateTime writtenAt = LocalDateTime.now();
         final Long memberId = 1L;
 
         // when, then
-        assertThatThrownBy(() -> NoticeBoardEntity.of(title, content, category, null, writer, writtenAt, memberId))
+        assertThatThrownBy(() -> NoticeBoardEntity.of(title, content, boardCategoryEntity, null, writer, writtenAt, memberId))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("알림글 여부는 null이 될 수 없습니다.");
     }
@@ -116,13 +99,13 @@ class NoticeBoardEntityTest {
         // given
         final String title = "title";
         final String content = "content";
-        final String category = "category";
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
         final Boolean isImportant = false;
         final LocalDateTime writtenAt = LocalDateTime.now();
         final Long memberId = 1L;
 
         // when, then
-        assertThatThrownBy(() -> NoticeBoardEntity.of(title, content, category, isImportant, writer, writtenAt, memberId))
+        assertThatThrownBy(() -> NoticeBoardEntity.of(title, content, boardCategoryEntity, isImportant, writer, writtenAt, memberId))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("작성자는 null이 될 수 없고 빈 문자열이 될 수 없습니다.");
     }
@@ -133,13 +116,13 @@ class NoticeBoardEntityTest {
         // given
         final String title = "title";
         final String content = "content";
-        final String category = "category";
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
         final Boolean isImportant = false;
         final String writer = "writer";
         final Long memberId = 1L;
 
         // when, then
-        assertThatThrownBy(() -> NoticeBoardEntity.of(title, content, category, isImportant, writer, null, memberId))
+        assertThatThrownBy(() -> NoticeBoardEntity.of(title, content, boardCategoryEntity, isImportant, writer, null, memberId))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("작성일은 null이 될 수 없습니다.");
     }
@@ -151,13 +134,13 @@ class NoticeBoardEntityTest {
         // given
         final String title = "title";
         final String content = "content";
-        final String category = "category";
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
         final Boolean isImportant = false;
         final String writer = "writer";
         final LocalDateTime writtenAt = LocalDateTime.now();
 
         // when, then
-        assertThatThrownBy(() -> NoticeBoardEntity.of(title, content, category, isImportant, writer, writtenAt, memberId))
+        assertThatThrownBy(() -> NoticeBoardEntity.of(title, content, boardCategoryEntity, isImportant, writer, writtenAt, memberId))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("멤버 아이디는 null이 될 수 없고 0보다 커야 합니다.");
     }
@@ -168,12 +151,12 @@ class NoticeBoardEntityTest {
         // given
         final String title = "title";
         final String content = "content";
-        final String category = "category";
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
         final Boolean isImportant = false;
         final String writer = "writer";
         final LocalDateTime writtenAt = LocalDateTime.now();
         final Long memberId = 1L;
-        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(title, content, category, isImportant, writer, writtenAt, memberId);
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(title, content, boardCategoryEntity, isImportant, writer, writtenAt, memberId);
 
         // when
         noticeBoardEntity.setImportant();
@@ -188,12 +171,12 @@ class NoticeBoardEntityTest {
         // given
         final String title = "title";
         final String content = "content";
-        final String category = "category";
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
         final Boolean isImportant = false;
         final String writer = "writer";
         final LocalDateTime writtenAt = LocalDateTime.now();
         final Long memberId = 1L;
-        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(title, content, category, isImportant, writer, writtenAt, memberId);
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(title, content, boardCategoryEntity, isImportant, writer, writtenAt, memberId);
 
         // when
         noticeBoardEntity.increaseViewCount();
@@ -208,25 +191,25 @@ class NoticeBoardEntityTest {
         // given
         final String title = "title";
         final String content = "content";
-        final String category = "category";
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
         final Boolean isImportant = false;
         final String writer = "writer";
         final LocalDateTime writtenAt = LocalDateTime.now();
         final Long memberId = 1L;
-        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(title, content, category, isImportant, writer, writtenAt, memberId);
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(title, content, boardCategoryEntity, isImportant, writer, writtenAt, memberId);
 
         final String updatedTitle = "updatedTitle";
         final String updatedContent = "updatedContent";
-        final String updatedCategory = "updatedCategory";
+        final BoardCategoryEntity newBoardCategoryEntity = new BoardCategoryEntity("updatedCategory", "신규 카테고리", "notice");
         final Boolean updatedIsImportant = true;
 
         // when
-        noticeBoardEntity.update(updatedTitle, updatedContent, updatedCategory, updatedIsImportant);
+        noticeBoardEntity.update(updatedTitle, updatedContent, newBoardCategoryEntity, updatedIsImportant);
 
         // then
         assertThat(noticeBoardEntity.getTitle()).isEqualTo(updatedTitle);
         assertThat(noticeBoardEntity.getContent()).isEqualTo(updatedContent);
-        assertThat(noticeBoardEntity.getCategory()).isEqualTo(updatedCategory);
+        assertThat(noticeBoardEntity.getCategory()).isEqualTo(newBoardCategoryEntity);
         assertThat(noticeBoardEntity.getIsImportant()).isEqualTo(updatedIsImportant);
     }
 
@@ -235,10 +218,27 @@ class NoticeBoardEntityTest {
     void isWriter() {
         // given
         final Long memberId = 1L;
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
 
-        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of("title", "content", "category", false, "writer", LocalDateTime.now(), memberId);
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of("title", "content", boardCategoryEntity, false, "writer", LocalDateTime.now(), memberId);
 
         // when, then
         assertThat(noticeBoardEntity.isWriter(memberId)).isTrue();
+    }
+
+    @Test
+    @DisplayName("getCategoryCode() 메서드를 통해 카테고리 코드를 가져올 수 있다.")
+    void getCategoryCode() {
+        // given
+        final String categoryCode = "category";
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity(categoryCode, "카테고리", "notice");
+
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of("title", "content", boardCategoryEntity, false, "writer", LocalDateTime.now(), 1L);
+
+        // when
+        final String result = noticeBoardEntity.getCategoryCode();
+
+        // then
+        assertThat(result).isEqualTo(categoryCode);
     }
 }

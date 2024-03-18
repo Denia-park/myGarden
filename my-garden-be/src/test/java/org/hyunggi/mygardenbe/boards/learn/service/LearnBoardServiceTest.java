@@ -90,10 +90,13 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
     }
 
     private LearnBoardEntity buildLearnBoardWith(final String title, final String content, final String category) {
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity(category, "카테고리", "learn");
+        boardCategoryRepository.save(boardCategoryEntity);
+
         return LearnBoardEntity.of(
                 title,
                 content,
-                category,
+                boardCategoryEntity,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
                 1L
@@ -288,10 +291,13 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("TIL을 조회한다.")
     void getLearnBoard() {
         // given
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "learn");
+        boardCategoryRepository.save(boardCategoryEntity);
+
         final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
                 "title",
                 "content",
-                "category",
+                boardCategoryEntity,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
                 1L
@@ -305,7 +311,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
         assertThat(learnBoard.getId()).isEqualTo(learnBoardEntity.getId());
         assertThat(learnBoard.getTitle()).isEqualTo(learnBoardEntity.getTitle());
         assertThat(learnBoard.getContent()).isEqualTo(learnBoardEntity.getContent());
-        assertThat(learnBoard.getCategory()).isEqualTo(learnBoardEntity.getCategory());
+        assertThat(learnBoard.getCategory()).isEqualTo(learnBoardEntity.getCategoryCode());
         assertThat(learnBoard.getWriter()).isEqualTo(learnBoardEntity.getWriter());
         assertThat(learnBoard.getWrittenAt()).isEqualTo(learnBoardEntity.getWrittenAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         assertThat(learnBoard.getViews()).isEqualTo(learnBoardEntity.getViews());
@@ -315,10 +321,13 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("TIL을 조회하면, 조회 수가 1 증가한다.")
     void getLearnBoardWithIncreaseViewCount() {
         // given
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "learn");
+        boardCategoryRepository.save(boardCategoryEntity);
+
         final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
                 "title",
                 "content",
-                "category",
+                boardCategoryEntity,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
                 1L
@@ -373,7 +382,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
 
         assertThat(learnBoardEntity.getTitle()).isEqualTo("title");
         assertThat(learnBoardEntity.getContent()).isEqualTo("content");
-        assertThat(learnBoardEntity.getCategory()).isEqualTo("project");
+        assertThat(learnBoardEntity.getCategoryCode()).isEqualTo("project");
         assertThat(learnBoardEntity.getWriter()).isEqualTo(member.getEmail().split("@")[0]);
         assertThat(learnBoardEntity.getViews()).isZero();
     }
@@ -462,10 +471,13 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("TIL을 수정한다.")
     void putLearnBoard() {
         // given
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "learn");
+        boardCategoryRepository.save(boardCategoryEntity);
+
         final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
                 "title",
                 "content",
-                "category",
+                boardCategoryEntity,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
                 member.getId()
@@ -486,7 +498,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
 
         assertThat(updatedLearnBoardEntity.getTitle()).isEqualTo("title2");
         assertThat(updatedLearnBoardEntity.getContent()).isEqualTo("content2");
-        assertThat(updatedLearnBoardEntity.getCategory()).isEqualTo("project");
+        assertThat(updatedLearnBoardEntity.getCategoryCode()).isEqualTo("project");
     }
 
     @Test
@@ -527,10 +539,13 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("TIL을 수정할 때, PostRequest의 title이 null이면, IllegalArgumentException이 발생한다.")
     void putLearnBoardWithNullTitle() {
         // given
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "learn");
+        boardCategoryRepository.save(boardCategoryEntity);
+
         final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
                 "title",
                 "content",
-                "category",
+                boardCategoryEntity,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
                 member.getId()
@@ -553,10 +568,13 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("TIL을 수정할 때, PostRequest의 title이 100자를 넘으면, IllegalArgumentException이 발생한다.")
     void putLearnBoardWithOver100Title() {
         // given
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "learn");
+        boardCategoryRepository.save(boardCategoryEntity);
+
         final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
                 "title",
                 "content",
-                "category",
+                boardCategoryEntity,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
                 member.getId()
@@ -579,10 +597,13 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("TIL을 수정할 때, PostRequest의 content가 null이면, IllegalArgumentException이 발생한다.")
     void putLearnBoardWithNullContent() {
         // given
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "learn");
+        boardCategoryRepository.save(boardCategoryEntity);
+
         final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
                 "title",
                 "content",
-                "category",
+                boardCategoryEntity,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
                 member.getId()
@@ -605,10 +626,13 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("TIL을 수정할 때, PostRequest의 content가 4000자를 넘으면, IllegalArgumentException이 발생한다.")
     void putLearnBoardWithOver4000Content() {
         // given
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "learn");
+        boardCategoryRepository.save(boardCategoryEntity);
+
         final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
                 "title",
                 "content",
-                "category",
+                boardCategoryEntity,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
                 member.getId()
@@ -631,10 +655,13 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("TIL을 수정할 때, PostRequest의 category가 존재하지 않으면, EntityNotFoundException이 발생한다.")
     void putLearnBoardWithNonExistCategory() {
         // given
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "learn");
+        boardCategoryRepository.save(boardCategoryEntity);
+
         final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
                 "title",
                 "content",
-                "category",
+                boardCategoryEntity,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
                 member.getId()
@@ -674,10 +701,13 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("TIL을 수정할 때, 작성자가 아니면, IllegalArgumentException이 발생한다.")
     void putLearnBoardWithNotWriter() {
         // given
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "learn");
+        boardCategoryRepository.save(boardCategoryEntity);
+
         final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
                 "title",
                 "content",
-                "category",
+                boardCategoryEntity,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
                 member.getId()
@@ -700,10 +730,13 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
     @DisplayName("TIL을 삭제한다.")
     void deleteLearnBoard() {
         // given
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "learn");
+        boardCategoryRepository.save(boardCategoryEntity);
+
         final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
                 "title",
                 "content",
-                "category",
+                boardCategoryEntity,
                 "writer",
                 LocalDateTime.of(2024, 1, 27, 12, 0, 0),
                 member.getId()
