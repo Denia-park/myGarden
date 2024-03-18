@@ -141,7 +141,7 @@
   - `공지사항`은 `관리자`만 작성 가능
 
 ![공지사항 글 목록 조회](./docs/boards/notice/gif/Notice-List.gif)
-![공지사항 글 조회](./docs/boards/notice/gif/Notice-View.gif)
+![TIL 글 및 댓글 조회](./docs/boards/learn/gif/Learn-View.gif)
 ![TIL 글 작성](docs/boards/learn/gif/Learn-Post.gif)
 
 ### CI / CD
