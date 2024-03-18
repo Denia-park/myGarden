@@ -103,7 +103,7 @@ public class LearnBoardRepositoryCustomImpl extends Querydsl4RepositorySupport i
             return null;
         }
 
-        return learnBoardEntity.category.eq(category);
+        return learnBoardEntity.category.code.eq(category);
     }
 
     /**

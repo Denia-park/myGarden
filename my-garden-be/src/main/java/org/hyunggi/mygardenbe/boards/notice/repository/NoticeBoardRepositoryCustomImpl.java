@@ -105,7 +105,7 @@ public class NoticeBoardRepositoryCustomImpl extends Querydsl4RepositorySupport 
             return null;
         }
 
-        return noticeBoardEntity.category.eq(category);
+        return noticeBoardEntity.category.code.eq(category);
     }
 
     /**
