@@ -53,6 +53,7 @@ public class LearnBoardRepositoryCustomImpl extends Querydsl4RepositorySupport i
     private Function<JPAQueryFactory, JPAQuery> getContentQuery(final LocalDateTime startDateTime, final LocalDateTime endDateTime, final String category, final String searchText) {
         return queryFactory -> queryFactory
                 .selectFrom(learnBoardEntity)
+                .join(learnBoardEntity.category).fetchJoin()
                 .where(
                         writtenAtBetween(startDateTime, endDateTime),
                         categoryEquals(category),
