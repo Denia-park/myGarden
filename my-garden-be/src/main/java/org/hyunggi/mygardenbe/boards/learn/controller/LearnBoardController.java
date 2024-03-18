@@ -79,6 +79,7 @@ public class LearnBoardController {
      */
     @GetMapping("/{boardId}")
     public ApiResponse<LearnBoardResponse> getLearnBoard(@PathVariable final Long boardId) {
+        //TODO: 게시판 조회시에 연관관계에 따라, Board Category를 TIL 게시판 조회 후에 또 다시 조회하는 문제가 있음 -> 당장 급한 문제는 아니니, 추후에 수정
         return ApiResponse.ok(learnBoardService.getLearnBoard(boardId));
     }
 
