@@ -196,7 +196,7 @@ public class LearnBoardService {
     @Transactional
     public Long putLearnBoard(final Long boardId, final String category, final String title, final String content, final MemberEntity member) {
         validatePutRequest(boardId, title, content);
-        final BoardCategoryEntity categoryEntity = boardCategoryService.getCategoryWithBoardType(category, "notice");
+        final BoardCategoryEntity categoryEntity = boardCategoryService.getCategoryWithBoardType(category, "learn");
 
         final LearnBoardEntity learnBoardEntity = getLearnBoardEntity(boardId);
 

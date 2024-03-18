@@ -111,6 +111,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
 
     private NoticeBoardEntity buildNoticeBoardWith(final String title, final String content, final String category, final boolean isImportant) {
         final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity(category, "카테고리", "notice");
+        boardCategoryRepository.save(boardCategoryEntity);
 
         return NoticeBoardEntity.of(
                 title,
@@ -312,6 +313,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     void getNoticeBoard() {
         // given
         final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+        boardCategoryRepository.save(boardCategoryEntity);
 
         final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
                 "title",
@@ -331,7 +333,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
         assertThat(noticeBoard.getId()).isEqualTo(noticeBoardEntity.getId());
         assertThat(noticeBoard.getTitle()).isEqualTo(noticeBoardEntity.getTitle());
         assertThat(noticeBoard.getContent()).isEqualTo(noticeBoardEntity.getContent());
-        assertThat(noticeBoard.getCategory()).isEqualTo(noticeBoardEntity.getCategory());
+        assertThat(noticeBoard.getCategory()).isEqualTo(noticeBoardEntity.getCategoryCode());
         assertThat(noticeBoard.getIsImportant()).isEqualTo(noticeBoardEntity.getIsImportant());
         assertThat(noticeBoard.getWriter()).isEqualTo(noticeBoardEntity.getWriter());
         assertThat(noticeBoard.getWrittenAt()).isEqualTo(noticeBoardEntity.getWrittenAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
@@ -343,6 +345,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     void getNoticeBoardWithIncreaseViewCount() {
         // given
         final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+        boardCategoryRepository.save(boardCategoryEntity);
 
         final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
                 "title",
@@ -404,7 +407,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
 
         assertThat(noticeBoardEntity.getTitle()).isEqualTo("title");
         assertThat(noticeBoardEntity.getContent()).isEqualTo("content");
-        assertThat(noticeBoardEntity.getCategory()).isEqualTo("project");
+        assertThat(noticeBoardEntity.getCategoryCode()).isEqualTo("project");
         assertThat(noticeBoardEntity.getIsImportant()).isEqualTo((Boolean) true);
         assertThat(noticeBoardEntity.getWriter()).isEqualTo(member.getEmail().split("@")[0]);
         assertThat(noticeBoardEntity.getViews()).isZero();
@@ -500,6 +503,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     void putNoticeBoard() {
         // given
         final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+        boardCategoryRepository.save(boardCategoryEntity);
 
         final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
                 "title",
@@ -527,7 +531,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
 
         assertThat(updatedNoticeBoardEntity.getTitle()).isEqualTo("title2");
         assertThat(updatedNoticeBoardEntity.getContent()).isEqualTo("content2");
-        assertThat(updatedNoticeBoardEntity.getCategory()).isEqualTo("project");
+        assertThat(updatedNoticeBoardEntity.getCategoryCode()).isEqualTo("project");
         assertThat(updatedNoticeBoardEntity.getIsImportant()).isEqualTo((Boolean) false);
     }
 
@@ -572,6 +576,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     void putNoticeBoardWithNullTitle() {
         // given
         final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+        boardCategoryRepository.save(boardCategoryEntity);
 
         final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
                 "title",
@@ -602,6 +607,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     void putNoticeBoardWithOver100Title() {
         // given
         final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+        boardCategoryRepository.save(boardCategoryEntity);
 
         final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
                 "title",
@@ -632,6 +638,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     void putNoticeBoardWithNullContent() {
         // given
         final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+        boardCategoryRepository.save(boardCategoryEntity);
 
         final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
                 "title",
@@ -662,6 +669,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     void putNoticeBoardWithOver4000Content() {
         // given
         final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+        boardCategoryRepository.save(boardCategoryEntity);
 
         final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
                 "title",
@@ -692,6 +700,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     void putNoticeBoardWithNonExistCategory() {
         // given
         final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+        boardCategoryRepository.save(boardCategoryEntity);
 
         final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
                 "title",
@@ -740,6 +749,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     void putNoticeBoardWithNotWriter() {
         // given
         final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+        boardCategoryRepository.save(boardCategoryEntity);
 
         final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
                 "title",
@@ -770,6 +780,7 @@ class NoticeBoardServiceTest extends IntegrationTestSupport {
     void deleteNoticeBoard() {
         // given
         final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "notice");
+        boardCategoryRepository.save(boardCategoryEntity);
 
         final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of(
                 "title",

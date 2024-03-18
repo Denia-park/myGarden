@@ -91,6 +91,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
 
     private LearnBoardEntity buildLearnBoardWith(final String title, final String content, final String category) {
         final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity(category, "카테고리", "learn");
+        boardCategoryRepository.save(boardCategoryEntity);
 
         return LearnBoardEntity.of(
                 title,
@@ -291,6 +292,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
     void getLearnBoard() {
         // given
         final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "learn");
+        boardCategoryRepository.save(boardCategoryEntity);
 
         final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
                 "title",
@@ -320,6 +322,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
     void getLearnBoardWithIncreaseViewCount() {
         // given
         final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "learn");
+        boardCategoryRepository.save(boardCategoryEntity);
 
         final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
                 "title",
@@ -379,7 +382,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
 
         assertThat(learnBoardEntity.getTitle()).isEqualTo("title");
         assertThat(learnBoardEntity.getContent()).isEqualTo("content");
-        assertThat(learnBoardEntity.getCategory()).isEqualTo("project");
+        assertThat(learnBoardEntity.getCategoryCode()).isEqualTo("project");
         assertThat(learnBoardEntity.getWriter()).isEqualTo(member.getEmail().split("@")[0]);
         assertThat(learnBoardEntity.getViews()).isZero();
     }
@@ -469,6 +472,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
     void putLearnBoard() {
         // given
         final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "learn");
+        boardCategoryRepository.save(boardCategoryEntity);
 
         final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
                 "title",
@@ -494,7 +498,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
 
         assertThat(updatedLearnBoardEntity.getTitle()).isEqualTo("title2");
         assertThat(updatedLearnBoardEntity.getContent()).isEqualTo("content2");
-        assertThat(updatedLearnBoardEntity.getCategory()).isEqualTo("project");
+        assertThat(updatedLearnBoardEntity.getCategoryCode()).isEqualTo("project");
     }
 
     @Test
@@ -536,6 +540,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
     void putLearnBoardWithNullTitle() {
         // given
         final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "learn");
+        boardCategoryRepository.save(boardCategoryEntity);
 
         final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
                 "title",
@@ -564,6 +569,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
     void putLearnBoardWithOver100Title() {
         // given
         final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "learn");
+        boardCategoryRepository.save(boardCategoryEntity);
 
         final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
                 "title",
@@ -592,6 +598,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
     void putLearnBoardWithNullContent() {
         // given
         final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "learn");
+        boardCategoryRepository.save(boardCategoryEntity);
 
         final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
                 "title",
@@ -620,6 +627,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
     void putLearnBoardWithOver4000Content() {
         // given
         final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "learn");
+        boardCategoryRepository.save(boardCategoryEntity);
 
         final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
                 "title",
@@ -648,6 +656,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
     void putLearnBoardWithNonExistCategory() {
         // given
         final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "learn");
+        boardCategoryRepository.save(boardCategoryEntity);
 
         final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
                 "title",
@@ -693,6 +702,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
     void putLearnBoardWithNotWriter() {
         // given
         final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "learn");
+        boardCategoryRepository.save(boardCategoryEntity);
 
         final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
                 "title",
@@ -721,6 +731,7 @@ class LearnBoardServiceTest extends IntegrationTestSupport {
     void deleteLearnBoard() {
         // given
         final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity("category", "카테고리", "learn");
+        boardCategoryRepository.save(boardCategoryEntity);
 
         final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of(
                 "title",

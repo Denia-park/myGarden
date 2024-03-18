@@ -67,7 +67,14 @@ class NoticeBoardControllerTest extends ControllerTestSupport {
     @DisplayName("공지사항 목록을 조회한다.")
     void getNoticeBoards() throws Exception {
         //given
-        final Pageable pageable = PageRequest.of(0, 10, Sort.by("writtenAt", "id").descending());
+        final Pageable pageable = PageRequest.of(
+                0,
+                10,
+                Sort.by(
+                        Sort.Order.desc("writtenAt"),
+                        Sort.Order.asc("id")
+                )
+        );
 
         final List<NoticeBoardResponse> noticeBoardResponses = List.of(
                 NoticeBoardResponse.builder()
