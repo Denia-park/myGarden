@@ -176,4 +176,17 @@ class LearnBoardEntityTest {
         // when, then
         assertThat(learnBoardEntity.isWriter(memberId)).isTrue();
     }
+
+    @Test
+    @DisplayName("getCategoryCode() 메서드를 통해 카테고리 코드를 가져올 수 있다.")
+    void getCategoryCode() {
+        // given
+        final String categoryCode = "category";
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity(categoryCode, "카테고리", "learn");
+
+        final LearnBoardEntity learnBoardEntity = LearnBoardEntity.of("title", "content", boardCategoryEntity, "writer", LocalDateTime.now(), 1L);
+
+        // when, then
+        assertThat(learnBoardEntity.getCategoryCode()).isEqualTo(categoryCode);
+    }
 }

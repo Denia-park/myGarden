@@ -225,4 +225,20 @@ class NoticeBoardEntityTest {
         // when, then
         assertThat(noticeBoardEntity.isWriter(memberId)).isTrue();
     }
+
+    @Test
+    @DisplayName("getCategoryCode() 메서드를 통해 카테고리 코드를 가져올 수 있다.")
+    void getCategoryCode() {
+        // given
+        final String categoryCode = "category";
+        final BoardCategoryEntity boardCategoryEntity = new BoardCategoryEntity(categoryCode, "카테고리", "notice");
+
+        final NoticeBoardEntity noticeBoardEntity = NoticeBoardEntity.of("title", "content", boardCategoryEntity, false, "writer", LocalDateTime.now(), 1L);
+
+        // when
+        final String result = noticeBoardEntity.getCategoryCode();
+
+        // then
+        assertThat(result).isEqualTo(categoryCode);
+    }
 }
