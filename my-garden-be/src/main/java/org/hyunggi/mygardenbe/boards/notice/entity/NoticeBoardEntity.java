@@ -38,7 +38,7 @@ public class NoticeBoardEntity extends BaseEntity {
     /**
      * 분류
      */
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "category_id")
     private BoardCategoryEntity category;
 
