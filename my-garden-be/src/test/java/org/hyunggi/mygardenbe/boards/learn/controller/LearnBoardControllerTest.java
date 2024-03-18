@@ -29,7 +29,14 @@ class LearnBoardControllerTest extends ControllerTestSupport {
     @DisplayName("TIL 목록을 조회한다.")
     void getDailyRoutine_withoutPagination() throws Exception {
         //given
-        final Pageable pageable = PageRequest.of(0, 10, Sort.by("writtenAt", "id").descending());
+        final Pageable pageable = PageRequest.of(
+                0,
+                10,
+                Sort.by(
+                        Sort.Order.desc("writtenAt"),
+                        Sort.Order.asc("id")
+                )
+        );
 
         final List<LearnBoardResponse> learnBoardResponses = List.of(
                 LearnBoardResponse.builder()
