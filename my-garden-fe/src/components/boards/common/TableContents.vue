@@ -49,8 +49,8 @@ watch(() => props.tableContentPage.currentPage, () => {
     <thead>
     <tr>
       <th scope="col" style="width: 10%;">번호</th>
-      <th scope="col" style="width: 12%;">분류</th>
-      <th scope="col" style="width: 45%;">제목</th>
+      <th scope="col" style="width: 15%;">분류</th>
+      <th scope="col" style="width: 42%;">제목</th>
       <th scope="col" style="width: 10%;">조회수</th>
       <th scope="col" style="width: 13%;">등록 일시</th>
       <th scope="col" style="width: 10%;">작성자</th>
@@ -94,7 +94,7 @@ watch(() => props.tableContentPage.currentPage, () => {
 <style scoped>
 .table-title {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 }
 
