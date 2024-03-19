@@ -37,14 +37,14 @@
 
 ## 아키텍처
 
-| `분야`         | `기술 스택`                                       |
-|:-------------|:----------------------------------------------|
-| `Front`      | `Vue.js`                                      |
-| `Back`       | `Spring Boot`                                 |
-| `DevOps`     | `AWS EC2` / `AWS RDS` / `AWS Parameter Store` |
-| `DB`         | `MySQL (AWS RDS)`                             |
-| `CI/CD`      | `Github Actions`                              |
-| `Monitoring` | `Prometheus` / `Grafana`                      |
+| `분야`         | `기술 스택`                                                  |
+|:-------------|:---------------------------------------------------------|
+| `Front`      | `Vue.js`                                                 |
+| `Back`       | `Spring Boot`                                            |
+| `DevOps`     | `AWS EC2` / `AWS RDS` / `AWS Parameter Store` / `Docker` |
+| `DB`         | `MySQL (AWS RDS)`                                        |
+| `CI/CD`      | `Github Actions`                                         |
+| `Monitoring` | `Prometheus` / `Grafana`                                 |
 
 ![Architecture](./docs/architecture/Architecture-240214.png)
 
@@ -69,11 +69,10 @@
   - `Github Actions`는 간편하게 설정이 가능해서 소규모 개인 프로젝트를 할 때 더 적합하다고 판단했으며, 추가적인 인프라 설정 없이 GitHub의 클라우드 인프라에서 실행이 가능하기 때문에
     선택했습니다.
 - `Docker`
-  - `Docker`는 컨테이너 기술에 대한 실질적인 경험 쌓기 위해 선택했으며, 이식성이 좋기 때문에 개발, 테스팅, 배포 과정의 일관성을 보장하고,
-    다양한 환경에서의 호환성 문제를 최소화할 수 있어서 `CD`에 적합하다고 판단해서 선택했습니다.
+  - `Docker`는 다양한 환경에서의 호환성 문제를 최소화할 수 있어서, 일관성을 보장하고 이식성이 좋기 때문에 선택했습니다.
 - `Prometheus`, `Grafana`
   - `Prometheus`, `Grafana`는 두 기술 스택 모두 오픈소스라서 비용 문제 없이 접근할 수 있으며, 두 기술 모두 커뮤니티가
-    잘 되어 있기 때문에 관련 자료의 접근성이 좋아서 선택했습니다
+    잘 되어 있기 때문에 관련 자료의 접근성이 좋아서 선택했습니다.
 
 </details>
 
