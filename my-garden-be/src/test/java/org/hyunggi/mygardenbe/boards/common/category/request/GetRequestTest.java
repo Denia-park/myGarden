@@ -31,7 +31,7 @@ class GetRequestTest {
     }
 
     @Test
-    @DisplayName("시작일이 null일 때, 시작일은 현재 날짜의 한달 전이다.")
+    @DisplayName("시작일이 null일 때, 시작일은 현재 날짜의 1년 전이다.")
     void searchDateConstructor2() {
         //given
         final LocalDate startDate = null;
@@ -44,7 +44,7 @@ class GetRequestTest {
                 .build();
 
         //then
-        assertThat(searchDate.startDate()).isEqualTo(LocalDate.now().minusMonths(1));
+        assertThat(searchDate.startDate()).isEqualTo(LocalDate.now().minusYears(1));
     }
 
     @Test
@@ -253,7 +253,7 @@ class GetRequestTest {
         final GetRequest.SearchCondition requestSearchCondition = getRequest.getSearchCondition();
         final GetRequest.SearchPaging requestSearchPaging = getRequest.getSearchPaging();
 
-        assertThat(requestSearchDate.startDate()).isEqualTo(LocalDate.now().minusMonths(1));
+        assertThat(requestSearchDate.startDate()).isEqualTo(LocalDate.now().minusYears(1));
         assertThat(requestSearchDate.endDate()).isEqualTo(LocalDate.now());
         assertThat(requestSearchCondition.category()).isEmpty();
         assertThat(requestSearchCondition.searchText()).isEmpty();
