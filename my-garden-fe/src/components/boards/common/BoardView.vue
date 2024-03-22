@@ -54,8 +54,19 @@ function submitComment() {
   comment.value = '';
 }
 
+/**
+ * 댓글이 하나 이상 달려있거나 로그인 상태인지 확인
+ * @returns {boolean|*}
+ */
 function isCommentBoxActive() {
   return props.comments.length > 0 || isLogin();
+}
+
+/**
+ * 본인이 게시글의 작성자인지 확인
+ */
+function isWriter() {
+  return myEmailId === props.board.writer;
 }
 </script>
 
@@ -115,8 +126,8 @@ function isCommentBoxActive() {
 
     <div class="detail_bot_button_box">
       <button id="list_btn" @click="() => emit('goToList')">목록</button>
-      <button v-if="isAccessAccount" id="edit_btn" @click="() => emit('goToEdit')">수정</button>
-      <button v-if="isAccessAccount" id="delete_btn" @click="() => emit('deleteBoard')">삭제</button>
+      <button v-if="isAccessAccount && isWriter()" id="edit_btn" @click="() => emit('goToEdit')">수정</button>
+      <button v-if="isAccessAccount && isWriter()" id="delete_btn" @click="() => emit('deleteBoard')">삭제</button>
     </div>
   </div>
 </template>
