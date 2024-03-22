@@ -79,7 +79,7 @@ export function getNoticeBoardViewApi(boardId) {
 export function deleteNoticeBoardApi(boardId) {
     return axios.delete(`/api/boards/notice/${boardId}`)
         .then(({data}) => {
-            return data.data;
+            alert("삭제되었습니다.");
         })
         .catch(error => {
             alert('공지사항을 삭제하는데 실패했습니다.')

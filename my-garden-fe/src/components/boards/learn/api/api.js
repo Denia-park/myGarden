@@ -64,7 +64,7 @@ export function getLearnBoardViewApi(boardId) {
 export function deleteLearnBoardApi(boardId) {
     return axios.delete(`/api/boards/learn/${boardId}`)
         .then(({data}) => {
-            return data.data;
+            alert("삭제되었습니다.");
         })
         .catch(error => {
             alert('TIL을 삭제하는데 실패했습니다.')
