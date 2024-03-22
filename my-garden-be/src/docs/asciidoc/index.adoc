@@ -24,6 +24,7 @@ include::dailyroutine/get.adoc[]
 include::dailyroutine/post.adoc[]
 include::dailyroutine/put.adoc[]
 include::dailyroutine/delete.adoc[]
+include::dailyroutine/getStudyHours.adoc[]
 
 [[board-category]]
 == Board Category [게시판 분류]
