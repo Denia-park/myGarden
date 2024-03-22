@@ -9,11 +9,14 @@ import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineType;
 import org.hyunggi.mygardenbe.dailyroutine.entity.DailyRoutineEntity;
 import org.hyunggi.mygardenbe.dailyroutine.repository.DailyRoutineRepository;
 import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineResponse;
+import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineStudyHourResponse;
 import org.hyunggi.mygardenbe.member.entity.MemberEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -164,5 +167,34 @@ public class DailyRoutineService {
 
         dailyRoutineRepository.deleteById(dailyRoutineEntity.getId());
         return timeBlockId;
+    }
+
+    /**
+     * 1년전에서 어제까지의 공부 시간 조회 (오늘 공부 시간은 미포함)
+     *
+     * @param today  오늘 날짜
+     * @param member 유저 Entity
+     * @return 공부 시간 목록
+     */
+    public List<DailyRoutineStudyHourResponse> getStudyHours(final LocalDate today, final MemberEntity member) {
+        final LocalDateTime startDateTime = today.atStartOfDay().minusYears(1);
+        final LocalDateTime endDateTime = today.atTime(LocalTime.MAX).minusDays(1);
+
+        return getDailyRoutine(startDateTime, endDateTime, member).stream()
+                .filter(routine -> routine.isEqualType(RoutineType.STUDY))
+                .collect(Collectors.groupingBy(DailyRoutineResponse::getStartDate, Collectors.summingInt(DailyRoutineResponse::calculateMinutesBetweenStartAndEnd)))
+                .entrySet().stream()
+                .map(entry -> new DailyRoutineStudyHourResponse(entry.getKey(), convertMinToHour(entry.getValue())))
+                .toList();
+    }
+
+    /**
+     * 분을 시간으로 변환
+     *
+     * @param min 분
+     * @return 시간
+     */
+    private int convertMinToHour(final int min) {
+        return min / 60;
     }
 }

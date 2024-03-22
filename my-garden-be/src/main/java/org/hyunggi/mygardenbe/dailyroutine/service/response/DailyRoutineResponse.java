@@ -1,7 +1,12 @@
 package org.hyunggi.mygardenbe.dailyroutine.service.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import org.hyunggi.mygardenbe.dailyroutine.domain.DailyRoutine;
+import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineType;
+
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 /**
  * 데일리 루틴 조회 응답
@@ -50,5 +55,37 @@ public record DailyRoutineResponse(
                 .routineType(dailyRoutine.getRoutineTypeDescription())
                 .routineDescription(dailyRoutine.getRoutineDescription())
                 .build();
+    }
+
+    /**
+     * 루틴 시작 날짜 조회
+     *
+     * @return 루틴 시작 날짜
+     */
+    @JsonIgnore
+    public String getStartDate() {
+        return startDateTime.split("T")[0];
+    }
+
+    /**
+     * 루틴 타입 비교
+     *
+     * @param type 루틴 타입
+     * @return 루틴 타입이 같은지 여부
+     */
+    public boolean isEqualType(final RoutineType type) {
+        return routineType.equals(type.getDescription());
+    }
+
+    /**
+     * 루틴의 시작 시간과 종료 시간의 차이를 분으로 조회
+     *
+     * @return 루틴의 시작 시간과 종료 시간의 차이 (분)
+     */
+    public int calculateMinutesBetweenStartAndEnd() {
+        final LocalDateTime start = LocalDateTime.parse(startDateTime);
+        final LocalDateTime end = LocalDateTime.parse(endDateTime);
+
+        return (int) start.until(end, ChronoUnit.MINUTES);
     }
 }
