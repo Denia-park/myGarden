@@ -25,9 +25,16 @@ const inputDate = ref(new Date());
  * 오늘 공부 시간 추가
  */
 function addTodayStudyHour() {
+  let studyHoursToday = store.getters.getStudyHoursToday;
+
+  // 타입 확인 추가
+  if (typeof studyHoursToday !== 'number' || studyHoursToday < 0) {
+    studyHoursToday = 0;
+  }
+
   studyHours.value.push({
     date: getTodayDate(),
-    count: Math.floor(store.getters.getStudyHoursToday),
+    count: Math.floor(studyHoursToday),
   });
 }
 
@@ -43,6 +50,9 @@ function getStudyHours() {
           studyHours.value = data;
           addTodayStudyHour();
         })
+        .catch(error => {
+          console.error(error);
+        });
   } else {
     studyHours.value = studyHoursArrExceptToday;
     addTodayStudyHour();
