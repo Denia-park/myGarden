@@ -37,6 +37,10 @@ export function getTodayDate() {
  * @returns {string} 변환된 일자 (yyyy-MM-dd)
  */
 export function convertDateFormat(date) {
+    if (date === null) {
+        date = new Date();
+    }
+
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');

@@ -79,6 +79,10 @@ function closeModal() {
  * @param date 변경할 날짜
  */
 function updateDate(date) {
+  if (date === null) {
+    return;
+  }
+
   inputDate.value = date;
   closeModal();
   store.commit("setViewDate", convertDateFormat(date));
