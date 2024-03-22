@@ -3,6 +3,7 @@ package org.hyunggi.mygardenbe.dailyroutine.controller;
 import org.hyunggi.mygardenbe.ControllerTestSupportWithMockUser;
 import org.hyunggi.mygardenbe.dailyroutine.controller.request.PostRequest;
 import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineResponse;
+import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineStudyHourResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -196,5 +197,29 @@ class DailyRoutineControllerTest extends ControllerTestSupportWithMockUser {
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data").value(1L));
+    }
+
+    @Test
+    @DisplayName("공부 시간 목록을 조회한다.")
+    void getStudyHours() throws Exception {
+        //given
+        BDDMockito.given(dailyRoutineService.getStudyHours(any(), any()))
+                .willReturn(
+                        List.of(
+                                new DailyRoutineStudyHourResponse("2024-03-21", 3),
+                                new DailyRoutineStudyHourResponse("2024-03-22", 4)
+                        )
+                );
+
+        //when, then
+        mockMvc.perform(
+                        get("/api/daily-routine/study-hours")
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").isArray())
+                .andExpect(jsonPath("$.data[0].date").value("2024-03-21"))
+                .andExpect(jsonPath("$.data[0].count").value(3))
+                .andExpect(jsonPath("$.data[1].date").value("2024-03-22"))
+                .andExpect(jsonPath("$.data[1].count").value(4));
     }
 }

@@ -5,6 +5,7 @@ import org.hyunggi.mygardenbe.dailyroutine.controller.request.PostRequest;
 import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineType;
 import org.hyunggi.mygardenbe.dailyroutine.service.DailyRoutineService;
 import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineResponse;
+import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineStudyHourResponse;
 import org.hyunggi.mygardenbe.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -210,7 +211,7 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
     void deleteDailyRoutine() throws Exception {
         //given
         String accessToken = "accessToken";
-        
+
         BDDMockito.given(dailyRoutineService.deleteDailyRoutine(any(), any()))
                 .willReturn(
                         1L
@@ -238,6 +239,48 @@ class DailyRoutineControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("status").type(JsonFieldType.STRING).description("HTTP 상태"),
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
                                 fieldWithPath("data").type(JsonFieldType.NUMBER).description("데이터 (삭제된 TimeBlock ID)")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("공부 시간을 조회한다.")
+    void getStudyHours() throws Exception {
+        //given
+        String accessToken = "accessToken";
+
+        BDDMockito.given(dailyRoutineService.getStudyHours(any(), any()))
+                .willReturn(
+                        List.of(
+                                new DailyRoutineStudyHourResponse("2024-03-19", 5),
+                                new DailyRoutineStudyHourResponse("2024-03-21", 1),
+                                new DailyRoutineStudyHourResponse("2024-03-22", 2)
+                        )
+                );
+
+        //when, then
+        mockMvc.perform(
+                        get("/api/daily-routine/study-hours")
+                                .header("Authorization", "Bearer " + accessToken)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").isArray())
+                .andDo(document("daily-routine/get-study-hours"
+                        , preprocessRequest(prettyPrint())
+                        , preprocessResponse(prettyPrint())
+                        , requestHeaders(
+                                headerWithName("Authorization").description("access token")
+                                        .attributes(field("constraints", "Bearer {accessToken}"))
+                        )
+                        , responseFields(
+                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("HTTP 상태 코드"),
+                                fieldWithPath("status").type(JsonFieldType.STRING).description("HTTP 상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
+                                fieldWithPath("data").type(JsonFieldType.ARRAY).description("데이터 (DailyRoutineStudyHourResponse 목록)"),
+                                fieldWithPath("data[].date").type(JsonFieldType.STRING).description("날짜")
+                                        .attributes(field("constraints", "yyyy-MM-dd")),
+                                fieldWithPath("data[].count").type(JsonFieldType.NUMBER).description("공부 시간")
+                                        .attributes(field("constraints", "0 이상의 정수 (시간 단위)"))
                         )
                 ));
     }

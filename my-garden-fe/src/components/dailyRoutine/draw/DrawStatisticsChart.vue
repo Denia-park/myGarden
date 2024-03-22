@@ -132,8 +132,17 @@ function updateDataSetFrom(statisticData) {
         myChart.data.datasets[0].backgroundColor.push(timeBlock.routineColor);
       });
 
+  saveTodayStudyHours(statisticData['공부']);
+
   // Chart의 Title을 업데이트
   myChart.options.plugins.title.text = `일과 통계 [${viewDate}]`;
+}
+
+/**
+ * 오늘 공부한 시간을 저장
+ */
+function saveTodayStudyHours(todayStudyHours) {
+  store.commit("setStudyHoursToday", todayStudyHours / 60);
 }
 
 /**

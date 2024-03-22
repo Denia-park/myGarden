@@ -11,9 +11,11 @@ import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineType;
 import org.hyunggi.mygardenbe.dailyroutine.domain.TimeSplitter;
 import org.hyunggi.mygardenbe.dailyroutine.service.DailyRoutineService;
 import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineResponse;
+import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineStudyHourResponse;
 import org.hyunggi.mygardenbe.member.entity.MemberEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -96,5 +98,10 @@ public class DailyRoutineController {
         final Long deletedId = dailyRoutineService.deleteDailyRoutine(timeBlockId, member);
 
         return ApiResponse.ok(deletedId);
+    }
+
+    @GetMapping("/study-hours")
+    public ApiResponse<List<DailyRoutineStudyHourResponse>> getStudyHours(@WithLoginUserEntity MemberEntity member) {
+        return ApiResponse.ok(dailyRoutineService.getStudyHours(LocalDate.now(), member));
     }
 }

@@ -9,6 +9,7 @@ import org.hyunggi.mygardenbe.dailyroutine.domain.RoutineType;
 import org.hyunggi.mygardenbe.dailyroutine.entity.DailyRoutineEntity;
 import org.hyunggi.mygardenbe.dailyroutine.repository.DailyRoutineRepository;
 import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineResponse;
+import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineStudyHourResponse;
 import org.hyunggi.mygardenbe.member.domain.Member;
 import org.hyunggi.mygardenbe.member.entity.MemberEntity;
 import org.hyunggi.mygardenbe.member.repository.MemberRepository;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -95,7 +97,7 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         final List<RoutineTime> routineTimes = List.of(routineTimeSample1, routineTimeSample2);
         final RoutineType routineType = RoutineType.STUDY;
         final String routineDescription = "자바 스터디";
-        dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription, member);
+        postRoutine(routineTimes, routineType, routineDescription);
 
         //when
         final List<DailyRoutineResponse> dailyRoutineResponses = dailyRoutineService.getDailyRoutine(
@@ -127,7 +129,7 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         final List<RoutineTime> routineTimes = List.of(routineTimeSample1, routineTimeSample2);
         final RoutineType routineType = RoutineType.STUDY;
         final String routineDescription = "자바 스터디";
-        dailyRoutineService.postDailyRoutine(routineTimes, routineType, routineDescription, member);
+        postRoutine(routineTimes, routineType, routineDescription);
 
         //when
         final List<DailyRoutineResponse> dailyRoutineResponses = dailyRoutineService.getDailyRoutine(
@@ -291,5 +293,47 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         assertThatThrownBy(() -> dailyRoutineService.deleteDailyRoutine(postId, anotherMember))
                 .isInstanceOf(BusinessException.class)
                 .hasMessageContaining("본인의 DailyRoutine만 수정 및 삭제할 수 있습니다.");
+    }
+
+    @Test
+    @DisplayName("1년전에서 어제까지의 공부 시간 조회 (STUDY 타입만 조회, 오늘 공부 시간은 포함하지 않으며 1시간 단위로 계산)")
+    void getStudyHours() {
+        //given
+        final LocalDate today = LocalDate.of(2024, 3, 3);
+
+        final RoutineTime routineTimeSample1 = RoutineTime.of(
+                LocalDateTime.of(2024, 3, 1, 20, 0, 0),
+                LocalDateTime.of(2024, 3, 1, 22, 0, 0)
+        );
+        final RoutineType routineTypeExercise = RoutineType.EXERCISE;
+        final String routineDescriptionExercise = "운동";
+        postRoutine(List.of(routineTimeSample1), routineTypeExercise, routineDescriptionExercise);
+
+        final RoutineTime routineTimeSample2 = RoutineTime.of(
+                LocalDateTime.of(2024, 3, 1, 22, 0, 0),
+                LocalDateTime.of(2024, 3, 1, 23, 59, 59)
+        );
+        final RoutineTime routineTimeSample3 = RoutineTime.of(
+                LocalDateTime.of(2024, 3, 2, 0, 0, 0),
+                LocalDateTime.of(2024, 3, 2, 1, 13, 0)
+        );
+        final RoutineType routineType = RoutineType.STUDY;
+        final String routineDescription = "자바 스터디";
+        postRoutine(List.of(routineTimeSample2, routineTimeSample3), routineType, routineDescription);
+
+        //when
+        final List<DailyRoutineStudyHourResponse> studyHours = dailyRoutineService.getStudyHours(today, member);
+
+        //then
+        assertThat(studyHours).hasSize(2)
+                .extracting("date", "studyHour")
+                .containsExactlyInAnyOrder(
+                        Tuple.tuple("2024-03-01", 1),
+                        Tuple.tuple("2024-03-02", 1)
+                );
+    }
+
+    private void postRoutine(final List<RoutineTime> routineTimeSample3, final RoutineType routineTypeExercise, final String routineDescriptionExercise) {
+        dailyRoutineService.postDailyRoutine(routineTimeSample3, routineTypeExercise, routineDescriptionExercise, member);
     }
 }

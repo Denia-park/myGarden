@@ -1,18 +1,53 @@
 <script setup>
-import {ref} from "vue";
-import {convertDateFormat} from "@/components/dailyRoutine/api/util.js";
+import {onMounted, ref} from "vue";
+import {convertDateFormat, getTodayDate} from "@/components/dailyRoutine/api/util.js";
 import {store} from "@/scripts/store.js";
 import {router} from "@/scripts/router.js";
+import {CalendarHeatmap} from "vue3-calendar-heatmap";
+import 'vue3-calendar-heatmap/dist/style.css';
+import {getStudyHoursExceptTodayApi} from "@/components/dailyRoutine/api/api.js";
 
 /**
  * 모달을 보여줄지 여부
  */
 const showModal = ref(false);
+/**
+ * 공부 시간을 저장한 배열
+ */
+const studyHours = ref([]);
 
 /**
  * 조회 날짜
  */
 const inputDate = ref(new Date());
+
+/**
+ * 오늘 공부 시간 추가
+ */
+function addTodayStudyHour() {
+  studyHours.value.push({
+    date: getTodayDate(),
+    count: Math.floor(store.getters.getStudyHoursToday),
+  });
+}
+
+/**
+ * 오늘을 제외한 공부 시간 조회
+ */
+function getStudyHours() {
+  let studyHoursArrExceptToday = store.getters.getStudyHoursArrExceptToday;
+  if (studyHoursArrExceptToday.length === 0) {
+    getStudyHoursExceptTodayApi()
+        .then(data => {
+          store.commit("setStudyHoursArrExceptToday", data);
+          studyHours.value = data;
+          addTodayStudyHour();
+        })
+  } else {
+    studyHours.value = studyHoursArrExceptToday;
+    addTodayStudyHour();
+  }
+}
 
 /**
  * 모달 열기
@@ -57,6 +92,10 @@ function handleClickOutside(event) {
     closeModal();
   }
 }
+
+onMounted(() => {
+  getStudyHours();
+});
 </script>
 <template>
   <div class="date-wrapper">
@@ -79,8 +118,12 @@ function handleClickOutside(event) {
       <h4>조회 날짜 선택</h4>
       <button class="btn btn-success today-button" @click="updateDate(new Date())">오늘</button>
       <div>
-        <VDatePicker v-model="inputDate" class="date-picker" mode="date" style="width: 65%"
+        <VDatePicker v-model="inputDate" class="date-picker" mode="date" style="width: 35%"
                      @update:modelValue="updateDate"/>
+      </div>
+      <div class="heatmapBox">
+        <h4>공부 시간</h4>
+        <CalendarHeatmap :end-date="getTodayDate()" :values="studyHours" tooltip-unit="Hours"/>
       </div>
       <span class="close" @click="closeModal">close</span>
     </div>
@@ -155,10 +198,11 @@ function handleClickOutside(event) {
 
 .modal-content {
   background-color: #fefefe;
-  margin: 15% auto;
+  margin: 6% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 500px;
+  width: 1200px;
+  height: 750px;
 
   position: relative;
 }
@@ -183,5 +227,9 @@ function handleClickOutside(event) {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+.heatmapBox {
+  margin: 30px 20px;
 }
 </style>

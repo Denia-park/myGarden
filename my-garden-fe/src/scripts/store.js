@@ -22,7 +22,11 @@ export const store = createStore({
                 '게임': '#e76c0c',
                 '기타': '#cd4dff',
             },
-            timeBlockArray: []
+            timeBlockArray: [],
+            studyHours: {
+                today: 0,
+                arrExceptToday: [],
+            }
         }
     },
     mutations: {
@@ -48,6 +52,12 @@ export const store = createStore({
         },
         setTimeBlockArray(state, payload) {
             state.timeBlockArray = payload;
+        },
+        setStudyHoursToday(state, payload) {
+            state.studyHours.today = payload;
+        },
+        setStudyHoursArrExceptToday(state, payload) {
+            state.studyHours.arrExceptToday = payload;
         }
     },
     actions: {
@@ -101,5 +111,11 @@ export const store = createStore({
         getTimeBlockArray(state) {
             return state.timeBlockArray;
         },
+        getStudyHoursToday(state) {
+            return state.studyHours.today;
+        },
+        getStudyHoursArrExceptToday(state) {
+            return state.studyHours.arrExceptToday;
+        }
     }
 });

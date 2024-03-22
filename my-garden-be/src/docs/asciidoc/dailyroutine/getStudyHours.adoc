@@ -1,0 +1,12 @@
+[[get-study-hours]]
+=== GET [공부 시간 조회]
+
+==== HTTP Request
+
+include::{snippets}/daily-routine/get-study-hours/http-request.adoc[]
+include::{snippets}/daily-routine/get-study-hours/request-headers.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/daily-routine/get-study-hours/http-response.adoc[]
+include::{snippets}/daily-routine/get-study-hours/response-fields.adoc[]
