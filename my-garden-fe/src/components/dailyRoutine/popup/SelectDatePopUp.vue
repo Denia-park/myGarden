@@ -1,34 +1,52 @@
 <script setup>
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import {convertDateFormat, getTodayDate} from "@/components/dailyRoutine/api/util.js";
 import {store} from "@/scripts/store.js";
 import {router} from "@/scripts/router.js";
 import {CalendarHeatmap} from "vue3-calendar-heatmap";
 import 'vue3-calendar-heatmap/dist/style.css';
+import {getStudyHoursExceptTodayApi} from "@/components/dailyRoutine/api/api.js";
 
 /**
  * 모달을 보여줄지 여부
  */
 const showModal = ref(false);
+/**
+ * 공부 시간을 저장한 배열
+ */
+const studyHours = ref([]);
 
 /**
  * 조회 날짜
  */
 const inputDate = ref(new Date());
-const studyHours = ref([]);
 
-function getStudyHoursApi() {
-  const studyHours = store.getters.getStudyHours;
-  if (studyHours === null) {
-    //TODO: getStudyHours API 호출 추가
+/**
+ * 오늘 공부 시간 추가
+ */
+function addTodayStudyHour() {
+  studyHours.value.push({
+    date: getTodayDate(),
+    count: Math.floor(store.getters.getStudyHoursToday),
+  });
+}
 
-    //getStudyHours API 호출
-
-    store.commit("setStudyHours", studyHours);
-    return studyHours;
+/**
+ * 오늘을 제외한 공부 시간 조회
+ */
+function getStudyHours() {
+  let studyHoursArrExceptToday = store.getters.getStudyHoursArrExceptToday;
+  if (studyHoursArrExceptToday.length === 0) {
+    getStudyHoursExceptTodayApi()
+        .then(data => {
+          store.commit("setStudyHoursArrExceptToday", data);
+          studyHours.value = data;
+          addTodayStudyHour();
+        })
+  } else {
+    studyHours.value = studyHoursArrExceptToday;
+    addTodayStudyHour();
   }
-
-  return studyHours;
 }
 
 /**
@@ -74,6 +92,10 @@ function handleClickOutside(event) {
     closeModal();
   }
 }
+
+onMounted(() => {
+  getStudyHours();
+});
 </script>
 <template>
   <div class="date-wrapper">

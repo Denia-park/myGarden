@@ -23,7 +23,10 @@ export const store = createStore({
                 '기타': '#cd4dff',
             },
             timeBlockArray: [],
-            studyHours: [],
+            studyHours: {
+                today: 0,
+                arrExceptToday: [],
+            }
         }
     },
     mutations: {
@@ -50,8 +53,11 @@ export const store = createStore({
         setTimeBlockArray(state, payload) {
             state.timeBlockArray = payload;
         },
-        setStudyHours(state, payload) {
-            state.studyHours = payload;
+        setStudyHoursToday(state, payload) {
+            state.studyHours.today = payload;
+        },
+        setStudyHoursArrExceptToday(state, payload) {
+            state.studyHours.arrExceptToday = payload;
         }
     },
     actions: {
@@ -105,8 +111,11 @@ export const store = createStore({
         getTimeBlockArray(state) {
             return state.timeBlockArray;
         },
-        getStudyHours(state) {
-            return state.studyHours;
+        getStudyHoursToday(state) {
+            return state.studyHours.today;
+        },
+        getStudyHoursArrExceptToday(state) {
+            return state.studyHours.arrExceptToday;
         }
     }
 });

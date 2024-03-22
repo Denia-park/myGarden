@@ -100,3 +100,18 @@ export function deleteDailyRoutineApi(id) {
             alert("삭제에 실패했습니다.");
         });
 }
+
+/**
+ * 공부 시간 목록 조회 API
+ *
+ * @returns {Promise<[] | void>} 성공 시 공부 시간 목록, 실패 시 alert
+ */
+export function getStudyHoursExceptTodayApi() {
+    return axios.get(`/api/daily-routine/study-hours`)
+        .then(({data}) => {
+            return data.data;
+        })
+        .catch(error => {
+            alert('공부 시간을 불러오는데 실패했습니다.')
+        });
+}
