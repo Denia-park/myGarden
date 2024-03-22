@@ -45,14 +45,14 @@ export function convertDateFormat(date) {
 }
 
 /**
- * 현재 시간을 기준으로 한 달 전의 일자를 특정 포맷으로 반환한다.
+ * 현재 시간을 기준으로 1년 전의 일자를 특정 포맷으로 반환한다.
  *
- * @returns {string} 한 달 전의 일자 (yyyy-MM-dd)
+ * @returns {string} 1년 전의 일자 (yyyy-MM-dd)
  */
-export function getOneMonthAgoDate() {
+export function getOneYearAgoDate() {
     const currentDate = new Date();
 
-    currentDate.setMonth(currentDate.getMonth() - 1);
+    currentDate.setFullYear(currentDate.getFullYear() - 1);
 
     const year = currentDate.getFullYear();
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');

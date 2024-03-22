@@ -82,7 +82,7 @@ public final class GetRequest {
         /**
          * 조회 시작일 초기화
          * <br><br>
-         * - 조회 시작일이 없을 경우, 1달 전으로 초기화 <br>
+         * - 조회 시작일이 없을 경우, 1년 전으로 초기화 <br>
          * - 조회 시작일이 있을 경우, 그대로 반환
          *
          * @param startDate 조회 시작일
@@ -90,7 +90,7 @@ public final class GetRequest {
          */
         private LocalDate initStartDate(LocalDate startDate) {
             if (startDate == null) {
-                return LocalDate.now().minusMonths(1);
+                return LocalDate.now().minusYears(1);
             }
 
             return startDate;

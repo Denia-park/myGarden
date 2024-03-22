@@ -8,7 +8,7 @@ import {
   getNoticeBoardListApi,
   getNoticeImportantBoardListApi
 } from "@/components/boards/notice/api/api.js";
-import {getOneMonthAgoDate, getTodayDate} from "@/components/dailyRoutine/api/util.js";
+import {getOneYearAgoDate, getTodayDate} from "@/components/dailyRoutine/api/util.js";
 import SearchForm from "@/components/boards/common/SearchForm.vue";
 import {router} from "@/scripts/router.js";
 import {useRoute} from "vue-router";
@@ -24,7 +24,7 @@ const noticeImportantPage = ref([]);
 const noticeTotalCount = ref(0);
 const categories = ref([]);
 const queryParameter = ref({
-  startDate: getOneMonthAgoDate(),
+  startDate: getOneYearAgoDate(),
   endDate: getTodayDate(),
   category: "",
   searchText: "",

@@ -4,7 +4,7 @@ import TableContents from "@/components/boards/common/TableContents.vue";
 
 import {onMounted, ref, watch} from "vue";
 import {getLearnBoardCategoryApi, getLearnBoardListApi} from "@/components/boards/learn/api/api.js";
-import {getOneMonthAgoDate, getTodayDate} from "@/components/dailyRoutine/api/util.js";
+import {getOneYearAgoDate, getTodayDate} from "@/components/dailyRoutine/api/util.js";
 import SearchForm from "@/components/boards/common/SearchForm.vue";
 import {router} from "@/scripts/router.js";
 import {useRoute} from "vue-router";
@@ -19,7 +19,7 @@ const learnPage = ref({});
 const learnTotalCount = ref(0);
 const categories = ref([]);
 const queryParameter = ref({
-  startDate: getOneMonthAgoDate(),
+  startDate: getOneYearAgoDate(),
   endDate: getTodayDate(),
   category: "",
   searchText: "",
