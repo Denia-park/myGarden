@@ -103,7 +103,9 @@ function isCommentBoxActive() {
             <span class="comment_writer">{{ comment.writer }}</span>
             <span class="comment_regDate">{{ convertCommentDateTimeFormat(comment.writtenAt) }}</span>
           </div>
-          <a v-if="myEmailId === comment.writer" href="#" @click="() => emit('deleteComment', comment.id)">삭제</a>
+          <button v-if="myEmailId === comment.writer" class="comment_delete_button"
+                  @click="() => emit('deleteComment', comment.id)">삭제
+          </button>
         </div>
         <div class="comment_content">{{ comment.content }}</div>
       </div>
@@ -251,7 +253,6 @@ h1 {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
-
 }
 
 .comment .comment_info .comment_writer {
@@ -267,5 +268,12 @@ h1 {
 .comment .comment_content {
   font-size: 15px;
   margin-top: 10px;
+}
+
+.comment .comment_delete_button {
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 5px;
 }
 </style>
