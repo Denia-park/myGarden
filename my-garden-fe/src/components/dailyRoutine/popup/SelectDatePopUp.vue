@@ -138,7 +138,7 @@ onMounted(() => {
                      @update:modelValue="updateDate"/>
       </div>
       <div class="heatmapBox">
-        <h4>공부 시간</h4>
+        <h4>공부 시간 잔디</h4>
         <CalendarHeatmap :end-date="getTodayDate()" :values="studyHours" tooltip-unit="Hours"/>
       </div>
       <span class="close" @click="closeModal">close</span>
