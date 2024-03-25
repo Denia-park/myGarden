@@ -103,6 +103,8 @@ public class DailyRoutineController {
 
     /**
      * 공부시간 조회 (로그인한 사용자)
+     * <br/><br/>
+     * - 어제까지의 공부시간을 조회하기 위해서, 오늘 날짜를 넣어서 조회한다. (오늘 날짜에 해당하는 공부 시간은 클라이언트단에서 계산)
      *
      * @param member 로그인한 사용자
      * @return 공부시간 목록 응답

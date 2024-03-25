@@ -176,15 +176,17 @@ public class DailyRoutineService {
     }
 
     /**
-     * 1년전에서 어제까지의 공부 시간 조회 (오늘 공부 시간은 미포함)
+     * (targetDate - 1년) ~ (targetDate - 1일)까지의 공부 시간을 조회
+     * <br/><br/>
+     * targetDate의 공부 시간은 미포함 -> targetDate에 해당하는 공부시간은 클라이언트단에서 계산
      *
-     * @param today  오늘 날짜
-     * @param member 유저 Entity
+     * @param targetDate 오늘 날짜
+     * @param member     유저 Entity
      * @return 공부 시간 목록
      */
-    public List<DailyRoutineStudyHourResponse> getStudyHours(final LocalDate today, final MemberEntity member) {
-        final LocalDateTime startDateTime = today.atStartOfDay().minusYears(1);
-        final LocalDateTime endDateTime = today.atTime(LocalTime.MAX).minusDays(1);
+    public List<DailyRoutineStudyHourResponse> getStudyHours(final LocalDate targetDate, final MemberEntity member) {
+        final LocalDateTime startDateTime = targetDate.atStartOfDay().minusYears(1);
+        final LocalDateTime endDateTime = targetDate.atTime(LocalTime.MAX).minusDays(1);
 
         return getDailyRoutine(startDateTime, endDateTime, member).stream()
                 .filter(routine -> routine.isEqualType(RoutineType.STUDY))
