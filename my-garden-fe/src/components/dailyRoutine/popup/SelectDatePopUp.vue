@@ -43,22 +43,23 @@ function addTodayStudyHour() {
  */
 function getStudyHours() {
   let studyHoursArrExceptToday = store.getters.getStudyHoursArrExceptToday;
-  if (studyHoursArrExceptToday.length === 0) {
-    getStudyHoursExceptTodayApi()
-        .then(data => {
-          store.commit("setStudyHoursArrExceptToday", data);
-          studyHours.value = data;
-          addTodayStudyHour();
-        })
-        .catch(error => {
-          console.error(error);
-        });
-  } else {
+
+  if (studyHoursArrExceptToday.length !== 0) {
     studyHours.value = studyHoursArrExceptToday;
     addTodayStudyHour();
+
+    return;
   }
 
-  console.log(studyHours.value);
+  getStudyHoursExceptTodayApi()
+      .then(data => {
+        store.commit("setStudyHoursArrExceptToday", data);
+        studyHours.value = data;
+        addTodayStudyHour();
+      })
+      .catch(error => {
+        console.error(error);
+      });
 }
 
 /**
