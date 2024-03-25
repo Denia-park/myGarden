@@ -11,6 +11,7 @@ import LearnBoardList from "@/pages/boards/learn/LearnBoardList.vue";
 import LearnBoardView from "@/pages/boards/learn/LearnBoardView.vue";
 import LearnBoardWrite from "@/pages/boards/learn/LearnBoardWrite.vue";
 import Statistics from "@/pages/dailyRoutine/DailyRoutineStatistics.vue";
+import StudyHoursView from "@/pages/dailyRoutine/StudyHoursView.vue";
 
 /**
  * 라우터 설정
@@ -21,6 +22,7 @@ const routes = [
     {path: '/notFound', component: NotFound},
     {path: '/daily-routine', component: DailyRoutine, meta: {permitRoles: ['ROLE_USER', 'ROLE_ADMIN']}},
     {path: '/daily-routine/statistics', component: Statistics, meta: {permitRoles: ['ROLE_USER', 'ROLE_ADMIN']}},
+    {path: '/daily-routine/study-hours-view/:urlSafeBase64MemberEmail', component: StudyHoursView},
     {path: '/boards/notice', component: NoticeBoardList, name: 'NoticeBoardList'},
     {path: '/boards/notice/:boardId', component: NoticeBoardView, name: 'NoticeBoardView'},
     {
