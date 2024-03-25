@@ -142,6 +142,8 @@ function updateDataSetFrom(statisticData) {
  * 오늘 공부한 시간을 저장
  */
 function saveTodayStudyHours(todayStudyHours) {
+  if (todayStudyHours === undefined) return;
+
   store.commit("setStudyHoursToday", todayStudyHours / 60);
 }
 
