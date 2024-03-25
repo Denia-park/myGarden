@@ -11,6 +11,7 @@ import org.hyunggi.mygardenbe.dailyroutine.repository.DailyRoutineRepository;
 import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineResponse;
 import org.hyunggi.mygardenbe.dailyroutine.service.response.DailyRoutineStudyHourResponse;
 import org.hyunggi.mygardenbe.member.entity.MemberEntity;
+import org.hyunggi.mygardenbe.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,11 @@ public class DailyRoutineService {
      * 데일리 루틴 Entity Repository
      */
     private final DailyRoutineRepository dailyRoutineRepository;
+
+    /**
+     * 유저 Entity Repository
+     */
+    private final MemberRepository memberRepository;
 
     /**
      * 데일리 루틴 등록
@@ -196,5 +202,27 @@ public class DailyRoutineService {
      */
     private int convertMinToHour(final int min) {
         return min / 60;
+    }
+
+    /**
+     * 로그인 없이 memberEmail을 통해 해당 member의 (targetDate - 1년) ~ (targetDate - 1일)까지의 공부 시간을 조회한다.
+     *
+     * @param targetDate  조회 날짜
+     * @param memberEmail 조회할 사용자 이메일
+     * @return 공부 시간 목록
+     */
+    public List<DailyRoutineStudyHourResponse> getStudyHoursWithoutLogin(final LocalDate targetDate, final String memberEmail) {
+        return getStudyHours(targetDate, findMemberByEmail(memberEmail));
+    }
+
+    /**
+     * memberEmail을 통해 MemberEntity 조회
+     *
+     * @param memberEmail 조회할 사용자 이메일
+     * @return MemberEntity
+     */
+    private MemberEntity findMemberByEmail(final String memberEmail) {
+        return memberRepository.findByEmail(memberEmail)
+                .orElseThrow(() -> new EntityNotFoundException("해당하는 이메일의 사용자가 존재하지 않습니다."));
     }
 }
