@@ -28,8 +28,8 @@ function addTodayStudyHour() {
   let studyHoursToday = store.getters.getStudyHoursToday;
 
   // 타입 확인 추가
-  if (typeof studyHoursToday !== 'number' || studyHoursToday < 0) {
-    studyHoursToday = 0;
+  if (isNaN(studyHoursToday) || typeof studyHoursToday !== 'number' || studyHoursToday <= 0) {
+    return;
   }
 
   studyHours.value.push({
@@ -57,6 +57,8 @@ function getStudyHours() {
     studyHours.value = studyHoursArrExceptToday;
     addTodayStudyHour();
   }
+
+  console.log(studyHours.value);
 }
 
 /**
