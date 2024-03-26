@@ -112,6 +112,7 @@
 8. [GitHub Actions 기반의 CI 속도 개선 [Vue.js Build]](https://velog.io/@as9587/GitHub-Actions-%EA%B8%B0%EB%B0%98%EC%9D%98-CI-%EC%86%8D%EB%8F%84-%EA%B0%9C%EC%84%A0-Vue.js-Build)
 9. [GitHub Actions 기반의 CD 속도 개선](https://velog.io/@as9587/GitHub-Actions-%EA%B8%B0%EB%B0%98%EC%9D%98-CD-%EC%86%8D%EB%8F%84-%EA%B0%9C%EC%84%A0)
 10. [Spring Boot에서 @RestControllerAdvice 우선순위 문제 해결하기 (aka @Order)](https://velog.io/@as9587/Spring-Boot%EC%97%90%EC%84%9C-RestControllerAdvice-%EC%9A%B0%EC%84%A0%EC%88%9C%EC%9C%84-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0%ED%95%98%EA%B8%B0-aka-Order)
+11. [공부 시간 잔디 화면을 이미지로 저장하기 [With AWS (CDK + API Gateway + Lambda + S3)] (aka. Html to Image)](https://velog.io/@as9587/%EA%B3%B5%EB%B6%80-%EC%8B%9C%EA%B0%84-%EC%9E%94%EB%94%94%EB%A5%BC-%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%A1%9C-%EC%A0%80%EC%9E%A5%ED%95%98%EA%B8%B0-With-AWS-CDK-API-Gateway-Lambda-S3-aka.-Html-to-Image)
 
 ## 주요 기능
 
@@ -120,6 +121,8 @@
 - `오늘 있었던 일`들을 `시간대별로 등록` 및 확인할 수 있다.
 - `오늘 등록한 내용`들을 `타입별로 정리`하여 확인할 수 있다.
 - `하루 일과 통계`에서 지금까지 등록한 내용들을 `타입별로 통계`를 내어 확인할 수 있다.
+- 지금까지 등록한 `공부` 타입의 일과들을 `Calendar Heatmap`의 형태로 모아서 볼 수 있다. <br/>
+  (※ `AWS Lambda`를 이용해 `공부 시간 잔디`를 캡쳐하여 `S3`에 저장하고, `GitHub ReadMe`에서 읽어온다.)
 
 ![하루 일과 전체 화면](./docs/daily-routine/img/DailyRoutine-ScreenShot.png)
 
@@ -130,6 +133,10 @@
 - **일과 범위 통계**
 
   ![일과 범위 통계](./docs/daily-routine/img/DailyRoutine-Statistic-Range.png)
+
+- **공부 시간 잔디**
+
+  ![공부 시간 잔디](./docs/daily-routine/gif/DailyRoutine-StudyHoursView.gif)
 
 ### 게시판 (공지사항 게시판, TIL 게시판)
 
