@@ -53,7 +53,8 @@ public class SecurityConfiguration {
             "/favicon.ico",
             "/",
             "/index.html",
-            "/api/boards/categories"
+            "/api/boards/categories",
+            "/api/daily-routine/study-hours/without-login",
     };
 
     /**

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.List;
 
 /**
@@ -100,8 +101,47 @@ public class DailyRoutineController {
         return ApiResponse.ok(deletedId);
     }
 
+    /**
+     * 공부시간 조회 (로그인한 사용자)
+     * <br/><br/>
+     * - 어제까지의 공부시간을 조회하기 위해서, 오늘 날짜를 넣어서 조회한다. (오늘 날짜에 해당하는 공부 시간은 클라이언트단에서 계산)
+     *
+     * @param member 로그인한 사용자
+     * @return 공부시간 목록 응답
+     */
     @GetMapping("/study-hours")
     public ApiResponse<List<DailyRoutineStudyHourResponse>> getStudyHours(@WithLoginUserEntity MemberEntity member) {
         return ApiResponse.ok(dailyRoutineService.getStudyHours(LocalDate.now(), member));
+    }
+
+    /**
+     * 공부시간 조회 (로그인하지 않은 사용자)
+     * <br/><br/>
+     * - 조회할 사용자 이메일을 URL Safe Base64로 인코딩하여 전달받는다.
+     * - 현재까지의 공부시간을 조회하기 위해서, 내일 날짜를 넣어서 조회한다.
+     *
+     * @param urlSafeBase64MemberEmail 조회할 사용자 이메일
+     * @return 공부시간 목록 응답
+     */
+    @GetMapping("/study-hours/without-login")
+    public ApiResponse<List<DailyRoutineStudyHourResponse>> getStudyHoursWithoutLogin(@RequestParam("memberEmail") String urlSafeBase64MemberEmail) {
+        final String memberEmail = convertUrlSafeBase64MemberEmailToMemberEmail(urlSafeBase64MemberEmail);
+        final LocalDate tomorrow = LocalDate.now().plusDays(1);
+
+        return ApiResponse.ok(dailyRoutineService.getStudyHoursWithoutLogin(tomorrow, memberEmail));
+    }
+
+    /**
+     * URL Safe Base64로 인코딩된 사용자 이메일을 사용자 이메일로 변환
+     *
+     * @param urlSafeBase64MemberEmail URL Safe Base64로 인코딩된 사용자 이메일
+     * @return 사용자 이메일
+     */
+    private String convertUrlSafeBase64MemberEmailToMemberEmail(final String urlSafeBase64MemberEmail) {
+        if (urlSafeBase64MemberEmail == null || urlSafeBase64MemberEmail.isEmpty()) {
+            throw new IllegalArgumentException("memberEmail은 필수 값입니다.");
+        }
+
+        return new String(Base64.getUrlDecoder().decode(urlSafeBase64MemberEmail));
     }
 }

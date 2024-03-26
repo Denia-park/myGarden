@@ -28,8 +28,8 @@ function addTodayStudyHour() {
   let studyHoursToday = store.getters.getStudyHoursToday;
 
   // 타입 확인 추가
-  if (typeof studyHoursToday !== 'number' || studyHoursToday < 0) {
-    studyHoursToday = 0;
+  if (isNaN(studyHoursToday) || typeof studyHoursToday !== 'number' || studyHoursToday <= 0) {
+    return;
   }
 
   studyHours.value.push({
@@ -43,20 +43,23 @@ function addTodayStudyHour() {
  */
 function getStudyHours() {
   let studyHoursArrExceptToday = store.getters.getStudyHoursArrExceptToday;
-  if (studyHoursArrExceptToday.length === 0) {
-    getStudyHoursExceptTodayApi()
-        .then(data => {
-          store.commit("setStudyHoursArrExceptToday", data);
-          studyHours.value = data;
-          addTodayStudyHour();
-        })
-        .catch(error => {
-          console.error(error);
-        });
-  } else {
+
+  if (studyHoursArrExceptToday.length !== 0) {
     studyHours.value = studyHoursArrExceptToday;
     addTodayStudyHour();
+
+    return;
   }
+
+  getStudyHoursExceptTodayApi()
+      .then(data => {
+        store.commit("setStudyHoursArrExceptToday", data);
+        studyHours.value = data;
+        addTodayStudyHour();
+      })
+      .catch(error => {
+        console.error(error);
+      });
 }
 
 /**
@@ -136,7 +139,7 @@ onMounted(() => {
                      @update:modelValue="updateDate"/>
       </div>
       <div class="heatmapBox">
-        <h4>공부 시간</h4>
+        <h4>공부 시간 잔디</h4>
         <CalendarHeatmap :end-date="getTodayDate()" :values="studyHours" tooltip-unit="Hours"/>
       </div>
       <span class="close" @click="closeModal">close</span>

@@ -116,3 +116,20 @@ export function getStudyHoursExceptTodayApi() {
             throw error;
         });
 }
+
+/**
+ * 공부 시간 목록 조회 API (로그인하지 않은 사용자용)
+ *
+ * @param urlSafeBase64MemberEmail URL-safe 인코딩된 이메일
+ * @returns {Promise<*>} 성공 시 공부 시간 목록, 실패 시 error
+ */
+export function getStudyHoursExceptTodayApiWithoutLogin(urlSafeBase64MemberEmail) {
+    return axios.get(`/api/daily-routine/study-hours/without-login?memberEmail=${urlSafeBase64MemberEmail}`)
+        .then(({data}) => {
+            return data.data;
+        })
+        .catch(error => {
+            console.log('공부 시간을 불러오는데 실패했습니다.', error)
+            throw error;
+        });
+}
