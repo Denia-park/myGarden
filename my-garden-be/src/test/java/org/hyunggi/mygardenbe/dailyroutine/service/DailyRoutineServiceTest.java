@@ -296,7 +296,7 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
     }
 
     @Test
-    @DisplayName("1년전에서 어제까지의 공부 시간 조회 (STUDY 타입만 조회, 오늘 공부 시간은 포함하지 않으며 1시간 단위로 계산)")
+    @DisplayName("(targetDate - 1년) ~ (targetDate - 1일)까지의 공부 시간 조회한다. (STUDY 타입만 조회, 오늘 공부 시간은 포함하지 않으며 1시간 단위로 계산)")
     void getStudyHours() {
         //given
         final LocalDate today = LocalDate.of(2024, 3, 3);
@@ -335,5 +335,44 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
 
     private void postRoutine(final List<RoutineTime> routineTimeSample3, final RoutineType routineTypeExercise, final String routineDescriptionExercise) {
         dailyRoutineService.postDailyRoutine(routineTimeSample3, routineTypeExercise, routineDescriptionExercise, member);
+    }
+
+    @Test
+    @DisplayName("memberEmail을 통해서, 해당 member의 (targetDate - 1년) ~ (targetDate - 1일)까지의 공부 시간을 조회한다. (STUDY 타입만 조회, 오늘 공부 시간은 포함하지 않으며 1시간 단위로 계산)")
+    void getStudyHoursWithoutLogin() {
+        //given
+        final String memberEmail = "test@test.com";
+        final LocalDate tomorrow = LocalDate.of(2024, 3, 4);
+
+        final RoutineTime routineTimeSample1 = RoutineTime.of(
+                LocalDateTime.of(2024, 3, 1, 20, 0, 0),
+                LocalDateTime.of(2024, 3, 1, 22, 0, 0)
+        );
+        final RoutineType routineTypeExercise = RoutineType.EXERCISE;
+        final String routineDescriptionExercise = "운동";
+        postRoutine(List.of(routineTimeSample1), routineTypeExercise, routineDescriptionExercise);
+
+        final RoutineTime routineTimeSample2 = RoutineTime.of(
+                LocalDateTime.of(2024, 3, 1, 22, 0, 0),
+                LocalDateTime.of(2024, 3, 1, 23, 59, 59)
+        );
+        final RoutineTime routineTimeSample3 = RoutineTime.of(
+                LocalDateTime.of(2024, 3, 2, 0, 0, 0),
+                LocalDateTime.of(2024, 3, 2, 1, 13, 0)
+        );
+        final RoutineType routineType = RoutineType.STUDY;
+        final String routineDescription = "자바 스터디";
+        postRoutine(List.of(routineTimeSample2, routineTimeSample3), routineType, routineDescription);
+
+        //when
+        final List<DailyRoutineStudyHourResponse> studyHours = dailyRoutineService.getStudyHoursWithoutLogin(tomorrow, memberEmail);
+
+        //then
+        assertThat(studyHours).hasSize(2)
+                .extracting("date", "studyHour")
+                .containsExactlyInAnyOrder(
+                        Tuple.tuple("2024-03-01", 1),
+                        Tuple.tuple("2024-03-02", 1)
+                );
     }
 }

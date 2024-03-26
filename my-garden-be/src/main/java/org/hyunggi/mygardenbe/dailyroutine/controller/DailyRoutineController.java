@@ -139,7 +139,7 @@ public class DailyRoutineController {
      */
     private String convertUrlSafeBase64MemberEmailToMemberEmail(final String urlSafeBase64MemberEmail) {
         if (urlSafeBase64MemberEmail == null || urlSafeBase64MemberEmail.isEmpty()) {
-            throw new IllegalArgumentException("memberEmail is required");
+            throw new IllegalArgumentException("memberEmail은 필수 값입니다.");
         }
 
         return new String(Base64.getUrlDecoder().decode(urlSafeBase64MemberEmail));
