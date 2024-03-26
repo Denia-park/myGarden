@@ -301,25 +301,28 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         //given
         final LocalDate today = LocalDate.of(2024, 3, 3);
 
-        final RoutineTime routineTimeSample1 = RoutineTime.of(
-                LocalDateTime.of(2024, 3, 1, 20, 0, 0),
-                LocalDateTime.of(2024, 3, 1, 22, 0, 0)
+        final LocalDateTime startExercise = LocalDateTime.of(2024, 3, 1, 20, 0, 0);
+        final LocalDateTime endExercise = LocalDateTime.of(2024, 3, 1, 22, 0, 0);
+        postRoutine(
+                List.of(
+                        RoutineTime.of(startExercise, endExercise)
+                ),
+                RoutineType.EXERCISE,
+                "운동"
         );
-        final RoutineType routineTypeExercise = RoutineType.EXERCISE;
-        final String routineDescriptionExercise = "운동";
-        postRoutine(List.of(routineTimeSample1), routineTypeExercise, routineDescriptionExercise);
 
-        final RoutineTime routineTimeSample2 = RoutineTime.of(
-                LocalDateTime.of(2024, 3, 1, 22, 0, 0),
-                LocalDateTime.of(2024, 3, 1, 23, 59, 59)
+        final LocalDateTime startStudyDay1 = LocalDateTime.of(2024, 3, 1, 22, 0, 0);
+        final LocalDateTime endStudyDay1 = LocalDateTime.of(2024, 3, 1, 23, 59, 59);
+        final LocalDateTime startStudyDay2 = LocalDateTime.of(2024, 3, 2, 0, 0, 0);
+        final LocalDateTime endStudyDay2 = LocalDateTime.of(2024, 3, 2, 1, 13, 0);
+        postRoutine(
+                List.of(
+                        RoutineTime.of(startStudyDay1, endStudyDay1),
+                        RoutineTime.of(startStudyDay2, endStudyDay2)
+                ),
+                RoutineType.STUDY,
+                "자바 스터디"
         );
-        final RoutineTime routineTimeSample3 = RoutineTime.of(
-                LocalDateTime.of(2024, 3, 2, 0, 0, 0),
-                LocalDateTime.of(2024, 3, 2, 1, 13, 0)
-        );
-        final RoutineType routineType = RoutineType.STUDY;
-        final String routineDescription = "자바 스터디";
-        postRoutine(List.of(routineTimeSample2, routineTimeSample3), routineType, routineDescription);
 
         //when
         final List<DailyRoutineStudyHourResponse> studyHours = dailyRoutineService.getStudyHours(today, member);
@@ -328,8 +331,8 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         assertThat(studyHours).hasSize(2)
                 .extracting("date", "studyHour")
                 .containsExactlyInAnyOrder(
-                        Tuple.tuple("2024-03-01", 1),
-                        Tuple.tuple("2024-03-02", 1)
+                        Tuple.tuple("2024-03-01", (int) startStudyDay1.until(endStudyDay1, java.time.temporal.ChronoUnit.HOURS)),
+                        Tuple.tuple("2024-03-02", (int) startStudyDay2.until(endStudyDay2, java.time.temporal.ChronoUnit.HOURS))
                 );
     }
 
@@ -344,25 +347,28 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         final String memberEmail = "test@test.com";
         final LocalDate tomorrow = LocalDate.of(2024, 3, 4);
 
-        final RoutineTime routineTimeSample1 = RoutineTime.of(
-                LocalDateTime.of(2024, 3, 1, 20, 0, 0),
-                LocalDateTime.of(2024, 3, 1, 22, 0, 0)
+        final LocalDateTime startExercise = LocalDateTime.of(2024, 3, 1, 20, 0, 0);
+        final LocalDateTime endExercise = LocalDateTime.of(2024, 3, 1, 22, 0, 0);
+        postRoutine(
+                List.of(
+                        RoutineTime.of(startExercise, endExercise)
+                ),
+                RoutineType.EXERCISE,
+                "운동"
         );
-        final RoutineType routineTypeExercise = RoutineType.EXERCISE;
-        final String routineDescriptionExercise = "운동";
-        postRoutine(List.of(routineTimeSample1), routineTypeExercise, routineDescriptionExercise);
 
-        final RoutineTime routineTimeSample2 = RoutineTime.of(
-                LocalDateTime.of(2024, 3, 1, 22, 0, 0),
-                LocalDateTime.of(2024, 3, 1, 23, 59, 59)
+        final LocalDateTime startStudyDay1 = LocalDateTime.of(2024, 3, 1, 22, 0, 0);
+        final LocalDateTime endStudyDay1 = LocalDateTime.of(2024, 3, 1, 23, 59, 59);
+        final LocalDateTime startStudyDay2 = LocalDateTime.of(2024, 3, 2, 0, 0, 0);
+        final LocalDateTime endStudyDay2 = LocalDateTime.of(2024, 3, 2, 1, 13, 0);
+        postRoutine(
+                List.of(
+                        RoutineTime.of(startStudyDay1, endStudyDay1),
+                        RoutineTime.of(startStudyDay2, endStudyDay2)
+                ),
+                RoutineType.STUDY,
+                "자바 스터디"
         );
-        final RoutineTime routineTimeSample3 = RoutineTime.of(
-                LocalDateTime.of(2024, 3, 2, 0, 0, 0),
-                LocalDateTime.of(2024, 3, 2, 1, 13, 0)
-        );
-        final RoutineType routineType = RoutineType.STUDY;
-        final String routineDescription = "자바 스터디";
-        postRoutine(List.of(routineTimeSample2, routineTimeSample3), routineType, routineDescription);
 
         //when
         final List<DailyRoutineStudyHourResponse> studyHours = dailyRoutineService.getStudyHoursWithoutLogin(tomorrow, memberEmail);
@@ -371,8 +377,8 @@ class DailyRoutineServiceTest extends IntegrationTestSupport {
         assertThat(studyHours).hasSize(2)
                 .extracting("date", "studyHour")
                 .containsExactlyInAnyOrder(
-                        Tuple.tuple("2024-03-01", 1),
-                        Tuple.tuple("2024-03-02", 1)
+                        Tuple.tuple("2024-03-01", (int) startStudyDay1.until(endStudyDay1, java.time.temporal.ChronoUnit.HOURS)),
+                        Tuple.tuple("2024-03-02", (int) startStudyDay2.until(endStudyDay2, java.time.temporal.ChronoUnit.HOURS))
                 );
     }
 }
